@@ -74,62 +74,7 @@ jobs:
           echo ""
           echo "Все необходимые secrets проверены!"
 
-      - name: 📦 Создание архива для деплоя
-        run: |
-          echo "Проверка структуры перед архивацией:"
-          ls -la
-          echo ""
-          echo "Проверка front/:"
-          ls -la front/ | head -10
-          echo ""
-
-          # Игнорируем предупреждения о изменении файлов во время архивации
-          # Исключаем node_modules во всех папках, но не саму папку front
-          tar -czf deploy.tar.gz \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='*.log' \
-            --exclude='deploy.tar.gz' \
-            --exclude='dist' \
-            --exclude='front/node_modules' \
-            --exclude='front/dist' \
-            . 2>&1 | grep -v "file changed as we read it" || true
-
-          # Проверяем, что архив создан
-          if [ -f deploy.tar.gz ]; then
-            ls -lh deploy.tar.gz
-            echo "✅ Архив создан успешно"
-            
-            # Проверяем содержимое архива
-            echo ""
-            echo "Проверка содержимого архива:"
-            tar -tzf deploy.tar.gz | head -20
-            echo ""
-            echo "Проверка наличия front/Dockerfile в архиве:"
-            if tar -tzf deploy.tar.gz | grep -q "front/Dockerfile"; then
-              echo "✅ front/Dockerfile найден в архиве"
-            else
-              echo "❌ front/Dockerfile НЕ найден в архиве!"
-              echo "Список файлов в front/:"
-              tar -tzf deploy.tar.gz | grep "^front/" | head -20
-              exit 1
-            fi
-          else
-            echo "❌ Ошибка: архив не создан"
-            exit 1
-          fi
-
-      - name: 🚀 Копирование файлов на сервер
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: "deploy.tar.gz"
-          target: "/home/${{ secrets.SERVER_USER }}/"
-
-      - name: 📂 Распаковка на сервере
+      - name: 🚀 Клонирование репозитория на сервер
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -139,16 +84,28 @@ jobs:
           script: |
             cd /home/${{ secrets.SERVER_USER }}
 
-            # Удаляем старую папку
+            # Удаляем старую папку, если есть
             rm -rf app
 
-            # Создаем новую и распаковываем
-            mkdir -p app
-            tar -xzf deploy.tar.gz -C app
-            rm deploy.tar.gz
+            # Клонируем репозиторий
+            REPO_URL="https://github.com/${{ github.repository }}.git"
+            BRANCH="${{ github.ref_name }}"
+
+            echo "Клонирование репозитория: $REPO_URL (ветка: $BRANCH)"
+
+            # Для публичных репозиториев - простое клонирование
+            # Для приватных - нужен Personal Access Token в secrets как GITHUB_PAT
+            if [ -n "${{ secrets.GITHUB_PAT }}" ]; then
+              echo "Использование Personal Access Token для приватного репозитория"
+              git clone --branch "$BRANCH" --depth 1 "https://${{ secrets.GITHUB_PAT }}@github.com/${{ github.repository }}.git" app
+            else
+              echo "Клонирование публичного репозитория"
+              git clone --branch "$BRANCH" --depth 1 "$REPO_URL" app
+            fi
 
             cd app
-            echo "✅ Файлы распакованы"
+
+            echo "✅ Репозиторий склонирован"
             echo "Структура папок:"
             ls -la
             echo ""
@@ -156,7 +113,15 @@ jobs:
             ls -la front/ || echo "Папка front не найдена"
             echo ""
             echo "Проверка front/Dockerfile:"
-            cat front/Dockerfile || echo "Файл не найден"
+            if [ -f front/Dockerfile ]; then
+              echo "✅ front/Dockerfile найден"
+              head -5 front/Dockerfile
+            else
+              echo "❌ front/Dockerfile НЕ найден!"
+              echo "Содержимое front/:"
+              ls -la front/
+              exit 1
+            fi
 
       - name: 🏃‍♂️ Перезапуск сервиса на сервере
         uses: appleboy/ssh-action@master
