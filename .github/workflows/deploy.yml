@@ -18,22 +18,22 @@ jobs:
       - name: 🚀 Деплой на сервер по SSH
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.ENERGOSYSTEMS_SERVER_HOST }}
-          username: ${{ secrets.ENERGOSYSTEMS_SERVER_USER }}
-          key: ${{ secrets.ENERGOSYSTEMS_SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.ENERGOSYSTEMS_SSH_PASSPHRASE }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "." # Что копируем (всё содержимое репо)
-          target: "/home/${{ secrets.ENERGOSYSTEMS_SERVER_USER }}/app" # Куда копируем
+          target: "/home/${{ secrets.SERVER_USER }}/app" # Куда копируем
 
       - name: 🏃‍♂️ Перезапуск сервиса на сервере
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.ENERGOSYSTEMS_SERVER_HOST }}
-          username: ${{ secrets.ENERGOSYSTEMS_SERVER_USER }}
-          key: ${{ secrets.ENERGOSYSTEMS_SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.ENERGOSYSTEMS_SSH_PASSPHRASE }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            cd /home/${{ secrets.ENERGOSYSTEMS_SERVER_USER }}/app
+            cd /home/${{ secrets.SERVER_USER }}/app
             sudo docker compose down
             timeout 300s sudo docker compose up -d --build
             sleep 10 # Ожидание запуска контейнеров
