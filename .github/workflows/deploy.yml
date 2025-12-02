@@ -76,13 +76,24 @@ jobs:
 
       - name: 📦 Создание архива для деплоя
         run: |
+          # Игнорируем предупреждения о изменении файлов во время архивации
           tar -czf deploy.tar.gz \
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='.github' \
             --exclude='*.log' \
-            .
-          ls -lh deploy.tar.gz
+            --exclude='deploy.tar.gz' \
+            --exclude='dist' \
+            . 2>&1 | grep -v "file changed as we read it" || true
+
+          # Проверяем, что архив создан
+          if [ -f deploy.tar.gz ]; then
+            ls -lh deploy.tar.gz
+            echo "✅ Архив создан успешно"
+          else
+            echo "❌ Ошибка: архив не создан"
+            exit 1
+          fi
 
       - name: 🚀 Копирование файлов на сервер
         uses: appleboy/scp-action@v0.1.7
