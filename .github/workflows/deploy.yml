@@ -52,8 +52,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: "." # Что копируем (всё содержимое репо)
-          target: "/home/${{ secrets.SERVER_USER }}/app" # Куда копируем
+          source: "."
+          target: "/home/${{ secrets.SERVER_USER }}/app"
 
       - name: 🏃‍♂️ Перезапуск сервиса на сервере
         uses: appleboy/ssh-action@master
