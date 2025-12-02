@@ -93,6 +93,57 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /home/${{ secrets.SERVER_USER }}/app
-            sudo docker compose down
+            echo "=== Проверка файлов на сервере ==="
+            ls -la
+            echo ""
+            echo "Проверка docker-compose.yml:"
+            cat docker-compose.yml | head -20
+            echo ""
+            echo "Проверка nginx.conf:"
+            cat nginx.conf
+            echo ""
+            echo "Проверка front/Dockerfile:"
+            cat front/Dockerfile || echo "Файл не найден"
+            echo ""
+            echo "Остановка старых контейнеров..."
+            sudo docker compose down || true
+            echo "Запуск новых контейнеров..."
             timeout 300s sudo docker compose up -d --build
-            sleep 10 # Ожидание запуска контейнеров
+            echo "Ожидание запуска контейнеров..."
+            sleep 15
+
+            echo ""
+            echo "=== Статус контейнеров ==="
+            sudo docker compose ps
+
+            echo ""
+            echo "=== Логи frontend ==="
+            sudo docker compose logs --tail=50 frontend || echo "Не удалось получить логи frontend"
+
+            echo ""
+            echo "=== Логи nginx ==="
+            sudo docker compose logs --tail=50 nginx || echo "Не удалось получить логи nginx"
+
+            echo ""
+            echo "=== Проверка портов ==="
+            sudo netstat -tlnp | grep -E ':(80|443|5173)' || sudo ss -tlnp | grep -E ':(80|443|5173)' || echo "Не удалось проверить порты"
+
+            echo ""
+            echo "=== Проверка доступности frontend ==="
+            sudo docker compose exec -T frontend wget -qO- http://localhost:5173 | head -20 || echo "Frontend не отвечает на порту 5173"
+
+            echo ""
+            echo "=== Проверка доступности nginx ==="
+            curl -I http://localhost:80 || echo "Nginx не отвечает на порту 80"
+
+            echo ""
+            echo "=== Проверка firewall (ufw) ==="
+            sudo ufw status || echo "ufw не установлен или не активен"
+
+            echo ""
+            echo "=== Проверка firewall (iptables) ==="
+            sudo iptables -L -n | grep -E '(80|443|5173)' || echo "Правила для портов не найдены"
+
+            echo ""
+            echo "=== Информация о сети ==="
+            ip addr show | grep -E 'inet ' || echo "Не удалось получить информацию о сети"
