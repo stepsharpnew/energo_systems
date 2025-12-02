@@ -76,20 +76,44 @@ jobs:
 
       - name: 📦 Создание архива для деплоя
         run: |
+          echo "Проверка структуры перед архивацией:"
+          ls -la
+          echo ""
+          echo "Проверка front/:"
+          ls -la front/ | head -10
+          echo ""
+
           # Игнорируем предупреждения о изменении файлов во время архивации
+          # Исключаем node_modules во всех папках, но не саму папку front
           tar -czf deploy.tar.gz \
             --exclude='.git' \
-            --exclude='node_modules' \
             --exclude='.github' \
             --exclude='*.log' \
             --exclude='deploy.tar.gz' \
             --exclude='dist' \
+            --exclude='front/node_modules' \
+            --exclude='front/dist' \
             . 2>&1 | grep -v "file changed as we read it" || true
 
           # Проверяем, что архив создан
           if [ -f deploy.tar.gz ]; then
             ls -lh deploy.tar.gz
             echo "✅ Архив создан успешно"
+            
+            # Проверяем содержимое архива
+            echo ""
+            echo "Проверка содержимого архива:"
+            tar -tzf deploy.tar.gz | head -20
+            echo ""
+            echo "Проверка наличия front/Dockerfile в архиве:"
+            if tar -tzf deploy.tar.gz | grep -q "front/Dockerfile"; then
+              echo "✅ front/Dockerfile найден в архиве"
+            else
+              echo "❌ front/Dockerfile НЕ найден в архиве!"
+              echo "Список файлов в front/:"
+              tar -tzf deploy.tar.gz | grep "^front/" | head -20
+              exit 1
+            fi
           else
             echo "❌ Ошибка: архив не создан"
             exit 1
