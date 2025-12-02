@@ -15,6 +15,35 @@ jobs:
       - name: 🛎️ Клонирование репозитория
         uses: actions/checkout@v4
 
+      - name: 🔍 Проверка SSH ключа
+  run: |
+    echo "Проверка формата ключа..."
+    if [ -z "${{ secrets.ENERGOSYSTEMS_SERVER_SSH_KEY }}" ]; then
+      echo "❌ Ключ пустой или не установлен!"
+      exit 1
+    fi
+
+    # Проверяем начало ключа (без вывода всего содержимого)
+    KEY_START=$(echo "${{ secrets.ENERGOSYSTEMS_SERVER_SSH_KEY }}" | head -c 50)
+    KEY_END=$(echo "${{ secrets.ENERGOSYSTEMS_SERVER_SSH_KEY }}" | tail -c 50)
+
+    echo "Начало ключа: $KEY_START"
+    echo "Конец ключа: $KEY_END"
+
+    # Проверяем формат
+    if echo "${{ secrets.ENERGOSYSTEMS_SERVER_SSH_KEY }}" | grep -q "BEGIN.*PRIVATE KEY"; then
+      echo "✅ Формат ключа правильный (приватный ключ)"
+    else
+      echo "❌ Неверный формат! Должен начинаться с 'BEGIN ... PRIVATE KEY'"
+      exit 1
+    fi
+
+    # Проверяем длину (приватный ключ должен быть достаточно длинным)
+    KEY_LENGTH=$(echo "${{ secrets.ENERGOSYSTEMS_SERVER_SSH_KEY }}" | wc -c)
+    echo "Длина ключа: $KEY_LENGTH символов"
+    if [ "$KEY_LENGTH" -lt 500 ]; then
+      echo "⚠️  Ключ слишком короткий! Возможно, скопирован не полностью."
+    fi
       - name: 🚀 Деплой на сервер по SSH
         uses: appleboy/scp-action@v0.1.7
         with:
