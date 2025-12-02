@@ -74,15 +74,54 @@ jobs:
           echo ""
           echo "Все необходимые secrets проверены!"
 
-      - name: 🚀 Деплой на сервер по SSH
+      - name: 📦 Создание архива для деплоя
+        run: |
+          tar -czf deploy.tar.gz \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.github' \
+            --exclude='*.log' \
+            .
+          ls -lh deploy.tar.gz
+
+      - name: 🚀 Копирование файлов на сервер
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: "."
-          target: "/home/${{ secrets.SERVER_USER }}/app"
+          source: "deploy.tar.gz"
+          target: "/home/${{ secrets.SERVER_USER }}/"
+
+      - name: 📂 Распаковка на сервере
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd /home/${{ secrets.SERVER_USER }}
+
+            # Удаляем старую папку
+            rm -rf app
+
+            # Создаем новую и распаковываем
+            mkdir -p app
+            tar -xzf deploy.tar.gz -C app
+            rm deploy.tar.gz
+
+            cd app
+            echo "✅ Файлы распакованы"
+            echo "Структура папок:"
+            ls -la
+            echo ""
+            echo "Проверка front:"
+            ls -la front/ || echo "Папка front не найдена"
+            echo ""
+            echo "Проверка front/Dockerfile:"
+            cat front/Dockerfile || echo "Файл не найден"
 
       - name: 🏃‍♂️ Перезапуск сервиса на сервере
         uses: appleboy/ssh-action@master
@@ -93,17 +132,30 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /home/${{ secrets.SERVER_USER }}/app
-            echo "=== Проверка файлов на сервере ==="
+
+            echo "=== Финальная проверка структуры ==="
+            echo "Содержимое корня:"
             ls -la
             echo ""
-            echo "Проверка docker-compose.yml:"
-            cat docker-compose.yml | head -20
-            echo ""
-            echo "Проверка nginx.conf:"
-            cat nginx.conf
+            echo "Содержимое front/:"
+            ls -la front/ || echo "❌ Папка front не найдена!"
             echo ""
             echo "Проверка front/Dockerfile:"
-            cat front/Dockerfile || echo "Файл не найден"
+            if [ -f front/Dockerfile ]; then
+              echo "✅ front/Dockerfile найден"
+              head -5 front/Dockerfile
+            else
+              echo "❌ front/Dockerfile НЕ найден!"
+              exit 1
+            fi
+            echo ""
+            echo "Проверка docker-compose.yml:"
+            if [ -f docker-compose.yml ]; then
+              echo "✅ docker-compose.yml найден"
+            else
+              echo "❌ docker-compose.yml НЕ найден!"
+              exit 1
+            fi
             echo ""
             echo "Остановка старых контейнеров..."
             sudo docker compose down || true
