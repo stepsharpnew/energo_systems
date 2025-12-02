@@ -1,0 +1,75 @@
+name: Docker Compose CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Клонирование репозитория
+        uses: actions/checkout@v4
+
+      - name: 🧹 Очистка старой папки на сервере
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            rm -rf /home/${{ secrets.SERVER_USER }}/app
+            mkdir -p /home/${{ secrets.SERVER_USER }}/app
+
+      - name: 🚀 Деплой на сервер по SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          source: "." # Что копируем (всё содержимое репо)
+          target: "/home/${{ secrets.SERVER_USER }}/app" # Куда копируем
+          overwrite: true
+          strip_components: 0
+
+      - name: 🏃‍♂️ Перезапуск сервиса на сервере
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd /home/${{ secrets.SERVER_USER }}/app
+
+            # Проверка структуры перед запуском
+            echo "Проверка структуры файлов:"
+            ls -la
+            echo ""
+            echo "Проверка front/:"
+            ls -la front/ || echo "⚠️ Папка front не найдена"
+            echo ""
+            echo "Проверка front/Dockerfile:"
+            if [ -f front/Dockerfile ]; then
+              echo "✅ front/Dockerfile найден"
+            else
+              echo "❌ front/Dockerfile НЕ найден!"
+              echo "Содержимое front/:"
+              ls -la front/ 2>/dev/null || echo "Папка front не существует"
+              exit 1
+            fi
+            echo ""
+
+            sudo docker compose down
+            timeout 300s sudo docker compose up -d --build
+            sleep 10 # Ожидание запуска контейнеров
+
+            echo ""
+            echo "=== Статус контейнеров ==="
+            sudo docker compose ps

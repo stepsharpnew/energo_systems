@@ -1,0 +1,48 @@
+networks:
+  dev:
+
+services:
+  # database:
+  #   image: postgres:latest
+  #   container_name: postgres-image
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: 12345678
+  #     POSTGRES_DB: postgres
+  #   networks:
+  #     - dev
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+      - "/etc/letsencrypt:/etc/letsencrypt"
+    depends_on:
+      - frontend
+    networks:
+      - dev
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   networks:
+  #     - dev
+  #   environment:
+  #     DATABASE_HOST: postgres-image
+  #     DATABASE_USER: postgres
+  #     DATABASE_PASSWORD: 12345678
+  #     DATABASE_NAME: postgres
+  #   ports:
+  #     - "5000:5000"
+  frontend:
+    build:
+      context: ./front
+    ports:
+      - "5173:5173"
+    networks:
+      - dev
+  # volumes:
+  #   postgres_data:
+  #   grafana-storage:

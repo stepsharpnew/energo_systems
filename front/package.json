@@ -1,0 +1,21 @@
+{
+  "name": "energy-systems-project",
+  "version": "1.0.0",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "dev": "vue-cli-service serve --open"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "register-service-worker": "^1.7.2",
+    "vue": "^3.3.0",
+    "vue-router": "^4.2.0",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^5.0.0",
+    "sass": "^1.60.0",
+    "sass-loader": "^13.0.0"
+  }
+}
