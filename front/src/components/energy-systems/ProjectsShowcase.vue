@@ -77,16 +77,6 @@ export default {
     initScrollTriggers() {
       this.$nextTick(() => {
         const isMobile = window.innerWidth <= 1200;
-        
-        if (isMobile) {
-          // На мобильных устройствах устанавливаем начальные значения
-          this.cardRefs.forEach((card) => {
-            if (card) {
-              gsap.set(card, { opacity: 1, x: 0, y: 0 });
-            }
-          });
-          return;
-        }
 
         // Очищаем предыдущие триггеры
         if (this.scrollTriggers.length > 0) {
@@ -94,113 +84,86 @@ export default {
           this.scrollTriggers = [];
         }
 
-        // 1 столбец (index 0): быстро и издалека слева
-        if (this.cardRefs[0]) {
-          const anim1 = gsap.fromTo(
-            this.cardRefs[0],
-            {
-              opacity: 0,
-              x: -150,
-              y: 40,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              y: 0,
-              ease: "power1.out",
+        // Определяем параметры анимации в зависимости от устройства
+        const getCardAnimationConfig = (index) => {
+          if (isMobile) {
+            // На мобильных - упрощенные анимации с меньшими смещениями
+            // Чередуем направления для визуального интереса
+            const offsets = [
+              { x: -40, y: 20 }, // Карточка 0
+              { x: -30, y: 15 }, // Карточка 1
+              { x: 30, y: 15 },  // Карточка 2
+              { x: 40, y: 20 },  // Карточка 3
+            ];
+            // Для карточек больше 4 используем циклический паттерн
+            const patternIndex = index % 4;
+            const offset = offsets[patternIndex] || { x: 0, y: 20 };
+            return {
+              from: {
+                opacity: 0,
+                x: offset.x,
+                y: offset.y,
+              },
+              to: {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+              },
               scrollTrigger: {
-                trigger: this.cardRefs[0],
+                trigger: this.cardRefs[index],
+                start: "top 90%",
+                end: isMobile ? "top 50%" : "center 60%",
+                scrub: 0.8, // Привязка к скроллу - работает в обе стороны
+              },
+            };
+          } else {
+            // Десктоп - оригинальные анимации
+            const configs = [
+              { x: -150, y: 40, scrub: 0.3 },  // Карточка 0
+              { x: -80, y: 30, scrub: 1.5 },   // Карточка 1
+              { x: 80, y: 30, scrub: 1.5 },    // Карточка 2
+              { x: 150, y: 40, scrub: 0.3 },   // Карточка 3
+            ];
+            // Для карточек больше 4 используем циклический паттерн
+            const patternIndex = index % 4;
+            const config = configs[patternIndex] || { x: 0, y: 30, scrub: 0.5 };
+            return {
+              from: {
+                opacity: 0,
+                x: config.x,
+                y: config.y,
+              },
+              to: {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+              },
+              scrollTrigger: {
+                trigger: this.cardRefs[index],
                 start: "top 90%",
                 end: "center 60%",
-                scrub: 0.3, // Быстрое движение
+                scrub: config.scrub,
               },
-            }
-          );
-          if (anim1.scrollTrigger) {
-            this.scrollTriggers.push(anim1.scrollTrigger);
+            };
           }
-        }
+        };
 
-        // 2 столбец (index 1): медленно и прилипает к центру слева
-        if (this.cardRefs[1]) {
-          const anim2 = gsap.fromTo(
-            this.cardRefs[1],
-            {
-              opacity: 0,
-              x: -80,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              y: 0,
-              ease: "power1.out",
-              scrollTrigger: {
-                trigger: this.cardRefs[1],
-                start: "top 90%",
-                end: "center 60%",
-                scrub: 1.5, // Медленное движение, прилипает к центру
-              },
-            }
-          );
-          if (anim2.scrollTrigger) {
-            this.scrollTriggers.push(anim2.scrollTrigger);
-          }
-        }
+        // Создаем анимации для всех карточек
+        this.cardRefs.forEach((card, index) => {
+          if (!card) return;
 
-        // 3 столбец (index 2): медленно и прилипает к центру справа
-        if (this.cardRefs[2]) {
-          const anim3 = gsap.fromTo(
-            this.cardRefs[2],
-            {
-              opacity: 0,
-              x: 80,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              y: 0,
-              ease: "power1.out",
-              scrollTrigger: {
-                trigger: this.cardRefs[2],
-                start: "top 90%",
-                end: "center 60%",
-                scrub: 1.5, // Медленное движение, прилипает к центру
-              },
-            }
-          );
-          if (anim3.scrollTrigger) {
-            this.scrollTriggers.push(anim3.scrollTrigger);
-          }
-        }
+          const config = getCardAnimationConfig(index);
+          const anim = gsap.fromTo(card, config.from, {
+            ...config.to,
+            scrollTrigger: config.scrollTrigger,
+          });
 
-        // 4 столбец (index 3): быстро и издалека справа
-        if (this.cardRefs[3]) {
-          const anim4 = gsap.fromTo(
-            this.cardRefs[3],
-            {
-              opacity: 0,
-              x: 150,
-              y: 40,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              y: 0,
-              ease: "power1.out",
-              scrollTrigger: {
-                trigger: this.cardRefs[3],
-                start: "top 90%",
-                end: "center 60%",
-                scrub: 0.3, // Быстрое движение
-              },
-            }
-          );
-          if (anim4.scrollTrigger) {
-            this.scrollTriggers.push(anim4.scrollTrigger);
+          if (anim.scrollTrigger) {
+            this.scrollTriggers.push(anim.scrollTrigger);
           }
-        }
+        });
 
         // Обновляем ScrollTrigger после создания всех анимаций
         this.refreshScrollTrigger();
@@ -212,26 +175,14 @@ export default {
       }, 100);
     },
     handleResize() {
-      const isMobile = window.innerWidth <= 1200;
-
-      // Если переключились на мобильный режим
-      if (isMobile && this.scrollTriggers.length > 0) {
-        // Убиваем все ScrollTrigger
+      // При изменении размера пересоздаем анимации
+      if (this.scrollTriggers.length > 0) {
         this.scrollTriggers.forEach((st) => st.kill());
         this.scrollTriggers = [];
-        // Устанавливаем видимость элементов
-        this.cardRefs.forEach((card) => {
-          if (card) {
-            gsap.set(card, { opacity: 1, x: 0, y: 0 });
-          }
-        });
-      } else if (!isMobile && this.scrollTriggers.length === 0) {
-        // Если переключились на десктоп, пересоздаем анимации
-        this.initScrollTriggers();
-      } else if (this.scrollTriggers.length > 0) {
-        // Просто обновляем ScrollTrigger
-        this.refreshScrollTrigger();
       }
+      
+      // Пересоздаем анимации с новыми параметрами
+      this.initScrollTriggers();
     },
   },
 };
@@ -379,11 +330,7 @@ export default {
 }
 
 @media (max-width: 1200px) {
-  .project-card {
-    opacity: 1 !important;
-    transform: none !important;
-    will-change: auto !important;
-  }
+  /* Анимации теперь работают на мобильных, CSS правила удалены */
 }
 
 @media (max-width: 767px) {

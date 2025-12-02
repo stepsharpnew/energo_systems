@@ -1,14 +1,15 @@
 <template>
   <section class="certificates-section" ref="certificatesSection">
-    <div class="section-heading compact">
+    <div class="section-heading compact" ref="headingRef">
       <p class="section-kicker">Сертификаты</p>
       <h2>Подтвержденная экспертиза</h2>
       <p>Разрешительные документы, лицензии СРО и отраслевые сертификаты</p>
     </div>
     <div class="certificates-grid">
       <div
-        v-for="certificate in certificates"
+        v-for="(certificate, index) in certificates"
         :key="certificate.id"
+        :ref="el => setCardRef(el, index)"
         class="certificate-card"
       >
         <div
@@ -36,7 +37,127 @@ export default {
       type: Array,
       required: true
     }
-  }
+  },
+  data() {
+    return {
+      cardRefs: [],
+      scrollTriggers: [],
+    };
+  },
+  mounted() {
+    this.initScrollTriggers();
+    window.addEventListener("resize", this.handleResize, { passive: true });
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+    if (this.scrollTriggers) {
+      this.scrollTriggers.forEach((st) => st.kill());
+      this.scrollTriggers = [];
+    }
+  },
+  methods: {
+    setCardRef(el, index) {
+      if (el) {
+        this.cardRefs[index] = el;
+      }
+    },
+    initScrollTriggers() {
+      this.$nextTick(() => {
+        const gsap = this.$gsap;
+        const ScrollTrigger = this.$ScrollTrigger;
+
+        if (!gsap || !ScrollTrigger) return;
+
+        const isMobile = window.innerWidth <= 992;
+
+        // Очищаем предыдущие триггеры
+        if (this.scrollTriggers.length > 0) {
+          this.scrollTriggers.forEach((st) => st.kill());
+          this.scrollTriggers = [];
+        }
+
+        // Анимация для заголовка секции
+        if (this.$refs.headingRef) {
+          const headingAnim = gsap.fromTo(
+            this.$refs.headingRef,
+            {
+              opacity: 0,
+              y: 30,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: this.$refs.headingRef,
+                start: "top 90%",
+                end: isMobile ? "top 60%" : "top 70%",
+                scrub: isMobile ? 0.8 : 0.5,
+              },
+            }
+          );
+          if (headingAnim.scrollTrigger) {
+            this.scrollTriggers.push(headingAnim.scrollTrigger);
+          }
+        }
+
+        // Анимации для карточек сертификатов
+        this.cardRefs.forEach((card, index) => {
+          if (!card) return;
+
+          const xOffset = isMobile ? 30 : 50;
+          const yOffset = isMobile ? 20 : 30;
+          
+          // Чередуем направления для визуального интереса
+          const direction = index % 2 === 0 ? -1 : 1;
+          
+          const cardAnim = gsap.fromTo(
+            card,
+            {
+              opacity: 0,
+              x: xOffset * direction,
+              y: yOffset,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                end: isMobile ? "top 50%" : "center 60%",
+                scrub: isMobile ? 0.8 : 0.5,
+              },
+            }
+          );
+
+          if (cardAnim.scrollTrigger) {
+            this.scrollTriggers.push(cardAnim.scrollTrigger);
+          }
+        });
+
+        // Обновляем ScrollTrigger после создания всех анимаций
+        this.refreshScrollTrigger();
+      });
+    },
+    refreshScrollTrigger() {
+      const ScrollTrigger = this.$ScrollTrigger;
+      if (ScrollTrigger) {
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
+      }
+    },
+    handleResize() {
+      // При изменении размера пересоздаем анимации
+      if (this.scrollTriggers.length > 0) {
+        this.scrollTriggers.forEach((st) => st.kill());
+        this.scrollTriggers = [];
+      }
+      this.initScrollTriggers();
+    },
+  },
 }
 </script>
 
@@ -90,6 +211,7 @@ export default {
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  will-change: transform, opacity;
 }
 
 .certificate-card:hover {

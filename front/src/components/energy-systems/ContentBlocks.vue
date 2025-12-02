@@ -127,27 +127,22 @@ export default {
 
       this.scrollTriggers = [];
 
-      // На мобильных устройствах устанавливаем начальные значения
-      if (isMobile) {
-        if (this.$refs.block1) {
-          gsap.set(this.$refs.block1, { opacity: 1, x: 0 });
-        }
-        if (this.$refs.block2) {
-          gsap.set(this.$refs.block2, { opacity: 1, x: 0 });
-        }
-        if (this.$refs.block3) {
-          gsap.set(this.$refs.block3, { opacity: 1, x: 0 });
-        }
-        return;
-      }
+      // Определяем параметры анимации в зависимости от устройства
+      const animConfig = isMobile ? {
+        xOffset: 30, // Меньшее смещение на мобильных
+        scrubValue: 0.8, // Плавная привязка к скроллу на мобильных
+      } : {
+        xOffset: 60,
+        scrubValue: 0.5,
+      };
 
-      // Анимация для блока 1 (движение слева)
+      // Анимация для блока 1 (движение слева) - появляется вниз, пропадает вверх
       if (this.$refs.block1) {
         const anim1 = gsap.fromTo(
           this.$refs.block1,
           {
             opacity: 0,
-            x: -60,
+            x: -animConfig.xOffset,
           },
           {
             opacity: 1,
@@ -156,22 +151,24 @@ export default {
             scrollTrigger: {
               trigger: this.$refs.block1,
               start: "top 90%",
-              end: "center 60%",
-              scrub: 0.5,
+              end: isMobile ? "top 50%" : "center 60%",
+              scrub: animConfig.scrubValue, // Привязка к скроллу - работает в обе стороны
             },
           }
         );
 
-        this.scrollTriggers.push(anim1.scrollTrigger);
+        if (anim1.scrollTrigger) {
+          this.scrollTriggers.push(anim1.scrollTrigger);
+        }
       }
 
-      // Анимация для блока 2 (движение справа)
+      // Анимация для блока 2 (движение справа) - появляется вниз, пропадает вверх
       if (this.$refs.block2) {
         const anim2 = gsap.fromTo(
           this.$refs.block2,
           {
             opacity: 0,
-            x: 60,
+            x: animConfig.xOffset,
           },
           {
             opacity: 1,
@@ -180,22 +177,24 @@ export default {
             scrollTrigger: {
               trigger: this.$refs.block2,
               start: "top 90%",
-              end: "center 60%",
-              scrub: 0.5,
+              end: isMobile ? "top 50%" : "center 60%",
+              scrub: animConfig.scrubValue, // Привязка к скроллу - работает в обе стороны
             },
           }
         );
 
-        this.scrollTriggers.push(anim2.scrollTrigger);
+        if (anim2.scrollTrigger) {
+          this.scrollTriggers.push(anim2.scrollTrigger);
+        }
       }
 
-      // Анимация для блока 3 (движение слева)
+      // Анимация для блока 3 (движение слева) - появляется вниз, пропадает вверх
       if (this.$refs.block3) {
         const anim3 = gsap.fromTo(
           this.$refs.block3,
           {
             opacity: 0,
-            x: -60,
+            x: -animConfig.xOffset,
           },
           {
             opacity: 1,
@@ -204,13 +203,15 @@ export default {
             scrollTrigger: {
               trigger: this.$refs.block3,
               start: "top 90%",
-              end: "center 60%",
-              scrub: 0.5,
+              end: isMobile ? "top 50%" : "center 60%",
+              scrub: animConfig.scrubValue, // Привязка к скроллу - работает в обе стороны
             },
           }
         );
 
-        this.scrollTriggers.push(anim3.scrollTrigger);
+        if (anim3.scrollTrigger) {
+          this.scrollTriggers.push(anim3.scrollTrigger);
+        }
       }
 
       // Обновляем ScrollTrigger после создания всех анимаций
@@ -226,34 +227,19 @@ export default {
       }
     },
     handleResize() {
-      const isMobile = window.innerWidth <= 992;
       const gsap = this.$gsap;
       const ScrollTrigger = this.$ScrollTrigger;
 
       if (!gsap || !ScrollTrigger) return;
 
-      // Если переключились на мобильный режим
-      if (isMobile && this.scrollTriggers.length > 0) {
-        // Убиваем все ScrollTrigger
+      // При изменении размера пересоздаем анимации
+      if (this.scrollTriggers.length > 0) {
         this.scrollTriggers.forEach((st) => st.kill());
         this.scrollTriggers = [];
-        // Устанавливаем видимость элементов
-        if (this.$refs.block1) {
-          gsap.set(this.$refs.block1, { opacity: 1, x: 0 });
-        }
-        if (this.$refs.block2) {
-          gsap.set(this.$refs.block2, { opacity: 1, x: 0 });
-        }
-        if (this.$refs.block3) {
-          gsap.set(this.$refs.block3, { opacity: 1, x: 0 });
-        }
-      } else if (!isMobile && this.scrollTriggers.length === 0) {
-        // Если переключились на десктоп, пересоздаем анимации
-        this.setupScrollTrigger();
-      } else if (this.scrollTriggers.length > 0) {
-        // Просто обновляем ScrollTrigger
-        this.refreshScrollTrigger();
       }
+      
+      // Пересоздаем анимации с новыми параметрами
+      this.setupScrollTrigger();
     },
   },
 };
@@ -348,9 +334,7 @@ export default {
   .content-block {
     grid-template-columns: 1fr;
     gap: 40px;
-    opacity: 1 !important;
-    transform: none !important;
-    will-change: auto !important;
+    margin-bottom: clamp(50px, 7vw, 80px);
   }
 
   .content-block-1,
@@ -359,13 +343,7 @@ export default {
     grid-template-areas:
       "image"
       "text";
-    opacity: 1 !important;
-    transform: none !important;
     z-index: auto !important;
-  }
-
-  .content-block {
-    margin-bottom: clamp(50px, 7vw, 80px);
   }
 
   /* Отключаем data-speed эффект на мобильных */
