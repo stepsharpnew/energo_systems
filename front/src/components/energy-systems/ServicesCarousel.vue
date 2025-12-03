@@ -7,70 +7,30 @@
           class="carousel-wrapper"
           ref="carousel"
           @scroll.passive="handleScroll"
+          @touchstart="handleTouchStart"
+          @touchmove="handleTouchMove"
+          @touchend="handleTouchEnd"
         >
-          <!-- Дубликаты в конце (для бесконечной прокрутки) -->
+          <!-- Всегда показываем только 3 элемента: предыдущий, текущий, следующий -->
           <div
-            v-for="(service, index) in services"
-            :key="`duplicate-end-${service.id}`"
+            v-for="(card, idx) in visibleCards"
+            :key="`card-${card.index}`"
             class="carousel-card"
-            :class="{ active: getRealIndex(index) === activeIndex }"
-            :data-index="getRealIndex(index)"
-            :data-duplicate="true"
-            @click="handleServiceClick(service, getRealIndex(index))"
-            :style="getCardStyle(service)"
+            :class="{ active: card.index === activeIndex && !card.isDuplicate }"
+            :data-index="card.index"
+            :data-duplicate="card.isDuplicate"
+            @click="handleServiceClick(card.service, card.index)"
+            :style="getCardStyle(card.service)"
           >
             <button
               class="card-info-toggle"
               type="button"
-              @click.stop="$emit('open-service-modal', service)"
+              @click.stop="$emit('open-service-modal', card.service)"
               aria-label="Подробнее об услуге"
             >
               i
             </button>
-            <span class="service-name">{{ service.name }}</span>
-          </div>
-
-          <!-- Основные элементы -->
-          <div
-            v-for="(service, index) in services"
-            :key="service.id"
-            class="carousel-card"
-            :class="{ active: index === activeIndex }"
-            :data-index="index"
-            @click="handleServiceClick(service, index)"
-            :style="getCardStyle(service)"
-          >
-            <button
-              class="card-info-toggle"
-              type="button"
-              @click.stop="$emit('open-service-modal', service)"
-              aria-label="Подробнее об услуге"
-            >
-              i
-            </button>
-            <span class="service-name">{{ service.name }}</span>
-          </div>
-
-          <!-- Дубликаты в начале (для бесконечной прокрутки) -->
-          <div
-            v-for="(service, index) in services"
-            :key="`duplicate-start-${service.id}`"
-            class="carousel-card"
-            :class="{ active: getRealIndex(index) === activeIndex }"
-            :data-index="getRealIndex(index)"
-            :data-duplicate="true"
-            @click="handleServiceClick(service, getRealIndex(index))"
-            :style="getCardStyle(service)"
-          >
-            <button
-              class="card-info-toggle"
-              type="button"
-              @click.stop="$emit('open-service-modal', service)"
-              aria-label="Подробнее об услуге"
-            >
-              i
-            </button>
-            <span class="service-name">{{ service.name }}</span>
+            <span class="service-name">{{ card.service.name }}</span>
           </div>
         </div>
       </div>
@@ -106,11 +66,51 @@ export default {
       gap: 0,
       isAnimating: false,
       scrollUpdateTimeout: null,
+      touchStartX: 0,
+      touchStartY: 0,
+      touchStartScrollLeft: 0,
+      isTouching: false,
+      isScrolling: false,
     };
   },
   computed: {
     activeService() {
       return this.services[this.activeIndex] || null;
+    },
+    visibleCards() {
+      if (this.services.length === 0) return [];
+
+      const total = this.services.length;
+      const current = this.activeIndex;
+
+      // Вычисляем индексы предыдущего и следующего элементов
+      const prevIndex = (current - 1 + total) % total;
+      const nextIndex = (current + 1) % total;
+
+      const cards = [];
+
+      // Предыдущий элемент
+      cards.push({
+        service: this.services[prevIndex],
+        index: prevIndex,
+        isDuplicate: false,
+      });
+
+      // Текущий элемент
+      cards.push({
+        service: this.services[current],
+        index: current,
+        isDuplicate: false,
+      });
+
+      // Следующий элемент
+      cards.push({
+        service: this.services[nextIndex],
+        index: nextIndex,
+        isDuplicate: false,
+      });
+
+      return cards;
     },
   },
   mounted() {
@@ -129,8 +129,9 @@ export default {
     }
   },
   methods: {
-    getRealIndex(index) {
-      return index;
+    resetAutoPlay() {
+      this.stopAutoPlay();
+      this.startAutoPlay();
     },
     initializeCarousel() {
       const carousel = this.$refs.carousel;
@@ -139,30 +140,27 @@ export default {
       this.$nextTick(() => {
         requestAnimationFrame(() => {
           // Вычисляем размеры карточек
-          const firstCard = carousel.querySelector(
-            ".carousel-card:not([data-duplicate])"
-          );
+          const firstCard = carousel.querySelector(".carousel-card");
           if (firstCard && firstCard.offsetWidth > 0) {
             this.cardWidth = firstCard.offsetWidth;
             const style = window.getComputedStyle(carousel);
             this.gap = parseFloat(style.gap) || 0;
           }
 
-          // Устанавливаем начальную позицию так, чтобы первый элемент был по центру
+          // Устанавливаем начальную позицию так, чтобы средний элемент (текущий) был по центру
           if (this.cardWidth > 0 && carousel.offsetWidth > 0) {
-            const sectionWidth =
-              this.services.length * (this.cardWidth + this.gap);
-            // Позиция = начало оригиналов + центр первого элемента - центр viewport
-            const firstCardCenter = sectionWidth + this.cardWidth / 2;
-            const viewportCenter = carousel.offsetWidth / 2;
-            carousel.scrollLeft = Math.max(0, firstCardCenter - viewportCenter);
+            // Средний элемент - это второй в массиве из 3 элементов (индекс 1)
+            const middleCard = carousel.querySelectorAll(".carousel-card")[1];
+            if (middleCard) {
+              const middleCardCenter =
+                middleCard.offsetLeft + middleCard.offsetWidth / 2;
+              const viewportCenter = carousel.offsetWidth / 2;
+              carousel.scrollLeft = Math.max(
+                0,
+                middleCardCenter - viewportCenter
+              );
+            }
             // Устанавливаем активный индекс на первый элемент
-            this.activeIndex = 0;
-          } else {
-            // Fallback: устанавливаем на начало оригиналов
-            const sectionWidth =
-              this.services.length * (this.cardWidth + this.gap);
-            carousel.scrollLeft = sectionWidth;
             this.activeIndex = 0;
           }
         });
@@ -185,77 +183,66 @@ export default {
       this.goToSlide(nextIndex);
     },
     goToSlide(index) {
+      if (this.isAnimating) return;
+      if (index === this.activeIndex) return;
+
       const carousel = this.$refs.carousel;
       if (!carousel) return;
 
-      // Находим первый оригинальный элемент с нужным индексом
-      const cards = carousel.querySelectorAll(
-        `.carousel-card:not([data-duplicate])`
-      );
-      const target = cards[index];
-      if (!target) return;
+      // Определяем, какой элемент нужно показать по центру
+      // Если переходим на следующий элемент, он уже виден справа
+      // Если переходим на предыдущий, он уже виден слева
+      const total = this.services.length;
+      const current = this.activeIndex;
+      const diff = (index - current + total) % total;
 
-      // Устанавливаем флаг анимации, чтобы предотвратить обновление activeIndex во время скролла
+      // Устанавливаем флаг анимации
       this.isAnimating = true;
 
-      const gsap = this.$gsap;
-      if (gsap) {
-        // Используем GSAP для плавного скролла
-        gsap.to(carousel, {
-          scrollLeft:
-            target.offsetLeft -
-            carousel.offsetWidth / 2 +
-            target.offsetWidth / 2,
-          duration: 0.8,
-          ease: "power2.inOut",
-          onComplete: () => {
-            this.handleInfiniteScroll();
-            this.isAnimating = false;
-            // Устанавливаем активный индекс только после завершения анимации
-            this.activeIndex = index;
-            // Обновляем для проверки точности позиционирования
-            this.updateActiveByScroll();
-          },
-        });
-      } else {
-        // Fallback на нативный скролл
-        target.scrollIntoView({
-          behavior: "smooth",
-          inline: "center",
-          block: "nearest",
-        });
-        setTimeout(() => {
-          this.handleInfiniteScroll();
+      // Обновляем activeIndex сразу, чтобы visibleCards обновился
+      // Это создаст правильный порядок элементов для плавного перехода
+      this.activeIndex = index;
+
+      this.$nextTick(() => {
+        // Находим средний элемент (текущий активный)
+        const cards = carousel.querySelectorAll(".carousel-card");
+        const middleCard = cards[1]; // Средний элемент всегда по индексу 1
+
+        if (!middleCard) {
           this.isAnimating = false;
-          // Устанавливаем активный индекс только после завершения анимации
-          this.activeIndex = index;
-          this.updateActiveByScroll();
-        }, 800);
-      }
+          return;
+        }
+
+        const gsap = this.$gsap;
+        if (gsap) {
+          // Используем GSAP для плавного скролла
+          gsap.to(carousel, {
+            scrollLeft:
+              middleCard.offsetLeft -
+              carousel.offsetWidth / 2 +
+              middleCard.offsetWidth / 2,
+            duration: 0.8,
+            ease: "power2.inOut",
+            onComplete: () => {
+              this.isAnimating = false;
+            },
+          });
+        } else {
+          // Fallback на нативный скролл
+          middleCard.scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "nearest",
+          });
+          setTimeout(() => {
+            this.isAnimating = false;
+          }, 800);
+        }
+      });
     },
     handleInfiniteScroll() {
-      if (!this.cardWidth) return;
-
-      const carousel = this.$refs.carousel;
-      if (!carousel) return;
-
-      const cardWithGap = this.cardWidth + this.gap;
-      const sectionWidth = this.services.length * cardWithGap;
-      const originalStart = sectionWidth;
-      const originalEnd = originalStart + sectionWidth;
-      const duplicateEndStart = 2 * sectionWidth;
-      const scrollLeft = carousel.scrollLeft;
-      const threshold = cardWithGap;
-
-      // Если прокрутили в конец дубликатов в начале (вправо)
-      if (scrollLeft >= duplicateEndStart - threshold) {
-        const offset = scrollLeft - duplicateEndStart;
-        carousel.scrollLeft = originalStart + offset;
-      }
-      // Если прокрутили в начало дубликатов в конце (влево)
-      else if (scrollLeft <= threshold) {
-        carousel.scrollLeft = originalEnd - threshold + scrollLeft;
-      }
+      // Этот метод больше не нужен, так как мы всегда показываем только 3 элемента
+      // и используем computed свойство visibleCards для управления отображением
     },
     handleResize() {
       this.initializeCarousel();
@@ -279,20 +266,21 @@ export default {
       const carousel = this.$refs.carousel;
       if (!carousel) return;
 
-      const cards = carousel.querySelectorAll(
-        ".carousel-card:not([data-duplicate])"
-      );
+      const cards = carousel.querySelectorAll(".carousel-card");
       if (cards.length === 0) return;
 
       const viewportCenter = carousel.scrollLeft + carousel.offsetWidth / 2;
       let closestCard = null;
       let closestDistance = Infinity;
 
-      cards.forEach((card) => {
+      // Проверяем все карточки, но предпочитаем среднюю (индекс 1)
+      cards.forEach((card, idx) => {
         const cardCenter = card.offsetLeft + card.offsetWidth / 2;
         const distance = Math.abs(viewportCenter - cardCenter);
-        if (distance < closestDistance) {
-          closestDistance = distance;
+        // Даем приоритет средней карточке (индекс 1)
+        const adjustedDistance = idx === 1 ? distance * 0.5 : distance;
+        if (adjustedDistance < closestDistance) {
+          closestDistance = adjustedDistance;
           closestCard = card;
         }
       });
@@ -301,6 +289,8 @@ export default {
         const index = parseInt(closestCard.dataset.index);
         if (!isNaN(index) && index !== this.activeIndex) {
           this.activeIndex = index;
+          // Пользователь переключил слайд вручную (скроллом) — сбрасываем таймер
+          this.resetAutoPlay();
         }
       }
     },
@@ -322,9 +312,107 @@ export default {
         return;
       }
       // Переключаем на выбранный слайд
-      this.stopAutoPlay();
       this.goToSlide(index);
-      this.startAutoPlay();
+      // Сбрасываем таймер автопрокрутки при ручном переключении
+      this.resetAutoPlay();
+    },
+    handleTouchStart(e) {
+      const carousel = this.$refs.carousel;
+      if (!carousel) return;
+
+      this.touchStartX = e.touches[0].clientX;
+      this.touchStartY = e.touches[0].clientY;
+      this.touchStartScrollLeft = carousel.scrollLeft;
+      this.isTouching = true;
+      this.isScrolling = false;
+    },
+    handleTouchMove(e) {
+      if (!this.isTouching) return;
+
+      const carousel = this.$refs.carousel;
+      if (!carousel) return;
+
+      // Пересчитываем размеры, если они не были вычислены
+      if (!this.cardWidth || !this.gap) {
+        const firstCard = carousel.querySelector(".carousel-card");
+        if (firstCard && firstCard.offsetWidth > 0) {
+          this.cardWidth = firstCard.offsetWidth;
+          const style = window.getComputedStyle(carousel);
+          this.gap = parseFloat(style.gap) || 0;
+        }
+      }
+
+      if (!this.cardWidth) return;
+
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      const deltaX = touchX - this.touchStartX;
+      const deltaY = touchY - this.touchStartY;
+
+      // Определяем, это горизонтальный или вертикальный свайп
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Горизонтальный свайп - блокируем вертикальную прокрутку
+        e.preventDefault();
+        this.isScrolling = true;
+
+        // Вычисляем максимальное расстояние прокрутки (один элемент)
+        const cardWithGap = this.cardWidth + this.gap;
+        const maxScroll = this.touchStartScrollLeft + cardWithGap;
+        const minScroll = this.touchStartScrollLeft - cardWithGap;
+
+        // Увеличиваем чувствительность свайпа (умножаем на 2.0 для более быстрого отклика)
+        const newScrollLeft = this.touchStartScrollLeft - deltaX * 2.0;
+
+        // Ограничиваем прокрутку одним элементом
+        carousel.scrollLeft = Math.max(
+          minScroll,
+          Math.min(maxScroll, newScrollLeft)
+        );
+      }
+    },
+    handleTouchEnd(e) {
+      if (!this.isTouching) return;
+
+      const carousel = this.$refs.carousel;
+      if (!carousel) return;
+
+      // Пересчитываем размеры, если они не были вычислены
+      if (!this.cardWidth || !this.gap) {
+        const firstCard = carousel.querySelector(".carousel-card");
+        if (firstCard && firstCard.offsetWidth > 0) {
+          this.cardWidth = firstCard.offsetWidth;
+          const style = window.getComputedStyle(carousel);
+          this.gap = parseFloat(style.gap) || 0;
+        }
+      }
+
+      if (this.isScrolling && this.cardWidth) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const deltaX = touchEndX - this.touchStartX;
+        const cardWithGap = this.cardWidth + this.gap;
+        const threshold = cardWithGap * 0.25; // Порог для переключения (25% от ширины карточки)
+
+        // Определяем направление и переключаем слайд
+        if (Math.abs(deltaX) > threshold) {
+          if (deltaX < 0) {
+            // Свайп влево - следующий слайд
+            this.nextSlide();
+          } else {
+            // Свайп вправо - предыдущий слайд
+            const prevIndex =
+              (this.activeIndex - 1 + this.services.length) %
+              this.services.length;
+            this.goToSlide(prevIndex);
+          }
+          this.resetAutoPlay();
+        } else {
+          // Недостаточный свайп - возвращаемся к текущему слайду
+          this.goToSlide(this.activeIndex);
+        }
+      }
+
+      this.isTouching = false;
+      this.isScrolling = false;
     },
   },
 };
@@ -354,16 +442,16 @@ export default {
 
 .carousel-container {
   position: relative;
-  padding: 80px 0;
+  padding: 60px 0;
   overflow: hidden;
 }
 
 .carousel-wrapper {
   display: flex;
-  gap: clamp(16px, 2.5vw, 32px);
+  gap: clamp(20px, 3vw, 40px);
   overflow-x: auto;
-  overflow-y: hidden;
-  padding: 40px 0;
+  overflow-y: visible;
+  padding: 60px 0;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -379,16 +467,16 @@ export default {
 }
 
 .carousel-card {
-  flex: 0 0 clamp(280px, 25vw, 380px);
-  min-width: clamp(280px, 25vw, 380px);
-  height: clamp(240px, 28vw, 360px);
+  flex: 0 0 clamp(320px, 32vw, 480px);
+  min-width: clamp(320px, 32vw, 480px);
+  height: clamp(280px, 32vw, 420px);
   border-radius: 28px;
   border: none;
   color: #fff;
-  font-size: clamp(16px, 1.8vw, 20px);
+  font-size: clamp(18px, 2vw, 24px);
   font-weight: 600;
   text-align: left;
-  padding: clamp(20px, 3vw, 32px);
+  padding: clamp(24px, 3.5vw, 40px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -406,6 +494,7 @@ export default {
   transform: scale(1.15);
   opacity: 1;
   z-index: 10;
+  cursor: pointer;
 }
 
 .carousel-card:not(.active) {
@@ -474,7 +563,7 @@ export default {
 
 .description-flight-enter-active,
 .description-flight-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .description-flight-enter-from,
@@ -490,10 +579,18 @@ export default {
 }
 
 @media (max-width: 992px) {
+  .carousel-container {
+    padding: 40px 0;
+  }
+
+  .carousel-wrapper {
+    padding: 50px 0;
+  }
+
   .carousel-card {
     flex: 0 0 75vw;
     min-width: 75vw;
-    height: clamp(200px, 40vw, 280px);
+    height: clamp(220px, 42vw, 320px);
     transform: scale(0.9);
     opacity: 0.8;
   }
@@ -511,7 +608,12 @@ export default {
   }
 
   .carousel-container {
-    padding: 30px 0;
+    padding: 40px 0;
+  }
+
+  .carousel-wrapper {
+    padding: 40px 0;
+    scroll-snap-type: none;
   }
 
   .carousel-card {
@@ -539,7 +641,11 @@ export default {
 
 @media (max-width: 560px) {
   .carousel-container {
-    padding: 20px 0;
+    padding: 30px 0;
+  }
+
+  .carousel-wrapper {
+    padding: 30px 0;
   }
 
   .carousel-card {
