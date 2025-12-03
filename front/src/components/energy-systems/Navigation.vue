@@ -121,7 +121,8 @@ export default {
   align-items: center;
   flex-wrap: nowrap;
   overflow-x: auto;
-  background-color: #ef4422;
+  /* #background-color: #ef4422; */
+  background-color:#000;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
   padding: 8px;
   scrollbar-width: none;
