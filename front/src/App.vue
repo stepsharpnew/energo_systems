@@ -23,8 +23,23 @@ export default {
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
 body {
   font-family: "Arial", sans-serif;
   background: #f5f5f5;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+#app {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 </style>

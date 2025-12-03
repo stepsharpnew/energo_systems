@@ -424,11 +424,17 @@ export default {
   margin: 0 auto;
   padding: 0 24px;
   width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .services-carousel {
   padding: clamp(36px, 6vw, 72px) 0 20px;
   position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 .section-title {
@@ -444,17 +450,24 @@ export default {
   position: relative;
   padding: 60px 0;
   overflow: hidden;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 .carousel-wrapper {
   display: flex;
   gap: clamp(20px, 3vw, 40px);
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: hidden;
   padding: 60px 0;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .carousel-wrapper::-webkit-scrollbar {
@@ -488,6 +501,8 @@ export default {
     opacity 0.6s ease;
   transform: scale(0.85);
   opacity: 0.7;
+  transform-origin: center;
+  will-change: transform;
 }
 
 .carousel-card.active {
@@ -602,6 +617,10 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .container-1 {
+    padding: 0 16px;
+  }
+
   .section-title {
     font-size: clamp(24px, 5vw, 32px);
     margin-bottom: clamp(24px, 4vw, 36px);
@@ -609,20 +628,31 @@ export default {
 
   .carousel-container {
     padding: 40px 0;
+    overflow-x: hidden;
   }
 
   .carousel-wrapper {
     padding: 40px 0;
     scroll-snap-type: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
 
   .carousel-card {
     flex: 0 0 80vw;
     min-width: 80vw;
+    max-width: 80vw;
     height: 200px;
     font-size: 16px;
     padding: 20px;
     border-radius: 20px;
+    transform: scale(0.9) !important;
+  }
+
+  .carousel-card.active {
+    transform: scale(1) !important;
   }
 
   .carousel-description {
@@ -640,19 +670,34 @@ export default {
 }
 
 @media (max-width: 560px) {
+  .container-1 {
+    padding: 0 12px;
+  }
+
   .carousel-container {
     padding: 30px 0;
+    overflow-x: hidden;
   }
 
   .carousel-wrapper {
     padding: 30px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
 
   .carousel-card {
     flex: 0 0 85vw;
     min-width: 85vw;
+    max-width: 85vw;
     height: 180px;
     padding: 16px;
+    transform: scale(0.9) !important;
+  }
+
+  .carousel-card.active {
+    transform: scale(1) !important;
   }
 }
 </style>
