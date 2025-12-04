@@ -2,6 +2,19 @@
   <section class="services-carousel" ref="servicesSection">
     <div class="container-1">
       <h2 class="section-title">Наши услуги</h2>
+      <div class="carousel-indicators">
+        <button
+          v-for="(service, index) in services"
+          :key="`indicator-${index}`"
+          class="indicator-dot"
+          :class="{ active: index === activeIndex }"
+          @click="goToSlide(index)"
+          :aria-label="`Перейти к услуге ${index + 1}`"
+        ></button>
+      </div>
+      <div class="image-slide">
+        <img src="..//../assets/slide-carosel.png"/>
+      </div>
       <div class="carousel-container" ref="carouselContainer">
         <div
           class="carousel-wrapper"
@@ -13,7 +26,7 @@
         >
           <!-- Всегда показываем только 3 элемента: предыдущий, текущий, следующий -->
           <div
-            v-for="(card, idx) in visibleCards"
+            v-for="card in visibleCards"
             :key="`card-${card.index}`"
             class="carousel-card"
             :class="{ active: card.index === activeIndex && !card.isDuplicate }"
@@ -34,6 +47,7 @@
           </div>
         </div>
       </div>
+      
       <transition name="description-flight" mode="out-in">
         <div
           class="carousel-description"
@@ -45,6 +59,7 @@
         </div>
       </transition>
     </div>
+    
   </section>
 </template>
 
@@ -424,7 +439,6 @@ export default {
   margin: 0 auto;
   padding: 0 24px;
   width: 100%;
-  overflow-x: hidden;
   box-sizing: border-box;
 }
 
@@ -441,9 +455,50 @@ export default {
   font-size: clamp(28px, 4vw, 42px);
   font-weight: 700;
   color: #111827;
-  margin: 0 0 clamp(32px, 5vw, 48px) 0;
+  margin: 0 0 clamp(24px, 3vw, 32px) 0;
   text-align: center;
   letter-spacing: -0.02em;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(8px, 1.2vw, 12px);
+  margin: 0 0 clamp(32px, 5vw, 48px) 0;
+  flex-wrap: wrap;
+  padding: 0 24px;
+}
+
+.indicator-dot {
+  width: clamp(10px, 1.5vw, 14px);
+  height: clamp(10px, 1.5vw, 14px);
+  border-radius: 50%;
+  border: 2px solid rgba(15, 23, 42, 0.3);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  position: relative;
+  outline: none;
+}
+
+.indicator-dot:hover {
+  border-color: rgba(15, 23, 42, 0.6);
+  transform: scale(1.2);
+}
+
+.indicator-dot.active {
+  background: #ef4422;
+  border-color: #ef4422;
+  width: clamp(14px, 2vw, 18px);
+  height: clamp(14px, 2vw, 18px);
+  box-shadow: 0 0 0 3px rgba(239, 68, 34, 0.2);
+}
+
+.indicator-dot:focus-visible {
+  outline: 2px solid #ef4422;
+  outline-offset: 2px;
 }
 
 .carousel-container {
@@ -623,7 +678,23 @@ export default {
 
   .section-title {
     font-size: clamp(24px, 5vw, 32px);
+    margin-bottom: clamp(20px, 3vw, 28px);
+  }
+
+  .carousel-indicators {
+    gap: 8px;
     margin-bottom: clamp(24px, 4vw, 36px);
+    padding: 0 16px;
+  }
+
+  .indicator-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .indicator-dot.active {
+    width: 12px;
+    height: 12px;
   }
 
   .carousel-container {
@@ -674,6 +745,22 @@ export default {
     padding: 0 12px;
   }
 
+  .carousel-indicators {
+    gap: 6px;
+    padding: 0 12px;
+  }
+
+  .indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-width: 1.5px;
+  }
+
+  .indicator-dot.active {
+    width: 10px;
+    height: 10px;
+  }
+
   .carousel-container {
     padding: 30px 0;
     overflow-x: hidden;
@@ -698,6 +785,31 @@ export default {
 
   .carousel-card.active {
     transform: scale(1) !important;
+  }
+}
+
+.image-slide {
+  width:100%;
+  display: flex;
+  justify-content: center;
+}
+
+.image-slide img{
+  width:35px;
+  height: 35px;
+  opacity: .2;
+  animation: slide-hint 5s linear infinite;
+}
+
+@keyframes slide-hint {
+  0% {
+    transform: translateX(50px);
+  }
+  99.9% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(50px);
   }
 }
 </style>

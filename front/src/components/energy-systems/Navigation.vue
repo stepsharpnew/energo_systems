@@ -1,5 +1,5 @@
 <template>
-  <nav class="main-nav" :class="{ 'fixed': isFixed }">
+  <nav class="main-nav">
     <!-- Десктопная навигация -->
     <div class="nav-container desktop-nav">
       <button
@@ -73,29 +73,10 @@ export default {
   emits: ['scroll-to'],
   data() {
     return {
-      isMobileMenuOpen: false,
-      isFixed: false,
-      navOffsetTop: 0,
-      initialNavOffsetTop: 0
+      isMobileMenuOpen: false
     };
   },
-  mounted() {
-    // Отслеживание скролла только для десктопной версии
-    if (window.innerWidth > 992) {
-      this.$nextTick(() => {
-        // Получаем начальную позицию навбара относительно верха документа
-        const rect = this.$el.getBoundingClientRect();
-        this.initialNavOffsetTop = Math.max(0, rect.top + window.scrollY);
-        this.navOffsetTop = this.initialNavOffsetTop;
-        this.handleScroll();
-        window.addEventListener('scroll', this.handleScroll, { passive: true });
-      });
-    }
-    window.addEventListener('resize', this.handleResize);
-  },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-    window.removeEventListener('resize', this.handleResize);
     document.body.style.overflow = '';
   },
   methods: {
@@ -114,39 +95,6 @@ export default {
     closeMobileMenu() {
       this.isMobileMenuOpen = false;
       document.body.style.overflow = '';
-    },
-    handleScroll() {
-      // Применяем эффект только для десктопной версии
-      if (window.innerWidth > 992) {
-        const scrollY = window.scrollY;
-        
-        // Фиксируем навбар когда проскроллили мимо его начальной позиции
-        if (scrollY >= this.initialNavOffsetTop) {
-          this.isFixed = true;
-        } else if (scrollY < this.initialNavOffsetTop) {
-          // Если скроллим обратно вверх и еще не достигли начальной позиции, убираем фиксацию
-          this.isFixed = false;
-        }
-      }
-    },
-    handleResize() {
-      // Переинициализация обработчика скролла при изменении размера
-      window.removeEventListener('scroll', this.handleScroll);
-      if (window.innerWidth > 992) {
-        this.$nextTick(() => {
-          // Пересчитываем начальную позицию только если навбар еще не зафиксирован
-          if (!this.isFixed) {
-            const rect = this.$el.getBoundingClientRect();
-            this.initialNavOffsetTop = Math.max(0, rect.top + window.scrollY);
-            this.navOffsetTop = this.initialNavOffsetTop;
-          }
-          this.handleScroll();
-          window.addEventListener('scroll', this.handleScroll, { passive: true });
-        });
-      } else {
-        this.isFixed = false;
-        this.initialNavOffsetTop = 0;
-      }
     }
   }
 }
@@ -156,23 +104,16 @@ export default {
 .main-nav {
   position: relative;
   z-index: 25;
-  
   margin-top: 0px;
   background: transparent;
-  will-change: position;
 }
 
-/* Фиксация навбара вверху при скролле для десктопной версии */
+/* Фиксация навбара при скролле для десктопной версии */
 @media (min-width: 993px) {
-  .main-nav.fixed {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0;
-    right: 0;
-    width: 100%;
+  .main-nav {
+    position: sticky;
+    top: 0;
     z-index: 1000;
-    visibility: visible !important;
-    opacity: 1 !important;
   }
 }
 
@@ -188,7 +129,7 @@ export default {
   flex-wrap: nowrap;
   overflow-x: auto;
   /* #background-color: #ef4422; */
-  background-color: #0000004b;
+  background-color: #000;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
   padding: 8px;
   scrollbar-width: none;

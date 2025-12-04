@@ -46,9 +46,8 @@
           <b>3.</b> Строительно-монтажные работы<br />
           <b>4.</b> Пусконаладочные работы<br />
           <b>5.</b> Формирование и сдача исполнительной документации<br />
-          <b>6.</b> Строительно-монтажные работы<br />
-          <b>7.</b> Ввод объекта в эксплуатацию<br />
-          <b>8.</b> Гарантийное и послегарантийное обслуживание<br />
+          <b>6.</b> Ввод объекта в эксплуатацию<br />
+          <b>7.</b> Гарантийное и послегарантийное обслуживание<br />
         </p>
       </div>
       <img
@@ -255,7 +254,7 @@ export default {
   grid-template-columns: 1fr 1fr;
   gap: clamp(32px, 5vw, 60px);
   align-items: center;
-  margin-bottom: clamp(60px, 8vw, 100px);
+  margin-bottom: clamp(100px, 12vw, 160px);
   position: relative;
   will-change: transform, opacity;
 }
@@ -320,7 +319,7 @@ export default {
 }
 
 .content-description {
-  font-size: clamp(12px, 1vw, 14px);
+  font-size: clamp(15px, 1vw, 18px);
   line-height: 1.8;
   color: #4a4a4a;
   margin-bottom: 20px;
@@ -334,7 +333,7 @@ export default {
   .content-block {
     grid-template-columns: 1fr;
     gap: 40px;
-    margin-bottom: clamp(50px, 7vw, 80px);
+    margin-bottom: clamp(80px, 10vw, 120px);
   }
 
   .content-block-1,
@@ -354,7 +353,7 @@ export default {
 
 @media (max-width: 768px) {
   .content-block {
-    margin-bottom: 50px;
+    margin-bottom: 80px;
     gap: 32px;
   }
 
@@ -375,7 +374,7 @@ export default {
 
 @media (max-width: 560px) {
   .content-block {
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     gap: 28px;
   }
 
