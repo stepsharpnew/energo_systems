@@ -103,17 +103,7 @@
           <div class="stat-compact-number">5000+</div>
           <div class="stat-compact-label">объектов</div>
         </div>
-        <div class="stat-compact-divider"></div>
-        <div class="stat-compact-item" ref="statCompact2">
-          <div class="stat-compact-icon">📋</div>
-          <div class="stat-compact-text">Спроектировано</div>
-        </div>
-        <div class="stat-compact-divider"></div>
-        <div class="stat-compact-item" ref="statCompact3">
-          <div class="stat-compact-icon">🏗️</div>
-          <div class="stat-compact-text">Построено</div>
-        </div>
-      </div>
+            </div>
     </div>
   </section>
 </template>
