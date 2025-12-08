@@ -613,6 +613,7 @@ export default {
   margin-top: clamp(24px, 4vw, 40px);
   height: 200px;
   min-height: 200px;
+  max-height: 200px;
 }
 
 .carousel-description {
@@ -622,25 +623,38 @@ export default {
   padding: clamp(20px, 3vw, 32px);
   text-align: center;
   height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .carousel-description h2 {
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   font-size: clamp(22px, 3vw, 28px);
   font-weight: 700;
   color: #111827;
-  line-height: 1.3;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .carousel-description p {
   margin: 0;
   color: #4a5568;
   font-size: clamp(14px, 1.8vw, 18px);
-  line-height: 1.6;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  flex: 1;
 }
 
 .description-flight-enter-active,
@@ -747,17 +761,27 @@ export default {
     transform: scale(1) !important;
   }
 
+  .carousel-description-wrapper {
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
+  }
+
   .carousel-description {
-    padding: 20px;
+    padding: 16px;
     border-radius: 20px;
   }
 
   .carousel-description h2 {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 6px;
+    -webkit-line-clamp: 2;
   }
 
   .carousel-description p {
-    font-size: 15px;
+    font-size: 13px;
+    line-height: 1.4;
+    -webkit-line-clamp: 3;
   }
 }
 
@@ -811,6 +835,23 @@ export default {
   .carousel-description-wrapper {
     height: 130px;
     min-height: 130px;
+    max-height: 130px;
+  }
+
+  .carousel-description {
+    padding: 14px;
+  }
+
+  .carousel-description h2 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    -webkit-line-clamp: 1;
+  }
+
+  .carousel-description p {
+    font-size: 12px;
+    line-height: 1.3;
+    -webkit-line-clamp: 3;
   }
 }
 
@@ -818,6 +859,12 @@ export default {
   width:100%;
   display: none;
   justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .image-slide {
+    display: flex;
+  }
 }
 
 .image-slide img{
