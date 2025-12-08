@@ -66,6 +66,7 @@
     <ContactModal
       :show="showContactModal"
       :services="services"
+      :selected-service-id="selectedServiceId"
       @close="closeContactModal"
     />
 

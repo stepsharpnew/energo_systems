@@ -40,6 +40,9 @@
             </div>
           </div>
           <div class="modal-actions">
+            <button class="order-button" @click="openContactModal">
+              Заказать услугу
+            </button>
             <button class="details-button" @click="goToDetails">
               Подробнее
             </button>
@@ -63,7 +66,7 @@ export default {
       default: null,
     },
   },
-  emits: ["close"],
+  emits: ["close", "open-contact-modal"],
   data() {
     return {
       activeIndex: 0,
@@ -135,6 +138,10 @@ export default {
         this.$emit("close");
         this.$router.push(`/services/${this.service.id}`);
       }
+    },
+    openContactModal() {
+      this.$emit("close");
+      this.$emit("open-contact-modal", this.service);
     },
   },
 };
@@ -262,10 +269,12 @@ export default {
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
+  gap: 16px;
   margin-top: 24px;
+  flex-wrap: wrap;
 }
 
-.details-button {
+.order-button {
   padding: 14px 32px;
   background: linear-gradient(135deg, #ef4422, #ff6934);
   border: none;
@@ -278,9 +287,30 @@ export default {
   box-shadow: 0 4px 12px rgba(239, 68, 34, 0.3);
 }
 
-.details-button:hover {
+.order-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(239, 68, 34, 0.4);
+}
+
+.order-button:active {
+  transform: translateY(0);
+}
+
+.details-button {
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
 }
 
 .details-button:active {

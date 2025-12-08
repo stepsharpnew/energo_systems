@@ -40,21 +40,60 @@
 
             <div class="form-group">
               <label for="service">Выберите услугу *</label>
-              <select
-                id="service"
-                v-model="formData.service"
-                required
-                class="form-select"
-              >
-                <option value="" disabled>Выберите услугу</option>
-                <option
-                  v-for="service in services"
-                  :key="service.id"
-                  :value="service.id"
+              <div class="custom-select-wrapper">
+                <div
+                  class="custom-select"
+                  :class="{ 'is-open': isSelectOpen, 'has-value': formData.service }"
+                  @click.stop="toggleSelect"
+                  tabindex="0"
+                  @keydown.enter.prevent="toggleSelect"
+                  @keydown.escape="isSelectOpen = false"
                 >
-                  {{ service.name }}
-                </option>
-              </select>
+                  <span class="custom-select-value">
+                    {{
+                      formData.service
+                        ? services.find((s) => s.id === formData.service)?.name ||
+                          "Выберите услугу"
+                        : "Выберите услугу"
+                    }}
+                  </span>
+                  <svg
+                    class="custom-select-arrow"
+                    :class="{ 'is-open': isSelectOpen }"
+                    width="12"
+                    height="8"
+                    viewBox="0 0 12 8"
+                    fill="none"
+                  >
+                    <path
+                      d="M6 8L0 0h12L6 8z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class="custom-select-dropdown"
+                  :class="{ 'is-open': isSelectOpen }"
+                  @click.stop
+                  @wheel.stop
+                  @touchmove.stop
+                >
+                  <div
+                    v-for="service in services"
+                    :key="service.id"
+                    class="custom-select-option"
+                    :class="{ 'is-selected': formData.service === service.id }"
+                    @click.stop="selectService(service.id)"
+                  >
+                    {{ service.name }}
+                  </div>
+                </div>
+              </div>
+              <input
+                type="hidden"
+                :value="formData.service"
+                required
+              />
             </div>
 
             <button
@@ -86,6 +125,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    selectedServiceId: {
+      type: [String, Number],
+      default: null,
+    },
   },
   emits: ["close"],
   data() {
@@ -96,20 +139,37 @@ export default {
         service: "",
       },
       isSubmitting: false,
+      isSelectOpen: false,
     };
   },
   watch: {
     show(newVal) {
       if (newVal) {
         document.body.style.overflow = "hidden";
+        // Автоматически выбираем услугу, если она передана
+        if (this.selectedServiceId) {
+          this.formData.service = this.selectedServiceId;
+        }
+        // Добавляем обработчик клика вне компонента
+        this.$nextTick(() => {
+          document.addEventListener("click", this.handleClickOutside);
+        });
       } else {
         document.body.style.overflow = "";
+        document.removeEventListener("click", this.handleClickOutside);
         this.resetForm();
+      }
+    },
+    selectedServiceId(newVal) {
+      // Обновляем выбранную услугу при изменении пропа
+      if (newVal && this.show) {
+        this.formData.service = newVal;
       }
     },
   },
   beforeUnmount() {
     document.body.style.overflow = "";
+    document.removeEventListener("click", this.handleClickOutside);
   },
   methods: {
     formatPhone(event) {
@@ -204,7 +264,18 @@ export default {
       return formatted;
     },
     handlePhoneKeydown,
-    handleSubmit() {
+    handleSubmit(event) {
+      // Проверяем, что услуга выбрана
+      if (!this.formData.service) {
+        event.preventDefault();
+        this.isSelectOpen = true;
+        const selectElement = this.$el?.querySelector(".custom-select");
+        if (selectElement) {
+          selectElement.focus();
+        }
+        return;
+      }
+
       this.isSubmitting = true;
 
       // Здесь можно добавить отправку данных на сервер
@@ -225,6 +296,33 @@ export default {
         service: "",
       };
       this.isSubmitting = false;
+      this.isSelectOpen = false;
+    },
+    toggleSelect() {
+      this.isSelectOpen = !this.isSelectOpen;
+    },
+    selectService(serviceId) {
+      this.formData.service = serviceId;
+      // Небольшая задержка перед закрытием, чтобы скролл работал
+      setTimeout(() => {
+        this.isSelectOpen = false;
+        // Восстанавливаем скролл модального окна
+        const modalBody = this.$el?.querySelector(".modal-body");
+        if (modalBody) {
+          modalBody.style.overflow = "auto";
+        }
+      }, 100);
+    },
+    handleClickOutside(event) {
+      const selectWrapper = this.$el?.querySelector(".custom-select-wrapper");
+      if (selectWrapper && !selectWrapper.contains(event.target)) {
+        this.isSelectOpen = false;
+        // Восстанавливаем скролл модального окна
+        const modalBody = this.$el?.querySelector(".modal-body");
+        if (modalBody) {
+          modalBody.style.overflow = "auto";
+        }
+      }
     },
   },
 };
@@ -260,16 +358,17 @@ export default {
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45);
   margin: auto;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-body {
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-}
-
-.modal-body {
+  flex: 1;
   padding: clamp(24px, 5vw, 48px);
   color: #e2e8f0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .section-kicker {
@@ -346,6 +445,163 @@ export default {
 .form-select option {
   background: #0f172a;
   color: #fff;
+}
+
+/* Кастомный select */
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 14px 18px;
+  padding-right: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  user-select: none;
+}
+
+.custom-select:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.custom-select:focus,
+.custom-select.is-open {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ef4422;
+  box-shadow: 0 0 0 3px rgba(239, 68, 34, 0.1);
+}
+
+.custom-select.is-invalid {
+  border-color: #ef4422;
+  box-shadow: 0 0 0 3px rgba(239, 68, 34, 0.2);
+}
+
+.custom-select-value {
+  flex: 1;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-select:not(.has-value) .custom-select-value {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.custom-select-arrow {
+  flex-shrink: 0;
+  margin-left: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.custom-select-arrow.is-open {
+  transform: rotate(180deg);
+}
+
+.custom-select-dropdown {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #1a2332;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 10001;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.custom-select-dropdown.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.custom-select-option {
+  padding: 14px 18px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.custom-select-option:last-child {
+  border-bottom: none;
+}
+
+.custom-select-option:hover {
+  background: rgba(239, 68, 34, 0.15);
+  color: #fff;
+}
+
+.custom-select-option.is-selected {
+  background: rgba(239, 68, 34, 0.2);
+  color: #ef4422;
+  font-weight: 600;
+}
+
+.custom-select-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .custom-select {
+    padding: 16px 18px;
+    padding-right: 40px;
+    font-size: 16px;
+    min-height: 52px;
+  }
+
+  .custom-select-dropdown {
+    max-height: 200px;
+  }
+
+  .custom-select-option {
+    padding: 16px 18px;
+    font-size: 16px;
+  }
 }
 
 .submit-button {
