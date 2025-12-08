@@ -269,23 +269,25 @@ export default {
           this.scrollTriggers.push(anim4.scrollTrigger);
         }
 
-        // Анимация партнерской информации
+        // Анимация партнерской информации - плавная привязка к скроллу
         if (this.$refs.partnerInfo) {
           const partnerInfoAnim = gsap.fromTo(
             this.$refs.partnerInfo,
             {
               opacity: 0,
-              y: 20,
+              y: 30,
+              scale: 0.95,
             },
             {
               opacity: 1,
               y: 0,
+              scale: 1,
               ease: "power2.out",
-              duration: 0.6,
               scrollTrigger: {
-                trigger: this.$refs.block4,
-                start: "top 85%",
-                toggleActions: "play none none none",
+                trigger: this.$refs.partnerInfo,
+                start: "top 90%",
+                end: isMobile ? "top 60%" : "top 70%",
+                scrub: animConfig.scrubValue,
               },
             }
           );
@@ -294,24 +296,25 @@ export default {
           }
         }
 
-        // Анимация логотипа
+        // Анимация логотипа - плавная привязка к скроллу
         if (this.$refs.logoContainer) {
           const logoAnim = gsap.fromTo(
             this.$refs.logoContainer,
             {
               opacity: 0,
-              scale: 0.9,
+              scale: 0.8,
+              x: -20,
             },
             {
               opacity: 1,
               scale: 1,
-              ease: "back.out(1.7)",
-              duration: 0.5,
-              delay: 0.2,
+              x: 0,
+              ease: "back.out(1.4)",
               scrollTrigger: {
-                trigger: this.$refs.block4,
-                start: "top 85%",
-                toggleActions: "play none none none",
+                trigger: this.$refs.partnerInfo,
+                start: "top 90%",
+                end: isMobile ? "top 60%" : "top 70%",
+                scrub: animConfig.scrubValue,
               },
             }
           );
@@ -320,24 +323,23 @@ export default {
           }
         }
 
-        // Анимация статистики
+        // Анимация статистики - плавная привязка к скроллу
         if (this.$refs.statsCompact) {
           const statsAnim = gsap.fromTo(
             this.$refs.statsCompact,
             {
               opacity: 0,
-              y: 20,
+              y: 30,
             },
             {
               opacity: 1,
               y: 0,
               ease: "power2.out",
-              duration: 0.6,
-              delay: 0.3,
               scrollTrigger: {
-                trigger: this.$refs.block4,
-                start: "top 85%",
-                toggleActions: "play none none none",
+                trigger: this.$refs.statsCompact,
+                start: "top 90%",
+                end: isMobile ? "top 60%" : "top 70%",
+                scrub: animConfig.scrubValue,
               },
             }
           );
@@ -346,25 +348,26 @@ export default {
           }
         }
 
-        // Анимация отдельных элементов статистики
+        // Анимация отдельных элементов статистики - плавная привязка к скроллу
         [this.$refs.statCompact1, this.$refs.statCompact2, this.$refs.statCompact3].forEach((stat, index) => {
           if (stat) {
             const statAnim = gsap.fromTo(
               stat,
               {
                 opacity: 0,
-                scale: 0.8,
+                scale: 0.7,
+                y: 20,
               },
               {
                 opacity: 1,
                 scale: 1,
-                ease: "back.out(1.4)",
-                duration: 0.5,
-                delay: 0.4 + index * 0.1,
+                y: 0,
+                ease: "back.out(1.2)",
                 scrollTrigger: {
-                  trigger: this.$refs.block4,
-                  start: "top 85%",
-                  toggleActions: "play none none none",
+                  trigger: this.$refs.statsCompact,
+                  start: "top 90%",
+                  end: isMobile ? "top 60%" : "top 70%",
+                  scrub: animConfig.scrubValue,
                 },
               }
             );
@@ -521,6 +524,8 @@ export default {
   gap: clamp(20px, 3vw, 32px);
   padding-bottom: clamp(20px, 3vw, 28px);
   border-bottom: 2px solid rgba(239, 68, 34, 0.1);
+  will-change: transform, opacity;
+  min-height: 80px;
 }
 
 .partner-logo-compact {
@@ -530,6 +535,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  will-change: transform, opacity;
 }
 
 .partner-logo-img {
@@ -560,6 +566,8 @@ export default {
   justify-content: center;
   gap: clamp(16px, 3vw, 32px);
   flex-wrap: wrap;
+  will-change: transform, opacity;
+  min-height: 100px;
 }
 
 .stat-compact-item {
@@ -568,6 +576,7 @@ export default {
   align-items: center;
   text-align: center;
   min-width: 100px;
+  will-change: transform, opacity;
 }
 
 .stat-compact-number {

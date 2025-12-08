@@ -56,7 +56,7 @@
               </div>
             </div>
             <div v-else class="service-placeholder">
-              <p>Выберите услугу из списка слева</p>
+              <p>Выберите услугу из списка</p>
             </div>
           </div>
         </div>

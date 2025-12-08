@@ -48,16 +48,18 @@
         </div>
       </div>
       
-      <transition name="description-flight" mode="out-in">
-        <div
-          class="carousel-description"
-          v-if="activeService"
-          :key="activeService.id"
-        >
-          <h2>{{ activeService.name }}</h2>
-          <p>{{ activeService.description }}</p>
-        </div>
-      </transition>
+      <div class="carousel-description-wrapper">
+        <transition name="description-flight" mode="out-in">
+          <div
+            class="carousel-description"
+            v-if="activeService"
+            :key="activeService.id"
+          >
+            <h2>{{ activeService.name }}</h2>
+            <p>{{ activeService.description }}</p>
+          </div>
+        </transition>
+      </div>
     </div>
     
   </section>
@@ -607,13 +609,23 @@ export default {
   background: #fff;
 }
 
-.carousel-description {
+.carousel-description-wrapper {
   margin-top: clamp(24px, 4vw, 40px);
+  height: 200px;
+  min-height: 200px;
+}
+
+.carousel-description {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
   border-radius: 24px;
   padding: clamp(20px, 3vw, 32px);
   text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .carousel-description h2 {
@@ -672,6 +684,15 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .image-slide {
+    display: flex;
+  }
+
+  .carousel-description-wrapper {
+    height: 150px;
+    min-height: 150px;
+  }
+
   .container-1 {
     padding: 0 16px;
   }
@@ -786,11 +807,16 @@ export default {
   .carousel-card.active {
     transform: scale(1) !important;
   }
+
+  .carousel-description-wrapper {
+    height: 130px;
+    min-height: 130px;
+  }
 }
 
 .image-slide {
   width:100%;
-  display: flex;
+  display: none;
   justify-content: center;
 }
 
