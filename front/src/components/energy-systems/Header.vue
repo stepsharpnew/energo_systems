@@ -3,7 +3,7 @@
     <div class="container">
       <div class="header-main">
         <!-- Логотип и название -->
-        <div class="logo-wrapper">
+        <div class="logo-wrapper" @click="goToHome">
           <div class="logo">
             <img src="../../assets/LOGO-electro.png" alt="Энергосистемы">
           </div>
@@ -54,7 +54,14 @@
 <script>
 export default {
   name: 'Header',
-  emits: ['open-contact-modal']
+  emits: ['open-contact-modal'],
+  methods: {
+    goToHome() {
+      if (this.$route.path !== '/') {
+        this.$router.push('/');
+      }
+    }
+  }
 }
 </script>
 
@@ -86,6 +93,12 @@ export default {
   align-items: center;
   gap: 16px;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.logo-wrapper:hover {
+  opacity: 0.8;
 }
 
 .logo {

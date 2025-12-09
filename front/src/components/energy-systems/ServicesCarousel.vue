@@ -15,37 +15,51 @@
       <div class="image-slide">
         <img src="..//../assets/slide-carosel.png"/>
       </div>
-      <div class="carousel-container" ref="carouselContainer">
-        <div
-          class="carousel-wrapper"
-          ref="carousel"
-          @scroll.passive="handleScroll"
-          @touchstart="handleTouchStart"
-          @touchmove="handleTouchMove"
-          @touchend="handleTouchEnd"
+      
+      <div 
+        class="carousel-wrapper" 
+        ref="carouselWrapper"
+        @mouseenter="showNavButtons = true"
+        @mouseleave="showNavButtons = false"
+      >
+        <div 
+          class="carousel-track"
+          :style="{ transform: `translateX(-${activeIndex * 100}%)` }"
         >
-          <!-- Всегда показываем только 3 элемента: предыдущий, текущий, следующий -->
           <div
-            v-for="card in visibleCards"
-            :key="`card-${card.index}`"
+            v-for="(service, index) in services"
+            :key="`card-${service.id}`"
             class="carousel-card"
-            :class="{ active: card.index === activeIndex && !card.isDuplicate }"
-            :data-index="card.index"
-            :data-duplicate="card.isDuplicate"
-            @click="handleServiceClick(card.service, card.index)"
-            :style="getCardStyle(card.service)"
+            :class="{ active: index === activeIndex }"
+            :style="getCardStyle(service)"
+            @click="handleServiceClick(service, index)"
           >
-            <button
-              class="card-info-toggle"
-              type="button"
-              @click.stop="$emit('open-service-modal', card.service)"
-              aria-label="Подробнее об услуге"
-            >
-              i
-            </button>
-            <span class="service-name">{{ card.service.name }}</span>
+            <span class="service-name">{{ service.name }}</span>
           </div>
         </div>
+        
+        <button
+          class="carousel-nav carousel-nav-prev"
+          :class="{ 'is-visible': showNavButtons }"
+          @click="prevSlide"
+          aria-label="Предыдущий слайд"
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="rgba(255, 255, 255, 0.1)"/>
+            <path d="M14 8l-4 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button
+          class="carousel-nav carousel-nav-next"
+          :class="{ 'is-visible': showNavButtons }"
+          @click="nextSlide"
+          aria-label="Следующий слайд"
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="rgba(255, 255, 255, 0.1)"/>
+            <path d="M10 8l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
       
       <div class="carousel-description-wrapper">
@@ -61,7 +75,6 @@
         </transition>
       </div>
     </div>
-    
   </section>
 </template>
 
@@ -79,238 +92,25 @@ export default {
     return {
       activeIndex: 0,
       autoPlayInterval: null,
-      cardWidth: 0,
-      gap: 0,
-      isAnimating: false,
-      scrollUpdateTimeout: null,
-      touchStartX: 0,
-      touchStartY: 0,
-      touchStartScrollLeft: 0,
-      isTouching: false,
-      isScrolling: false,
+      isTransitioning: false,
+      showNavButtons: false,
     };
   },
   computed: {
     activeService() {
       return this.services[this.activeIndex] || null;
     },
-    visibleCards() {
-      if (this.services.length === 0) return [];
-
-      const total = this.services.length;
-      const current = this.activeIndex;
-
-      // Вычисляем индексы предыдущего и следующего элементов
-      const prevIndex = (current - 1 + total) % total;
-      const nextIndex = (current + 1) % total;
-
-      const cards = [];
-
-      // Предыдущий элемент
-      cards.push({
-        service: this.services[prevIndex],
-        index: prevIndex,
-        isDuplicate: false,
-      });
-
-      // Текущий элемент
-      cards.push({
-        service: this.services[current],
-        index: current,
-        isDuplicate: false,
-      });
-
-      // Следующий элемент
-      cards.push({
-        service: this.services[nextIndex],
-        index: nextIndex,
-        isDuplicate: false,
-      });
-
-      return cards;
-    },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.initializeCarousel();
-      this.updateActiveByScroll();
-      this.startAutoPlay();
-    });
-    window.addEventListener("resize", this.handleResize, { passive: true });
+    this.startAutoPlay();
+    // Поддержка свайпов на мобильных
+    this.initTouchHandlers();
   },
   beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
     this.stopAutoPlay();
-    if (this.scrollUpdateTimeout) {
-      clearTimeout(this.scrollUpdateTimeout);
-    }
+    this.removeTouchHandlers();
   },
   methods: {
-    resetAutoPlay() {
-      this.stopAutoPlay();
-      this.startAutoPlay();
-    },
-    initializeCarousel() {
-      const carousel = this.$refs.carousel;
-      if (!carousel) return;
-
-      this.$nextTick(() => {
-        requestAnimationFrame(() => {
-          // Вычисляем размеры карточек
-          const firstCard = carousel.querySelector(".carousel-card");
-          if (firstCard && firstCard.offsetWidth > 0) {
-            this.cardWidth = firstCard.offsetWidth;
-            const style = window.getComputedStyle(carousel);
-            this.gap = parseFloat(style.gap) || 0;
-          }
-
-          // Устанавливаем начальную позицию так, чтобы средний элемент (текущий) был по центру
-          if (this.cardWidth > 0 && carousel.offsetWidth > 0) {
-            // Средний элемент - это второй в массиве из 3 элементов (индекс 1)
-            const middleCard = carousel.querySelectorAll(".carousel-card")[1];
-            if (middleCard) {
-              const middleCardCenter =
-                middleCard.offsetLeft + middleCard.offsetWidth / 2;
-              const viewportCenter = carousel.offsetWidth / 2;
-              carousel.scrollLeft = Math.max(
-                0,
-                middleCardCenter - viewportCenter
-              );
-            }
-            // Устанавливаем активный индекс на первый элемент
-            this.activeIndex = 0;
-          }
-        });
-      });
-    },
-    startAutoPlay() {
-      this.stopAutoPlay();
-      this.autoPlayInterval = setInterval(() => {
-        this.nextSlide();
-      }, 5000);
-    },
-    stopAutoPlay() {
-      if (this.autoPlayInterval) {
-        clearInterval(this.autoPlayInterval);
-        this.autoPlayInterval = null;
-      }
-    },
-    nextSlide() {
-      const nextIndex = (this.activeIndex + 1) % this.services.length;
-      this.goToSlide(nextIndex);
-    },
-    goToSlide(index) {
-      if (this.isAnimating) return;
-      if (index === this.activeIndex) return;
-
-      const carousel = this.$refs.carousel;
-      if (!carousel) return;
-
-      // Определяем, какой элемент нужно показать по центру
-      // Если переходим на следующий элемент, он уже виден справа
-      // Если переходим на предыдущий, он уже виден слева
-      const total = this.services.length;
-      const current = this.activeIndex;
-      const diff = (index - current + total) % total;
-
-      // Устанавливаем флаг анимации
-      this.isAnimating = true;
-
-      // Обновляем activeIndex сразу, чтобы visibleCards обновился
-      // Это создаст правильный порядок элементов для плавного перехода
-      this.activeIndex = index;
-
-      this.$nextTick(() => {
-        // Находим средний элемент (текущий активный)
-        const cards = carousel.querySelectorAll(".carousel-card");
-        const middleCard = cards[1]; // Средний элемент всегда по индексу 1
-
-        if (!middleCard) {
-          this.isAnimating = false;
-          return;
-        }
-
-        const gsap = this.$gsap;
-        if (gsap) {
-          // Используем GSAP для плавного скролла
-          gsap.to(carousel, {
-            scrollLeft:
-              middleCard.offsetLeft -
-              carousel.offsetWidth / 2 +
-              middleCard.offsetWidth / 2,
-            duration: 0.8,
-            ease: "power2.inOut",
-            onComplete: () => {
-              this.isAnimating = false;
-            },
-          });
-        } else {
-          // Fallback на нативный скролл
-          middleCard.scrollIntoView({
-            behavior: "smooth",
-            inline: "center",
-            block: "nearest",
-          });
-          setTimeout(() => {
-            this.isAnimating = false;
-          }, 800);
-        }
-      });
-    },
-    handleInfiniteScroll() {
-      // Этот метод больше не нужен, так как мы всегда показываем только 3 элемента
-      // и используем computed свойство visibleCards для управления отображением
-    },
-    handleResize() {
-      this.initializeCarousel();
-      this.updateActiveByScroll();
-    },
-    handleScroll() {
-      // Отменяем предыдущий таймер, если он есть
-      if (this.scrollUpdateTimeout) {
-        clearTimeout(this.scrollUpdateTimeout);
-      }
-
-      // Устанавливаем новый таймер для debounce
-      this.scrollUpdateTimeout = setTimeout(() => {
-        this.updateActiveByScroll();
-      }, 50);
-    },
-    updateActiveByScroll() {
-      // Не обновляем активный индекс во время анимации
-      if (this.isAnimating) return;
-
-      const carousel = this.$refs.carousel;
-      if (!carousel) return;
-
-      const cards = carousel.querySelectorAll(".carousel-card");
-      if (cards.length === 0) return;
-
-      const viewportCenter = carousel.scrollLeft + carousel.offsetWidth / 2;
-      let closestCard = null;
-      let closestDistance = Infinity;
-
-      // Проверяем все карточки, но предпочитаем среднюю (индекс 1)
-      cards.forEach((card, idx) => {
-        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-        const distance = Math.abs(viewportCenter - cardCenter);
-        // Даем приоритет средней карточке (индекс 1)
-        const adjustedDistance = idx === 1 ? distance * 0.5 : distance;
-        if (adjustedDistance < closestDistance) {
-          closestDistance = adjustedDistance;
-          closestCard = card;
-        }
-      });
-
-      if (closestCard) {
-        const index = parseInt(closestCard.dataset.index);
-        if (!isNaN(index) && index !== this.activeIndex) {
-          this.activeIndex = index;
-          // Пользователь переключил слайд вручную (скроллом) — сбрасываем таймер
-          this.resetAutoPlay();
-        }
-      }
-    },
     getCardStyle(service) {
       const layers = [
         "linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7))",
@@ -329,107 +129,99 @@ export default {
         return;
       }
       // Переключаем на выбранный слайд
-      this.goToSlide(index);
-      // Сбрасываем таймер автопрокрутки при ручном переключении
+      this.goToSlide(index, true);
+    },
+    goToSlide(index, isManual = false) {
+      if (this.isTransitioning) return;
+      if (index === this.activeIndex && !isManual) return;
+      
+      // Сбрасываем таймер при ручном переходе
+      if (isManual) {
+        this.resetAutoPlay();
+      }
+      
+      this.isTransitioning = true;
+      this.activeIndex = index;
+      
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 500);
+    },
+    nextSlide() {
+      if (this.isTransitioning) return;
+      
+      this.isTransitioning = true;
+      this.activeIndex = (this.activeIndex + 1) % this.services.length;
+      
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 500);
+    },
+    prevSlide() {
+      if (this.isTransitioning) return;
+      
+      this.isTransitioning = true;
+      this.activeIndex = (this.activeIndex - 1 + this.services.length) % this.services.length;
+      
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 500);
+      
+      // Сбрасываем таймер при ручном переходе
       this.resetAutoPlay();
     },
-    handleTouchStart(e) {
-      const carousel = this.$refs.carousel;
-      if (!carousel) return;
-
-      this.touchStartX = e.touches[0].clientX;
-      this.touchStartY = e.touches[0].clientY;
-      this.touchStartScrollLeft = carousel.scrollLeft;
-      this.isTouching = true;
-      this.isScrolling = false;
+    startAutoPlay() {
+      this.stopAutoPlay();
+      this.autoPlayInterval = setInterval(() => {
+        this.nextSlide();
+      }, 5000);
     },
-    handleTouchMove(e) {
-      if (!this.isTouching) return;
-
-      const carousel = this.$refs.carousel;
-      if (!carousel) return;
-
-      // Пересчитываем размеры, если они не были вычислены
-      if (!this.cardWidth || !this.gap) {
-        const firstCard = carousel.querySelector(".carousel-card");
-        if (firstCard && firstCard.offsetWidth > 0) {
-          this.cardWidth = firstCard.offsetWidth;
-          const style = window.getComputedStyle(carousel);
-          this.gap = parseFloat(style.gap) || 0;
-        }
-      }
-
-      if (!this.cardWidth) return;
-
-      const touchX = e.touches[0].clientX;
-      const touchY = e.touches[0].clientY;
-      const deltaX = touchX - this.touchStartX;
-      const deltaY = touchY - this.touchStartY;
-
-      // Определяем, это горизонтальный или вертикальный свайп
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        // Горизонтальный свайп - блокируем вертикальную прокрутку
-        e.preventDefault();
-        this.isScrolling = true;
-
-        // Вычисляем максимальное расстояние прокрутки (один элемент)
-        const cardWithGap = this.cardWidth + this.gap;
-        const maxScroll = this.touchStartScrollLeft + cardWithGap;
-        const minScroll = this.touchStartScrollLeft - cardWithGap;
-
-        // Увеличиваем чувствительность свайпа (умножаем на 2.0 для более быстрого отклика)
-        const newScrollLeft = this.touchStartScrollLeft - deltaX * 2.0;
-
-        // Ограничиваем прокрутку одним элементом
-        carousel.scrollLeft = Math.max(
-          minScroll,
-          Math.min(maxScroll, newScrollLeft)
-        );
+    stopAutoPlay() {
+      if (this.autoPlayInterval) {
+        clearInterval(this.autoPlayInterval);
+        this.autoPlayInterval = null;
       }
     },
-    handleTouchEnd(e) {
-      if (!this.isTouching) return;
-
-      const carousel = this.$refs.carousel;
-      if (!carousel) return;
-
-      // Пересчитываем размеры, если они не были вычислены
-      if (!this.cardWidth || !this.gap) {
-        const firstCard = carousel.querySelector(".carousel-card");
-        if (firstCard && firstCard.offsetWidth > 0) {
-          this.cardWidth = firstCard.offsetWidth;
-          const style = window.getComputedStyle(carousel);
-          this.gap = parseFloat(style.gap) || 0;
-        }
-      }
-
-      if (this.isScrolling && this.cardWidth) {
-        const touchEndX = e.changedTouches[0].clientX;
-        const deltaX = touchEndX - this.touchStartX;
-        const cardWithGap = this.cardWidth + this.gap;
-        const threshold = cardWithGap * 0.25; // Порог для переключения (25% от ширины карточки)
-
-        // Определяем направление и переключаем слайд
-        if (Math.abs(deltaX) > threshold) {
-          if (deltaX < 0) {
-            // Свайп влево - следующий слайд
-            this.nextSlide();
-          } else {
-            // Свайп вправо - предыдущий слайд
-            const prevIndex =
-              (this.activeIndex - 1 + this.services.length) %
-              this.services.length;
-            this.goToSlide(prevIndex);
-          }
-          this.resetAutoPlay();
+    resetAutoPlay() {
+      this.stopAutoPlay();
+      this.startAutoPlay();
+    },
+    initTouchHandlers() {
+      const wrapper = this.$refs.carouselWrapper;
+      if (!wrapper) return;
+      
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      wrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      
+      wrapper.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe(touchStartX, touchEndX);
+      }, { passive: true });
+    },
+    removeTouchHandlers() {
+      const wrapper = this.$refs.carouselWrapper;
+      if (!wrapper) return;
+      // Обработчики будут удалены автоматически при размонтировании компонента
+    },
+    handleSwipe(startX, endX) {
+      const swipeThreshold = 50;
+      const diff = startX - endX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Свайп влево - следующий слайд
+          this.nextSlide();
         } else {
-          // Недостаточный свайп - возвращаемся к текущему слайду
-          this.goToSlide(this.activeIndex);
+          // Свайп вправо - предыдущий слайд
+          this.prevSlide();
         }
+        // Сбрасываем таймер при ручном переходе
+        this.resetAutoPlay();
       }
-
-      this.isTouching = false;
-      this.isScrolling = false;
     },
   },
 };
@@ -457,7 +249,7 @@ export default {
   font-size: clamp(28px, 4vw, 42px);
   font-weight: 700;
   color: #111827;
-  margin: 0 0 clamp(24px, 3vw, 32px) 0;
+  margin: 0 0 clamp(16px, 2vw, 24px) 0;
   text-align: center;
   letter-spacing: -0.02em;
 }
@@ -467,7 +259,7 @@ export default {
   justify-content: center;
   align-items: center;
   gap: clamp(8px, 1.2vw, 12px);
-  margin: 0 0 clamp(32px, 5vw, 48px) 0;
+  margin: 0 0 clamp(20px, 3vw, 32px) 0;
   flex-wrap: wrap;
   padding: 0 24px;
 }
@@ -503,43 +295,49 @@ export default {
   outline-offset: 2px;
 }
 
-.carousel-container {
-  position: relative;
-  padding: 60px 0;
-  overflow: hidden;
+.image-slide {
   width: 100%;
-  max-width: 100vw;
-  box-sizing: border-box;
-}
-
-.carousel-wrapper {
-  display: flex;
-  gap: clamp(20px, 3vw, 40px);
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 60px 0;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  position: relative;
-}
-
-.carousel-wrapper::-webkit-scrollbar {
   display: none;
+  justify-content: center;
+}
+
+.image-slide img {
+  width: 35px;
+  height: 35px;
+  opacity: 0.2;
+  animation: slide-hint 5s linear infinite;
+}
+
+@keyframes slide-hint {
+  0% {
+    transform: translateX(50px);
+  }
+  99.9% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(50px);
+  }
 }
 
 .carousel-wrapper {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
 .carousel-card {
-  flex: 0 0 clamp(320px, 32vw, 480px);
-  min-width: clamp(320px, 32vw, 480px);
-  height: clamp(280px, 32vw, 420px);
+  flex: 0 0 100%;
+  min-width: 100%;
+  height: clamp(320px, 38vw, 480px);
   border-radius: 28px;
   border: none;
   color: #fff;
@@ -553,29 +351,23 @@ export default {
   background-size: cover;
   background-position: center;
   position: relative;
-  scroll-snap-align: center;
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.6s ease;
-  transform: scale(0.85);
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+  transform: scale(0.9);
   opacity: 0.7;
-  transform-origin: center;
-  will-change: transform;
 }
 
 .carousel-card.active {
-  transform: scale(1.15);
+  transform: scale(1);
   opacity: 1;
-  z-index: 10;
-  cursor: pointer;
 }
 
-.carousel-card:not(.active) {
-  cursor: pointer;
+.carousel-card:hover {
+  filter: brightness(1.15) saturate(1.15);
 }
 
-.carousel-card:not(.active):hover {
-  transform: scale(0.92);
-  opacity: 0.9;
+.carousel-card.active:hover {
+  filter: brightness(1.2) saturate(1.2);
 }
 
 .service-name {
@@ -584,36 +376,76 @@ export default {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-.card-info-toggle {
+.carousel-nav {
   position: absolute;
-  top: clamp(14px, 2vw, 20px);
-  right: clamp(14px, 2vw, 20px);
-  width: clamp(32px, 4vw, 44px);
-  height: clamp(32px, 4vw, 44px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.8);
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.9);
-  color: #0f172a;
-  font-weight: 700;
-  font-size: clamp(14px, 1.8vw, 18px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #ef4422;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
 }
 
-.card-info-toggle:hover {
-  transform: translateY(-2px) scale(1.1);
+.carousel-nav.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.carousel-nav:hover {
   background: #fff;
+  transform: translateY(-50%) scale(1);
+  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.3);
+  color: #ef4422;
+}
+
+.carousel-nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-nav svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: transform 0.2s ease;
+}
+
+.carousel-nav:hover svg {
+  transform: scale(1.1);
+}
+
+.carousel-nav-prev:hover svg {
+  transform: scale(1.1) translateX(-2px);
+}
+
+.carousel-nav-next:hover svg {
+  transform: scale(1.1) translateX(2px);
+}
+
+.carousel-nav-prev {
+  left: 20px;
+}
+
+.carousel-nav-next {
+  right: 20px;
 }
 
 .carousel-description-wrapper {
-  margin-top: clamp(24px, 4vw, 40px);
-  height: 200px;
-  min-height: 200px;
-  max-height: 200px;
+  margin-top: clamp(16px, 2.5vw, 28px);
+  height: 240px;
+  min-height: 240px;
+  max-height: 240px;
 }
 
 .carousel-description {
@@ -652,7 +484,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   flex: 1;
 }
@@ -675,25 +507,16 @@ export default {
 }
 
 @media (max-width: 992px) {
-  .carousel-container {
+  .carousel-wrapper {
     padding: 40px 0;
   }
 
-  .carousel-wrapper {
-    padding: 50px 0;
-  }
-
   .carousel-card {
-    flex: 0 0 75vw;
-    min-width: 75vw;
     height: clamp(220px, 42vw, 320px);
-    transform: scale(0.9);
-    opacity: 0.8;
   }
 
-  .carousel-card.active {
-    transform: scale(1);
-    opacity: 1;
+  .carousel-nav {
+    display: none;
   }
 }
 
@@ -702,23 +525,18 @@ export default {
     display: flex;
   }
 
-  .carousel-description-wrapper {
-    height: 150px;
-    min-height: 150px;
-  }
-
   .container-1 {
     padding: 0 16px;
   }
 
   .section-title {
     font-size: clamp(24px, 5vw, 32px);
-    margin-bottom: clamp(20px, 3vw, 28px);
+    margin-bottom: clamp(12px, 2vw, 20px);
   }
 
   .carousel-indicators {
     gap: 8px;
-    margin-bottom: clamp(24px, 4vw, 36px);
+    margin-bottom: clamp(16px, 2.5vw, 24px);
     padding: 0 16px;
   }
 
@@ -732,39 +550,22 @@ export default {
     height: 12px;
   }
 
-  .carousel-container {
-    padding: 40px 0;
-    overflow-x: hidden;
-  }
-
   .carousel-wrapper {
-    padding: 40px 0;
-    scroll-snap-type: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100%;
-    max-width: 100vw;
+    padding: 30px 0;
   }
 
   .carousel-card {
-    flex: 0 0 80vw;
-    min-width: 80vw;
-    max-width: 80vw;
-    height: 200px;
+    height: 220px;
     font-size: 16px;
     padding: 20px;
     border-radius: 20px;
-    transform: scale(0.9) !important;
-  }
-
-  .carousel-card.active {
-    transform: scale(1) !important;
   }
 
   .carousel-description-wrapper {
-    height: 150px;
-    min-height: 150px;
-    max-height: 150px;
+    margin-top: clamp(12px, 2vw, 20px);
+    height: 180px;
+    min-height: 180px;
+    max-height: 180px;
   }
 
   .carousel-description {
@@ -781,7 +582,7 @@ export default {
   .carousel-description p {
     font-size: 13px;
     line-height: 1.4;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
   }
 }
 
@@ -806,30 +607,13 @@ export default {
     height: 10px;
   }
 
-  .carousel-container {
-    padding: 30px 0;
-    overflow-x: hidden;
-  }
-
   .carousel-wrapper {
     padding: 30px 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100%;
-    max-width: 100vw;
   }
 
   .carousel-card {
-    flex: 0 0 85vw;
-    min-width: 85vw;
-    max-width: 85vw;
     height: 180px;
     padding: 16px;
-    transform: scale(0.9) !important;
-  }
-
-  .carousel-card.active {
-    transform: scale(1) !important;
   }
 
   .carousel-description-wrapper {
@@ -851,38 +635,7 @@ export default {
   .carousel-description p {
     font-size: 12px;
     line-height: 1.3;
-    -webkit-line-clamp: 3;
-  }
-}
-
-.image-slide {
-  width:100%;
-  display: none;
-  justify-content: center;
-}
-
-@media (max-width: 768px) {
-  .image-slide {
-    display: flex;
-  }
-}
-
-.image-slide img{
-  width:35px;
-  height: 35px;
-  opacity: .2;
-  animation: slide-hint 5s linear infinite;
-}
-
-@keyframes slide-hint {
-  0% {
-    transform: translateX(50px);
-  }
-  99.9% {
-    transform: translateX(-50px);
-  }
-  100% {
-    transform: translateX(50px);
+    -webkit-line-clamp: 4;
   }
 }
 </style>
