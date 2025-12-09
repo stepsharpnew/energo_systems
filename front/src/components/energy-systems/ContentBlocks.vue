@@ -89,14 +89,14 @@
             </div>
           </div> -->
           <div class="work-step">
-            <div class="step-number">05</div>
+            <div class="step-number">03</div>
             <div class="step-content">
               <h3 class="step-title">Документация и ввод в эксплуатацию</h3>
               <p class="step-description">Формирование полного пакета исполнительной документации и ввод объекта в эксплуатацию</p>
             </div>
           </div>
           <div class="work-step">
-            <div class="step-number">06</div>
+            <div class="step-number">04</div>
             <div class="step-content">
               <h3 class="step-title">Гарантийное обслуживание</h3>
               <p class="step-description">Гарантийное и послегарантийное обслуживание с постоянным мониторингом состояния систем</p>
@@ -145,22 +145,22 @@
         </p>
         <div class="advantages-grid">
           <div class="advantage-card">
-            <div class="advantage-icon">💰</div>
+            <!-- <div class="advantage-icon">💰</div> -->
             <h3 class="advantage-title">Гибкая ценовая политика</h3>
             <p class="advantage-description">Индивидуальный подход к ценообразованию с учетом специфики проекта и возможностей заказчика</p>
           </div>
           <div class="advantage-card">
-            <div class="advantage-icon">🏆</div>
+            <!-- <div class="advantage-icon">🏆</div> -->
             <h3 class="advantage-title">Большой опыт проектов</h3>
             <p class="advantage-description">Более 5000 успешно реализованных проектов различной сложности и масштаба</p>
           </div>
           <div class="advantage-card">
-            <div class="advantage-icon">⚡</div>
+            <!-- <div class="advantage-icon">⚡</div> -->
             <h3 class="advantage-title">Оптимизация расходов</h3>
             <p class="advantage-description">Конкретизация нужд заказчика и поиск наиболее экономически выгодных решений</p>
           </div>
           <div class="advantage-card">
-            <div class="advantage-icon">🔑</div>
+            <!-- <div class="advantage-icon">🔑</div> -->
             <h3 class="advantage-title">Работа "под ключ"</h3>
             <p class="advantage-description">Полный цикл работ от проектирования до ввода в эксплуатацию и обслуживания</p>
           </div>
@@ -694,6 +694,7 @@ export default {
   margin-bottom: 200px;
   position: relative;
   will-change: transform, opacity;
+  z-index: 1;
 }
 
 .content-block:last-child {
@@ -706,10 +707,25 @@ export default {
 
 .content-block-2 {
   grid-template-areas: "text image";
+  margin-bottom: 200px !important;
+  z-index: 1;
+  min-height: 0;
 }
 
 .content-block-3 {
   grid-template-areas: "image text";
+  margin-top: 0 !important;
+  margin-bottom: 200px;
+  padding-top: 200px;
+  z-index: 2;
+  position: relative;
+  clear: both;
+}
+
+@media (max-width: 992px) {
+  .content-block-3 {
+    padding-top: 0;
+  }
 }
 
 .content-block-4 {

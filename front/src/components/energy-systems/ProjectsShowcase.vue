@@ -13,16 +13,7 @@
           'project-card',
           { 'card-left': index < 2, 'card-right': index >= 2 && index < 4 }
         ]"
-        @click="$emit('open-project-modal', project)"
       >
-        <button
-          class="card-info-toggle light"
-          type="button"
-          @click.stop="$emit('open-project-modal', project)"
-          aria-label="Подробнее о проекте"
-        >
-          i
-        </button>
         <div
           class="project-cover"
           :style="{ backgroundImage: `url(${project.image})` }"
@@ -49,7 +40,6 @@ export default {
       required: true,
     },
   },
-  emits: ["open-project-modal"],
   data() {
     return {
       cardRefs: [],
@@ -237,7 +227,6 @@ export default {
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.3s ease, background 0.3s ease;
-  cursor: pointer;
   position: relative;
   will-change: transform, opacity;
 }
@@ -306,28 +295,6 @@ export default {
   word-break: break-word;
 }
 
-.card-info-toggle {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(15, 23, 42, 0.75);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  transition: transform 0.25s ease, background 0.25s ease;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  z-index: 2;
-}
-
-.card-info-toggle:hover {
-  transform: translateY(-3px) scale(1.05);
-  background: rgba(15, 23, 42, 0.95);
-}
 
 @media (max-width: 1200px) {
   /* Анимации теперь работают на мобильных, CSS правила удалены */

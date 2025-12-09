@@ -19,7 +19,6 @@
         <ProjectsShowcase
           ref="projectsSection"
           :projects="projects"
-          @open-project-modal="openProjectModal"
         />
 
         <ClientsSection ref="clientsSection" :clients="clients" />
@@ -44,13 +43,6 @@
       />
     </Teleport>
 
-    <Teleport to="body">
-      <ProjectModal
-        :show="showProjectModal"
-        :project="modalProject"
-        @close="closeProjectModal"
-      />
-    </Teleport>
 
     <Teleport to="body">
       <ContactModal
@@ -79,7 +71,6 @@ import Footer from "./energy-systems/Footer.vue";
 import Header from "./energy-systems/Header.vue";
 import HeroSection from "./energy-systems/HeroSection.vue";
 import Navigation from "./energy-systems/Navigation.vue";
-import ProjectModal from "./energy-systems/ProjectModal.vue";
 import ProjectsShowcase from "./energy-systems/ProjectsShowcase.vue";
 import ScrollToTop from "./energy-systems/ScrollToTop.vue";
 import ServiceModal from "./energy-systems/ServiceModal.vue";
@@ -99,7 +90,6 @@ export default {
     ContactCTA,
     Footer,
     ServiceModal,
-    ProjectModal,
     ContactModal,
     ScrollToTop,
   },
@@ -392,8 +382,6 @@ export default {
       ],
       showServiceModal: false,
       modalService: null,
-      showProjectModal: false,
-      modalProject: null,
       showContactModal: false,
       contactModalServiceId: null,
       showScrollTop: false,
@@ -427,14 +415,6 @@ export default {
     closeServiceModal() {
       this.showServiceModal = false;
       this.modalService = null;
-    },
-    openProjectModal(project) {
-      this.modalProject = project;
-      this.showProjectModal = true;
-    },
-    closeProjectModal() {
-      this.showProjectModal = false;
-      this.modalProject = null;
     },
     openContactModal() {
       this.contactModalServiceId = null;
