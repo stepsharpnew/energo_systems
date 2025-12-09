@@ -24,12 +24,12 @@
           <span>Специалистов</span>
         </div>
         <div class="stat-card">
-          <strong>5000+</strong>
-          <span>Выполненных проектов</span>
-        </div>
-        <div class="stat-card">
           <strong>55</strong>
           <span>Округов Москва и область</span>
+        </div>
+        <div class="stat-card stat-card-full">
+          <strong>5000+</strong>
+          <span>Выполненных проектов</span>
         </div>
       </div>
     </div>
@@ -73,14 +73,18 @@ export default {
 .hero-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 40px;
+  padding: clamp(40px, 5vw, 60px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(24px, 5vw, 60px);
-  border-radius: 36px;
+  gap: clamp(32px, 5vw, 80px);
+  border-radius: 32px;
   color: #fff;
   position: relative;
   z-index: 1;
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .hero-content,
@@ -95,38 +99,70 @@ export default {
   font-size: 12px;
   color: #ef4422;
   margin-bottom: 14px;
+  font-weight: 600;
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(239, 68, 34, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 34, 0.3);
 }
 
 .hero-content h2 {
   font-size: clamp(30px, 4vw, 44px);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   line-height: 1.2;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-description {
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 20px;
-  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 28px;
+  font-size: clamp(16px, 1.8vw, 18px);
+  line-height: 1.6;
+  font-weight: 400;
 }
 
 .hero-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 24px;
+  margin: 0 0 32px;
   display: grid;
-  gap: 10px;
+  gap: 16px;
 }
 
 .hero-list li {
   position: relative;
-  padding-left: 26px;
+  padding: 16px 20px 16px 48px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(15px, 1.6vw, 17px);
+  line-height: 1.6;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.hero-list li:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(239, 68, 34, 0.3);
+  transform: translateX(4px);
 }
 
 .hero-list li::before {
-  content: '•';
+  content: '';
   position: absolute;
-  left: 0;
-  color: #f97316;
+  left: 20px;
+  top: 20px;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #ef4422, #ff6934);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(239, 68, 34, 0.6);
 }
 
 .hero-cta {
@@ -137,25 +173,57 @@ export default {
 }
 
 .hero-cta button {
-  background: linear-gradient(135deg, #ef4422, #ff4c34);
+  background: linear-gradient(135deg, #ef4422, #ff6934);
   border: none;
-  border-radius: 999px;
-  padding: 12px 32px;
+  border-radius: 12px;
+  padding: 16px 36px;
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   font-size: 16px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(239, 68, 34, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-cta button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.hero-cta button:hover::before {
+  left: 100%;
 }
 
 .hero-cta button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(239, 68, 34, 0.4);
+  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.5);
+  background: linear-gradient(135deg, #ff6934, #ef4422);
+}
+
+.hero-cta button:active {
+  transform: translateY(-1px);
 }
 
 .hero-cta span {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-cta span::before {
+  content: '⚡';
+  font-size: 16px;
 }
 
 .hero-stats {
@@ -176,24 +244,59 @@ export default {
 }
 
 .stat-card {
-  background: rgba(15, 23, 42, 0.178);
-  border-radius: 24px;
-  padding: 24px;
-  backdrop-filter: blur(10px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 20px;
+  padding: 28px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ef4422, #ff6934, #ef4422);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(239, 68, 34, 0.4);
+  box-shadow: 0 12px 40px rgba(239, 68, 34, 0.2);
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.stat-card:hover::before {
+  opacity: 1;
 }
 
 .stat-card strong {
   display: block;
-  font-size: 34px;
+  font-size: clamp(32px, 4vw, 42px);
   line-height: 1;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Arial', sans-serif;
 }
 
 .stat-card span {
   color: #ef4422;
-  font-size: 17px;
+  font-size: clamp(15px, 1.8vw, 17px);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 @media (max-width: 768px) {
@@ -211,7 +314,12 @@ export default {
   }
 
   .hero-stats {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat-card-full {
+    grid-column: 1 / -1;
   }
 }
 

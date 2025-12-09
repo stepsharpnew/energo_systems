@@ -2,11 +2,12 @@
   <section class="services-section" ref="aboutSection">
     <div ref="block1" class="content-block content-block-1" data-speed="0.9">
       <img
+        ref="image1"
         :src="contentImage1"
         alt="О компании"
         class="content-image content-image-1"
       />
-      <div class="content-text">
+      <div ref="text1" class="content-text">
         <h2 class="content-title">О компании</h2>
         <p class="content-intro">
           Ведущая энергетическая компания с более чем 10-летним опытом работы в Москве и Московской области. 
@@ -52,7 +53,7 @@
     </div>
 
     <div ref="block2" class="content-block content-block-2" data-speed="0.8">
-      <div class="content-text">
+      <div ref="text2" class="content-text">
         <h2 class="content-title">Как мы работаем</h2>
         <p class="content-intro">
           Мы предлагаем комплексный подход к реализации проектов — от первичной консультации до ввода объекта в эксплуатацию. 
@@ -105,11 +106,14 @@
       </div>
       <div class="content-images-group">
         <img
+          ref="image2"
           :src="contentImage2"
           alt="Как мы работаем"
           class="content-image content-image-2"
         />
         <img
+          v-if="!isMobile"
+          ref="image4"
           :src="contentImage4"
           alt="Как мы работаем"
           class="content-image content-image-4"
@@ -120,17 +124,20 @@
     <div ref="block3" class="content-block content-block-3" data-speed="0.8">
       <div class="content-images-group">
         <img
+          ref="image3"
           :src="contentImage3"
           alt="Наши преимущества"
           class="content-image content-image-3"
         />
         <img
+          v-if="!isMobile"
+          ref="image5"
           :src="contentImage5"
           alt="Наши преимущества"
           class="content-image content-image-5"
         />
       </div>
-      <div class="content-text">
+      <div ref="text3" class="content-text">
         <h2 class="content-title">Наши преимущества</h2>
         <p class="content-intro">
           Мы создаем максимальную ценность для наших клиентов, сочетая профессиональный опыт, 
@@ -226,9 +233,11 @@ export default {
       contentImage4,
       contentImage5,
       rossetiLogo,
+      isMobile: false,
     };
   },
   mounted() {
+    this.checkMobile();
     this.$nextTick(() => {
       this.setupScrollTrigger();
       // Обновляем ScrollTrigger после монтирования
@@ -247,6 +256,9 @@ export default {
     }
   },
   methods: {
+    checkMobile() {
+      this.isMobile = window.innerWidth <= 992;
+    },
     setupScrollTrigger() {
       const gsap = this.$gsap;
       const ScrollTrigger = this.$ScrollTrigger;
@@ -267,81 +279,222 @@ export default {
         scrubValue: 0.5,
       };
 
-      // Анимация для блока 1 (движение слева) - появляется вниз, пропадает вверх
+      // Анимация для блока 1 - отдельно для изображения и текста
       if (this.$refs.block1) {
-        const anim1 = gsap.fromTo(
-          this.$refs.block1,
-          {
-            opacity: 0,
-            x: -animConfig.xOffset,
-          },
-          {
-            opacity: 1,
-            x: 0,
-            ease: "power1.out",
-            scrollTrigger: {
-              trigger: this.$refs.block1,
-              start: "top 90%",
-              end: isMobile ? "top 50%" : "center 60%",
-              scrub: animConfig.scrubValue, // Привязка к скроллу - работает в обе стороны
+        // Анимация изображения
+        if (this.$refs.image1) {
+          const imageAnim1 = gsap.fromTo(
+            this.$refs.image1,
+            {
+              opacity: 0,
+              x: -animConfig.xOffset,
+              scale: 0.95,
             },
+            {
+              opacity: 1,
+              x: 0,
+              scale: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block1,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (imageAnim1.scrollTrigger) {
+            this.scrollTriggers.push(imageAnim1.scrollTrigger);
           }
-        );
+        }
 
-        if (anim1.scrollTrigger) {
-          this.scrollTriggers.push(anim1.scrollTrigger);
+        // Анимация текста
+        if (this.$refs.text1) {
+          const textAnim1 = gsap.fromTo(
+            this.$refs.text1,
+            {
+              opacity: 0,
+              y: 30,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block1,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (textAnim1.scrollTrigger) {
+            this.scrollTriggers.push(textAnim1.scrollTrigger);
+          }
         }
       }
 
-      // Анимация для блока 2 (движение справа) - появляется вниз, пропадает вверх
+      // Анимация для блока 2 - отдельно для изображений и текста
       if (this.$refs.block2) {
-        const anim2 = gsap.fromTo(
-          this.$refs.block2,
-          {
-            opacity: 0,
-            x: animConfig.xOffset,
-          },
-          {
-            opacity: 1,
-            x: 0,
-            ease: "power1.out",
-            scrollTrigger: {
-              trigger: this.$refs.block2,
-              start: "top 90%",
-              end: isMobile ? "top 50%" : "center 60%",
-              scrub: animConfig.scrubValue, // Привязка к скроллу - работает в обе стороны
+        // Анимация первого изображения
+        if (this.$refs.image2) {
+          const imageAnim2 = gsap.fromTo(
+            this.$refs.image2,
+            {
+              opacity: 0,
+              x: animConfig.xOffset,
+              scale: 0.95,
             },
+            {
+              opacity: 1,
+              x: 0,
+              scale: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block2,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (imageAnim2.scrollTrigger) {
+            this.scrollTriggers.push(imageAnim2.scrollTrigger);
           }
-        );
+        }
 
-        if (anim2.scrollTrigger) {
-          this.scrollTriggers.push(anim2.scrollTrigger);
+        // Анимация второго изображения (с задержкой)
+        if (this.$refs.image4) {
+          const imageAnim4 = gsap.fromTo(
+            this.$refs.image4,
+            {
+              opacity: 0,
+              x: animConfig.xOffset,
+              scale: 0.95,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              scale: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block2,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (imageAnim4.scrollTrigger) {
+            this.scrollTriggers.push(imageAnim4.scrollTrigger);
+          }
+        }
+
+        // Анимация текста
+        if (this.$refs.text2) {
+          const textAnim2 = gsap.fromTo(
+            this.$refs.text2,
+            {
+              opacity: 0,
+              y: 30,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block2,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (textAnim2.scrollTrigger) {
+            this.scrollTriggers.push(textAnim2.scrollTrigger);
+          }
         }
       }
 
-      // Анимация для блока 3 (движение слева) - появляется вниз, пропадает вверх
+      // Анимация для блока 3 - отдельно для изображений и текста
       if (this.$refs.block3) {
-        const anim3 = gsap.fromTo(
-          this.$refs.block3,
-          {
-            opacity: 0,
-            x: -animConfig.xOffset,
-          },
-          {
-            opacity: 1,
-            x: 0,
-            ease: "power1.out",
-            scrollTrigger: {
-              trigger: this.$refs.block3,
-              start: "top 90%",
-              end: isMobile ? "top 50%" : "center 60%",
-              scrub: animConfig.scrubValue, // Привязка к скроллу - работает в обе стороны
+        // Анимация первого изображения
+        if (this.$refs.image3) {
+          const imageAnim3 = gsap.fromTo(
+            this.$refs.image3,
+            {
+              opacity: 0,
+              x: -animConfig.xOffset,
+              scale: 0.95,
             },
+            {
+              opacity: 1,
+              x: 0,
+              scale: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block3,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (imageAnim3.scrollTrigger) {
+            this.scrollTriggers.push(imageAnim3.scrollTrigger);
           }
-        );
+        }
 
-        if (anim3.scrollTrigger) {
-          this.scrollTriggers.push(anim3.scrollTrigger);
+        // Анимация второго изображения (с задержкой)
+        if (this.$refs.image5) {
+          const imageAnim5 = gsap.fromTo(
+            this.$refs.image5,
+            {
+              opacity: 0,
+              x: -animConfig.xOffset,
+              scale: 0.95,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              scale: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block3,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (imageAnim5.scrollTrigger) {
+            this.scrollTriggers.push(imageAnim5.scrollTrigger);
+          }
+        }
+
+        // Анимация текста
+        if (this.$refs.text3) {
+          const textAnim3 = gsap.fromTo(
+            this.$refs.text3,
+            {
+              opacity: 0,
+              y: 30,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: this.$refs.block3,
+                start: "top 85%",
+                end: isMobile ? "top 40%" : "center 50%",
+                scrub: animConfig.scrubValue,
+              },
+            }
+          );
+          if (textAnim3.scrollTrigger) {
+            this.scrollTriggers.push(textAnim3.scrollTrigger);
+          }
         }
       }
 
@@ -497,16 +650,32 @@ export default {
       const gsap = this.$gsap;
       const ScrollTrigger = this.$ScrollTrigger;
 
-      if (!gsap || !ScrollTrigger) return;
+      // Обновляем состояние мобильного устройства
+      const wasMobile = this.isMobile;
+      this.checkMobile();
 
-      // При изменении размера пересоздаем анимации
-      if (this.scrollTriggers.length > 0) {
-        this.scrollTriggers.forEach((st) => st.kill());
-        this.scrollTriggers = [];
+      // Если состояние изменилось, нужно пересоздать анимации
+      if (wasMobile !== this.isMobile) {
+        this.$nextTick(() => {
+          if (!gsap || !ScrollTrigger) return;
+
+          // При изменении размера пересоздаем анимации
+          if (this.scrollTriggers.length > 0) {
+            this.scrollTriggers.forEach((st) => st.kill());
+            this.scrollTriggers = [];
+          }
+          
+          // Пересоздаем анимации с новыми параметрами
+          this.setupScrollTrigger();
+        });
+      } else if (gsap && ScrollTrigger) {
+        // Если состояние не изменилось, просто обновляем ScrollTrigger
+        if (this.scrollTriggers.length > 0) {
+          this.scrollTriggers.forEach((st) => st.kill());
+          this.scrollTriggers = [];
+        }
+        this.setupScrollTrigger();
       }
-      
-      // Пересоздаем анимации с новыми параметрами
-      this.setupScrollTrigger();
     },
   },
 };
@@ -573,7 +742,7 @@ export default {
   grid-area: image;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-auto-rows: auto;
   gap: clamp(16px, 2.5vw, 24px);
   width: 100%;
 }
