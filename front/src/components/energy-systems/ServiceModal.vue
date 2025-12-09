@@ -160,7 +160,7 @@ export default {
   backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px;
   z-index: 9999;
   overflow-y: auto;
@@ -177,17 +177,25 @@ export default {
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45);
   margin: auto;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-body {
   padding: clamp(24px, 5vw, 48px);
   color: #e2e8f0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .service-modal {
   display: flex;
   flex-direction: column;
   gap: clamp(24px, 4vw, 40px);
+  min-height: 100%;
 }
 
 .section-kicker {
@@ -270,8 +278,14 @@ export default {
   display: flex;
   justify-content: center;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: auto;
+  padding-top: 24px;
   flex-wrap: wrap;
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(to top, #0f172a 0%, #0f172a 80%, rgba(15, 23, 42, 0.95) 100%);
+  z-index: 10;
 }
 
 .order-button {
@@ -348,6 +362,21 @@ export default {
 
 /* Адаптивные стили */
 @media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .modal-window {
+    max-height: calc(100vh - 20px);
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .modal-body {
+    padding: 24px;
+  }
+
   .modal-carousel-card {
     flex: 0 0 90vw;
     height: clamp(250px, 60vw, 400px);
@@ -364,6 +393,17 @@ export default {
   .modal-carousel-dots button {
     width: 8px;
     height: 8px;
+  }
+
+  .modal-actions {
+    padding-top: 20px;
+    background: linear-gradient(to top, #0f172a 0%, #0f172a 85%, rgba(15, 23, 42, 0.95) 100%);
+  }
+
+  .order-button,
+  .details-button {
+    width: 100%;
+    padding: 16px 32px;
   }
 }
 

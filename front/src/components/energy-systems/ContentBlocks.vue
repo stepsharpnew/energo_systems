@@ -8,77 +8,176 @@
       />
       <div class="content-text">
         <h2 class="content-title">О компании</h2>
-        <p class="content-description">
+        <p class="content-intro">
+          Ведущая энергетическая компания с более чем 10-летним опытом работы в Москве и Московской области. 
+          Мы специализируемся на комплексных решениях в сфере электроснабжения от проектирования до ввода объектов в эксплуатацию.
+        </p>
+        <div class="content-highlights">
+          <div class="highlight-item">
+            <span class="highlight-number">2013</span>
+            <span class="highlight-text">год основания компании</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-number">5000+</span>
+            <span class="highlight-text">реализованных проектов</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-number">100%</span>
+            <span class="highlight-text">выполнение в срок</span>
+          </div>
+        </div>
+        <!-- <p class="content-description">
           ООО «ЭНЕРГОСИСТЕМЫ» работает в сфере энергетики с 2013 года. За это
           время мы собрали команду первоклассных специалистов, обширную
           материально-техническую базу и накопили большой опыт реализации
           проектов любой степени сложности.
         </p>
         <p class="content-description">
-          Более 1000 объектов запроектировано и построено для ПАО Россети
-          Московский регион.
-        </p>
-
-        <p class="content-description">
-          Наше проектное бюро имеет обширный опыт выпуска проектной
-          документации, соответствующий не только всем нормативным требованиям,
+          Более 5000 объектов спроектировано и построено для ПАО «Россети
+          Московский регион». Наше проектное бюро имеет обширный опыт выпуска проектной
+          документации, соответствующей не только всем нормативным требованиям,
           но и конкретным технико-экономическим показателям, установленным
-          заказчиком. Наша компания на протяжении многих лет является рамочным
+          заказчиком.
+        </p>
+        <p class="content-description">
+          Наша компания на протяжении многих лет является рамочным
           подрядчиком ПАО «Россети» Москвы и московского региона, и имеет
           исключительно положительные характеристики своей работы. Мы готовы
           взять на себя функции подрядчика на строительных объектах любого
           масштаба и назначения для своевременного выполнения работ "под ключ"
           по электрическим и слаботочным системам как по проектам собственного
           исполнения, так и по готовым проектам Заказчика.
-        </p>
+        </p> -->
       </div>
     </div>
 
     <div ref="block2" class="content-block content-block-2" data-speed="0.8">
       <div class="content-text">
         <h2 class="content-title">Как мы работаем</h2>
-        <p class="content-description">
-          <b>«Энергосистемы»</b> - решаем задачи быстро и эффективно.
+        <p class="content-intro">
+          Мы предлагаем комплексный подход к реализации проектов — от первичной консультации до ввода объекта в эксплуатацию. 
+          Каждый этап тщательно проработан и контролируется нашими специалистами.
         </p>
-        <p class="content-description">
-          Этапы нашей работы:
-        </p>
-        <p class="content-description">
-          <b>• </b> Проектирование и согласование проектов<br />
-          <b>• </b> Закупка и поставка оборудования и материалов<br />
-          <b>• </b> Строительно-монтажные работы<br />
-          <b>• </b> Пусконаладочные работы<br />
-          <b>• </b> Формирование и сдача исполнительной документации<br />
-          <b>• </b> Ввод объекта в эксплуатацию<br />
-          <b>• </b> Гарантийное и послегарантийное обслуживание<br />
-        </p>
+        <div class="work-steps">
+          <div class="work-step">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h3 class="step-title">Проектирование и согласование</h3>
+              <p class="step-description">Разработка проектной документации с учетом всех нормативных требований и согласование во всех необходимых инстанциях</p>
+            </div>
+          </div>
+          <div class="work-step">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h3 class="step-title">Закупка и поставка</h3>
+              <p class="step-description">Подбор и закупка качественного оборудования и материалов от проверенных поставщиков</p>
+            </div>
+          </div>
+          <!-- <div class="work-step">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h3 class="step-title">Строительно-монтажные работы</h3>
+              <p class="step-description">Выполнение всех видов электромонтажных работ с соблюдением технологий и сроков</p>
+            </div>
+          </div> -->
+          <!-- <div class="work-step">
+            <div class="step-number">04</div>
+            <div class="step-content">
+              <h3 class="step-title">Пусконаладочные работы</h3>
+              <p class="step-description">Проверка, настройка и испытание всех систем для обеспечения надежной работы</p>
+            </div>
+          </div> -->
+          <div class="work-step">
+            <div class="step-number">05</div>
+            <div class="step-content">
+              <h3 class="step-title">Документация и ввод в эксплуатацию</h3>
+              <p class="step-description">Формирование полного пакета исполнительной документации и ввод объекта в эксплуатацию</p>
+            </div>
+          </div>
+          <div class="work-step">
+            <div class="step-number">06</div>
+            <div class="step-content">
+              <h3 class="step-title">Гарантийное обслуживание</h3>
+              <p class="step-description">Гарантийное и послегарантийное обслуживание с постоянным мониторингом состояния систем</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <img
-        :src="contentImage2"
-        alt="Как мы работаем"
-        class="content-image content-image-2"
-      />
+      <div class="content-images-group">
+        <img
+          :src="contentImage2"
+          alt="Как мы работаем"
+          class="content-image content-image-2"
+        />
+        <img
+          :src="contentImage4"
+          alt="Как мы работаем"
+          class="content-image content-image-4"
+        />
+      </div>
     </div>
 
     <div ref="block3" class="content-block content-block-3" data-speed="0.8">
-      <img
-        :src="contentImage3"
-        alt="Наши преимущества"
-        class="content-image content-image-3"
-      />
+      <div class="content-images-group">
+        <img
+          :src="contentImage3"
+          alt="Наши преимущества"
+          class="content-image content-image-3"
+        />
+        <img
+          :src="contentImage5"
+          alt="Наши преимущества"
+          class="content-image content-image-5"
+        />
+      </div>
       <div class="content-text">
         <h2 class="content-title">Наши преимущества</h2>
-        <p class="content-description">
-          <b>• </b> Гибкая ценовая политика<br />
-          <b>• </b> Большой опыт реализованных проектов<br />
-          <b>• </b> Конкретизация нужд и оптимизация расходов заказчика<br />
-          <b>• </b> Возможность выступать в роли субподрядчика "под ключ"<br />
-          <b>• </b> Строгое соблюдение сроков на каждом этапе реализации
-          работ<br />
-          <b>• </b> Постоянный внутренний контроль качества выполнения работ<br />
-          <b>• </b> Обширная материально-техническая база<br />
-          <b>• </b> Поиск наиболее оптимальных вариантов реализации проектов<br />
+        <p class="content-intro">
+          Мы создаем максимальную ценность для наших клиентов, сочетая профессиональный опыт, 
+          современные технологии и индивидуальный подход к каждому проекту.
         </p>
+        <div class="advantages-grid">
+          <div class="advantage-card">
+            <div class="advantage-icon">💰</div>
+            <h3 class="advantage-title">Гибкая ценовая политика</h3>
+            <p class="advantage-description">Индивидуальный подход к ценообразованию с учетом специфики проекта и возможностей заказчика</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🏆</div>
+            <h3 class="advantage-title">Большой опыт проектов</h3>
+            <p class="advantage-description">Более 5000 успешно реализованных проектов различной сложности и масштаба</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">⚡</div>
+            <h3 class="advantage-title">Оптимизация расходов</h3>
+            <p class="advantage-description">Конкретизация нужд заказчика и поиск наиболее экономически выгодных решений</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🔑</div>
+            <h3 class="advantage-title">Работа "под ключ"</h3>
+            <p class="advantage-description">Полный цикл работ от проектирования до ввода в эксплуатацию и обслуживания</p>
+          </div>
+          <!-- <div class="advantage-card">
+            <div class="advantage-icon">⏱️</div>
+            <h3 class="advantage-title">Соблюдение сроков</h3>
+            <p class="advantage-description">Строгое соблюдение договорных обязательств и сроков на каждом этапе реализации</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">✅</div>
+            <h3 class="advantage-title">Контроль качества</h3>
+            <p class="advantage-description">Многоуровневая система контроля качества на всех этапах выполнения работ</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🛠️</div>
+            <h3 class="advantage-title">Материально-техническая база</h3>
+            <p class="advantage-description">Обширная база современного оборудования и инструментов для выполнения любых задач</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">💡</div>
+            <h3 class="advantage-title">Оптимальные решения</h3>
+            <p class="advantage-description">Поиск и реализация наиболее эффективных технических решений для каждого проекта</p>
+          </div> -->
+        </div>
       </div>
     </div>
 
@@ -112,6 +211,8 @@
 import contentImage1 from "@/assets/content/content-1.png";
 import contentImage3 from "@/assets/content/content-2.jpg";
 import contentImage2 from "@/assets/content/content-3.png";
+import contentImage4 from "@/assets/content/content-4.jpg";
+import contentImage5 from "@/assets/content/content-5.jpg";
 import rossetiLogo from "@/assets/clients/client-5.png";
 
 export default {
@@ -122,6 +223,8 @@ export default {
       contentImage1,
       contentImage2,
       contentImage3,
+      contentImage4,
+      contentImage5,
       rossetiLogo,
     };
   },
@@ -466,8 +569,16 @@ export default {
   background: linear-gradient(90deg, #ef4422 0%, #ff6b4a 50%, #ef4422 100%);
 }
 
-.content-image {
+.content-images-group {
   grid-area: image;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: clamp(16px, 2.5vw, 24px);
+  width: 100%;
+}
+
+.content-image {
   width: 100%;
   aspect-ratio: 4 / 3;
   border-radius: 24px;
@@ -515,6 +626,151 @@ export default {
 
 .content-description:last-child {
   margin-bottom: 0;
+}
+
+.content-intro {
+  font-size: clamp(18px, 2.2vw, 22px);
+  line-height: 1.7;
+  color: #4a5568;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+/* Стили для блока "О компании" */
+.content-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 32px 0;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(239, 68, 34, 0.05), rgba(239, 68, 34, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(239, 68, 34, 0.1);
+}
+
+.highlight-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.highlight-number {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 800;
+  color: #ef4422;
+  line-height: 1;
+  font-family: 'Arial', sans-serif;
+}
+
+.highlight-text {
+  font-size: clamp(13px, 1.5vw, 16px);
+  color: #64748b;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Стили для блока "Как мы работаем" */
+.work-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.work-step {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.work-step:hover {
+  border-color: #ef4422;
+  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.1);
+  transform: translateX(4px);
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ef4422, #ff6934);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  border-radius: 12px;
+  font-family: 'Arial', sans-serif;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-size: clamp(18px, 2vw, 20px);
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+}
+
+.step-description {
+  font-size: clamp(15px, 1.8vw, 16px);
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Стили для блока "Наши преимущества" */
+.advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.advantage-card {
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.advantage-card:hover {
+  border-color: #ef4422;
+  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.15);
+  transform: translateY(-4px);
+}
+
+.advantage-icon {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.advantage-title {
+  font-size: clamp(18px, 2vw, 20px);
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.advantage-description {
+  font-size: clamp(14px, 1.6vw, 16px);
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* Компактный инфографический блок */
@@ -631,6 +887,11 @@ export default {
     z-index: auto !important;
   }
 
+  .content-images-group {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
   .content-block-4 {
     padding: clamp(28px, 4vw, 40px);
   }
@@ -643,6 +904,16 @@ export default {
 
   .partner-logo-compact {
     margin: 0 auto;
+  }
+
+  .content-highlights {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .advantages-grid {
+    grid-template-columns: 1fr;
   }
 
   /* Отключаем data-speed эффект на мобильных */
@@ -659,6 +930,39 @@ export default {
 
   .content-image {
     border-radius: 20px;
+  }
+
+  .content-intro {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .content-highlights {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .highlight-number {
+    font-size: 28px;
+  }
+
+  .work-step {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .step-number {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .advantage-card {
+    padding: 20px;
+  }
+
+  .advantage-icon {
+    font-size: 32px;
   }
 
   .content-title {
