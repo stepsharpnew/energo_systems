@@ -32,9 +32,37 @@
           <div class="service-details">
             <div v-if="selectedService" class="service-details-content">
               <h2>{{ selectedService.name }}</h2>
-              <div class="service-description">
-                <div class="detailed-text" v-html="formatText(selectedService.detailedDescription)"></div>
+              
+              <div v-if="selectedService.description" class="service-intro">
+                <p>{{ selectedService.description }}</p>
               </div>
+
+              <div class="service-sections">
+                <div
+                  v-for="(section, idx) in selectedService.sections"
+                  :key="idx"
+                  class="service-section"
+                  :class="`section-${section.type}`"
+                >
+                  <h3 class="section-title">{{ section.title }}</h3>
+                  
+                  <div v-if="section.items" class="section-items">
+                    <div
+                      v-for="(item, itemIdx) in section.items"
+                      :key="itemIdx"
+                      class="section-item"
+                    >
+                      <span class="item-icon"></span>
+                      <span class="item-text">{{ item }}</span>
+                    </div>
+                  </div>
+                  
+                  <div v-if="section.content" class="section-content">
+                    <p>{{ section.content }}</p>
+                  </div>
+                </div>
+              </div>
+
               <div class="service-gallery">
                 <h3>Галерея</h3>
                 <div class="gallery-grid">
@@ -46,6 +74,7 @@
                   ></div>
                 </div>
               </div>
+              
               <div class="service-actions">
                 <button class="contact-button" @click="openContactModal">
                   Заказать услугу
@@ -137,28 +166,6 @@ export default {
         this.$router.push('/');
       }
     },
-    formatText(text) {
-      // Форматируем текст: заменяем переносы строк на <br> и обрабатываем списки
-      if (!text) return '';
-      return text
-        .split('\n')
-        .map(line => {
-          // Если строка начинается с "•", делаем её элементом списка
-          if (line.trim().startsWith('•')) {
-            return `<div class="list-item">${line.trim().substring(1).trim()}</div>`;
-          }
-          // Если строка начинается с "-", делаем её элементом списка
-          if (line.trim().startsWith('-')) {
-            return `<div class="list-item">${line.trim().substring(1).trim()}</div>`;
-          }
-          // Если строка не пустая, делаем её параграфом
-          if (line.trim()) {
-            return `<p>${line.trim()}</p>`;
-          }
-          return '';
-        })
-        .join('');
-    }
   }
 }
 </script>
@@ -257,51 +264,147 @@ export default {
   margin-bottom: 24px;
 }
 
-.service-description,
-.service-details-text {
+.service-intro {
   margin-bottom: 32px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(239, 68, 34, 0.05), rgba(239, 68, 34, 0.02));
+  border-left: 4px solid #ef4422;
+  border-radius: 8px;
 }
 
-.service-description h3,
-.service-details-text h3 {
-  font-size: 20px;
+.service-intro p {
+  color: #4a5568;
+  font-size: 18px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.service-sections {
+  margin-bottom: 40px;
+}
+
+.service-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.service-section:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #ef4422;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
   color: #0f172a;
-  margin-bottom: 12px;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.service-description p,
-.service-details-text p {
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, #ef4422, #ff6934);
+  border-radius: 2px;
+}
+
+.section-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.section-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(239, 68, 34, 0.1);
+}
+
+.item-icon {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  background: #ef4422;
+  border-radius: 50%;
+  margin-top: 8px;
+}
+
+.item-text {
+  color: #4a5568;
+  font-size: 16px;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.section-content {
   color: #4a5568;
   font-size: 16px;
   line-height: 1.7;
-  margin-bottom: 16px;
 }
 
-.detailed-text {
-  color: #4a5568;
-  font-size: 16px;
-  line-height: 1.8;
+.section-content p {
+  margin: 0;
 }
 
-.detailed-text p {
-  margin-bottom: 16px;
-  color: #4a5568;
+/* Специальные стили для разных типов секций */
+.section-advantages .section-title::before {
+  background: linear-gradient(135deg, #10b981, #34d399);
 }
 
-.detailed-text .list-item {
-  margin-bottom: 12px;
-  padding-left: 24px;
+.section-warning .section-title::before {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.section-warning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(245, 158, 11, 0.02));
+  border-color: #f59e0b;
+}
+
+.section-steps .section-item {
+  counter-increment: step-counter;
   position: relative;
-  color: #4a5568;
+  padding-left: 48px;
 }
 
-.detailed-text .list-item::before {
-  content: '•';
+.section-steps .section-item::before {
+  content: counter(step-counter);
   position: absolute;
-  left: 0;
-  color: #ef4422;
-  font-weight: bold;
-  font-size: 20px;
+  left: 12px;
+  top: 12px;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #ef4422, #ff6934);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.section-steps {
+  counter-reset: step-counter;
+}
+
+.section-steps .item-icon {
+  display: none;
 }
 
 .service-gallery {
@@ -399,6 +502,35 @@ export default {
 
   .service-details-content h2 {
     font-size: 24px;
+  }
+
+  .service-intro {
+    padding: 16px;
+  }
+
+  .service-intro p {
+    font-size: 16px;
+  }
+
+  .service-section {
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .section-item {
+    padding: 10px;
+  }
+
+  .item-text {
+    font-size: 15px;
+  }
+
+  .section-content {
+    font-size: 15px;
   }
 
   .gallery-grid {
