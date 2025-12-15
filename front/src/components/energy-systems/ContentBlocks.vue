@@ -308,29 +308,90 @@ export default {
           }
         }
 
-        // Анимация текста
+        // Анимация текста - выезжание с разных сторон без opacity
         if (this.$refs.text1) {
-          const textAnim1 = gsap.fromTo(
-            this.$refs.text1,
-            {
-              opacity: 0,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block1,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
+          // Анимация заголовка - выезжает слева
+          const title = this.$refs.text1.querySelector('.content-title');
+          if (title) {
+            const titleAnim = gsap.fromTo(
+              title,
+              {
+                x: isMobile ? -60 : -100,
+                y: isMobile ? 20 : 30,
               },
+              {
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block1,
+                  start: "top 85%",
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (titleAnim.scrollTrigger) {
+              this.scrollTriggers.push(titleAnim.scrollTrigger);
             }
-          );
-          if (textAnim1.scrollTrigger) {
-            this.scrollTriggers.push(textAnim1.scrollTrigger);
           }
+
+          // Анимация вводного текста - выезжает снизу
+          const intro = this.$refs.text1.querySelector('.content-intro');
+          if (intro) {
+            const introAnim = gsap.fromTo(
+              intro,
+              {
+                y: isMobile ? 40 : 60,
+              },
+              {
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block1,
+                  start: "top 85%",
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (introAnim.scrollTrigger) {
+              this.scrollTriggers.push(introAnim.scrollTrigger);
+            }
+          }
+
+          // Анимация highlight элементов - выезжают с разных сторон
+          const highlights = this.$refs.text1.querySelectorAll('.highlight-item');
+          const highlightOffsets = [
+            { x: -50, y: 30 },  // Слева
+            { x: 0, y: 40 },    // Снизу
+            { x: 50, y: 30 },   // Справа
+          ];
+          highlights.forEach((highlight, index) => {
+            const patternIndex = index % highlightOffsets.length;
+            const offset = highlightOffsets[patternIndex] || { x: 0, y: 30 };
+            const highlightAnim = gsap.fromTo(
+              highlight,
+              {
+                x: isMobile ? offset.x * 0.6 : offset.x,
+                y: isMobile ? offset.y * 0.6 : offset.y,
+              },
+              {
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block1,
+                  start: `top ${85 - index * 2}%`,
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (highlightAnim.scrollTrigger) {
+              this.scrollTriggers.push(highlightAnim.scrollTrigger);
+            }
+          });
         }
       }
 
@@ -390,29 +451,91 @@ export default {
           }
         }
 
-        // Анимация текста
+        // Анимация текста - выезжание с разных сторон без opacity
         if (this.$refs.text2) {
-          const textAnim2 = gsap.fromTo(
-            this.$refs.text2,
-            {
-              opacity: 0,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block2,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
+          // Анимация заголовка - выезжает справа
+          const title = this.$refs.text2.querySelector('.content-title');
+          if (title) {
+            const titleAnim = gsap.fromTo(
+              title,
+              {
+                x: isMobile ? 60 : 100,
+                y: isMobile ? 20 : 30,
               },
+              {
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block2,
+                  start: "top 85%",
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (titleAnim.scrollTrigger) {
+              this.scrollTriggers.push(titleAnim.scrollTrigger);
             }
-          );
-          if (textAnim2.scrollTrigger) {
-            this.scrollTriggers.push(textAnim2.scrollTrigger);
           }
+
+          // Анимация вводного текста - выезжает снизу
+          const intro = this.$refs.text2.querySelector('.content-intro');
+          if (intro) {
+            const introAnim = gsap.fromTo(
+              intro,
+              {
+                y: isMobile ? 40 : 60,
+              },
+              {
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block2,
+                  start: "top 85%",
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (introAnim.scrollTrigger) {
+              this.scrollTriggers.push(introAnim.scrollTrigger);
+            }
+          }
+
+          // Анимация шагов работы - выезжают с разных сторон
+          const workSteps = this.$refs.text2.querySelectorAll('.work-step');
+          const stepOffsets = [
+            { x: 80, y: 30 },   // Справа
+            { x: -60, y: 30 },  // Слева
+            { x: 80, y: 30 },   // Справа
+            { x: -60, y: 30 },  // Слева
+          ];
+          workSteps.forEach((step, index) => {
+            const patternIndex = index % stepOffsets.length;
+            const offset = stepOffsets[patternIndex] || { x: 0, y: 30 };
+            const stepAnim = gsap.fromTo(
+              step,
+              {
+                x: isMobile ? offset.x * 0.6 : offset.x,
+                y: isMobile ? offset.y * 0.6 : offset.y,
+              },
+              {
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block2,
+                  start: `top ${85 - index * 3}%`,
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (stepAnim.scrollTrigger) {
+              this.scrollTriggers.push(stepAnim.scrollTrigger);
+            }
+          });
         }
       }
 
@@ -472,29 +595,91 @@ export default {
           }
         }
 
-        // Анимация текста
+        // Анимация текста - выезжание с разных сторон без opacity
         if (this.$refs.text3) {
-          const textAnim3 = gsap.fromTo(
-            this.$refs.text3,
-            {
-              opacity: 0,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block3,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
+          // Анимация заголовка - выезжает слева
+          const title = this.$refs.text3.querySelector('.content-title');
+          if (title) {
+            const titleAnim = gsap.fromTo(
+              title,
+              {
+                x: isMobile ? -60 : -100,
+                y: isMobile ? 20 : 30,
               },
+              {
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block3,
+                  start: "top 85%",
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (titleAnim.scrollTrigger) {
+              this.scrollTriggers.push(titleAnim.scrollTrigger);
             }
-          );
-          if (textAnim3.scrollTrigger) {
-            this.scrollTriggers.push(textAnim3.scrollTrigger);
           }
+
+          // Анимация вводного текста - выезжает снизу
+          const intro = this.$refs.text3.querySelector('.content-intro');
+          if (intro) {
+            const introAnim = gsap.fromTo(
+              intro,
+              {
+                y: isMobile ? 40 : 60,
+              },
+              {
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block3,
+                  start: "top 85%",
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (introAnim.scrollTrigger) {
+              this.scrollTriggers.push(introAnim.scrollTrigger);
+            }
+          }
+
+          // Анимация карточек преимуществ - выезжают с разных сторон
+          const advantageCards = this.$refs.text3.querySelectorAll('.advantage-card');
+          const cardOffsets = [
+            { x: -70, y: 40 },  // Слева-сверху
+            { x: 70, y: 40 },   // Справа-сверху
+            { x: -70, y: 40 },  // Слева-снизу
+            { x: 70, y: 40 },   // Справа-снизу
+          ];
+          advantageCards.forEach((card, index) => {
+            const patternIndex = index % cardOffsets.length;
+            const offset = cardOffsets[patternIndex] || { x: 0, y: 40 };
+            const cardAnim = gsap.fromTo(
+              card,
+              {
+                x: isMobile ? offset.x * 0.6 : offset.x,
+                y: isMobile ? offset.y * 0.6 : offset.y,
+              },
+              {
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.block3,
+                  start: `top ${85 - Math.floor(index / 2) * 2}%`,
+                  end: isMobile ? "top 40%" : "center 50%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (cardAnim.scrollTrigger) {
+              this.scrollTriggers.push(cardAnim.scrollTrigger);
+            }
+          });
         }
       }
 
@@ -525,59 +710,62 @@ export default {
           this.scrollTriggers.push(anim4.scrollTrigger);
         }
 
-        // Анимация партнерской информации - плавная привязка к скроллу
+        // Анимация партнерской информации - отдельно для логотипа и текста
         if (this.$refs.partnerInfo) {
-          const partnerInfoAnim = gsap.fromTo(
-            this.$refs.partnerInfo,
-            {
-              opacity: 0,
-              y: 30,
-              scale: 0.95,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.partnerInfo,
-                start: "top 90%",
-                end: isMobile ? "top 60%" : "top 70%",
-                scrub: animConfig.scrubValue,
+          // Анимация логотипа
+          if (this.$refs.logoContainer) {
+            const logoAnim = gsap.fromTo(
+              this.$refs.logoContainer,
+              {
+                opacity: 0,
+                scale: 0.8,
+                x: -20,
               },
+              {
+                opacity: 1,
+                scale: 1,
+                x: 0,
+                ease: "back.out(1.4)",
+                scrollTrigger: {
+                  trigger: this.$refs.partnerInfo,
+                  start: "top 90%",
+                  end: isMobile ? "top 60%" : "top 70%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (logoAnim.scrollTrigger) {
+              this.scrollTriggers.push(logoAnim.scrollTrigger);
             }
-          );
-          if (partnerInfoAnim.scrollTrigger) {
-            this.scrollTriggers.push(partnerInfoAnim.scrollTrigger);
+          }
+
+          // Анимация текста партнерской информации - выезжает справа
+          const partnerText = this.$refs.partnerInfo.querySelector('.partner-text-compact');
+          if (partnerText) {
+            const partnerTextAnim = gsap.fromTo(
+              partnerText,
+              {
+                x: isMobile ? 60 : 100,
+                y: isMobile ? 20 : 30,
+              },
+              {
+                x: 0,
+                y: 0,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: this.$refs.partnerInfo,
+                  start: "top 90%",
+                  end: isMobile ? "top 60%" : "top 70%",
+                  scrub: animConfig.scrubValue,
+                },
+              }
+            );
+            if (partnerTextAnim.scrollTrigger) {
+              this.scrollTriggers.push(partnerTextAnim.scrollTrigger);
+            }
           }
         }
 
-        // Анимация логотипа - плавная привязка к скроллу
-        if (this.$refs.logoContainer) {
-          const logoAnim = gsap.fromTo(
-            this.$refs.logoContainer,
-            {
-              opacity: 0,
-              scale: 0.8,
-              x: -20,
-            },
-            {
-              opacity: 1,
-              scale: 1,
-              x: 0,
-              ease: "back.out(1.4)",
-              scrollTrigger: {
-                trigger: this.$refs.partnerInfo,
-                start: "top 90%",
-                end: isMobile ? "top 60%" : "top 70%",
-                scrub: animConfig.scrubValue,
-              },
-            }
-          );
-          if (logoAnim.scrollTrigger) {
-            this.scrollTriggers.push(logoAnim.scrollTrigger);
-          }
-        }
 
         // Анимация статистики - плавная привязка к скроллу
         if (this.$refs.statsCompact) {
