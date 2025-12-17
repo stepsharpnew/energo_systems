@@ -43,6 +43,22 @@ services:
       - "5173:5173"
     networks:
       - dev
+    depends_on:
+      - tg_bot
+  tg_bot:
+    build:
+      context: ./tg_bot
+    container_name: tg_bot
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - ADMIN_CHAT_IDS=${ADMIN_CHAT_IDS}
+      - ALLOWED_USER_IDS=${ALLOWED_USER_IDS}
+      - PORT=3001
+    networks:
+      - dev
   # volumes:
   #   postgres_data:
   #   grafana-storage:
