@@ -74,29 +74,29 @@
               <p class="step-description">Подбор и закупка качественного оборудования и материалов от проверенных поставщиков</p>
             </div>
           </div>
-          <!-- <div class="work-step">
+          <div class="work-step">
             <div class="step-number">03</div>
             <div class="step-content">
               <h3 class="step-title">Строительно-монтажные работы</h3>
               <p class="step-description">Выполнение всех видов электромонтажных работ с соблюдением технологий и сроков</p>
             </div>
-          </div> -->
-          <!-- <div class="work-step">
+          </div>
+          <div class="work-step">
             <div class="step-number">04</div>
             <div class="step-content">
               <h3 class="step-title">Пусконаладочные работы</h3>
               <p class="step-description">Проверка, настройка и испытание всех систем для обеспечения надежной работы</p>
             </div>
-          </div> -->
+          </div>
           <div class="work-step">
-            <div class="step-number">03</div>
+            <div class="step-number">05</div>
             <div class="step-content">
               <h3 class="step-title">Документация и ввод в эксплуатацию</h3>
               <p class="step-description">Формирование полного пакета исполнительной документации и ввод объекта в эксплуатацию</p>
             </div>
           </div>
           <div class="work-step">
-            <div class="step-number">04</div>
+            <div class="step-number">06</div>
             <div class="step-content">
               <h3 class="step-title">Гарантийное обслуживание</h3>
               <p class="step-description">Гарантийное и послегарантийное обслуживание с постоянным мониторингом состояния систем</p>

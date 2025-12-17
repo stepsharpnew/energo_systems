@@ -113,6 +113,7 @@
 
 <script>
 import { handlePhoneKeydown } from "../../utils/phoneFormatter";
+import axios from "axios";
 
 export default {
   name: "ContactModal",
@@ -264,7 +265,7 @@ export default {
       return formatted;
     },
     handlePhoneKeydown,
-    handleSubmit(event) {
+    async handleSubmit(event) {
       // Проверяем, что услуга выбрана
       if (!this.formData.service) {
         event.preventDefault();
@@ -278,16 +279,33 @@ export default {
 
       this.isSubmitting = true;
 
-      // Здесь можно добавить отправку данных на сервер
-      console.log("Form data:", this.formData);
+      try {
+        const selectedService = this.services.find(
+          (s) => s.id === this.formData.service
+        );
 
-      // Имитация отправки
-      setTimeout(() => {
-        this.isSubmitting = false;
-        alert("Спасибо! Мы свяжемся с вами в ближайшее время.");
+        const payload = {
+          type: "service",
+          name: this.formData.name,
+          contact: this.formData.phone,
+          service: selectedService ? selectedService.name : undefined,
+        };
+
+        const response = await axios.post("/api/telegram/lead", payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        alert("Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.");
         this.$emit("close");
         this.resetForm();
-      }, 1000);
+      } catch (error) {
+        console.error("Ошибка при отправке заявки в Telegram:", error);
+        alert("Произошла ошибка при отправке заявки. Попробуйте еще раз позже.");
+      } finally {
+        this.isSubmitting = false;
+      }
     },
     resetForm() {
       this.formData = {
