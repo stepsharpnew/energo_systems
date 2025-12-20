@@ -3,20 +3,29 @@
     <div class="cta-content">
       <p class="section-kicker">Связаться с нами</p>
       <h2>Нужен быстрый расчет или выезд инженера?</h2>
-      <p>Сообщите задачу — за 30 минут подготовим предварительные решения и стоимость, а при необходимости организуем выезд на объект в течение суток.</p>
+      <p>
+        Сообщите задачу — за 30 минут подготовим предварительные решения и
+        стоимость, а при необходимости организуем выезд на объект в течение
+        суток.
+      </p>
     </div>
     <div class="cta-actions">
-      <button type="button" @click="$emit('open-contact-modal')">Запланировать консультацию</button>
-      <a href="tel:84951780118">Позвонить 8 (495) 178-01-18</a>
+      <button type="button" @click="$emit('open-contact-modal')">
+        Запланировать консультацию
+      </button>
+      <div class="phone-link">
+        <span class="phone-icon">📞</span>
+        <a href="tel:84951780118">8 (495) 178-01-18</a>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: 'ContactCTA',
-  emits: ['open-contact-modal']
-}
+  name: "ContactCTA",
+  emits: ["open-contact-modal"],
+};
 </script>
 
 <style scoped>
@@ -76,14 +85,44 @@ export default {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
 }
 
-.cta-actions a {
+.phone-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.phone-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.phone-link a {
   color: #fff;
   text-decoration: none;
   font-weight: 600;
   font-size: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  transition: opacity 0.25s ease;
+}
+
+.phone-link a:hover {
+  opacity: 0.8;
+}
+
+/* На десктопе ссылка не кликабельна */
+@media (min-width: 769px) {
+  .phone-link a {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .phone-link a:hover {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {
@@ -95,7 +134,7 @@ export default {
     width: 100%;
   }
 
-  .cta-actions a {
+  .phone-link {
     justify-content: center;
   }
 }
@@ -106,4 +145,3 @@ export default {
   }
 }
 </style>
-
