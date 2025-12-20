@@ -12,9 +12,6 @@
           :aria-label="`Перейти к услуге ${index + 1}`"
         ></button>
       </div>
-      <div class="image-slide">
-        <img src="..//../assets/slide-carosel.png"/>
-      </div>
       
       <div 
         class="carousel-wrapper" 
@@ -295,30 +292,6 @@ export default {
   outline-offset: 2px;
 }
 
-.image-slide {
-  width: 100%;
-  display: none;
-  justify-content: center;
-}
-
-.image-slide img {
-  width: 35px;
-  height: 35px;
-  opacity: 0.2;
-  animation: slide-hint 5s linear infinite;
-}
-
-@keyframes slide-hint {
-  0% {
-    transform: translateX(50px);
-  }
-  99.9% {
-    transform: translateX(-50px);
-  }
-  100% {
-    transform: translateX(50px);
-  }
-}
 
 .carousel-wrapper {
   position: relative;
