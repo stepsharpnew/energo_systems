@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div ref="block2" class="content-block content-block-2" data-speed="0.8">
+    <div ref="block2" class="content-block content-block-2" data-speed="0.9">
       <div ref="text2" class="content-text">
         <h2 class="content-title">Как мы работаем</h2>
         <p class="content-intro">
@@ -326,8 +326,8 @@ export default {
           {
             opacity: 1,
             x: 0,
-            duration: 0.5,
-            ease: "power2.out",
+            duration: 0.3,
+            ease: "none",
             scrollTrigger: {
               trigger: this.$refs.block1,
               start: "top 80%",
@@ -340,140 +340,65 @@ export default {
         }
       }
 
-      // Анимация для блока 2 - отдельно для изображений и текста
+      // Анимация для блока 2 - заголовок, описание и картинки справа одним блоком, этапы справа с отдельными триггерами
       if (this.$refs.block2) {
-        // Анимация первого изображения
-        if (this.$refs.image2) {
-          const imageAnim2 = gsap.fromTo(
-            this.$refs.image2,
-            {
-              opacity: 0,
-              x: animConfig.xOffset,
-              scale: 0.95,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              scale: 1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block2,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
-              },
-            }
-          );
-          if (imageAnim2.scrollTrigger) {
-            this.scrollTriggers.push(imageAnim2.scrollTrigger);
-          }
-        }
+        // Создаем контейнер для заголовка, описания и картинок
+        const headerElements = [];
 
-        // Анимация второго изображения (с задержкой)
-        if (this.$refs.image4) {
-          const imageAnim4 = gsap.fromTo(
-            this.$refs.image4,
-            {
-              opacity: 0,
-              x: animConfig.xOffset,
-              scale: 0.95,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              scale: 1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block2,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
-              },
-            }
-          );
-          if (imageAnim4.scrollTrigger) {
-            this.scrollTriggers.push(imageAnim4.scrollTrigger);
-          }
-        }
-
-        // Анимация текста - выезжание с разных сторон без opacity
         if (this.$refs.text2) {
-          // Анимация заголовка - выезжает справа
           const title = this.$refs.text2.querySelector(".content-title");
-          if (title) {
-            const titleAnim = gsap.fromTo(
-              title,
-              {
-                x: isMobile ? 60 : 100,
-                y: isMobile ? 20 : 30,
-              },
-              {
-                x: 0,
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.block2,
-                  start: "top 85%",
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (titleAnim.scrollTrigger) {
-              this.scrollTriggers.push(titleAnim.scrollTrigger);
-            }
-          }
-
-          // Анимация вводного текста - выезжает снизу
           const intro = this.$refs.text2.querySelector(".content-intro");
-          if (intro) {
-            const introAnim = gsap.fromTo(
-              intro,
-              {
-                y: isMobile ? 40 : 60,
-              },
-              {
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.block2,
-                  start: "top 85%",
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (introAnim.scrollTrigger) {
-              this.scrollTriggers.push(introAnim.scrollTrigger);
-            }
-          }
+          if (title) headerElements.push(title);
+          if (intro) headerElements.push(intro);
+        }
 
-          // Анимация шагов работы - выезжают с разных сторон
+        if (this.$refs.image2) headerElements.push(this.$refs.image2);
+        if (this.$refs.image4) headerElements.push(this.$refs.image4);
+
+        // Анимация заголовка, описания и картинок как один блок справа
+        if (headerElements.length > 0) {
+          const headerAnim = gsap.fromTo(
+            headerElements,
+            {
+              opacity: 0,
+              x: 80,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              duration: 0.2,
+              ease: "none",
+              scrollTrigger: {
+                trigger: this.$refs.block2,
+                start: "top 80%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+          if (headerAnim.scrollTrigger) {
+            this.scrollTriggers.push(headerAnim.scrollTrigger);
+          }
+        }
+
+        // Анимация этапов работы - каждый этап с отдельным ScrollTrigger, появляется слева
+        if (this.$refs.text2) {
           const workSteps = this.$refs.text2.querySelectorAll(".work-step");
-          const stepOffsets = [
-            { x: 80, y: 30 }, // Справа
-            { x: -60, y: 30 }, // Слева
-            { x: 80, y: 30 }, // Справа
-            { x: -60, y: 30 }, // Слева
-          ];
-          workSteps.forEach((step, index) => {
-            const patternIndex = index % stepOffsets.length;
-            const offset = stepOffsets[patternIndex] || { x: 0, y: 30 };
+          workSteps.forEach((step) => {
             const stepAnim = gsap.fromTo(
               step,
               {
-                x: isMobile ? offset.x * 0.6 : offset.x,
-                y: isMobile ? offset.y * 0.6 : offset.y,
+                opacity: 0,
+                x: -80,
               },
               {
+                opacity: 1,
                 x: 0,
-                y: 0,
-                ease: "power1.out",
+                duration: 0,
+                ease: "none",
                 scrollTrigger: {
-                  trigger: this.$refs.block2,
-                  start: `top ${85 - index * 3}%`,
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
+                  trigger: step,
+                  start: "top 85%",
+                  toggleActions: "play reverse play reverse",
                 },
               }
             );
