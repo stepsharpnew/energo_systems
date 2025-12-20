@@ -68,45 +68,55 @@ export default {
 <style scoped>
 .header {
   background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 24px 0;
+  border-bottom: 1px solid rgba(239, 68, 34, 0.1);
+  padding: clamp(20px, 3vw, 28px) 0;
   position: relative;
   z-index: 24;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 clamp(20px, 4vw, 40px);
 }
 
 .header-main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
+  gap: clamp(24px, 4vw, 40px);
   flex-wrap: wrap;
 }
 
 .logo-wrapper {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(12px, 2vw, 20px);
   flex-shrink: 0;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .logo-wrapper:hover {
-  opacity: 0.8;
+  transform: translateY(-2px);
 }
 
 .logo {
-  width: 48px;
-  height: 48px;
+  width: clamp(44px, 5vw, 56px);
+  height: clamp(44px, 5vw, 56px);
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, rgba(239, 68, 34, 0.1), rgba(239, 68, 34, 0.05));
+  border-radius: 12px;
+  padding: 8px;
+  transition: all 0.3s ease;
+}
+
+.logo-wrapper:hover .logo {
+  background: linear-gradient(135deg, rgba(239, 68, 34, 0.15), rgba(239, 68, 34, 0.1));
+  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.2);
 }
 
 .logo img {
@@ -122,19 +132,23 @@ export default {
 }
 
 .company-name {
-  color: #111827;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  color: #0f172a;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0;
   line-height: 1.2;
+  background: linear-gradient(135deg, #0f172a, #1f2937);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .company-description {
-  color: #6b7280;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  color: #ef4422;
+  font-size: clamp(10px, 1.2vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   margin: 0;
 }
@@ -142,7 +156,7 @@ export default {
 .contacts {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: clamp(8px, 1vw, 12px);
   flex: 1;
   min-width: 0;
 }
@@ -150,19 +164,25 @@ export default {
 .contact-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(8px, 1.5vw, 12px);
+  padding: 6px 0;
 }
 
 .contact-icon {
-  width: 16px;
-  height: 16px;
-  color: #6b7280;
+  width: clamp(16px, 2vw, 20px);
+  height: clamp(16px, 2vw, 20px);
+  color: #ef4422;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.contact-row:hover .contact-icon {
+  transform: scale(1.1);
 }
 
 .contact-text {
-  color: #303030;
-  font-size: 14px;
+  color: #0f172a;
+  font-size: clamp(13px, 1.6vw, 15px);
   font-weight: 600;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -175,74 +195,101 @@ export default {
 .addresses {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  color: #111827;
-  font-size: 14px;
+  gap: 4px;
+  color: #0f172a;
+  font-size: clamp(13px, 1.6vw, 15px);
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .addresses span {
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(12px, 2vw, 20px);
   flex-shrink: 0;
 }
 
 .badge {
-  padding: 6px 16px;
+  padding: clamp(8px, 1.2vw, 10px) clamp(16px, 2vw, 20px);
   color: #ef4422;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 4px;
+  font-weight: 700;
+  font-size: clamp(11px, 1.3vw, 13px);
+  border-radius: 8px;
   white-space: nowrap;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
   border: 2px solid #ef4422;
+  background: rgba(239, 68, 34, 0.05);
+  transition: all 0.3s ease;
+}
+
+.badge:hover {
+  background: rgba(239, 68, 34, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.2);
 }
 
 .cta-button {
-  padding: 10px 20px;
-  background-color: #ef4422;
-  border: 1px solid #ef4422;
-  border-radius: 4px;
+  padding: clamp(12px, 1.5vw, 14px) clamp(24px, 3vw, 32px);
+  background: linear-gradient(135deg, #ef4422, #ff6934);
+  border: none;
+  border-radius: 12px;
   color: #ffffff;
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 700;
+  font-size: clamp(13px, 1.5vw, 15px);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   white-space: nowrap;
   letter-spacing: 0.02em;
+  box-shadow: 0 4px 16px rgba(239, 68, 34, 0.3);
 }
 
-
 .cta-button:hover {
-  background: #ffffff;
-  border-color: #ef4422;
-  color:#ef4422;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.4);
+  background: linear-gradient(135deg, #ff6934, #ef4422);
 }
 
 .cta-button:active {
-  transform: scale(0.98);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.3);
 }
 
 /* Адаптивность */
+@media (max-width: 1200px) {
+  .header-main {
+    gap: 24px;
+  }
+}
+
 @media (max-width: 992px) {
   .header-main {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 24px;
+  }
+
+  .logo-wrapper {
+    width: 100%;
   }
 
   .contacts {
     width: 100%;
+    gap: 12px;
   }
 
   .header-actions {
     width: 100%;
     justify-content: space-between;
+    gap: 16px;
+  }
+
+  .badge {
+    flex: 1;
+    text-align: center;
   }
 
   .cta-button {
@@ -259,35 +306,16 @@ export default {
     padding: 0 20px;
   }
 
-  .logo {
-    width: 44px;
-    height: 44px;
+  .header-main {
+    gap: 20px;
   }
 
-  .logo-wrapper {
-    gap: 12px;
-  }
-
-  .company-name {
-    font-size: 18px;
-  }
-
-  .company-description {
-    font-size: 10px;
+  .contacts {
+    gap: 10px;
   }
 
   .contact-row {
-    gap: 8px;
-  }
-
-  .contact-icon {
-    width: 14px;
-    height: 14px;
-  }
-
-  .contact-text,
-  .addresses {
-    font-size: 13px;
+    gap: 10px;
   }
 
   .header-actions {
@@ -298,13 +326,12 @@ export default {
 
   .badge {
     width: 100%;
-    text-align: center;
-    padding: 8px 16px;
+    padding: 10px 20px;
   }
 
   .cta-button {
     width: 100%;
-    padding: 12px 20px;
+    padding: 14px 24px;
   }
 }
 
@@ -313,26 +340,29 @@ export default {
     padding: 0 16px;
   }
 
-  .logo {
-    width: 40px;
-    height: 40px;
+  .header-main {
+    gap: 16px;
   }
 
-  .company-name {
-    font-size: 16px;
+  .logo-wrapper {
+    gap: 12px;
   }
 
   .contacts {
-    gap: 10px;
+    gap: 8px;
   }
 
   .contact-row {
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .addresses {
-    flex-direction: column;
     gap: 4px;
+  }
+
+  .header-actions {
+    gap: 10px;
   }
 }
 </style>
