@@ -3,19 +3,19 @@
     <div class="section-heading" ref="headingRef">
       <p class="section-kicker">Наши клиенты</p>
       <h2>Нам доверяют лидеры отраслей</h2>
-      <p>Подрядчики, муниципалитеты и девелоперы, которым важна скорость и безупречное качество</p>
+      <p>
+        Подрядчики, муниципалитеты и девелоперы, которым важна скорость и
+        безупречное качество
+      </p>
     </div>
     <div class="clients-grid">
       <div
         v-for="(client, index) in clients"
         :key="client.id"
-        :ref="el => setCardRef(el, index)"
+        :ref="(el) => setCardRef(el, index)"
         class="client-card"
       >
-        <div
-          class="client-logo"
-          :style="getClientStyle(client)"
-        ></div>
+        <div class="client-logo" :style="getClientStyle(client)"></div>
         <p>{{ client.name }}</p>
       </div>
     </div>
@@ -24,12 +24,12 @@
 
 <script>
 export default {
-  name: 'ClientsSection',
+  name: "ClientsSection",
   props: {
     clients: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -80,12 +80,12 @@ export default {
             {
               opacity: 1,
               y: 0,
-              ease: "power1.out",
+              duration: 0.2,
+              ease: "none",
               scrollTrigger: {
                 trigger: this.$refs.headingRef,
-                start: "top 90%",
-                end: isMobile ? "top 60%" : "top 70%",
-                scrub: isMobile ? 0.8 : 0.5,
+                start: "top 85%",
+                toggleActions: "play reverse play reverse",
               },
             }
           );
@@ -99,12 +99,12 @@ export default {
           if (!card) return;
 
           const offset = isMobile ? 25 : 40;
-          
+
           // Чередуем направления и создаем эффект волны
           const row = Math.floor(index / (isMobile ? 2 : 4));
           const col = index % (isMobile ? 2 : 4);
           const xDirection = col % 2 === 0 ? -1 : 1;
-          
+
           const cardAnim = gsap.fromTo(
             card,
             {
@@ -116,12 +116,12 @@ export default {
               opacity: 1,
               x: 0,
               y: 0,
-              ease: "power1.out",
+              duration: 0.2,
+              ease: "none",
               scrollTrigger: {
                 trigger: card,
-                start: "top 90%",
-                end: isMobile ? "top 50%" : "center 60%",
-                scrub: isMobile ? 0.8 : 0.5,
+                start: "top 85%",
+                toggleActions: "play reverse play reverse",
               },
             }
           );
@@ -155,19 +155,19 @@ export default {
       if (client.image) {
         return {
           backgroundImage: `url(${client.image})`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         };
       } else if (client.color) {
         return {
-          background: client.color
+          background: client.color,
         };
       }
       return {};
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -240,4 +240,3 @@ export default {
   }
 }
 </style>
-

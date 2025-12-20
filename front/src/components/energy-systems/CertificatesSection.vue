@@ -87,12 +87,12 @@ export default {
             {
               opacity: 1,
               y: 0,
-              ease: "power1.out",
+              duration: 0.2,
+              ease: "none",
               scrollTrigger: {
                 trigger: this.$refs.headingRef,
-                start: "top 90%",
-                end: isMobile ? "top 60%" : "top 70%",
-                scrub: isMobile ? 0.8 : 0.5,
+                start: "top 85%",
+                toggleActions: "play reverse play reverse",
               },
             }
           );
@@ -122,12 +122,12 @@ export default {
               opacity: 1,
               x: 0,
               y: 0,
-              ease: "power1.out",
+              duration: 0.2,
+              ease: "none",
               scrollTrigger: {
                 trigger: card,
-                start: "top 90%",
-                end: isMobile ? "top 50%" : "center 60%",
-                scrub: isMobile ? 0.8 : 0.5,
+                start: "top 85%",
+                toggleActions: "play reverse play reverse",
               },
             }
           );

@@ -142,7 +142,7 @@
       </div>
     </div>
 
-    <div ref="block3" class="content-block content-block-3" data-speed="0.8">
+    <div ref="block3" class="content-block content-block-3" data-speed="0.9">
       <div class="content-images-group">
         <img
           ref="image3"
@@ -222,7 +222,7 @@
       </div>
     </div>
 
-    <div ref="block4" class="content-block content-block-4" data-speed="0.8">
+    <div ref="block4" class="content-block content-block-4" data-speed="0.9">
       <div class="partner-info-compact" ref="partnerInfo">
         <div class="partner-logo-compact" ref="logoContainer">
           <img

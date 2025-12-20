@@ -78,77 +78,60 @@ export default {
         const getCardAnimationConfig = (index) => {
           if (isMobile) {
             // На мобильных - упрощенные анимации с меньшими смещениями
-            // Чередуем направления для визуального интереса
             const offsets = [
               { x: -40, y: 20 }, // Карточка 0
               { x: -30, y: 15 }, // Карточка 1
               { x: 30, y: 15 },  // Карточка 2
               { x: 40, y: 20 },  // Карточка 3
             ];
-            // Для карточек больше 4 используем циклический паттерн
             const patternIndex = index % 4;
             const offset = offsets[patternIndex] || { x: 0, y: 20 };
             return {
-              from: {
-                opacity: 0,
-                x: offset.x,
-                y: offset.y,
-              },
-              to: {
-                opacity: 1,
-                x: 0,
-                y: 0,
-                ease: "power1.out",
-              },
-              scrollTrigger: {
-                trigger: this.cardRefs[index],
-                start: "top 90%",
-                end: isMobile ? "top 50%" : "center 60%",
-                scrub: 0.8, // Привязка к скроллу - работает в обе стороны
-              },
+              x: offset.x,
+              y: offset.y,
             };
           } else {
             // Десктоп - оригинальные анимации
             const configs = [
-              { x: -150, y: 40, scrub: 0.3 },  // Карточка 0
-              { x: -80, y: 30, scrub: 1.5 },   // Карточка 1
-              { x: 80, y: 30, scrub: 1.5 },    // Карточка 2
-              { x: 150, y: 40, scrub: 0.3 },   // Карточка 3
+              { x: -150, y: 40 },  // Карточка 0
+              { x: -80, y: 30 },   // Карточка 1
+              { x: 80, y: 30 },    // Карточка 2
+              { x: 150, y: 40 },   // Карточка 3
             ];
-            // Для карточек больше 4 используем циклический паттерн
             const patternIndex = index % 4;
-            const config = configs[patternIndex] || { x: 0, y: 30, scrub: 0.5 };
+            const config = configs[patternIndex] || { x: 0, y: 30 };
             return {
-              from: {
-                opacity: 0,
-                x: config.x,
-                y: config.y,
-              },
-              to: {
-                opacity: 1,
-                x: 0,
-                y: 0,
-                ease: "power1.out",
-              },
-              scrollTrigger: {
-                trigger: this.cardRefs[index],
-                start: "top 90%",
-                end: "center 60%",
-                scrub: config.scrub,
-              },
+              x: config.x,
+              y: config.y,
             };
           }
         };
 
-        // Создаем анимации для всех карточек
+        // Создаем анимации для всех карточек - с opacity, быстрее
         this.cardRefs.forEach((card, index) => {
           if (!card) return;
 
-          const config = getCardAnimationConfig(index);
-          const anim = gsap.fromTo(card, config.from, {
-            ...config.to,
-            scrollTrigger: config.scrollTrigger,
-          });
+          const offset = getCardAnimationConfig(index);
+          const anim = gsap.fromTo(
+            card,
+            {
+              opacity: 0,
+              x: offset.x,
+              y: offset.y,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              duration: 0.2,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 85%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
 
           if (anim.scrollTrigger) {
             this.scrollTriggers.push(anim.scrollTrigger);
