@@ -10,8 +10,10 @@
       <div ref="text1" class="content-text">
         <h2 class="content-title">О компании</h2>
         <p class="content-intro">
-          Ведущая энергетическая компания с более чем 10-летним опытом работы в Москве и Московской области. 
-          Мы специализируемся на комплексных решениях в сфере электроснабжения от проектирования до ввода объектов в эксплуатацию.
+          Ведущая энергетическая компания с более чем 10-летним опытом работы в
+          Москве и Московской области. Мы специализируемся на комплексных
+          решениях в сфере электроснабжения от проектирования до ввода объектов
+          в эксплуатацию.
         </p>
         <div class="content-highlights">
           <div class="highlight-item">
@@ -56,50 +58,69 @@
       <div ref="text2" class="content-text">
         <h2 class="content-title">Как мы работаем</h2>
         <p class="content-intro">
-          Мы предлагаем комплексный подход к реализации проектов — от первичной консультации до ввода объекта в эксплуатацию. 
-          Каждый этап тщательно проработан и контролируется нашими специалистами.
+          Мы предлагаем комплексный подход к реализации проектов — от первичной
+          консультации до ввода объекта в эксплуатацию. Каждый этап тщательно
+          проработан и контролируется нашими специалистами.
         </p>
         <div class="work-steps">
           <div class="work-step">
             <div class="step-number">01</div>
             <div class="step-content">
               <h3 class="step-title">Проектирование и согласование</h3>
-              <p class="step-description">Разработка проектной документации с учетом всех нормативных требований и согласование во всех необходимых инстанциях</p>
+              <p class="step-description">
+                Разработка проектной документации с учетом всех нормативных
+                требований и согласование во всех необходимых инстанциях
+              </p>
             </div>
           </div>
           <div class="work-step">
             <div class="step-number">02</div>
             <div class="step-content">
               <h3 class="step-title">Закупка и поставка</h3>
-              <p class="step-description">Подбор и закупка качественного оборудования и материалов от проверенных поставщиков</p>
+              <p class="step-description">
+                Подбор и закупка качественного оборудования и материалов от
+                проверенных поставщиков
+              </p>
             </div>
           </div>
           <div class="work-step">
             <div class="step-number">03</div>
             <div class="step-content">
               <h3 class="step-title">Строительно-монтажные работы</h3>
-              <p class="step-description">Выполнение всех видов электромонтажных работ с соблюдением технологий и сроков</p>
+              <p class="step-description">
+                Выполнение всех видов электромонтажных работ с соблюдением
+                технологий и сроков
+              </p>
             </div>
           </div>
           <div class="work-step">
             <div class="step-number">04</div>
             <div class="step-content">
               <h3 class="step-title">Пусконаладочные работы</h3>
-              <p class="step-description">Проверка, настройка и испытание всех систем для обеспечения надежной работы</p>
+              <p class="step-description">
+                Проверка, настройка и испытание всех систем для обеспечения
+                надежной работы
+              </p>
             </div>
           </div>
           <div class="work-step">
             <div class="step-number">05</div>
             <div class="step-content">
               <h3 class="step-title">Документация и ввод в эксплуатацию</h3>
-              <p class="step-description">Формирование полного пакета исполнительной документации и ввод объекта в эксплуатацию</p>
+              <p class="step-description">
+                Формирование полного пакета исполнительной документации и ввод
+                объекта в эксплуатацию
+              </p>
             </div>
           </div>
           <div class="work-step">
             <div class="step-number">06</div>
             <div class="step-content">
               <h3 class="step-title">Гарантийное обслуживание</h3>
-              <p class="step-description">Гарантийное и послегарантийное обслуживание с постоянным мониторингом состояния систем</p>
+              <p class="step-description">
+                Гарантийное и послегарантийное обслуживание с постоянным
+                мониторингом состояния систем
+              </p>
             </div>
           </div>
         </div>
@@ -140,29 +161,42 @@
       <div ref="text3" class="content-text">
         <h2 class="content-title">Наши преимущества</h2>
         <p class="content-intro">
-          Мы создаем максимальную ценность для наших клиентов, сочетая профессиональный опыт, 
-          современные технологии и индивидуальный подход к каждому проекту.
+          Мы создаем максимальную ценность для наших клиентов, сочетая
+          профессиональный опыт, современные технологии и индивидуальный подход
+          к каждому проекту.
         </p>
         <div class="advantages-grid">
           <div class="advantage-card">
             <!-- <div class="advantage-icon">💰</div> -->
             <h3 class="advantage-title">Гибкая ценовая политика</h3>
-            <p class="advantage-description">Индивидуальный подход к ценообразованию с учетом специфики проекта и возможностей заказчика</p>
+            <p class="advantage-description">
+              Индивидуальный подход к ценообразованию с учетом специфики проекта
+              и возможностей заказчика
+            </p>
           </div>
           <div class="advantage-card">
             <!-- <div class="advantage-icon">🏆</div> -->
             <h3 class="advantage-title">Большой опыт проектов</h3>
-            <p class="advantage-description">Более 5000 успешно реализованных проектов различной сложности и масштаба</p>
+            <p class="advantage-description">
+              Более 5000 успешно реализованных проектов различной сложности и
+              масштаба
+            </p>
           </div>
           <div class="advantage-card">
             <!-- <div class="advantage-icon">⚡</div> -->
             <h3 class="advantage-title">Оптимизация расходов</h3>
-            <p class="advantage-description">Конкретизация нужд заказчика и поиск наиболее экономически выгодных решений</p>
+            <p class="advantage-description">
+              Конкретизация нужд заказчика и поиск наиболее экономически
+              выгодных решений
+            </p>
           </div>
           <div class="advantage-card">
             <!-- <div class="advantage-icon">🔑</div> -->
             <h3 class="advantage-title">Работа "под ключ"</h3>
-            <p class="advantage-description">Полный цикл работ от проектирования до ввода в эксплуатацию и обслуживания</p>
+            <p class="advantage-description">
+              Полный цикл работ от проектирования до ввода в эксплуатацию и
+              обслуживания
+            </p>
           </div>
           <!-- <div class="advantage-card">
             <div class="advantage-icon">⏱️</div>
@@ -191,15 +225,15 @@
     <div ref="block4" class="content-block content-block-4" data-speed="0.8">
       <div class="partner-info-compact" ref="partnerInfo">
         <div class="partner-logo-compact" ref="logoContainer">
-          <img 
-            :src="rossetiLogo" 
-            alt="ПАО Россети Московский регион" 
+          <img
+            :src="rossetiLogo"
+            alt="ПАО Россети Московский регион"
             class="partner-logo-img"
           />
         </div>
         <div class="partner-text-compact">
           <p class="partner-compact-description">
-            Более <strong>5000 объектов</strong> спроектировано и построено нами 
+            Более <strong>5000 объектов</strong> спроектировано и построено нами
             для <strong>ПАО "Россети Московский регион"</strong>
           </p>
         </div>
@@ -209,18 +243,18 @@
           <div class="stat-compact-number">5000+</div>
           <div class="stat-compact-label">объектов</div>
         </div>
-            </div>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
+import rossetiLogo from "@/assets/clients/client-5.png";
 import contentImage1 from "@/assets/content/content-1.png";
 import contentImage3 from "@/assets/content/content-2.jpg";
 import contentImage2 from "@/assets/content/content-3.png";
 import contentImage4 from "@/assets/content/content-4.jpg";
 import contentImage5 from "@/assets/content/content-5.jpg";
-import rossetiLogo from "@/assets/clients/client-5.png";
 
 export default {
   name: "ContentBlocks",
@@ -271,127 +305,38 @@ export default {
       this.scrollTriggers = [];
 
       // Определяем параметры анимации в зависимости от устройства
-      const animConfig = isMobile ? {
-        xOffset: 30, // Меньшее смещение на мобильных
-        scrubValue: 0.8, // Плавная привязка к скроллу на мобильных
-      } : {
-        xOffset: 60,
-        scrubValue: 0.5,
-      };
+      const animConfig = isMobile
+        ? {
+            xOffset: 30, // Меньшее смещение на мобильных
+            scrubValue: 0.8, // Плавная привязка к скроллу на мобильных
+          }
+        : {
+            xOffset: 60,
+            scrubValue: 0.5,
+          };
 
-      // Анимация для блока 1 - отдельно для изображения и текста
+      // Анимация для блока 1 - весь блок выезжает слева вместе
       if (this.$refs.block1) {
-        // Анимация изображения
-        if (this.$refs.image1) {
-          const imageAnim1 = gsap.fromTo(
-            this.$refs.image1,
-            {
-              opacity: 0,
-              x: -animConfig.xOffset,
-              scale: 0.95,
+        const anim = gsap.fromTo(
+          this.$refs.block1,
+          {
+            opacity: 0,
+            x: -80,
+          },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: this.$refs.block1,
+              start: "top 80%",
+              toggleActions: "play reverse play reverse",
             },
-            {
-              opacity: 1,
-              x: 0,
-              scale: 1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block1,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
-              },
-            }
-          );
-          if (imageAnim1.scrollTrigger) {
-            this.scrollTriggers.push(imageAnim1.scrollTrigger);
           }
-        }
-
-        // Анимация текста - выезжание с разных сторон без opacity
-        if (this.$refs.text1) {
-          // Анимация заголовка - выезжает слева
-          const title = this.$refs.text1.querySelector('.content-title');
-          if (title) {
-            const titleAnim = gsap.fromTo(
-              title,
-              {
-                x: isMobile ? -60 : -100,
-                y: isMobile ? 20 : 30,
-              },
-              {
-                x: 0,
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.block1,
-                  start: "top 85%",
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (titleAnim.scrollTrigger) {
-              this.scrollTriggers.push(titleAnim.scrollTrigger);
-            }
-          }
-
-          // Анимация вводного текста - выезжает снизу
-          const intro = this.$refs.text1.querySelector('.content-intro');
-          if (intro) {
-            const introAnim = gsap.fromTo(
-              intro,
-              {
-                y: isMobile ? 40 : 60,
-              },
-              {
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.block1,
-                  start: "top 85%",
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (introAnim.scrollTrigger) {
-              this.scrollTriggers.push(introAnim.scrollTrigger);
-            }
-          }
-
-          // Анимация highlight элементов - выезжают с разных сторон
-          const highlights = this.$refs.text1.querySelectorAll('.highlight-item');
-          const highlightOffsets = [
-            { x: -50, y: 30 },  // Слева
-            { x: 0, y: 40 },    // Снизу
-            { x: 50, y: 30 },   // Справа
-          ];
-          highlights.forEach((highlight, index) => {
-            const patternIndex = index % highlightOffsets.length;
-            const offset = highlightOffsets[patternIndex] || { x: 0, y: 30 };
-            const highlightAnim = gsap.fromTo(
-              highlight,
-              {
-                x: isMobile ? offset.x * 0.6 : offset.x,
-                y: isMobile ? offset.y * 0.6 : offset.y,
-              },
-              {
-                x: 0,
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.block1,
-                  start: `top ${85 - index * 2}%`,
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (highlightAnim.scrollTrigger) {
-              this.scrollTriggers.push(highlightAnim.scrollTrigger);
-            }
-          });
+        );
+        if (anim.scrollTrigger) {
+          this.scrollTriggers.push(anim.scrollTrigger);
         }
       }
 
@@ -454,7 +399,7 @@ export default {
         // Анимация текста - выезжание с разных сторон без opacity
         if (this.$refs.text2) {
           // Анимация заголовка - выезжает справа
-          const title = this.$refs.text2.querySelector('.content-title');
+          const title = this.$refs.text2.querySelector(".content-title");
           if (title) {
             const titleAnim = gsap.fromTo(
               title,
@@ -480,7 +425,7 @@ export default {
           }
 
           // Анимация вводного текста - выезжает снизу
-          const intro = this.$refs.text2.querySelector('.content-intro');
+          const intro = this.$refs.text2.querySelector(".content-intro");
           if (intro) {
             const introAnim = gsap.fromTo(
               intro,
@@ -504,12 +449,12 @@ export default {
           }
 
           // Анимация шагов работы - выезжают с разных сторон
-          const workSteps = this.$refs.text2.querySelectorAll('.work-step');
+          const workSteps = this.$refs.text2.querySelectorAll(".work-step");
           const stepOffsets = [
-            { x: 80, y: 30 },   // Справа
-            { x: -60, y: 30 },  // Слева
-            { x: 80, y: 30 },   // Справа
-            { x: -60, y: 30 },  // Слева
+            { x: 80, y: 30 }, // Справа
+            { x: -60, y: 30 }, // Слева
+            { x: 80, y: 30 }, // Справа
+            { x: -60, y: 30 }, // Слева
           ];
           workSteps.forEach((step, index) => {
             const patternIndex = index % stepOffsets.length;
@@ -598,7 +543,7 @@ export default {
         // Анимация текста - выезжание с разных сторон без opacity
         if (this.$refs.text3) {
           // Анимация заголовка - выезжает слева
-          const title = this.$refs.text3.querySelector('.content-title');
+          const title = this.$refs.text3.querySelector(".content-title");
           if (title) {
             const titleAnim = gsap.fromTo(
               title,
@@ -624,7 +569,7 @@ export default {
           }
 
           // Анимация вводного текста - выезжает снизу
-          const intro = this.$refs.text3.querySelector('.content-intro');
+          const intro = this.$refs.text3.querySelector(".content-intro");
           if (intro) {
             const introAnim = gsap.fromTo(
               intro,
@@ -648,12 +593,13 @@ export default {
           }
 
           // Анимация карточек преимуществ - выезжают с разных сторон
-          const advantageCards = this.$refs.text3.querySelectorAll('.advantage-card');
+          const advantageCards =
+            this.$refs.text3.querySelectorAll(".advantage-card");
           const cardOffsets = [
-            { x: -70, y: 40 },  // Слева-сверху
-            { x: 70, y: 40 },   // Справа-сверху
-            { x: -70, y: 40 },  // Слева-снизу
-            { x: 70, y: 40 },   // Справа-снизу
+            { x: -70, y: 40 }, // Слева-сверху
+            { x: 70, y: 40 }, // Справа-сверху
+            { x: -70, y: 40 }, // Слева-снизу
+            { x: 70, y: 40 }, // Справа-снизу
           ];
           advantageCards.forEach((card, index) => {
             const patternIndex = index % cardOffsets.length;
@@ -740,7 +686,9 @@ export default {
           }
 
           // Анимация текста партнерской информации - выезжает справа
-          const partnerText = this.$refs.partnerInfo.querySelector('.partner-text-compact');
+          const partnerText = this.$refs.partnerInfo.querySelector(
+            ".partner-text-compact"
+          );
           if (partnerText) {
             const partnerTextAnim = gsap.fromTo(
               partnerText,
@@ -765,7 +713,6 @@ export default {
             }
           }
         }
-
 
         // Анимация статистики - плавная привязка к скроллу
         if (this.$refs.statsCompact) {
@@ -793,7 +740,11 @@ export default {
         }
 
         // Анимация отдельных элементов статистики - плавная привязка к скроллу
-        [this.$refs.statCompact1, this.$refs.statCompact2, this.$refs.statCompact3].forEach((stat, index) => {
+        [
+          this.$refs.statCompact1,
+          this.$refs.statCompact2,
+          this.$refs.statCompact3,
+        ].forEach((stat, index) => {
           if (stat) {
             const statAnim = gsap.fromTo(
               stat,
@@ -852,7 +803,7 @@ export default {
             this.scrollTriggers.forEach((st) => st.kill());
             this.scrollTriggers = [];
           }
-          
+
           // Пересоздаем анимации с новыми параметрами
           this.setupScrollTrigger();
         });
@@ -1016,7 +967,11 @@ export default {
   gap: 24px;
   margin: 32px 0;
   padding: 32px;
-  background: linear-gradient(135deg, rgba(239, 68, 34, 0.05), rgba(239, 68, 34, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 34, 0.05),
+    rgba(239, 68, 34, 0.02)
+  );
   border-radius: 16px;
   border: 1px solid rgba(239, 68, 34, 0.1);
 }
@@ -1034,7 +989,7 @@ export default {
   font-weight: 800;
   color: #ef4422;
   line-height: 1;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .highlight-text {
@@ -1080,7 +1035,7 @@ export default {
   font-size: 24px;
   font-weight: 800;
   border-radius: 12px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .step-content {
@@ -1214,7 +1169,7 @@ export default {
   color: #ef4422;
   line-height: 1;
   margin-bottom: 8px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .stat-compact-label {
@@ -1240,7 +1195,12 @@ export default {
 .stat-compact-divider {
   width: 1px;
   height: 50px;
-  background: linear-gradient(180deg, transparent 0%, rgba(239, 68, 34, 0.2) 50%, transparent 100%);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(239, 68, 34, 0.2) 50%,
+    transparent 100%
+  );
   flex-shrink: 0;
 }
 
@@ -1410,11 +1370,16 @@ export default {
   .stat-compact-divider {
     width: 60px;
     height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(239, 68, 34, 0.2) 50%, transparent 100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(239, 68, 34, 0.2) 50%,
+      transparent 100%
+    );
   }
 }
 
 .content-description b {
-  color:#ef4422
+  color: #ef4422;
 }
 </style>
