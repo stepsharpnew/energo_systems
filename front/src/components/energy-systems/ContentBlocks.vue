@@ -409,141 +409,66 @@ export default {
         }
       }
 
-      // Анимация для блока 3 - отдельно для изображений и текста
+      // Анимация для блока 3 - заголовок, описание и картинки слева одним блоком, карточки справа с отдельными триггерами
       if (this.$refs.block3) {
-        // Анимация первого изображения
-        if (this.$refs.image3) {
-          const imageAnim3 = gsap.fromTo(
-            this.$refs.image3,
-            {
-              opacity: 0,
-              x: -animConfig.xOffset,
-              scale: 0.95,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              scale: 1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block3,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
-              },
-            }
-          );
-          if (imageAnim3.scrollTrigger) {
-            this.scrollTriggers.push(imageAnim3.scrollTrigger);
-          }
-        }
+        // Создаем контейнер для заголовка, описания и картинок
+        const headerElements = [];
 
-        // Анимация второго изображения (с задержкой)
-        if (this.$refs.image5) {
-          const imageAnim5 = gsap.fromTo(
-            this.$refs.image5,
-            {
-              opacity: 0,
-              x: -animConfig.xOffset,
-              scale: 0.95,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              scale: 1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.block3,
-                start: "top 85%",
-                end: isMobile ? "top 40%" : "center 50%",
-                scrub: animConfig.scrubValue,
-              },
-            }
-          );
-          if (imageAnim5.scrollTrigger) {
-            this.scrollTriggers.push(imageAnim5.scrollTrigger);
-          }
-        }
-
-        // Анимация текста - выезжание с разных сторон без opacity
         if (this.$refs.text3) {
-          // Анимация заголовка - выезжает слева
           const title = this.$refs.text3.querySelector(".content-title");
-          if (title) {
-            const titleAnim = gsap.fromTo(
-              title,
-              {
-                x: isMobile ? -60 : -100,
-                y: isMobile ? 20 : 30,
-              },
-              {
-                x: 0,
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.block3,
-                  start: "top 85%",
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (titleAnim.scrollTrigger) {
-              this.scrollTriggers.push(titleAnim.scrollTrigger);
-            }
-          }
-
-          // Анимация вводного текста - выезжает снизу
           const intro = this.$refs.text3.querySelector(".content-intro");
-          if (intro) {
-            const introAnim = gsap.fromTo(
-              intro,
-              {
-                y: isMobile ? 40 : 60,
-              },
-              {
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.block3,
-                  start: "top 85%",
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (introAnim.scrollTrigger) {
-              this.scrollTriggers.push(introAnim.scrollTrigger);
-            }
-          }
+          if (title) headerElements.push(title);
+          if (intro) headerElements.push(intro);
+        }
 
-          // Анимация карточек преимуществ - выезжают с разных сторон
+        if (this.$refs.image3) headerElements.push(this.$refs.image3);
+        if (this.$refs.image5) headerElements.push(this.$refs.image5);
+
+        // Анимация заголовка, описания и картинок как один блок слева
+        if (headerElements.length > 0) {
+          const headerAnim = gsap.fromTo(
+            headerElements,
+            {
+              opacity: 0,
+              x: -80,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              duration: 0.3,
+              ease: "none",
+              scrollTrigger: {
+                trigger: this.$refs.block3,
+                start: "top 80%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+          if (headerAnim.scrollTrigger) {
+            this.scrollTriggers.push(headerAnim.scrollTrigger);
+          }
+        }
+
+        // Анимация карточек преимуществ - каждая карточка с отдельным ScrollTrigger, появляется справа
+        if (this.$refs.text3) {
           const advantageCards =
             this.$refs.text3.querySelectorAll(".advantage-card");
-          const cardOffsets = [
-            { x: -70, y: 40 }, // Слева-сверху
-            { x: 70, y: 40 }, // Справа-сверху
-            { x: -70, y: 40 }, // Слева-снизу
-            { x: 70, y: 40 }, // Справа-снизу
-          ];
-          advantageCards.forEach((card, index) => {
-            const patternIndex = index % cardOffsets.length;
-            const offset = cardOffsets[patternIndex] || { x: 0, y: 40 };
+          advantageCards.forEach((card) => {
             const cardAnim = gsap.fromTo(
               card,
               {
-                x: isMobile ? offset.x * 0.6 : offset.x,
-                y: isMobile ? offset.y * 0.6 : offset.y,
+                opacity: 0,
+                x: 80,
               },
               {
+                opacity: 1,
                 x: 0,
-                y: 0,
-                ease: "power1.out",
+                duration: 0.2,
+                ease: "none",
                 scrollTrigger: {
-                  trigger: this.$refs.block3,
-                  start: `top ${85 - Math.floor(index / 2) * 2}%`,
-                  end: isMobile ? "top 40%" : "center 50%",
-                  scrub: animConfig.scrubValue,
+                  trigger: card,
+                  start: "top 85%",
+                  toggleActions: "play reverse play reverse",
                 },
               }
             );
