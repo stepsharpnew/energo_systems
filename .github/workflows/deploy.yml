@@ -66,6 +66,16 @@ jobs:
             fi
             echo ""
 
+            # Создание .env файла с секретами для tg_bot
+            echo "Создание .env файла..."
+            cat > .env << EOF
+            BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+            ADMIN_CHAT_IDS=${{ secrets.ALLOWED_USER_IDS }}
+            ALLOWED_USER_IDS=${{ secrets.ALLOWED_USER_IDS }}
+            EOF
+            echo "✅ .env файл создан"
+            echo ""
+
             sudo docker compose down
             timeout 300s sudo docker compose up -d --build
             sleep 10 # Ожидание запуска контейнеров
