@@ -1025,7 +1025,7 @@ const _65Vrce7_UDjXwPzN3kjMrkAbvfR1rf7Obk9JLyJhGe4 = (function(nitro) {
 
 const rootDir = "/home/user/Документы/energo_systems/front";
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"description","content":"Энергосистемы - эксперты в сфере энергетики. ГНБ, электромонтажные работы, проектирование."}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico?v=2"},{"rel":"icon","type":"image/png","sizes":"32x32","href":"/img/LOGO-electro.png?v=2"},{"rel":"apple-touch-icon","href":"/img/LOGO-electro.png?v=2"}],"style":[],"script":[],"noscript":[],"title":"Энергосистемы"};
 
 const appRootTag = "div";
 
