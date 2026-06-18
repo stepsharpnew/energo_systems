@@ -1,12 +1,21 @@
-FROM node:18 as build
+FROM node:20-alpine as build
 WORKDIR /app
+
+# Копируем файлы зависимостей
 COPY package.json package-lock.json ./
-RUN npm ci
+
+# Устанавливаем зависимости
+# Используем npm install вместо npm ci для большей гибкости
+RUN npm install --legacy-peer-deps
+
+# Копируем остальные файлы
 COPY . .
-RUN npm run build
+
+# Генерируем статический сайт
+RUN npm run generate
 
 FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/.output/public /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 5173
 CMD [ "nginx", "-g", "daemon off;" ]
