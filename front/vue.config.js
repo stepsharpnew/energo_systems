@@ -10,7 +10,6 @@ module.exports = defineConfig({
         target: "http://tg_bot:3001",
         changeOrigin: true,
         secure: false,
-        logLevel: "debug",
       },
     },
   },
