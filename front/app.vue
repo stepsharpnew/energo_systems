@@ -1,6 +1,8 @@
 <template>
   <VApp>
-    <Preloader />
+    <ClientOnly>
+      <Preloader />
+    </ClientOnly>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -14,12 +16,12 @@ import Preloader from '~/components/energy-systems/Preloader.vue'
 useHead({
   title: 'Энергосистемы',
   meta: [
-    { name: 'description', content: 'Энергосистемы - эксперты в сфере энергетики. ГНБ, электромонтажные работы, проектирование.' }
+    { name: 'description', content: 'Энергосистемы - ГНБ под ключ, электромонтажные работы, проектирование и инженерные сети в Москве и Московской области.' }
   ],
   link: [
     { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=2' },
-    { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/LOGO-electro.png?v=2' },
-    { rel: 'apple-touch-icon', href: '/img/LOGO-electro.png?v=2' }
+    { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/image.png?v=3' },
+    { rel: 'apple-touch-icon', href: '/img/image.png?v=3' }
   ]
 })
 </script>
@@ -38,7 +40,7 @@ html, body {
   width: 100%;
   max-width: 100vw;
   font-family: "Arial", sans-serif;
-  background: #f5f5f5;
+  background: #fff;
 }
 
 #__nuxt {
@@ -47,4 +49,3 @@ html, body {
   max-width: 100vw;
 }
 </style>
-

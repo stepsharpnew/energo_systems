@@ -5,6 +5,8 @@ front/node_modules/
 # Build outputs
 dist/
 front/dist/
+front/.nuxt/
+front/.output/
 
 # Environment files
 .env

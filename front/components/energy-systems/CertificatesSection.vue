@@ -1,9 +1,9 @@
 <template>
   <section class="certificates-section" ref="certificatesSection">
     <div class="section-heading compact" ref="headingRef">
-      <p class="section-kicker">Сертификаты</p>
-      <h2>Подтвержденная экспертиза</h2>
-      <p>Разрешительные документы, лицензии СРО и отраслевые сертификаты</p>
+      <p class="section-kicker">Документы</p>
+      <h2>Сертификаты и благодарности</h2>
+      <p>Разрешительные документы, отраслевые сертификаты и благодарственные письма</p>
     </div>
     <div class="certificates-grid">
       <div
@@ -180,7 +180,7 @@ export default {
 .section-kicker {
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #ef4422;
+  color: #ff4800;
   font-size: 12px;
   margin-bottom: 12px;
 }
@@ -222,9 +222,10 @@ export default {
 .certificate-image {
   width: 100%;
   aspect-ratio: 1 / 1.414;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  background-color: #fff;
   position: relative;
   overflow: hidden;
 }

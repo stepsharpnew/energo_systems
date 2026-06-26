@@ -180,7 +180,7 @@ export default {
 .section-kicker {
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #ef4422;
+  color: #ff4800;
   font-size: 12px;
   margin-bottom: 12px;
 }

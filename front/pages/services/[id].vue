@@ -10,8 +10,10 @@
     <div class="services-detail-container">
       <div class="container-1">
         <div class="services-detail-header">
-          <h1>Наши услуги</h1>
-          <p class="subtitle">Выберите интересующую вас услугу для получения подробной информации</p>
+          <h1>{{ selectedService?.name || 'Наши услуги' }}</h1>
+          <p class="subtitle">
+            {{ selectedService?.description || 'Выберите интересующую вас услугу для получения подробной информации' }}
+          </p>
         </div>
 
         <div class="services-detail-content">
@@ -35,6 +37,15 @@
               
               <div v-if="selectedService.description" class="service-intro">
                 <p>{{ selectedService.description }}</p>
+              </div>
+
+              <div v-if="selectedService.highlights" class="service-highlights">
+                <span
+                  v-for="highlight in selectedService.highlights"
+                  :key="highlight"
+                >
+                  {{ highlight }}
+                </span>
               </div>
 
               <div class="service-sections">
@@ -63,6 +74,18 @@
                 </div>
               </div>
 
+              <div v-if="selectedService.searchQueries" class="search-queries">
+                <h3>Возможно, вы искали</h3>
+                <div class="query-list">
+                  <span
+                    v-for="query in selectedService.searchQueries"
+                    :key="query"
+                  >
+                    {{ query }}
+                  </span>
+                </div>
+              </div>
+
               <div class="service-gallery">
                 <h3>Галерея</h3>
                 <div class="gallery-grid">
@@ -71,6 +94,8 @@
                     :key="idx"
                     class="gallery-item"
                     :style="{ backgroundImage: `url(${image})` }"
+                    role="img"
+                    :aria-label="`${selectedService.name}: фото ${idx + 1}`"
                   ></div>
                 </div>
               </div>
@@ -114,7 +139,7 @@ const route = useRoute()
 const router = useRouter()
 
 const services = servicesDetailData
-const selectedServiceId = ref(null)
+const selectedServiceId = ref(route.params.id || services[0]?.id || null)
 const showContactModal = ref(false)
 
 const navItems = [
@@ -123,7 +148,7 @@ const navItems = [
   { key: 'about', label: 'О нас' },
   { key: 'projects', label: 'Проекты' },
   { key: 'clients', label: 'Клиенты' },
-  { key: 'certificates', label: 'Сертификаты' },
+  { key: 'certificates', label: 'Документы' },
   { key: 'contact', label: 'Контакты' }
 ]
 
@@ -131,12 +156,68 @@ const selectedService = computed(() => {
   return services.find(s => s.id === selectedServiceId.value)
 })
 
+useHead(() => {
+  const service = selectedService.value
+  const title = service?.metaTitle || (service ? `${service.name} | Энергосистемы` : 'Услуги | Энергосистемы')
+  const description = service?.metaDescription || service?.description || 'Энергосистемы - инженерные услуги, электромонтажные работы, ГНБ и проектирование.'
+  const servicePath = `/services/${selectedServiceId.value || 'hdd'}`
+  const keywords = service?.searchQueries?.join(', ')
+
+  const serviceSchema = service
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: service.name,
+        description,
+        serviceType: service.id === 'hdd' ? 'Горизонтально направленное бурение' : service.name,
+        areaServed: ['Москва', 'Московская область'],
+        provider: {
+          '@type': 'LocalBusiness',
+          name: 'Энергосистемы',
+          email: 'sales@e-systems.su',
+          telephone: ['+7 495 178-01-18', '+7 925 164-05-60'],
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: 'Москва',
+            streetAddress: 'улица Руставели, 14с6',
+            addressCountry: 'RU'
+          }
+        },
+        url: `https://e-systems.su${servicePath}`
+      }
+    : null
+
+  return {
+    title,
+    meta: [
+      { name: 'description', content: description },
+      ...(keywords ? [{ name: 'keywords', content: keywords }] : []),
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:url', content: `https://e-systems.su${servicePath}` },
+      { property: 'og:image', content: 'https://e-systems.su/img/background.jpg' }
+    ],
+    link: [
+      { rel: 'canonical', href: `https://e-systems.su${servicePath}` }
+    ],
+    script: serviceSchema
+      ? [
+          {
+            type: 'application/ld+json',
+            innerHTML: JSON.stringify(serviceSchema)
+          }
+        ]
+      : []
+  }
+})
+
 onMounted(() => {
   // Если перешли с параметром id, выбираем эту услугу
   const serviceId = route.params.id
-  if (serviceId) {
+  if (serviceId && services.some(s => s.id === serviceId)) {
     selectService(serviceId)
-  } else {
+  } else if (services[0]) {
     // Иначе выбираем первую услугу по умолчанию
     selectService(services[0].id)
   }
@@ -166,7 +247,7 @@ const scrollToSection = (key) => {
 <style scoped>
 .services-detail {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #fff;
 }
 
 .services-detail-container {
@@ -219,20 +300,20 @@ const scrollToSection = (key) => {
   padding: 16px 20px;
   background: #fff;
   border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 4px;
   text-align: left;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .service-item:hover {
-  border-color: #ef4422;
+  border-color: #ff4800;
   transform: translateX(4px);
 }
 
 .service-item.active {
-  background: #ef4422;
-  border-color: #ef4422;
+  background: #ff4800;
+  border-color: #ff4800;
   color: #fff;
 }
 
@@ -245,9 +326,9 @@ const scrollToSection = (key) => {
 
 .service-details {
   background: #fff;
-  border-radius: 24px;
+  border-radius: 8px;
   padding: 40px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(35, 40, 45, 0.1);
   min-height: 500px;
 }
 
@@ -260,8 +341,8 @@ const scrollToSection = (key) => {
 .service-intro {
   margin-bottom: 32px;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(239, 68, 34, 0.05), rgba(239, 68, 34, 0.02));
-  border-left: 4px solid #ef4422;
+  background: #f9f9f9;
+  border-left: 4px solid #ff4800;
   border-radius: 8px;
 }
 
@@ -272,6 +353,27 @@ const scrollToSection = (key) => {
   margin: 0;
 }
 
+.service-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -12px 0 32px;
+}
+
+.service-highlights span,
+.query-list span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 72, 0, 0.22);
+  border-radius: 4px;
+  background: rgba(255, 72, 0, 0.06);
+  color: #23282d;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .service-sections {
   margin-bottom: 40px;
 }
@@ -280,14 +382,14 @@ const scrollToSection = (key) => {
   margin-bottom: 32px;
   padding: 24px;
   background: #f9fafb;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid #e5e7eb;
   transition: all 0.3s ease;
 }
 
 .service-section:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-color: #ef4422;
+  border-color: #ff4800;
 }
 
 .section-title {
@@ -304,7 +406,7 @@ const scrollToSection = (key) => {
   content: '';
   width: 4px;
   height: 24px;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   border-radius: 2px;
 }
 
@@ -326,14 +428,14 @@ const scrollToSection = (key) => {
 
 .section-item:hover {
   transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(239, 68, 34, 0.1);
+  box-shadow: 0 2px 8px rgba(255, 72, 0, 0.12);
 }
 
 .item-icon {
   flex-shrink: 0;
   width: 6px;
   height: 6px;
-  background: #ef4422;
+  background: #ff4800;
   border-radius: 50%;
   margin-top: 8px;
 }
@@ -382,7 +484,7 @@ const scrollToSection = (key) => {
   top: 12px;
   width: 28px;
   height: 28px;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -398,6 +500,33 @@ const scrollToSection = (key) => {
 
 .section-steps .item-icon {
   display: none;
+}
+
+.search-queries {
+  margin: 0 0 36px;
+  padding: 24px;
+  background: #f4f4f4;
+  border-radius: 8px;
+}
+
+.search-queries h3 {
+  margin: 0 0 14px;
+  color: #23282d;
+  font-size: 20px;
+}
+
+.query-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.query-list span {
+  min-height: 30px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  background: #fff;
 }
 
 .service-gallery {
@@ -442,13 +571,13 @@ const scrollToSection = (key) => {
 }
 
 .contact-button {
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   color: #fff;
 }
 
 .contact-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 34, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 72, 0, 0.32);
 }
 
 .back-button {
@@ -540,4 +669,3 @@ const scrollToSection = (key) => {
   }
 }
 </style>
-

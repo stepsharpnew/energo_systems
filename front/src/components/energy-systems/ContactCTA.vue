@@ -15,7 +15,7 @@
       </button>
       <div class="phone-link">
         <span class="phone-icon">📞</span>
-        <a href="tel:84951780118">8 (495) 178-01-18</a>
+        <a href="tel:+74951780118">+7 (495) 178-01-18</a>
       </div>
     </div>
   </section>
@@ -32,7 +32,7 @@ export default {
 .contact-cta {
   margin: clamp(40px, 8vw, 90px) 0;
   padding: clamp(28px, 5vw, 60px);
-  background: linear-gradient(135deg, #111927, #1f2937 40%, #ef4422);
+  background: linear-gradient(135deg, #111927, #1f2937 40%, #ff4800);
   border-radius: 32px;
   color: #fff;
   display: grid;

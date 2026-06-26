@@ -740,7 +740,7 @@ export default {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ef4422 0%, #ff6b4a 50%, #ef4422 100%);
+  background: linear-gradient(90deg, #ff4800 0%, #ff7a2f 50%, #ff4800 100%);
 }
 
 .content-images-group {
@@ -787,7 +787,7 @@ export default {
   left: 0;
   width: 60px;
   height: 4px;
-  background: linear-gradient(90deg, #ef4422 0%, #ff6b4a 100%);
+  background: linear-gradient(90deg, #ff4800 0%, #ff7a2f 100%);
   border-radius: 2px;
 }
 
@@ -819,11 +819,11 @@ export default {
   padding: 32px;
   background: linear-gradient(
     135deg,
-    rgba(239, 68, 34, 0.05),
-    rgba(239, 68, 34, 0.02)
+    rgba(255, 72, 0, 0.05),
+    rgba(255, 72, 0, 0.02)
   );
   border-radius: 16px;
-  border: 1px solid rgba(239, 68, 34, 0.1);
+  border: 1px solid rgba(255, 72, 0, 0.1);
 }
 
 .highlight-item {
@@ -837,7 +837,7 @@ export default {
 .highlight-number {
   font-size: clamp(32px, 4vw, 48px);
   font-weight: 800;
-  color: #ef4422;
+  color: #ff4800;
   line-height: 1;
   font-family: "Arial", sans-serif;
 }
@@ -868,8 +868,8 @@ export default {
 }
 
 .work-step:hover {
-  border-color: #ef4422;
-  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.1);
+  border-color: #ff4800;
+  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.1);
   transform: translateX(4px);
 }
 
@@ -880,7 +880,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   color: #fff;
   font-size: 24px;
   font-weight: 800;
@@ -926,8 +926,8 @@ export default {
 }
 
 .advantage-card:hover {
-  border-color: #ef4422;
-  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.15);
+  border-color: #ff4800;
+  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.15);
   transform: translateY(-4px);
 }
 
@@ -957,7 +957,7 @@ export default {
   align-items: center;
   gap: clamp(20px, 3vw, 32px);
   padding-bottom: clamp(20px, 3vw, 28px);
-  border-bottom: 2px solid rgba(239, 68, 34, 0.1);
+  border-bottom: 2px solid rgba(255, 72, 0, 0.1);
   will-change: transform, opacity;
   min-height: 80px;
 }
@@ -990,7 +990,7 @@ export default {
 }
 
 .partner-compact-description strong {
-  color: #ef4422;
+  color: #ff4800;
   font-weight: 700;
 }
 
@@ -1016,7 +1016,7 @@ export default {
 .stat-compact-number {
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 800;
-  color: #ef4422;
+  color: #ff4800;
   line-height: 1;
   margin-bottom: 8px;
   font-family: "Arial", sans-serif;
@@ -1048,7 +1048,7 @@ export default {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(239, 68, 34, 0.2) 50%,
+    rgba(255, 72, 0, 0.2) 50%,
     transparent 100%
   );
   flex-shrink: 0;
@@ -1223,13 +1223,13 @@ export default {
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(239, 68, 34, 0.2) 50%,
+      rgba(255, 72, 0, 0.2) 50%,
       transparent 100%
     );
   }
 }
 
 .content-description b {
-  color: #ef4422;
+  color: #ff4800;
 }
 </style>

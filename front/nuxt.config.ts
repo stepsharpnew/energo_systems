@@ -3,6 +3,7 @@ import vuetify from 'vite-plugin-vuetify'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-07-17',
+  telemetry: false,
   
   devtools: { enabled: true },
   
@@ -13,12 +14,12 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Энергосистемы - эксперты в сфере энергетики. ГНБ, электромонтажные работы, проектирование.' }
+        { name: 'description', content: 'Энергосистемы - ГНБ под ключ, электромонтажные работы, проектирование и инженерные сети в Москве и Московской области.' }
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=2' },
-        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/LOGO-electro.png?v=2' },
-        { rel: 'apple-touch-icon', href: '/img/LOGO-electro.png?v=2' }
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/image.png?v=3' },
+        { rel: 'apple-touch-icon', href: '/img/image.png?v=3' }
       ]
     }
   },
@@ -27,6 +28,12 @@ export default defineNuxtConfig({
   devServer: {
     port: 5173,
     host: '0.0.0.0'
+  },
+
+  nitro: {
+    prerender: {
+      routes: ['/services/hdd']
+    }
   },
 
   // Включение CSS
@@ -50,6 +57,9 @@ export default defineNuxtConfig({
 
   // Настройка Vite
   vite: {
+    optimizeDeps: {
+      exclude: ['gsap']
+    },
     ssr: {
       noExternal: ['vuetify'],
       resolve: {
@@ -68,4 +78,3 @@ export default defineNuxtConfig({
     }
   }
 })
-

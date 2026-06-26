@@ -128,17 +128,17 @@ export default {
   flex-wrap: nowrap;
   overflow-x: auto;
   background: linear-gradient(135deg, #0f172a, #1f2937);
-  border: 1px solid rgba(239, 68, 34, 0.2);
+  border: 1px solid rgba(255, 72, 0, 0.2);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(239, 68, 34, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 72, 0, 0.1);
   scrollbar-width: none;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
 }
 
 .desktop-nav:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(239, 68, 34, 0.2);
-  border-color: rgba(239, 68, 34, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 72, 0, 0.2);
+  border-color: rgba(255, 72, 0, 0.3);
 }
 
 .desktop-nav::-webkit-scrollbar {
@@ -169,14 +169,14 @@ export default {
   transform: translateX(-50%) scaleX(0);
   width: calc(100% - 32px);
   height: 2px;
-  background: linear-gradient(90deg, transparent, #ef4422, #ff6934, transparent);
+  background: linear-gradient(90deg, transparent, #ff4800, #ff7a2f, transparent);
   border-radius: 2px;
   transition: transform 0.3s ease;
 }
 
 .desktop-nav button:hover {
   color: #fff;
-  background: rgba(239, 68, 34, 0.15);
+  background: rgba(255, 72, 0, 0.15);
   transform: translateY(-2px);
 }
 
@@ -200,10 +200,10 @@ export default {
   z-index: 30;
   width: clamp(48px, 5vw, 56px);
   height: clamp(48px, 5vw, 56px);
-  border: 2px solid rgba(239, 68, 34, 0.2);
+  border: 2px solid rgba(255, 72, 0, 0.2);
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(239, 68, 34, 0.95), rgba(255, 105, 52, 0.95));
-  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(255, 72, 0, 0.95), rgba(255, 122, 47, 0.95));
+  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: flex;
@@ -213,9 +213,9 @@ export default {
 }
 
 .mobile-menu-toggle:hover {
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   transform: scale(1.08);
-  box-shadow: 0 12px 32px rgba(239, 68, 34, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(255, 72, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -273,7 +273,7 @@ export default {
   flex-direction: column;
   z-index: 29;
   overflow-y: auto;
-  border-left: 1px solid rgba(239, 68, 34, 0.1);
+  border-left: 1px solid rgba(255, 72, 0, 0.1);
 }
 
 .mobile-menu-close {
@@ -282,10 +282,10 @@ export default {
   right: clamp(16px, 2vw, 20px);
   width: 44px;
   height: 44px;
-  border: 2px solid rgba(239, 68, 34, 0.2);
+  border: 2px solid rgba(255, 72, 0, 0.2);
   border-radius: 50%;
-  background: rgba(239, 68, 34, 0.1);
-  color: #ef4422;
+  background: rgba(255, 72, 0, 0.1);
+  color: #ff4800;
   font-size: 28px;
   font-weight: 300;
   cursor: pointer;
@@ -297,9 +297,9 @@ export default {
 }
 
 .mobile-menu-close:hover {
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   color: #fff;
-  border-color: #ef4422;
+  border-color: #ff4800;
   transform: scale(1.1) rotate(90deg);
 }
 
@@ -315,7 +315,7 @@ export default {
   padding: clamp(14px, 2vw, 18px) clamp(18px, 2.5vw, 24px);
   border: 2px solid transparent;
   border-radius: 12px;
-  background: rgba(239, 68, 34, 0.05);
+  background: rgba(255, 72, 0, 0.05);
   color: #0f172a;
   font-weight: 600;
   font-size: clamp(15px, 2vw, 17px);
@@ -333,17 +333,17 @@ export default {
   transform: translateY(-50%) scaleX(0);
   width: 4px;
   height: 60%;
-  background: linear-gradient(180deg, #ef4422, #ff6934);
+  background: linear-gradient(180deg, #ff4800, #ff7a2f);
   border-radius: 0 4px 4px 0;
   transition: transform 0.3s ease;
 }
 
 .mobile-nav-item:hover,
 .mobile-nav-item:active {
-  background: rgba(239, 68, 34, 0.12);
-  color: #ef4422;
+  background: rgba(255, 72, 0, 0.12);
+  color: #ff4800;
   transform: translateX(6px);
-  border-color: rgba(239, 68, 34, 0.2);
+  border-color: rgba(255, 72, 0, 0.2);
 }
 
 .mobile-nav-item:hover::before,
@@ -407,4 +407,3 @@ export default {
   }
 }
 </style>
-

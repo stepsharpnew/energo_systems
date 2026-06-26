@@ -19,7 +19,7 @@
             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <a href="tel:+74951780118" class="contact-text">8 (495) 178-01-18</a>
+            <a href="tel:+74951780118" class="contact-text">+7 (495) 178-01-18</a>
           </div>
 
           <div class="contact-row">
@@ -27,7 +27,7 @@
               <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div class="addresses">
-              <span>г. Москва, ул.Михалковская, д.63Б с4</span>
+              <span>г. Москва, улица Руставели, 14с6</span>
               <span>г. Солнечногорск ул.Промышленная с 5</span>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default {
 <style scoped>
 .header {
   background: #ffffff;
-  border-bottom: 1px solid rgba(239, 68, 34, 0.1);
+  border-bottom: 1px solid rgba(255, 72, 0, 0.1);
   padding: clamp(20px, 3vw, 28px) 0;
   position: relative;
   z-index: 24;
@@ -108,15 +108,15 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(239, 68, 34, 0.1), rgba(239, 68, 34, 0.05));
+  background: linear-gradient(135deg, rgba(255, 72, 0, 0.1), rgba(255, 72, 0, 0.05));
   border-radius: 12px;
   padding: 8px;
   transition: all 0.3s ease;
 }
 
 .logo-wrapper:hover .logo {
-  background: linear-gradient(135deg, rgba(239, 68, 34, 0.15), rgba(239, 68, 34, 0.1));
-  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.2);
+  background: linear-gradient(135deg, rgba(255, 72, 0, 0.15), rgba(255, 72, 0, 0.1));
+  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.2);
 }
 
 .logo img {
@@ -145,7 +145,7 @@ export default {
 }
 
 .company-description {
-  color: #ef4422;
+  color: #ff4800;
   font-size: clamp(10px, 1.2vw, 12px);
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -171,7 +171,7 @@ export default {
 .contact-icon {
   width: clamp(16px, 2vw, 20px);
   height: clamp(16px, 2vw, 20px);
-  color: #ef4422;
+  color: #ff4800;
   flex-shrink: 0;
   transition: transform 0.2s ease;
 }
@@ -189,7 +189,7 @@ export default {
 }
 
 .contact-text:hover {
-  color: #ef4422;
+  color: #ff4800;
 }
 
 .addresses {
@@ -215,26 +215,26 @@ export default {
 
 .badge {
   padding: clamp(8px, 1.2vw, 10px) clamp(16px, 2vw, 20px);
-  color: #ef4422;
+  color: #ff4800;
   font-weight: 700;
   font-size: clamp(11px, 1.3vw, 13px);
   border-radius: 8px;
   white-space: nowrap;
   letter-spacing: 0.05em;
-  border: 2px solid #ef4422;
-  background: rgba(239, 68, 34, 0.05);
+  border: 2px solid #ff4800;
+  background: rgba(255, 72, 0, 0.05);
   transition: all 0.3s ease;
 }
 
 .badge:hover {
-  background: rgba(239, 68, 34, 0.1);
+  background: rgba(255, 72, 0, 0.1);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.2);
 }
 
 .cta-button {
   padding: clamp(12px, 1.5vw, 14px) clamp(24px, 3vw, 32px);
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   border: none;
   border-radius: 12px;
   color: #ffffff;
@@ -244,18 +244,18 @@ export default {
   transition: all 0.3s ease;
   white-space: nowrap;
   letter-spacing: 0.02em;
-  box-shadow: 0 4px 16px rgba(239, 68, 34, 0.3);
+  box-shadow: 0 4px 16px rgba(255, 72, 0, 0.3);
 }
 
 .cta-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.4);
-  background: linear-gradient(135deg, #ff6934, #ef4422);
+  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.4);
+  background: linear-gradient(135deg, #ff7a2f, #ff4800);
 }
 
 .cta-button:active {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.3);
 }
 
 /* Адаптивность */

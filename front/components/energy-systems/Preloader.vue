@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="preloader">
       <div class="preloader-content">
         <img
-          src="/img/LOGO-electro.png"
+          src="/img/image.png"
           alt="Энергосистемы"
           class="preloader-logo"
         />
@@ -50,8 +50,8 @@ export default {
 }
 
 .preloader-logo {
-  width: 120px;
-  height: 120px;
+  width: min(300px, 82vw);
+  height: auto;
   object-fit: contain;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -82,15 +82,13 @@ export default {
 /* Адаптивность */
 @media (max-width: 768px) {
   .preloader-logo {
-    width: 100px;
-    height: 100px;
+    width: min(260px, 82vw);
   }
 }
 
 @media (max-width: 560px) {
   .preloader-logo {
-    width: 80px;
-    height: 80px;
+    width: min(220px, 82vw);
   }
 }
 </style>

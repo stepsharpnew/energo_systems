@@ -7,4 +7,3 @@
 <script setup>
 import EnergySystems from '~/components/EnergySystems.vue'
 </script>
-

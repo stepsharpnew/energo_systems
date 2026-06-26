@@ -448,8 +448,8 @@ export default {
 .form-input:focus,
 .form-select:focus {
   background: rgba(255, 255, 255, 0.12);
-  border-color: #ef4422;
-  box-shadow: 0 0 0 3px rgba(239, 68, 34, 0.1);
+  border-color: #ff4800;
+  box-shadow: 0 0 0 3px rgba(255, 72, 0, 0.1);
 }
 
 .form-select {
@@ -499,13 +499,13 @@ export default {
 .custom-select:focus,
 .custom-select.is-open {
   background: rgba(255, 255, 255, 0.12);
-  border-color: #ef4422;
-  box-shadow: 0 0 0 3px rgba(239, 68, 34, 0.1);
+  border-color: #ff4800;
+  box-shadow: 0 0 0 3px rgba(255, 72, 0, 0.1);
 }
 
 .custom-select.is-invalid {
-  border-color: #ef4422;
-  box-shadow: 0 0 0 3px rgba(239, 68, 34, 0.2);
+  border-color: #ff4800;
+  box-shadow: 0 0 0 3px rgba(255, 72, 0, 0.2);
 }
 
 .custom-select-value {
@@ -577,13 +577,13 @@ export default {
 }
 
 .custom-select-option:hover {
-  background: rgba(239, 68, 34, 0.15);
+  background: rgba(255, 72, 0, 0.15);
   color: #fff;
 }
 
 .custom-select-option.is-selected {
-  background: rgba(239, 68, 34, 0.2);
-  color: #ef4422;
+  background: rgba(255, 72, 0, 0.2);
+  color: #ff4800;
   font-weight: 600;
 }
 
@@ -626,7 +626,7 @@ export default {
 .submit-button {
   margin-top: 8px;
   padding: 16px 32px;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   border: none;
   border-radius: 16px;
   color: #fff;
@@ -639,7 +639,7 @@ export default {
 
 .submit-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(239, 68, 34, 0.4);
+  box-shadow: 0 12px 24px rgba(255, 72, 0, 0.4);
 }
 
 .submit-button:active:not(:disabled) {

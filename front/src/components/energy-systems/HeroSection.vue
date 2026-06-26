@@ -97,14 +97,14 @@ export default {
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-size: 12px;
-  color: #ef4422;
+  color: #ff4800;
   margin-bottom: 14px;
   font-weight: 600;
   display: inline-block;
   padding: 6px 12px;
-  background: rgba(239, 68, 34, 0.1);
+  background: rgba(255, 72, 0, 0.1);
   border-radius: 6px;
-  border: 1px solid rgba(239, 68, 34, 0.3);
+  border: 1px solid rgba(255, 72, 0, 0.3);
 }
 
 .hero-content h2 {
@@ -149,7 +149,7 @@ export default {
 
 .hero-list li:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(239, 68, 34, 0.3);
+  border-color: rgba(255, 72, 0, 0.3);
   transform: translateX(4px);
 }
 
@@ -160,9 +160,9 @@ export default {
   top: 20px;
   width: 8px;
   height: 8px;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(239, 68, 34, 0.6);
+  box-shadow: 0 0 12px rgba(255, 72, 0, 0.6);
 }
 
 .hero-cta {
@@ -173,7 +173,7 @@ export default {
 }
 
 .hero-cta button {
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   border: none;
   border-radius: 12px;
   padding: 16px 36px;
@@ -182,7 +182,7 @@ export default {
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(239, 68, 34, 0.3);
+  box-shadow: 0 4px 16px rgba(255, 72, 0, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -204,8 +204,8 @@ export default {
 
 .hero-cta button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.5);
-  background: linear-gradient(135deg, #ff6934, #ef4422);
+  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.5);
+  background: linear-gradient(135deg, #ff7a2f, #ff4800);
 }
 
 .hero-cta button:active {
@@ -237,7 +237,7 @@ export default {
   width: 220px;
   height: 220px;
   filter: blur(120px);
-  background: rgba(239, 68, 34, 0.75);
+  background: rgba(255, 72, 0, 0.75);
   top: 10%;
   right: 0;
   opacity: 0.8;
@@ -262,15 +262,15 @@ export default {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ef4422, #ff6934, #ef4422);
+  background: linear-gradient(90deg, #ff4800, #ff7a2f, #ff4800);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(239, 68, 34, 0.4);
-  box-shadow: 0 12px 40px rgba(239, 68, 34, 0.2);
+  border-color: rgba(255, 72, 0, 0.4);
+  box-shadow: 0 12px 40px rgba(255, 72, 0, 0.2);
   background: rgba(15, 23, 42, 0.5);
 }
 
@@ -292,7 +292,7 @@ export default {
 }
 
 .stat-card span {
-  color: #ef4422;
+  color: #ff4800;
   font-size: clamp(15px, 1.8vw, 17px);
   font-weight: 600;
   text-transform: uppercase;
@@ -329,4 +329,3 @@ export default {
   }
 }
 </style>
-

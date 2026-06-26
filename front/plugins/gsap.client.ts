@@ -1,27 +1,35 @@
-import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+export default defineNuxtPlugin(async (nuxtApp) => {
+  try {
+    const [
+      { gsap },
+      { ScrollSmoother },
+      { ScrollToPlugin },
+      { ScrollTrigger },
+    ] = await Promise.all([
+      import("gsap"),
+      import("gsap/ScrollSmoother"),
+      import("gsap/ScrollToPlugin"),
+      import("gsap/ScrollTrigger"),
+    ]);
 
-// Регистрируем плагины
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
+    gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 
-export default defineNuxtPlugin((nuxtApp) => {
-  // Делаем GSAP доступным глобально через this.$gsap
-  nuxtApp.vueApp.config.globalProperties.$gsap = gsap;
+    nuxtApp.vueApp.config.globalProperties.$gsap = gsap;
+    nuxtApp.vueApp.config.globalProperties.$ScrollTrigger = ScrollTrigger;
+    nuxtApp.vueApp.config.globalProperties.$ScrollSmoother = ScrollSmoother;
 
-  // Делаем ScrollTrigger доступным глобально через this.$ScrollTrigger
-  nuxtApp.vueApp.config.globalProperties.$ScrollTrigger = ScrollTrigger;
+    nuxtApp.provide("gsap", gsap);
+    nuxtApp.provide("ScrollTrigger", ScrollTrigger);
+    nuxtApp.provide("ScrollSmoother", ScrollSmoother);
+  } catch (error) {
+    console.warn("[gsap] animations disabled", error);
 
-  // Делаем ScrollSmoother доступным глобально через this.$ScrollSmoother
-  nuxtApp.vueApp.config.globalProperties.$ScrollSmoother = ScrollSmoother;
+    nuxtApp.vueApp.config.globalProperties.$gsap = null;
+    nuxtApp.vueApp.config.globalProperties.$ScrollTrigger = null;
+    nuxtApp.vueApp.config.globalProperties.$ScrollSmoother = null;
 
-  // Также предоставляем через provide для использования в Composition API
-  nuxtApp.provide("gsap", gsap);
-  nuxtApp.provide("ScrollTrigger", ScrollTrigger);
-  nuxtApp.provide("ScrollSmoother", ScrollSmoother);
+    nuxtApp.provide("gsap", null);
+    nuxtApp.provide("ScrollTrigger", null);
+    nuxtApp.provide("ScrollSmoother", null);
+  }
 });
-
-// Экспортируем для прямого использования
-export { gsap, ScrollSmoother, ScrollTrigger };
-

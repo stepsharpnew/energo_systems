@@ -14,8 +14,12 @@
         Запланировать консультацию
       </button>
       <div class="phone-link">
-        <span class="phone-icon">📞</span>
-        <a href="tel:84951780118">8 (495) 178-01-18</a>
+        <span class="phone-icon">☎</span>
+        <div class="contact-links">
+          <a href="tel:+74951780118">+7 (495) 178-01-18</a>
+          <a href="tel:+79251640560">+7 (925) 164-05-60</a>
+          <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su">sales@e-systems.su</a>
+        </div>
       </div>
     </div>
   </section>
@@ -32,8 +36,8 @@ export default {
 .contact-cta {
   margin: clamp(40px, 8vw, 90px) 0;
   padding: clamp(28px, 5vw, 60px);
-  background: linear-gradient(135deg, #111927, #1f2937 40%, #ef4422);
-  border-radius: 32px;
+  background: linear-gradient(135deg, #23282d, #111 58%, #1f6fb2);
+  border-radius: 8px;
   color: #fff;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -87,7 +91,7 @@ export default {
 
 .phone-link {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 10px;
   padding: 14px 28px;
@@ -109,20 +113,15 @@ export default {
   transition: opacity 0.25s ease;
 }
 
-.phone-link a:hover {
-  opacity: 0.8;
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
 }
 
-/* На десктопе ссылка не кликабельна */
-@media (min-width: 769px) {
-  .phone-link a {
-    pointer-events: none;
-    cursor: default;
-  }
-
-  .phone-link a:hover {
-    opacity: 1;
-  }
+.phone-link a:hover {
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {

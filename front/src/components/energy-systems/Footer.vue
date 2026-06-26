@@ -17,14 +17,14 @@
         <h4>Контакты</h4>
         <ul>
           <li>
-            <a href="tel:+74951780118" class="contact-link">8 (495) 178-01-18</a>
+            <a href="tel:+74951780118" class="contact-link">+7 (495) 178-01-18</a>
           </li>
           <li>
-            <a href="mailto:info@energosystems.ru" class="contact-link">info@energosystems.ru</a>
+            <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su" class="contact-link">sales@e-systems.su</a>
           </li>
           <li class="address-item">
             <span class="address-label">Москва:</span>
-            <span>125445, ул.Михалковская, д.63Б с4</span>
+            <span>улица Руставели, 14с6</span>
           </li>
           <li class="address-item">
             <span class="address-label">Солнечногорск:</span>
@@ -62,7 +62,7 @@ export default {
   background: linear-gradient(135deg, #0f172a, #1f2937);
   color: rgba(255, 255, 255, 0.85);
   padding: clamp(40px, 5vw, 50px) clamp(20px, 4vw, 40px) clamp(20px, 3vw, 24px);
-  border-top: 1px solid rgba(239, 68, 34, 0.2);
+  border-top: 1px solid rgba(255, 72, 0, 0.2);
 }
 
 .footer-content {
@@ -90,7 +90,7 @@ export default {
   width: clamp(40px, 4vw, 48px);
   height: clamp(40px, 4vw, 48px);
   object-fit: contain;
-  background: rgba(239, 68, 34, 0.1);
+  background: rgba(255, 72, 0, 0.1);
   border-radius: 10px;
   padding: 6px;
 }
@@ -107,7 +107,7 @@ export default {
   margin: 4px 0 0 0;
   font-size: clamp(10px, 1.2vw, 12px);
   font-weight: 600;
-  color: #ef4422;
+  color: #ff4800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -128,7 +128,7 @@ export default {
   left: 0;
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, #ef4422, #ff6934);
+  background: linear-gradient(90deg, #ff4800, #ff7a2f);
   border-radius: 2px;
 }
 
@@ -168,7 +168,7 @@ export default {
 }
 
 .contact-link:hover {
-  color: #ef4422;
+  color: #ff4800;
 }
 
 .address-item {
@@ -179,7 +179,7 @@ export default {
 
 .address-label {
   font-weight: 600;
-  color: #ef4422;
+  color: #ff4800;
   font-size: clamp(12px, 1.4vw, 13px);
 }
 
@@ -228,4 +228,3 @@ export default {
   }
 }
 </style>
-

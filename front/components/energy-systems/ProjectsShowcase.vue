@@ -29,9 +29,6 @@
 </template>
 
 <script>
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 export default {
   name: "ProjectsShowcase",
   props: {
@@ -56,7 +53,7 @@ export default {
       this.scrollTriggers.forEach((st) => st.kill());
       this.scrollTriggers = [];
     }
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    this.$ScrollTrigger?.getAll().forEach(trigger => trigger.kill());
   },
   methods: {
     setCardRef(el, index) {
@@ -66,6 +63,10 @@ export default {
     },
     initScrollTriggers() {
       this.$nextTick(() => {
+        const gsap = this.$gsap;
+        const ScrollTrigger = this.$ScrollTrigger;
+        if (!gsap || !ScrollTrigger) return;
+
         const isMobile = window.innerWidth <= 1200;
 
         // Очищаем предыдущие триггеры
@@ -144,7 +145,7 @@ export default {
     },
     refreshScrollTrigger() {
       setTimeout(() => {
-        ScrollTrigger.refresh();
+        this.$ScrollTrigger?.refresh();
       }, 100);
     },
     handleResize() {
@@ -215,7 +216,7 @@ export default {
 }
 
 .project-card:hover {
-  box-shadow: 0 18px 40px rgba(239, 68, 34, 0.25);
+  box-shadow: 0 18px 40px rgba(255, 72, 0, 0.25);
   background: rgba(255, 255, 255, 1);
 }
 
@@ -242,7 +243,7 @@ export default {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #ef4422;
+  color: #ff4800;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;

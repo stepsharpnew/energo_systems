@@ -270,7 +270,7 @@ export default {
 }
 
 .modal-carousel-dots button.active {
-  background: #ef4422;
+  background: #ff4800;
 }
 
 .modal-actions {
@@ -290,7 +290,7 @@ export default {
 
 .order-button {
   padding: 14px 32px;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   border: none;
   border-radius: 16px;
   color: #fff;
@@ -298,12 +298,12 @@ export default {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(239, 68, 34, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.3);
 }
 
 .order-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 34, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 72, 0, 0.4);
 }
 
 .order-button:active {

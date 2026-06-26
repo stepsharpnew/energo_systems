@@ -233,13 +233,13 @@ export default {
 }
 
 .service-item:hover {
-  border-color: #ef4422;
+  border-color: #ff4800;
   transform: translateX(4px);
 }
 
 .service-item.active {
-  background: #ef4422;
-  border-color: #ef4422;
+  background: #ff4800;
+  border-color: #ff4800;
   color: #fff;
 }
 
@@ -267,8 +267,8 @@ export default {
 .service-intro {
   margin-bottom: 32px;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(239, 68, 34, 0.05), rgba(239, 68, 34, 0.02));
-  border-left: 4px solid #ef4422;
+  background: linear-gradient(135deg, rgba(255, 72, 0, 0.05), rgba(255, 72, 0, 0.02));
+  border-left: 4px solid #ff4800;
   border-radius: 8px;
 }
 
@@ -294,7 +294,7 @@ export default {
 
 .service-section:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-color: #ef4422;
+  border-color: #ff4800;
 }
 
 .section-title {
@@ -311,7 +311,7 @@ export default {
   content: '';
   width: 4px;
   height: 24px;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   border-radius: 2px;
 }
 
@@ -333,14 +333,14 @@ export default {
 
 .section-item:hover {
   transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(239, 68, 34, 0.1);
+  box-shadow: 0 2px 8px rgba(255, 72, 0, 0.1);
 }
 
 .item-icon {
   flex-shrink: 0;
   width: 6px;
   height: 6px;
-  background: #ef4422;
+  background: #ff4800;
   border-radius: 50%;
   margin-top: 8px;
 }
@@ -389,7 +389,7 @@ export default {
   top: 12px;
   width: 28px;
   height: 28px;
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -449,13 +449,13 @@ export default {
 }
 
 .contact-button {
-  background: linear-gradient(135deg, #ef4422, #ff6934);
+  background: linear-gradient(135deg, #ff4800, #ff7a2f);
   color: #fff;
 }
 
 .contact-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 34, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 72, 0, 0.4);
 }
 
 .back-button {
@@ -547,4 +547,3 @@ export default {
   }
 }
 </style>
-

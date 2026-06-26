@@ -280,15 +280,15 @@ export default {
 }
 
 .indicator-dot.active {
-  background: #ef4422;
-  border-color: #ef4422;
+  background: #ff4800;
+  border-color: #ff4800;
   width: clamp(14px, 2vw, 18px);
   height: clamp(14px, 2vw, 18px);
-  box-shadow: 0 0 0 3px rgba(239, 68, 34, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 72, 0, 0.2);
 }
 
 .indicator-dot:focus-visible {
-  outline: 2px solid #ef4422;
+  outline: 2px solid #ff4800;
   outline-offset: 2px;
 }
 
@@ -359,7 +359,7 @@ export default {
   border: none;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  color: #ef4422;
+  color: #ff4800;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -381,8 +381,8 @@ export default {
 .carousel-nav:hover {
   background: #fff;
   transform: translateY(-50%) scale(1);
-  box-shadow: 0 8px 24px rgba(239, 68, 34, 0.3);
-  color: #ef4422;
+  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.3);
+  color: #ff4800;
 }
 
 .carousel-nav:active {
