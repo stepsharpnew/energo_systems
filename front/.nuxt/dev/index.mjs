@@ -1,4 +1,4 @@
-import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import './timing.js';globalThis.__timing__.logStart('Nitro Start');import { tmpdir } from 'node:os';
+import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
 import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
@@ -16,7 +16,7 @@ import { createHead as createHead$1, propsToString, renderSSRHead } from 'file:/
 import { stringify, uneval } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/devalue/index.js';
 import { isVNode, toValue, isRef } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/vue/index.mjs';
 import { DeprecationsPlugin, PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/unhead/dist/plugins.mjs';
-import { createDebugger, createHooks } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/hookable/dist/index.mjs';
+import { createHooks } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/hookable/dist/index.mjs';
 import { createFetch, Headers as Headers$1 } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/ofetch/dist/node.mjs';
 import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/node-mock-http/dist/index.mjs';
 import { createStorage, prefixStorage } from 'file://C:/Users/Steapn/Desktop/energo_full/front/node_modules/unstorage/dist/index.mjs';
@@ -1106,47 +1106,9 @@ function onConsoleLog(callback) {
   consola$1.wrapConsole();
 }
 
-function defineNitroPlugin(def) {
-  return def;
-}
-
-const _dkHxNlZNRG8LJeUNQwxyeUylyGuTkkMgoPe8IgWcr0g = defineNitroPlugin((nitro) => {
-  createDebugger(nitro.hooks, { tag: "nitro-runtime" });
-});
-
-const globalTiming = globalThis.__timing__ || {
-  start: () => 0,
-  end: () => 0,
-  metrics: []
-};
-const timingMiddleware = eventHandler((event) => {
-  const start = globalTiming.start();
-  const _end = event.node.res.end;
-  event.node.res.end = function(chunk, encoding, cb) {
-    const metrics = [
-      ["Generate", globalTiming.end(start)],
-      ...globalTiming.metrics
-    ];
-    const serverTiming = metrics.map((m) => `-;dur=${m[1]};desc="${encodeURIComponent(m[0])}"`).join(", ");
-    if (!event.node.res.headersSent) {
-      event.node.res.setHeader("Server-Timing", serverTiming);
-    }
-    _end.call(event.node.res, chunk, encoding, cb);
-    return this;
-  }.bind(event.node.res);
-});
-const _l6028vAcDjaG_zCJhGaGF7wsraXhfHB5Isk_VwQLWQw = defineNitroPlugin((nitro) => {
-  nitro.h3App.stack.unshift({
-    route: "/",
-    handler: timingMiddleware
-  });
-});
-
 const plugins = [
   _JqkLKHo1e_EmwA9AmqOtLOKnkMG4vnLCqd7Aqb2p4,
-_S8nau4DNdwsnvEeBb8r6RhIqXoG566Oqj2hKLXigLw,
-_dkHxNlZNRG8LJeUNQwxyeUylyGuTkkMgoPe8IgWcr0g,
-_l6028vAcDjaG_zCJhGaGF7wsraXhfHB5Isk_VwQLWQw
+_S8nau4DNdwsnvEeBb8r6RhIqXoG566Oqj2hKLXigLw
 ];
 
 const assets = {};
@@ -2083,5 +2045,5 @@ function renderHTMLDocument(html) {
 const renderer$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: renderer
-}, Symbol.toStringTag, { value: 'Module' }));;globalThis.__timing__.logEnd('Nitro Start');
+}, Symbol.toStringTag, { value: 'Module' }));
 //# sourceMappingURL=index.mjs.map
