@@ -198,25 +198,26 @@ export default {
 
 .certificates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(24px, 4vw, 40px);
-  max-width: 1200px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  max-width: 1280px;
   margin: 0 auto;
 }
 
 .certificate-card {
   background: #fff;
-  border-radius: 16px;
+  border: 1px solid rgba(216, 228, 237, 0.9);
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   will-change: transform, opacity;
 }
 
 .certificate-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.16);
 }
 
 .certificate-image {
@@ -251,7 +252,7 @@ export default {
 
 .certificate-info h3 {
   margin: 0 0 8px;
-  font-size: 18px;
+  font-size: clamp(14px, 1.3vw, 17px);
   font-weight: 700;
   color: #fff;
   line-height: 1.3;
@@ -271,12 +272,14 @@ export default {
   font-weight: 500;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .certificates-grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
   }
+}
 
+@media (max-width: 768px) {
   .certificate-info h3 {
     font-size: 16px;
   }

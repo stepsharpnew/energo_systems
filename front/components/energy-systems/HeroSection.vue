@@ -1,331 +1,271 @@
 <template>
-  <section class="impact-hero" ref="heroSection" :style="{ backgroundImage: `url(${backgroundImage})` }">
-    <div class="hero-container">
-      <div class="hero-content">
-        <p class="hero-kicker">Инфраструктура будущего</p>
-        <h2>Чем мы занимаемся:</h2>
+  <section
+    class="hdd-hero"
+    ref="heroSection"
+    :style="{ backgroundImage: `linear-gradient(90deg, rgba(10, 24, 38, 0.86), rgba(10, 24, 38, 0.55)), url(${backgroundImage})` }"
+  >
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-kicker">ГНБ под ключ в Москве и области</p>
+        <h1>Проколы под дорогами без вскрытия покрытия</h1>
         <p class="hero-description">
-          Получите бесплатную консультацию по интересующему Вас вопросу.
+          Прокладываем водопровод, канализацию, газ, кабель, футляры и гильзы методом горизонтально направленного бурения. Работаем в городе, под трассами, ж/д путями и на благоустроенных территориях.
         </p>
-        <ul class="hero-list">
-          <li>Производство ГНБ (горизонтально-направленное бурение) - современный бестраншейный метод прокладки подземных коммуникаций. Позволяет проводить трубы, кабели и трубопроводы на значительные расстояния, не нарушая целостности ландшафта и обходя сущестющие препятствия.</li>
-          <li>Электромонтажные работы - включают вынос сетей из пятна застройки, подключение к энергосетям, выполнение технических условий (ТУ) и комплексный монтаж элетрооборудования.</li>
-          <li>Проектирование - разработка технической документации, согласование проектов и сопровождение на всех этапах реализации.</li>
+
+        <ul class="hero-tags" aria-label="Направления работ">
+          <li>Водопровод</li>
+          <li>Канализация</li>
+          <li>Газ</li>
+          <li>Кабель</li>
+          <li>Футляры и гильзы</li>
         </ul>
-        <div class="hero-cta">
-          <button type="button" @click="$emit('open-contact-modal')">Консультация</button>
-          <span>Ответим в течение 15 минут</span>
+
+        <div class="hero-actions">
+          <NuxtLink class="primary-link" to="/services/hdd">
+            Подробнее о ГНБ
+          </NuxtLink>
+          <button class="secondary-action" type="button" @click="$emit('open-contact-modal')">
+            Получить расчет
+          </button>
         </div>
       </div>
-      <div class="hero-stats">
-        <div class="hero-glow"></div>
-        <div class="stat-card">
-          <strong>100+</strong>
-          <span>Специалистов</span>
+
+      <dl class="hero-facts" aria-label="Ключевые факты">
+        <div>
+          <dt>2 установки</dt>
+          <dd>DDW 36/13 и Теребро Т40</dd>
         </div>
-        <div class="stat-card">
-          <strong>55</strong>
-          <span>Округов Москва и область</span>
+        <div>
+          <dt>Под ключ</dt>
+          <dd>Обследование, бурение, расширение, протяжка</dd>
         </div>
-        <div class="stat-card stat-card-full">
-          <strong>5000+</strong>
-          <span>Выполненных проектов</span>
+        <div>
+          <dt>Без вскрытия</dt>
+          <dd>Сохраняем дорожное покрытие и благоустройство</dd>
         </div>
-      </div>
+      </dl>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: 'HeroSection',
-  emits: ['open-contact-modal'],
+  name: "HeroSection",
+  emits: ["open-contact-modal"],
   data() {
     return {
-      backgroundImage: '/img/background.jpg'
+      backgroundImage: "/img/background.jpg",
     };
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-.impact-hero {
-  padding: clamp(60px, 3vw, 150px) 0;
-  margin-top: -200px;
-  padding-top: calc(clamp(60px, 3vw, 150px) + 200px);
+.hdd-hero {
   position: relative;
-  overflow: visible;
+  min-height: clamp(560px, 72vh, 760px);
+  display: flex;
+  align-items: center;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
+  color: #ffffff;
+  overflow: hidden;
 }
 
-.impact-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 0;
-  pointer-events: none;
-}
-
-.hero-container {
-  max-width: 1200px;
+.hero-inner {
+  width: min(100% - 48px, 1280px);
   margin: 0 auto;
-  padding: clamp(40px, 5vw, 60px);
+  padding: clamp(64px, 9vw, 118px) 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(32px, 5vw, 80px);
-  border-radius: 32px;
-  color: #fff;
-  position: relative;
-  z-index: 1;
-  background: rgba(15, 23, 42, 0.3);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.55fr);
+  align-items: end;
+  gap: clamp(36px, 7vw, 92px);
 }
 
-.hero-content,
-.hero-stats {
-  position: relative;
-  z-index: 2;
+.hero-copy {
+  min-width: 0;
+  max-width: 800px;
 }
 
 .hero-kicker {
+  width: fit-content;
+  margin: 0 0 18px;
+  padding: 8px 12px;
+  border: 1px solid rgba(155, 204, 236, 0.38);
+  border-radius: 999px;
+  background: rgba(47, 127, 182, 0.16);
+  color: #d9efff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-size: 12px;
-  color: #ff4800;
-  margin-bottom: 14px;
-  font-weight: 600;
-  display: inline-block;
-  padding: 6px 12px;
-  background: rgba(255, 72, 0, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(255, 72, 0, 0.3);
 }
 
-.hero-content h2 {
-  font-size: clamp(30px, 4vw, 44px);
-  margin-bottom: 20px;
-  line-height: 1.2;
-  font-weight: 700;
-  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.hero-copy h1 {
+  max-width: 760px;
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(42px, 6vw, 78px);
+  font-weight: 850;
+  line-height: 0.98;
+  text-wrap: balance;
 }
 
 .hero-description {
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 28px;
-  font-size: clamp(16px, 1.8vw, 18px);
-  line-height: 1.6;
-  font-weight: 400;
+  max-width: 720px;
+  margin: 24px 0 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
-.hero-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 32px;
-  display: grid;
-  gap: 16px;
-}
-
-.hero-list li {
-  position: relative;
-  padding: 16px 20px 16px 48px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(15px, 1.6vw, 17px);
-  line-height: 1.6;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
-
-.hero-list li:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 72, 0, 0.3);
-  transform: translateX(4px);
-}
-
-.hero-list li::before {
-  content: '';
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  width: 8px;
-  height: 8px;
-  background: linear-gradient(135deg, #ff4800, #ff7a2f);
-  border-radius: 50%;
-  box-shadow: 0 0 12px rgba(255, 72, 0, 0.6);
-}
-
-.hero-cta {
+.hero-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
+  gap: 10px;
+  padding: 0;
+  margin: 28px 0 0;
+  list-style: none;
 }
 
-.hero-cta button {
-  background: linear-gradient(135deg, #ff4800, #ff7a2f);
-  border: none;
-  border-radius: 12px;
-  padding: 16px 36px;
-  color: #fff;
+.hero-tags li {
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
   font-weight: 700;
-  cursor: pointer;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.primary-link,
+.secondary-action {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 0 24px;
   font-size: 16px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(255, 72, 0, 0.3);
-  position: relative;
-  overflow: hidden;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
-.hero-cta button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
+.primary-link {
+  color: #082033;
+  border: 1px solid #ffffff;
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
 }
 
-.hero-cta button:hover::before {
-  left: 100%;
+.secondary-action {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.hero-cta button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.5);
-  background: linear-gradient(135deg, #ff7a2f, #ff4800);
-}
-
-.hero-cta button:active {
+.primary-link:hover,
+.secondary-action:hover {
   transform: translateY(-1px);
 }
 
-.hero-cta span {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.primary-link:hover {
+  background: #d9efff;
+  border-color: #d9efff;
 }
 
-.hero-cta span::before {
-  content: '⚡';
-  font-size: 16px;
+.secondary-action:hover {
+  background: rgba(47, 127, 182, 0.62);
+  border-color: rgba(155, 204, 236, 0.72);
 }
 
-.hero-stats {
+.primary-link:focus-visible,
+.secondary-action:focus-visible {
+  outline: 3px solid rgba(217, 239, 255, 0.55);
+  outline-offset: 4px;
+}
+
+.hero-facts {
   display: grid;
-  gap: 16px;
-  padding: clamp(24px, 4vw, 40px) 0;
+  gap: 14px;
+  margin: 0;
 }
 
-.hero-glow {
-  position: absolute;
-  width: 220px;
-  height: 220px;
-  filter: blur(120px);
-  background: rgba(255, 72, 0, 0.75);
-  top: 10%;
-  right: 0;
-  opacity: 0.8;
+.hero-facts div {
+  padding: 18px 20px;
+  border-left: 3px solid #8fc7ec;
+  background: rgba(4, 16, 28, 0.44);
+  backdrop-filter: blur(12px);
 }
 
-.stat-card {
-  background: rgba(15, 23, 42, 0.4);
-  border-radius: 20px;
-  padding: 28px;
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+.hero-facts dt {
+  margin: 0 0 6px;
+  color: #ffffff;
+  font-size: clamp(21px, 2.4vw, 30px);
+  font-weight: 850;
+  line-height: 1.1;
 }
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #ff4800, #ff7a2f, #ff4800);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.hero-facts dd {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 15px;
+  line-height: 1.45;
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 72, 0, 0.4);
-  box-shadow: 0 12px 40px rgba(255, 72, 0, 0.2);
-  background: rgba(15, 23, 42, 0.5);
-}
-
-.stat-card:hover::before {
-  opacity: 1;
-}
-
-.stat-card strong {
-  display: block;
-  font-size: clamp(32px, 4vw, 42px);
-  line-height: 1;
-  margin-bottom: 8px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: 'Arial', sans-serif;
-}
-
-.stat-card span {
-  color: #ff4800;
-  font-size: clamp(15px, 1.8vw, 17px);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-@media (max-width: 768px) {
-  .hero-container {
-    padding: 32px;
+@media (max-width: 980px) {
+  .hdd-hero {
+    min-height: auto;
   }
 
-  .hero-cta button {
-    width: 100%;
-    text-align: center;
+  .hero-inner {
+    grid-template-columns: 1fr;
+    padding: clamp(56px, 10vw, 84px) 0;
   }
 
-  .hero-cta span {
+  .hero-facts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-inner {
+    width: min(100% - 32px, 1280px);
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(36px, 11vw, 54px);
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primary-link,
+  .secondary-action {
     width: 100%;
   }
 
-  .hero-stats {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .stat-card-full {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 560px) {
-  .hero-container {
-    padding: 24px;
+  .hero-facts {
+    grid-template-columns: 1fr;
   }
 }
 </style>

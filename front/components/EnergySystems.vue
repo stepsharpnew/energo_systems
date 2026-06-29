@@ -380,6 +380,7 @@ export default {
         },
       ],
       navItems: [
+        { key: "gnb", label: "ГНБ под ключ", href: "/services/hdd", featured: true },
         { key: "hero", label: "Главная" },
         { key: "services", label: "Услуги" },
         { key: "about", label: "О нас" },

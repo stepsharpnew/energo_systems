@@ -1,56 +1,65 @@
 <template>
-  <header class="header">
-    <div class="container">
-      <div class="header-main">
-        <!-- Логотип и название -->
-        <button class="logo-wrapper" type="button" @click="goToHome" aria-label="На главную">
-          <img src="/img/image.png" alt="Энергосистемы" class="brand-logo">
+  <header class="site-header">
+    <div class="header-inner">
+      <NuxtLink class="brand-link" to="/" aria-label="На главную">
+        <img
+          src="/img/image.png"
+          alt="Энергосистемы"
+          class="brand-logo"
+          width="300"
+          height="58"
+          fetchpriority="high"
+        >
+      </NuxtLink>
+
+      <address class="header-contacts" aria-label="Контакты">
+        <div class="contact-item contact-item-phone">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M6.6 4.5 8.9 4c.7-.1 1.4.3 1.6 1l.8 2.5c.2.6 0 1.2-.5 1.6l-1.1.8c.9 1.8 2.4 3.4 4.2 4.3l.9-1.1c.4-.5 1-.7 1.6-.5l2.5.8c.7.2 1.1.9 1 1.6l-.5 2.3c-.1.7-.7 1.2-1.4 1.2h-.5C10.9 18.5 5.5 13.1 5.5 6.5V6c0-.7.4-1.3 1.1-1.5Z" />
+            </svg>
+          </span>
+          <span class="contact-copy">
+            <span class="contact-label">Звонок по проекту</span>
+            <span class="phone-links">
+              <a href="tel:+74951780118">+7 (495) 178-01-18</a>
+              <a href="tel:+79251640560">+7 (925) 164-05-60</a>
+            </span>
+          </span>
+        </div>
+
+        <div class="contact-item">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M12 3.8a5.7 5.7 0 0 0-5.7 5.7c0 4.2 5.7 10.7 5.7 10.7s5.7-6.5 5.7-10.7A5.7 5.7 0 0 0 12 3.8Zm0 7.9a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z" />
+            </svg>
+          </span>
+          <span class="contact-copy">
+            <span class="contact-label">Офис</span>
+            <span class="office-address">Москва, улица Руставели, 14с6</span>
+          </span>
+        </div>
+
+        <div class="contact-item">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M4.8 6.5h14.4c.8 0 1.3.6 1.3 1.3v8.4c0 .8-.6 1.3-1.3 1.3H4.8c-.8 0-1.3-.6-1.3-1.3V7.8c0-.8.6-1.3 1.3-1.3Zm.4 2.1 6.1 4.1c.4.3.9.3 1.3 0l6.1-4.1" />
+            </svg>
+          </span>
+          <span class="contact-copy">
+            <span class="contact-label">Почта</span>
+            <a class="mail-link" href="mailto:sales@e-systems.su?cc=inbox@e-systems.su">sales@e-systems.su</a>
+          </span>
+        </div>
+      </address>
+
+      <div class="header-actions">
+        <NuxtLink class="hdd-link" to="/services/hdd">
+          ГНБ под ключ
+        </NuxtLink>
+        <button class="request-button" type="button" @click="$emit('open-contact-modal')">
+          Рассчитать проект
         </button>
-
-        <!-- Контактная информация -->
-        <div class="contacts">
-          <div class="contact-row">
-            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <div class="contact-stack">
-              <a href="tel:+74951780118" class="contact-text">+7 (495) 178-01-18</a>
-              <a href="tel:+79251640560" class="contact-text">+7 (925) 164-05-60</a>
-            </div>
-          </div>
-
-          <div class="contact-row">
-            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <div class="addresses">
-              <span>г. Москва, улица Руставели, 14с6</span>
-              <span>г. Солнечногорск, ул. Промышленная, стр. 5</span>
-            </div>
-          </div>
-
-          <div class="contact-row">
-            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su" class="contact-text">sales@e-systems.su</a>
-          </div>
-
-          <div class="contact-row">
-            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-              <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="contact-text">пн-пт: 9:00 - 18:00</span>
-          </div>
-        </div>
-
-        <!-- Бейдж и кнопка -->
-        <div class="header-actions">
-          <div class="badge">№1 В СФЕРЕ ЭНЕРГЕТИКИ</div>
-          <button class="cta-button" type="button" @click="$emit('open-contact-modal')">СВЯЗАТЬСЯ С НАМИ</button>
-        </div>
       </div>
     </div>
   </header>
@@ -58,284 +67,297 @@
 
 <script>
 export default {
-  name: 'Header',
-  emits: ['open-contact-modal'],
-  methods: {
-    goToHome() {
-      if (this.$route.path !== '/') {
-        this.$router.push('/');
-      }
-    }
-  }
-}
+  name: "Header",
+  emits: ["open-contact-modal"],
+};
 </script>
 
 <style scoped>
-.header {
-  background: #ffffff;
-  border-bottom: 1px solid rgba(35, 40, 45, 0.12);
-  padding: clamp(20px, 3vw, 28px) 0;
+.site-header {
   position: relative;
-  z-index: 24;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+  z-index: 30;
+  background:
+    linear-gradient(180deg, rgba(248, 251, 253, 0.92), rgba(255, 255, 255, 1)),
+    #ffffff;
+  border-bottom: 1px solid #d8e4ed;
+  box-shadow: 0 8px 28px rgba(16, 32, 48, 0.06);
 }
 
-.container {
-  max-width: 1400px;
+.header-inner {
+  width: min(100% - 48px, 1280px);
+  min-height: 92px;
   margin: 0 auto;
-  padding: 0 clamp(20px, 4vw, 40px);
-}
-
-.header-main {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(230px, 300px) minmax(360px, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: clamp(24px, 4vw, 40px);
-  flex-wrap: wrap;
+  gap: clamp(22px, 3.2vw, 48px);
+  padding: 16px 0;
 }
 
-.logo-wrapper {
-  display: flex;
+.brand-link {
+  display: inline-flex;
   align-items: center;
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  border: 0;
-  background: transparent;
-  padding: 0;
+  min-width: 0;
+  border-radius: 8px;
 }
 
-.logo-wrapper:hover {
-  transform: translateY(-2px);
+.brand-link:focus-visible,
+.header-contacts a:focus-visible,
+.hdd-link:focus-visible,
+.request-button:focus-visible {
+  outline: 3px solid rgba(45, 122, 172, 0.3);
+  outline-offset: 4px;
 }
 
 .brand-logo {
-  width: clamp(220px, 23vw, 300px);
+  display: block;
+  width: min(300px, 100%);
   height: auto;
-  max-height: 58px;
   object-fit: contain;
 }
 
-.contacts {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(8px, 1vw, 12px);
-  flex: 1;
+.header-contacts {
   min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(190px, 0.9fr) minmax(180px, 1fr) minmax(170px, 0.8fr);
+  gap: 10px;
+  align-items: stretch;
+  margin: 0;
+  font-style: normal;
 }
 
-.contact-row {
-  display: flex;
+.contact-item {
+  min-width: 0;
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
   align-items: center;
-  gap: clamp(8px, 1.5vw, 12px);
-  padding: 6px 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(175, 198, 216, 0.62);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.contact-item-phone {
+  grid-template-columns: 34px minmax(0, 1fr);
 }
 
 .contact-icon {
-  width: clamp(16px, 2vw, 20px);
-  height: clamp(16px, 2vw, 20px);
-  color: #1f6fb2;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #edf6fc;
+  color: #2d7aac;
 }
 
-.contact-row:hover .contact-icon {
-  transform: scale(1.1);
+.contact-icon svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.contact-text {
-  color: #0f172a;
-  font-size: clamp(13px, 1.6vw, 15px);
-  font-weight: 600;
+.contact-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.contact-label {
+  color: #647789;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.phone-links {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.phone-links a,
+.mail-link,
+.office-address {
+  min-width: 0;
+  color: #142233;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.28;
   text-decoration: none;
-  transition: color 0.2s ease;
 }
 
-.contact-text:hover {
-  color: #ff4800;
+.phone-links a,
+.mail-link {
+  white-space: nowrap;
 }
 
-.contact-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.office-address {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.addresses {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  color: #0f172a;
-  font-size: clamp(13px, 1.6vw, 15px);
-  font-weight: 500;
-  line-height: 1.4;
+.mail-link {
+  color: #2d7aac;
 }
 
-.addresses span {
-  line-height: 1.5;
+.phone-links a:hover,
+.mail-link:hover {
+  color: #175f8f;
 }
 
 .header-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  justify-items: stretch;
+}
+
+.hdd-link,
+.request-button {
+  min-height: 42px;
+  display: inline-flex;
   align-items: center;
-  gap: clamp(12px, 2vw, 20px);
-  flex-shrink: 0;
-}
-
-.badge {
-  padding: clamp(8px, 1.2vw, 10px) clamp(16px, 2vw, 20px);
-  color: #ff4800;
-  font-weight: 700;
-  font-size: clamp(11px, 1.3vw, 13px);
+  justify-content: center;
   border-radius: 8px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
   white-space: nowrap;
-  letter-spacing: 0.05em;
-  border: 2px solid #ff4800;
-  background: rgba(255, 72, 0, 0.05);
-  transition: all 0.3s ease;
-}
-
-.badge:hover {
-  background: rgba(255, 72, 0, 0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.2);
-}
-
-.cta-button {
-  padding: clamp(12px, 1.5vw, 14px) clamp(24px, 3vw, 32px);
-  background: #ff4800;
-  border: none;
-  border-radius: 12px;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: clamp(13px, 1.5vw, 15px);
   cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-  box-shadow: 0 4px 16px rgba(255, 72, 0, 0.3);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
 
-.cta-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.35);
-  background: #23282d;
+.hdd-link {
+  color: #175f8f;
+  border: 1px solid #bfd8e9;
+  background: #f2f8fc;
 }
 
-.cta-button:active {
+.request-button {
+  color: #ffffff;
+  border: 1px solid #f05a28;
+  background: #f05a28;
+  box-shadow: 0 12px 24px rgba(240, 90, 40, 0.24);
+}
+
+.hdd-link:hover {
+  color: #ffffff;
+  border-color: #2d7aac;
+  background: #2d7aac;
+}
+
+.request-button:hover {
+  background: #d84618;
+  border-color: #d84618;
+  box-shadow: 0 14px 28px rgba(216, 70, 24, 0.28);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 72, 0, 0.3);
 }
 
-/* Адаптивность */
-@media (max-width: 1200px) {
-  .header-main {
-    gap: 24px;
+.request-button:active,
+.hdd-link:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 1240px) {
+  .header-inner {
+    grid-template-columns: minmax(220px, 290px) 1fr;
+  }
+
+  .header-actions {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 220px));
+    justify-content: start;
   }
 }
 
-@media (max-width: 992px) {
-  .header-main {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-  }
-
-  .logo-wrapper {
-    width: 100%;
+@media (max-width: 980px) {
+  .header-inner {
+    width: min(100% - 32px, 1280px);
+    grid-template-columns: 1fr;
+    gap: 14px;
+    min-height: auto;
+    padding: 16px 72px 16px 0;
   }
 
   .brand-logo {
-    width: min(300px, 85vw);
+    width: min(270px, 100%);
   }
 
-  .contacts {
-    width: 100%;
-    gap: 12px;
+  .header-contacts {
+    grid-template-columns: 1fr;
   }
 
-  .header-actions {
-    width: 100%;
-    justify-content: space-between;
-    gap: 16px;
+  .contact-item {
+    min-height: 52px;
   }
 
-  .badge {
-    flex: 1;
-    text-align: center;
-  }
-
-  .cta-button {
-    flex: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .header {
-    padding: 20px 0;
-  }
-
-  .container {
-    padding: 0 20px;
-  }
-
-  .header-main {
-    gap: 20px;
-  }
-
-  .contacts {
-    gap: 10px;
-  }
-
-  .contact-row {
-    gap: 10px;
+  .office-address {
+    white-space: normal;
   }
 
   .header-actions {
-    flex-direction: column;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
-    gap: 12px;
-  }
-
-  .badge {
-    width: 100%;
-    padding: 10px 20px;
-  }
-
-  .cta-button {
-    width: 100%;
-    padding: 14px 24px;
   }
 }
 
 @media (max-width: 560px) {
-  .container {
-    padding: 0 16px;
+  .header-inner {
+    width: min(100% - 28px, 1280px);
+    padding-right: 62px;
   }
 
-  .header-main {
-    gap: 16px;
+  .brand-logo {
+    width: min(238px, 100%);
   }
 
-  .logo-wrapper {
-    max-width: calc(100vw - 96px);
+  .contact-item {
+    grid-template-columns: 30px minmax(0, 1fr);
+    padding: 8px;
   }
 
-  .contacts {
-    gap: 8px;
+  .contact-icon {
+    width: 30px;
+    height: 30px;
   }
 
-  .contact-row {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .addresses {
-    gap: 4px;
+  .phone-links {
+    flex-direction: column;
   }
 
   .header-actions {
-    gap: 10px;
+    grid-template-columns: 1fr;
+  }
+
+  .hdd-link,
+  .request-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hdd-link,
+  .request-button {
+    transition: none;
   }
 }
 </style>

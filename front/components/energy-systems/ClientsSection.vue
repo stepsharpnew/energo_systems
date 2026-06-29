@@ -201,42 +201,59 @@ export default {
 
 .clients-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: clamp(16px, 3vw, 28px);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(10px, 1.5vw, 18px);
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .client-card {
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 18px;
-  padding: 20px;
+  border: 1px solid rgba(216, 228, 237, 0.9);
+  border-radius: 8px;
+  padding: 16px 12px;
   text-align: center;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   will-change: transform, opacity;
 }
 
 .client-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.18);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
 }
 
 .client-logo {
   width: 100%;
-  height: 90px;
-  border-radius: 16px;
-  margin-bottom: 14px;
+  height: 72px;
+  border-radius: 8px;
+  margin-bottom: 12px;
   background-color: #ffffff;
 }
 
 .client-card p {
   margin: 0;
   font-weight: 600;
+  font-size: 13px;
+  line-height: 1.25;
   color: #334155;
+}
+
+@media (max-width: 1023px) {
+  .clients-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .clients-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 560px) {
   .clients-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: 1fr;
   }
 }
 </style>

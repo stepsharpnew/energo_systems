@@ -1,8 +1,6 @@
 <template>
   <VApp>
-    <ClientOnly>
-      <Preloader />
-    </ClientOnly>
+    <Preloader />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -10,42 +8,49 @@
 </template>
 
 <script setup>
-import Preloader from '~/components/energy-systems/Preloader.vue'
+import Preloader from "~/components/energy-systems/Preloader.vue";
 
-// Устанавливаем title и meta теги
 useHead({
-  title: 'Энергосистемы',
+  title: "Энергосистемы",
   meta: [
-    { name: 'description', content: 'Энергосистемы - ГНБ под ключ, электромонтажные работы, проектирование и инженерные сети в Москве и Московской области.' }
+    {
+      name: "description",
+      content: "Энергосистемы - ГНБ под ключ, электромонтажные работы, проектирование и инженерные сети в Москве и Московской области.",
+    },
   ],
   link: [
-    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=2' },
-    { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/image.png?v=3' },
-    { rel: 'apple-touch-icon', href: '/img/image.png?v=3' }
-  ]
-})
+    { rel: "icon", type: "image/x-icon", href: "/favicon.ico?v=2" },
+    { rel: "icon", type: "image/png", sizes: "32x32", href: "/img/image.png?v=3" },
+    { rel: "apple-touch-icon", href: "/img/image.png?v=3" },
+  ],
+});
 </script>
 
 <style>
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
-  font-family: "Arial", sans-serif;
+  overflow-x: hidden;
   background: #fff;
+  color: #142233;
+  font-family: Arial, sans-serif;
+}
+
+button,
+a {
+  touch-action: manipulation;
 }
 
 #__nuxt {
-  overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
+  overflow-x: hidden;
 }
 </style>

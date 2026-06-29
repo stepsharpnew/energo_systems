@@ -1,75 +1,124 @@
 <template>
   <section class="services-carousel" ref="servicesSection">
     <div class="container-1">
-      <h2 class="section-title">Наши услуги</h2>
-      <div class="carousel-indicators">
+      <div class="services-heading">
+        <div>
+          <p class="section-kicker">Услуги</p>
+          <h2>Наши услуги</h2>
+        </div>
+        <p>
+          Комплекс работ для подключения, строительства и эксплуатации объектов
+          электроснабжения.
+        </p>
+      </div>
+
+      <div class="services-directory" aria-label="Направления услуг">
         <button
           v-for="(service, index) in services"
-          :key="`indicator-${index}`"
-          class="indicator-dot"
+          :key="`directory-${service.id}`"
+          class="directory-item"
           :class="{ active: index === activeIndex }"
-          @click="goToSlide(index)"
-          :aria-label="`Перейти к услуге ${index + 1}`"
-        ></button>
-      </div>
-      
-      <div 
-        class="carousel-wrapper" 
-        ref="carouselWrapper"
-        @mouseenter="showNavButtons = true"
-        @mouseleave="showNavButtons = false"
-      >
-        <div 
-          class="carousel-track"
-          :style="{ transform: `translateX(-${activeIndex * 100}%)` }"
+          type="button"
+          @click="goToSlide(index, true)"
         >
-          <div
-            v-for="(service, index) in services"
-            :key="`card-${service.id}`"
-            class="carousel-card"
-            :class="{ active: index === activeIndex }"
-            :style="getCardStyle(service)"
-            @click="handleServiceClick(service, index)"
-          >
-            <span class="service-name">{{ service.name }}</span>
+          <span>{{ formatNumber(index + 1) }}</span>
+          {{ shortServiceName(service) }}
+        </button>
+      </div>
+
+      <div
+        class="showcase-shell"
+        ref="carouselWrapper"
+        @mouseenter="stopAutoPlay"
+        @mouseleave="startAutoPlay"
+        @focusin="stopAutoPlay"
+        @focusout="startAutoPlay"
+        @touchstart.passive="onTouchStart"
+        @touchend.passive="onTouchEnd"
+      >
+        <div class="showcase-copy">
+          <span class="slide-counter">
+            {{ activeNumber }} / {{ totalNumber }}
+          </span>
+
+          <transition name="copy-fade" mode="out-in">
+            <div
+              v-if="activeService"
+              :key="activeService.id"
+              class="service-copy-body"
+            >
+              <h3>{{ activeService.name }}</h3>
+              <p>{{ activeService.description }}</p>
+            </div>
+          </transition>
+
+          <div v-if="activeService" class="showcase-actions">
+            <button class="primary-action" type="button" @click="openActiveService">
+              Подробнее
+            </button>
+            <NuxtLink
+              v-if="activeService.id === 'hdd'"
+              class="secondary-link"
+              to="/services/hdd"
+            >
+              Страница ГНБ
+            </NuxtLink>
           </div>
         </div>
-        
-        <button
-          class="carousel-nav carousel-nav-prev"
-          :class="{ 'is-visible': showNavButtons }"
-          @click="prevSlide"
-          aria-label="Предыдущий слайд"
-        >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="rgba(255, 255, 255, 0.1)"/>
-            <path d="M14 8l-4 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <button
-          class="carousel-nav carousel-nav-next"
-          :class="{ 'is-visible': showNavButtons }"
-          @click="nextSlide"
-          aria-label="Следующий слайд"
-        >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="rgba(255, 255, 255, 0.1)"/>
-            <path d="M10 8l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-      
-      <div class="carousel-description-wrapper">
-        <transition name="description-flight" mode="out-in">
-          <div
-            class="carousel-description"
-            v-if="activeService"
-            :key="activeService.id"
-          >
-            <h2>{{ activeService.name }}</h2>
-            <p>{{ activeService.description }}</p>
+
+        <div class="showcase-media">
+          <transition name="image-fade" mode="out-in">
+            <div
+              v-if="activeService"
+              :key="activeService.id"
+              class="media-image"
+              :style="getImageStyle(activeService)"
+              role="img"
+              :aria-label="activeService.name"
+            ></div>
+          </transition>
+
+          <div class="media-caption" aria-hidden="true">
+            <span>Энергосистемы</span>
+            <span>Инженерные работы</span>
           </div>
-        </transition>
+
+          <div class="carousel-controls">
+            <button
+              class="carousel-nav"
+              type="button"
+              @click="prevSlide(true)"
+              aria-label="Предыдущая услуга"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M15 6 9 12l6 6" />
+              </svg>
+            </button>
+            <button
+              class="carousel-nav"
+              type="button"
+              @click="nextSlide(true)"
+              aria-label="Следующая услуга"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-dots" aria-label="Выбор услуги">
+        <button
+          v-for="(service, index) in services"
+          :key="`dot-${service.id}`"
+          class="carousel-dot"
+          :class="{ active: index === activeIndex }"
+          type="button"
+          @click="goToSlide(index, true)"
+          :aria-label="`Показать услугу ${index + 1}`"
+        >
+        </button>
       </div>
     </div>
   </section>
@@ -90,88 +139,93 @@ export default {
       activeIndex: 0,
       autoPlayInterval: null,
       isTransitioning: false,
-      showNavButtons: false,
+      touchStartX: 0,
     };
   },
   computed: {
     activeService() {
       return this.services[this.activeIndex] || null;
     },
+    activeNumber() {
+      return this.formatNumber(this.activeIndex + 1);
+    },
+    totalNumber() {
+      return this.formatNumber(this.services.length);
+    },
   },
   mounted() {
     this.startAutoPlay();
-    // Поддержка свайпов на мобильных
-    this.initTouchHandlers();
   },
   beforeUnmount() {
     this.stopAutoPlay();
-    this.removeTouchHandlers();
   },
   methods: {
-    getCardStyle(service) {
+    formatNumber(value) {
+      return String(value).padStart(2, "0");
+    },
+    shortServiceName(service) {
+      const labels = {
+        hdd: "ГНБ под ключ",
+        road: "Подключение к сетям",
+        water: "Технические условия",
+        sewer: "Согласование проекта",
+        power: "Электромонтаж",
+        gas: "Пуско-наладка",
+        design: "Эксплуатация объектов",
+        support: "Ремонт сетей",
+        heating: "Электролаборатория",
+        monitoring: "Вынос электросетей",
+      };
+
+      return labels[service?.id] || service?.name || "Услуга";
+    },
+    getImageStyle(service) {
       const layers = [
-        "linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7))",
+        "linear-gradient(90deg, rgba(8, 22, 35, 0.1), rgba(8, 22, 35, 0.34))",
       ];
-      if (service.image) {
+
+      if (service?.image) {
         layers.push(`url(${service.image})`);
       }
+
       return {
         backgroundImage: layers.join(", "),
       };
     },
-    handleServiceClick(service, index) {
-      // Если кликнули на уже активный слайд, открываем модалку
-      if (this.activeIndex === index) {
-        this.$emit("open-service-modal", service);
-        return;
-      }
-      // Переключаем на выбранный слайд
-      this.goToSlide(index, true);
+    openActiveService() {
+      if (!this.activeService) return;
+      this.$emit("open-service-modal", this.activeService);
     },
     goToSlide(index, isManual = false) {
-      if (this.isTransitioning) return;
-      if (index === this.activeIndex && !isManual) return;
-      
-      // Сбрасываем таймер при ручном переходе
+      if (this.isTransitioning || this.services.length === 0) return;
+
+      const nextIndex = (index + this.services.length) % this.services.length;
+      if (nextIndex === this.activeIndex) return;
+
       if (isManual) {
         this.resetAutoPlay();
       }
-      
+
       this.isTransitioning = true;
-      this.activeIndex = index;
-      
+      this.activeIndex = nextIndex;
+
       setTimeout(() => {
         this.isTransitioning = false;
-      }, 500);
+      }, 420);
     },
-    nextSlide() {
-      if (this.isTransitioning) return;
-      
-      this.isTransitioning = true;
-      this.activeIndex = (this.activeIndex + 1) % this.services.length;
-      
-      setTimeout(() => {
-        this.isTransitioning = false;
-      }, 500);
+    nextSlide(isManual = false) {
+      this.goToSlide(this.activeIndex + 1, isManual);
     },
-    prevSlide() {
-      if (this.isTransitioning) return;
-      
-      this.isTransitioning = true;
-      this.activeIndex = (this.activeIndex - 1 + this.services.length) % this.services.length;
-      
-      setTimeout(() => {
-        this.isTransitioning = false;
-      }, 500);
-      
-      // Сбрасываем таймер при ручном переходе
-      this.resetAutoPlay();
+    prevSlide(isManual = false) {
+      this.goToSlide(this.activeIndex - 1, isManual);
     },
     startAutoPlay() {
       this.stopAutoPlay();
+      if (this.services.length <= 1) return;
+
       this.autoPlayInterval = setInterval(() => {
-        this.nextSlide();
-      }, 5000);
+        this.nextSlide(false);
+      }, 6500);
     },
     stopAutoPlay() {
       if (this.autoPlayInterval) {
@@ -183,41 +237,23 @@ export default {
       this.stopAutoPlay();
       this.startAutoPlay();
     },
-    initTouchHandlers() {
-      const wrapper = this.$refs.carouselWrapper;
-      if (!wrapper) return;
-      
-      let touchStartX = 0;
-      let touchEndX = 0;
-      
-      wrapper.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      }, { passive: true });
-      
-      wrapper.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        this.handleSwipe(touchStartX, touchEndX);
-      }, { passive: true });
+    onTouchStart(event) {
+      this.touchStartX = event.changedTouches[0]?.screenX || 0;
     },
-    removeTouchHandlers() {
-      const wrapper = this.$refs.carouselWrapper;
-      if (!wrapper) return;
-      // Обработчики будут удалены автоматически при размонтировании компонента
+    onTouchEnd(event) {
+      const touchEndX = event.changedTouches[0]?.screenX || 0;
+      this.handleSwipe(this.touchStartX, touchEndX);
     },
     handleSwipe(startX, endX) {
       const swipeThreshold = 50;
       const diff = startX - endX;
-      
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-          // Свайп влево - следующий слайд
-          this.nextSlide();
-        } else {
-          // Свайп вправо - предыдущий слайд
-          this.prevSlide();
-        }
-        // Сбрасываем таймер при ручном переходе
-        this.resetAutoPlay();
+
+      if (Math.abs(diff) <= swipeThreshold) return;
+
+      if (diff > 0) {
+        this.nextSlide(true);
+      } else {
+        this.prevSlide(true);
       }
     },
   },
@@ -226,7 +262,7 @@ export default {
 
 <style scoped>
 .container-1 {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
   width: 100%;
@@ -234,381 +270,477 @@ export default {
 }
 
 .services-carousel {
-  padding: clamp(36px, 6vw, 72px) 0 20px;
   position: relative;
-  overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
-  box-sizing: border-box;
+  padding: clamp(48px, 7vw, 90px) 0;
+  overflow-x: hidden;
+  background: linear-gradient(180deg, #f5f9fc 0%, #ffffff 100%);
 }
 
-.section-title {
-  font-size: clamp(28px, 4vw, 42px);
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 clamp(16px, 2vw, 24px) 0;
-  text-align: center;
-  letter-spacing: -0.02em;
+.services-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(280px, 0.55fr);
+  align-items: end;
+  gap: clamp(24px, 5vw, 72px);
+  margin-bottom: clamp(24px, 4vw, 40px);
 }
 
-.carousel-indicators {
+.section-kicker {
+  margin: 0 0 10px;
+  color: #f05a28;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.services-heading h2 {
+  margin: 0;
+  color: #102234;
+  font-size: clamp(32px, 4.8vw, 58px);
+  font-weight: 850;
+  line-height: 1.02;
+}
+
+.services-heading p {
+  margin: 0;
+  color: #607286;
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.55;
+}
+
+.services-directory {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: clamp(8px, 1.2vw, 12px);
-  margin: 0 0 clamp(20px, 3vw, 32px) 0;
   flex-wrap: wrap;
-  padding: 0 24px;
+  gap: 8px;
+  margin: 0 0 18px;
 }
 
-.indicator-dot {
-  width: clamp(10px, 1.5vw, 14px);
-  height: clamp(10px, 1.5vw, 14px);
-  border-radius: 50%;
-  border: 2px solid rgba(15, 23, 42, 0.3);
-  background: transparent;
+.directory-item {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid #d8e4ed;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: #102234;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0;
-  position: relative;
-  outline: none;
+  box-shadow: 0 8px 18px rgba(16, 34, 52, 0.05);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
 
-.indicator-dot:hover {
-  border-color: rgba(15, 23, 42, 0.6);
-  transform: scale(1.2);
+.directory-item span {
+  color: #f05a28;
+  font-size: 11px;
+  font-weight: 850;
 }
 
-.indicator-dot.active {
-  background: #ff4800;
-  border-color: #ff4800;
-  width: clamp(14px, 2vw, 18px);
-  height: clamp(14px, 2vw, 18px);
-  box-shadow: 0 0 0 3px rgba(255, 72, 0, 0.2);
+.directory-item:hover {
+  border-color: #adc9dc;
+  box-shadow: 0 12px 24px rgba(16, 34, 52, 0.09);
+  transform: translateY(-1px);
 }
 
-.indicator-dot:focus-visible {
-  outline: 2px solid #ff4800;
-  outline-offset: 2px;
+.directory-item.active {
+  border-color: #f05a28;
+  background: #fff6f1;
+  color: #d84618;
 }
 
-
-.carousel-wrapper {
-  position: relative;
-  width: 100%;
+.showcase-shell {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
+  height: clamp(500px, 44vw, 590px);
+  min-height: 0;
+  border-radius: 8px;
   overflow: hidden;
-  margin: 0 auto;
-  padding: 40px 0;
+  background: #102234;
+  box-shadow: 0 24px 54px rgba(16, 34, 52, 0.18);
 }
 
-.carousel-track {
-  display: flex;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
-
-.carousel-card {
-  flex: 0 0 100%;
-  min-width: 100%;
-  height: clamp(320px, 38vw, 480px);
-  border-radius: 28px;
-  border: none;
-  color: #fff;
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 600;
-  text-align: left;
-  padding: clamp(24px, 3.5vw, 40px);
+.showcase-copy {
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  gap: 24px;
+  overflow: hidden;
+  padding: clamp(26px, 3.4vw, 42px);
+  color: #ffffff;
+}
+
+.slide-counter {
+  flex: 0 0 auto;
+  width: fit-content;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.service-copy-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.service-copy-body h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(24px, 2.8vw, 38px);
+  font-weight: 850;
+  line-height: 1.08;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.service-copy-body p {
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(15px, 1.35vw, 17px);
+  line-height: 1.56;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.showcase-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.primary-action,
+.secondary-link {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.primary-action {
+  border: 1px solid #f05a28;
+  background: #f05a28;
+  color: #ffffff;
+  box-shadow: 0 14px 26px rgba(240, 90, 40, 0.22);
+}
+
+.secondary-link {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.primary-action:hover {
+  background: #d84618;
+  border-color: #d84618;
+  transform: translateY(-1px);
+}
+
+.secondary-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.34);
+  transform: translateY(-1px);
+}
+
+.primary-action:focus-visible,
+.secondary-link:focus-visible,
+.carousel-nav:focus-visible,
+.directory-item:focus-visible,
+.carousel-dot:focus-visible {
+  outline: 3px solid rgba(240, 90, 40, 0.38);
+  outline-offset: 3px;
+}
+
+.showcase-media {
+  position: relative;
+  min-width: 0;
+  min-height: 100%;
+  overflow: hidden;
+  background: #20364b;
+}
+
+.media-image {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
-  transform: scale(0.9);
-  opacity: 0.7;
+  transform: scale(1.01);
 }
 
-.carousel-card.active {
-  transform: scale(1);
-  opacity: 1;
+.media-caption {
+  position: absolute;
+  left: clamp(18px, 3vw, 34px);
+  right: clamp(18px, 3vw, 34px);
+  bottom: clamp(18px, 3vw, 34px);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
-.carousel-card:hover {
-  filter: brightness(1.15) saturate(1.15);
-}
-
-.carousel-card.active:hover {
-  filter: brightness(1.2) saturate(1.2);
-}
-
-.service-name {
-  z-index: 1;
-  line-height: 1.3;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+.carousel-controls {
+  position: absolute;
+  top: clamp(18px, 3vw, 30px);
+  right: clamp(18px, 3vw, 30px);
+  display: flex;
+  gap: 10px;
+  z-index: 2;
 }
 
 .carousel-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%) scale(0.8);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  color: #ff4800;
-  cursor: pointer;
-  display: flex;
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  pointer-events: none;
-}
-
-.carousel-nav.is-visible {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 8px;
+  background: rgba(16, 34, 52, 0.72);
+  color: #ffffff;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .carousel-nav:hover {
-  background: #fff;
-  transform: translateY(-50%) scale(1);
-  box-shadow: 0 8px 24px rgba(255, 72, 0, 0.3);
-  color: #ff4800;
-}
-
-.carousel-nav:active {
-  transform: translateY(-50%) scale(0.95);
+  background: #f05a28;
+  border-color: #f05a28;
+  transform: translateY(-1px);
 }
 
 .carousel-nav svg {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  transition: transform 0.2s ease;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.carousel-nav:hover svg {
-  transform: scale(1.1);
-}
-
-.carousel-nav-prev:hover svg {
-  transform: scale(1.1) translateX(-2px);
-}
-
-.carousel-nav-next:hover svg {
-  transform: scale(1.1) translateX(2px);
-}
-
-.carousel-nav-prev {
-  left: 20px;
-}
-
-.carousel-nav-next {
-  right: 20px;
-}
-
-.carousel-description-wrapper {
-  margin-top: clamp(16px, 2.5vw, 28px);
-  height: 240px;
-  min-height: 240px;
-  max-height: 240px;
-}
-
-.carousel-description {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border-radius: 24px;
-  padding: clamp(20px, 3vw, 32px);
-  text-align: center;
-  height: 100%;
-  max-height: 100%;
+.carousel-dots {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  overflow: hidden;
+  gap: 10px;
+  margin-top: 18px;
 }
 
-.carousel-description h2 {
-  margin: 0 0 8px 0;
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 700;
-  color: #111827;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+.carousel-dot {
+  position: relative;
+  width: 28px;
+  height: 10px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
-.carousel-description p {
-  margin: 0;
-  color: #4a5568;
-  font-size: clamp(14px, 1.8vw, 18px);
-  line-height: 1.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  flex: 1;
+.carousel-dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(16, 34, 52, 0.34);
+  border-radius: 999px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-.description-flight-enter-active,
-.description-flight-leave-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.carousel-dot:hover::before {
+  border-color: #f05a28;
 }
 
-.description-flight-enter-from,
-.description-flight-leave-to {
+.carousel-dot.active::before {
+  width: 28px;
+  border-color: #f05a28;
+  background: #f05a28;
+  box-shadow: 0 0 0 4px rgba(240, 90, 40, 0.13);
+}
+
+.copy-fade-enter-active,
+.copy-fade-leave-active,
+.image-fade-enter-active,
+.image-fade-leave-active {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+
+.copy-fade-enter-from,
+.copy-fade-leave-to {
   opacity: 0;
-  transform: translateY(20px) scale(0.95);
+  transform: translateY(12px);
 }
 
-.description-flight-enter-to,
-.description-flight-leave-from {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.image-fade-enter-from,
+.image-fade-leave-to {
+  opacity: 0;
+  transform: scale(1.04);
 }
 
-@media (max-width: 992px) {
-  .carousel-wrapper {
-    padding: 40px 0;
+@media (max-width: 1023px) {
+  .services-heading {
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
 
-  .carousel-card {
-    height: clamp(220px, 42vw, 320px);
+  .showcase-shell {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+  }
+
+  .showcase-copy {
+    min-height: 320px;
+  }
+
+  .service-copy-body {
+    min-height: 0;
+  }
+
+  .showcase-media {
+    height: clamp(260px, 45vw, 420px);
+    min-height: 0;
+    order: -1;
+  }
+
+  .services-directory {
+    gap: 7px;
+  }
+}
+
+@media (max-width: 720px) {
+  .container-1 {
+    padding: 0 16px;
+  }
+
+  .services-carousel {
+    padding: 42px 0;
+  }
+
+  .showcase-copy {
+    padding: 22px;
+  }
+
+  .service-copy-body h3 {
+    font-size: clamp(23px, 7vw, 32px);
+    -webkit-line-clamp: 3;
+  }
+
+  .service-copy-body p {
+    -webkit-line-clamp: 5;
+  }
+
+  .showcase-actions,
+  .primary-action,
+  .secondary-link {
+    width: 100%;
+  }
+
+  .showcase-media {
+    height: 240px;
+  }
+
+  .media-caption {
+    display: none;
+  }
+
+  .directory-item {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-1 {
+    padding: 0 12px;
+  }
+
+  .carousel-controls {
+    top: 12px;
+    right: 12px;
   }
 
   .carousel-nav {
-    display: none;
+    width: 42px;
+    height: 42px;
+  }
+
+  .showcase-copy {
+    padding: 18px;
+    min-height: 300px;
   }
 }
 
-@media (max-width: 768px) {
-  .image-slide {
-    display: flex;
-  }
-
-  .container-1 {
-    padding: 0 16px;
-  }
-
-  .section-title {
-    font-size: clamp(24px, 5vw, 32px);
-    margin-bottom: clamp(12px, 2vw, 20px);
-  }
-
-  .carousel-indicators {
-    gap: 8px;
-    margin-bottom: clamp(16px, 2.5vw, 24px);
-    padding: 0 16px;
-  }
-
-  .indicator-dot {
-    width: 10px;
-    height: 10px;
-  }
-
-  .indicator-dot.active {
-    width: 12px;
-    height: 12px;
-  }
-
-  .carousel-wrapper {
-    padding: 30px 0;
-  }
-
-  .carousel-card {
-    height: 220px;
-    font-size: 16px;
-    padding: 20px;
-    border-radius: 20px;
-  }
-
-  .carousel-description-wrapper {
-    margin-top: clamp(12px, 2vw, 20px);
-    height: 180px;
-    min-height: 180px;
-    max-height: 180px;
-  }
-
-  .carousel-description {
-    padding: 16px;
-    border-radius: 20px;
-  }
-
-  .carousel-description h2 {
-    font-size: 18px;
-    margin-bottom: 6px;
-    -webkit-line-clamp: 2;
-  }
-
-  .carousel-description p {
-    font-size: 13px;
-    line-height: 1.4;
-    -webkit-line-clamp: 4;
-  }
-}
-
-@media (max-width: 560px) {
-  .container-1 {
-    padding: 0 12px;
-  }
-
-  .carousel-indicators {
-    gap: 6px;
-    padding: 0 12px;
-  }
-
-  .indicator-dot {
-    width: 8px;
-    height: 8px;
-    border-width: 1.5px;
-  }
-
-  .indicator-dot.active {
-    width: 10px;
-    height: 10px;
-  }
-
-  .carousel-wrapper {
-    padding: 30px 0;
-  }
-
-  .carousel-card {
-    height: 180px;
-    padding: 16px;
-  }
-
-  .carousel-description-wrapper {
-    height: 130px;
-    min-height: 130px;
-    max-height: 130px;
-  }
-
-  .carousel-description {
-    padding: 14px;
-  }
-
-  .carousel-description h2 {
-    font-size: 16px;
-    margin-bottom: 4px;
-    -webkit-line-clamp: 1;
-  }
-
-  .carousel-description p {
-    font-size: 12px;
-    line-height: 1.3;
-    -webkit-line-clamp: 4;
+@media (prefers-reduced-motion: reduce) {
+  .primary-action,
+  .secondary-link,
+  .carousel-nav,
+  .directory-item,
+  .carousel-dot,
+  .carousel-dot::before,
+  .copy-fade-enter-active,
+  .copy-fade-leave-active,
+  .image-fade-enter-active,
+  .image-fade-leave-active {
+    transition: none;
   }
 }
 </style>
