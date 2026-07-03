@@ -27,7 +27,7 @@
           </li>
           <li class="address-item">
             <span class="address-label">Солнечногорск:</span>
-            <span>141504, ул.Промышленная с 5</span>
+            <span>Московская область, г. Солнечногорск, ул. Промышленная, с. 5</span>
           </li>
         </ul>
       </div>
@@ -39,6 +39,35 @@
         <p class="founder">Дмитрий Чернявский - учредитель компании</p>
       </div>
     </div>
+
+    <section class="footer-maps" aria-labelledby="footer-maps-title">
+      <div class="footer-maps-heading">
+        <h4 id="footer-maps-title">Офисы на карте</h4>
+      </div>
+      <div class="footer-map-layout">
+        <div class="footer-address-list">
+          <article
+            v-for="office in mapOffices"
+            :key="office.title"
+            class="map-address-card"
+          >
+            <span class="address-label">{{ office.title }}</span>
+            <span>{{ office.address }}</span>
+          </article>
+        </div>
+        <div class="map-card">
+          <iframe
+            class="map-frame"
+            :src="mapSrc"
+            title="Яндекс Карта: офисы в Москве и Солнечногорске"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
     <div class="footer-bottom">
       <span>© {{ currentYear }} Энергосистемы. Все права защищены.</span>
     </div>
@@ -48,6 +77,21 @@
 <script>
 export default {
   name: 'Footer',
+  data() {
+    return {
+      mapOffices: [
+        {
+          title: 'Москва',
+          address: 'Москва, улица Руставели, 14с6',
+        },
+        {
+          title: 'Солнечногорск',
+          address: 'Московская область, г. Солнечногорск, ул. Промышленная, с. 5',
+        },
+      ],
+      mapSrc: 'https://yandex.ru/map-widget/v1/?ll=36.996500%2C56.186500&z=8&l=map&pt=37.594900%2C55.814500%2Cpm2blm~36.996500%2C56.186500%2Cpm2rdm',
+    };
+  },
   computed: {
     currentYear() {
       return new Date().getFullYear();
@@ -180,6 +224,64 @@ export default {
   font-size: clamp(12px, 1.4vw, 13px);
 }
 
+.footer-maps {
+  max-width: 1400px;
+  margin: 0 auto clamp(24px, 3vw, 32px);
+}
+
+.footer-maps-heading {
+  margin-bottom: 16px;
+}
+
+.footer-maps-heading h4 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(16px, 2vw, 18px);
+  font-weight: 700;
+}
+
+.footer-map-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.34fr) minmax(0, 0.66fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.footer-address-list {
+  display: grid;
+  gap: 12px;
+}
+
+.map-address-card,
+.map-card {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.map-address-card {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 14px 16px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(13px, 1.5vw, 14px);
+  line-height: 1.45;
+}
+
+.map-card {
+  overflow: hidden;
+}
+
+.map-frame {
+  display: block;
+  width: 100%;
+  height: clamp(300px, 36vw, 420px);
+  border: 0;
+  background: #1f2933;
+}
+
 .founder {
   margin-top: clamp(12px, 2vw, 16px);
   font-size: clamp(12px, 1.4vw, 13px);
@@ -212,6 +314,10 @@ export default {
 
   .footer-logo {
     margin-bottom: 12px;
+  }
+
+  .footer-map-layout {
+    grid-template-columns: 1fr;
   }
 }
 

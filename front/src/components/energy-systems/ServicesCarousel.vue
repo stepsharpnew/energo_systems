@@ -416,9 +416,7 @@ export default {
 
 .carousel-description-wrapper {
   margin-top: clamp(16px, 2.5vw, 28px);
-  height: 240px;
   min-height: 240px;
-  max-height: 240px;
 }
 
 .carousel-description {
@@ -438,15 +436,13 @@ export default {
 
 .carousel-description h2 {
   margin: 0 0 8px 0;
-  font-size: clamp(22px, 3vw, 28px);
+  font-size: clamp(21px, 2.4vw, 26px);
   font-weight: 700;
   color: #111827;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  line-height: 1.22;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  word-break: normal;
 }
 
 .carousel-description p {
@@ -536,9 +532,7 @@ export default {
 
   .carousel-description-wrapper {
     margin-top: clamp(12px, 2vw, 20px);
-    height: 180px;
     min-height: 180px;
-    max-height: 180px;
   }
 
   .carousel-description {
@@ -549,7 +543,6 @@ export default {
   .carousel-description h2 {
     font-size: 18px;
     margin-bottom: 6px;
-    -webkit-line-clamp: 2;
   }
 
   .carousel-description p {
@@ -590,9 +583,7 @@ export default {
   }
 
   .carousel-description-wrapper {
-    height: 130px;
     min-height: 130px;
-    max-height: 130px;
   }
 
   .carousel-description {
@@ -602,7 +593,6 @@ export default {
   .carousel-description h2 {
     font-size: 16px;
     margin-bottom: 4px;
-    -webkit-line-clamp: 1;
   }
 
   .carousel-description p {

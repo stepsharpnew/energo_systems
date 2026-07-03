@@ -28,15 +28,24 @@
           </span>
         </div>
 
-        <div class="contact-item">
+        <div class="contact-item contact-item-offices">
           <span class="contact-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
               <path d="M12 3.8a5.7 5.7 0 0 0-5.7 5.7c0 4.2 5.7 10.7 5.7 10.7s5.7-6.5 5.7-10.7A5.7 5.7 0 0 0 12 3.8Zm0 7.9a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z" />
             </svg>
           </span>
           <span class="contact-copy">
-            <span class="contact-label">Офис</span>
-            <span class="office-address">Москва, улица Руставели, 14с6</span>
+            <span class="contact-label">Офисы</span>
+            <span class="office-addresses">
+              <span class="office-address">
+                <span class="office-city">Москва</span>
+                <span>улица Руставели, 14с6</span>
+              </span>
+              <span class="office-address">
+                <span class="office-city">Солнечногорск</span>
+                <span>Московская область, г. Солнечногорск, ул. Промышленная, с. 5</span>
+              </span>
+            </span>
           </span>
         </div>
 
@@ -88,9 +97,9 @@ export default {
   min-height: 92px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(230px, 300px) minmax(360px, 1fr) auto;
+  grid-template-columns: minmax(210px, 280px) minmax(0, 1fr) auto;
   align-items: center;
-  gap: clamp(22px, 3.2vw, 48px);
+  gap: clamp(18px, 2.6vw, 34px);
   padding: 16px 0;
 }
 
@@ -119,7 +128,7 @@ export default {
 .header-contacts {
   min-width: 0;
   display: grid;
-  grid-template-columns: minmax(190px, 0.9fr) minmax(180px, 1fr) minmax(170px, 0.8fr);
+  grid-template-columns: minmax(176px, 0.72fr) minmax(260px, 1.36fr) minmax(170px, 0.72fr);
   gap: 10px;
   align-items: stretch;
   margin: 0;
@@ -141,6 +150,10 @@ export default {
 
 .contact-item-phone {
   grid-template-columns: 34px minmax(0, 1fr);
+}
+
+.contact-item-offices {
+  align-items: flex-start;
 }
 
 .contact-icon {
@@ -196,20 +209,35 @@ export default {
   text-decoration: none;
 }
 
+.office-addresses {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
 .phone-links a,
 .mail-link {
   white-space: nowrap;
 }
 
 .office-address {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: grid;
+  gap: 2px;
+  white-space: normal;
+}
+
+.office-city {
+  color: #2d7aac;
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.1;
 }
 
 .mail-link {
   color: #2d7aac;
+  overflow-wrap: break-word;
+  white-space: normal;
+  word-break: normal;
 }
 
 .phone-links a:hover,

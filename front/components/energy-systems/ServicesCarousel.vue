@@ -406,14 +406,12 @@ export default {
 .service-copy-body h3 {
   margin: 0;
   color: #ffffff;
-  font-size: clamp(24px, 2.8vw, 38px);
+  font-size: clamp(22px, 1.9vw, 28px);
   font-weight: 850;
-  line-height: 1.08;
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  line-height: 1.16;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  word-break: normal;
 }
 
 .service-copy-body p {
@@ -680,8 +678,7 @@ export default {
   }
 
   .service-copy-body h3 {
-    font-size: clamp(23px, 7vw, 32px);
-    -webkit-line-clamp: 3;
+    font-size: clamp(22px, 6vw, 29px);
   }
 
   .service-copy-body p {
