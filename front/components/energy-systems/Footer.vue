@@ -21,14 +21,6 @@
           <li>
             <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su" class="contact-link">sales@e-systems.su</a>
           </li>
-          <li class="address-item">
-            <span class="address-label">Солнечногорск:</span>
-            <span>Промышленная улица, с. 5, Солнечногорск, Московская область</span>
-          </li>
-          <li class="address-item">
-            <span class="address-label">Москва:</span>
-            <span>улица Руставели, 14с6</span>
-          </li>
         </ul>
       </div>
       <div class="footer-column">
@@ -45,16 +37,6 @@
         <h4 id="footer-maps-title">Офис на карте</h4>
       </div>
       <div class="footer-map-layout">
-        <div class="footer-address-list">
-          <article
-            v-for="office in mapOffices"
-            :key="office.title"
-            class="map-address-card"
-          >
-            <span class="address-label">{{ office.title }}</span>
-            <span>{{ office.address }}</span>
-          </article>
-        </div>
         <div class="map-card">
           <iframe
             class="map-frame"
@@ -79,12 +61,6 @@ export default {
   name: 'Footer',
   data() {
     return {
-      mapOffices: [
-        {
-          title: 'Солнечногорск',
-          address: 'Промышленная улица, с. 5, Солнечногорск, Московская область',
-        },
-      ],
       mapSrc: 'https://yandex.ru/map-widget/v1/?indoorLevel=1&ll=36.993019%2C56.174625&mode=search&oid=92396911738&ol=biz&z=17.58',
     };
   },
@@ -208,18 +184,6 @@ export default {
   color: #ff4800;
 }
 
-.address-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.address-label {
-  font-weight: 600;
-  color: #ff4800;
-  font-size: clamp(12px, 1.4vw, 13px);
-}
-
 .footer-maps {
   max-width: 1400px;
   margin: 0 auto clamp(24px, 3vw, 32px);
@@ -237,33 +201,14 @@ export default {
 }
 
 .footer-map-layout {
-  display: grid;
-  grid-template-columns: minmax(240px, 0.34fr) minmax(0, 0.66fr);
-  gap: 16px;
-  align-items: stretch;
+  display: block;
 }
 
-.footer-address-list {
-  display: grid;
-  gap: 12px;
-}
-
-.map-address-card,
 .map-card {
   min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
-}
-
-.map-address-card {
-  display: grid;
-  align-content: start;
-  gap: 6px;
-  padding: 14px 16px;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: clamp(13px, 1.5vw, 14px);
-  line-height: 1.45;
 }
 
 .map-card {
@@ -312,9 +257,6 @@ export default {
     margin-bottom: 12px;
   }
 
-  .footer-map-layout {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 560px) {

@@ -10,10 +10,32 @@
     <div class="services-detail-container">
       <div class="container-1">
         <div class="services-detail-header">
-          <h1>{{ selectedService?.name || 'Наши услуги' }}</h1>
-          <p class="subtitle">
-            {{ selectedService?.description || 'Выберите интересующую вас услугу для получения подробной информации' }}
-          </p>
+          <div class="detail-header-copy">
+            <p class="detail-eyebrow">{{ selectedService ? shortServiceName(selectedService) : 'Услуги' }}</p>
+            <h1>{{ selectedService?.name || 'Наши услуги' }}</h1>
+            <p class="subtitle">
+              {{ selectedService?.description || 'Выберите интересующую вас услугу для получения подробной информации' }}
+            </p>
+            <div v-if="selectedService?.highlights" class="detail-highlights">
+              <span
+                v-for="highlight in selectedService.highlights.slice(0, 4)"
+                :key="highlight"
+              >
+                {{ highlight }}
+              </span>
+            </div>
+          </div>
+
+          <div v-if="selectedService" class="detail-header-media">
+            <img
+              :src="selectedServiceImage"
+              :alt="selectedService.name"
+            >
+            <div class="media-note">
+              <span>Энергосистемы</span>
+              <strong>{{ shortServiceName(selectedService) }}</strong>
+            </div>
+          </div>
         </div>
 
         <div class="services-detail-content">
@@ -142,6 +164,32 @@ const services = servicesDetailData
 const selectedServiceId = ref(route.params.id || services[0]?.id || null)
 const showContactModal = ref(false)
 
+const imageMap = {
+  hdd: '/img/service/service-center0.jpg',
+  road: '/img/service/service-center1.jpg',
+  water: '/img/service/service-center2.jpg',
+  sewer: '/img/service/service-center3.jpg',
+  power: '/img/service/service-center4.jpg',
+  gas: '/img/service/service-center5.jpg',
+  design: '/img/service/service-center6.jpg',
+  support: '/img/service/service-center7.jpg',
+  heating: '/img/service/service-center8.jpg',
+  monitoring: '/img/service/service-center9.jpg',
+}
+
+const labelMap = {
+  hdd: 'ГНБ под ключ',
+  road: 'Подключение к сетям',
+  water: 'Технические условия',
+  sewer: 'Согласование проекта',
+  power: 'Электромонтаж',
+  gas: 'Пуско-наладка',
+  design: 'Эксплуатация объектов',
+  support: 'Ремонт сетей',
+  heating: 'Электролаборатория',
+  monitoring: 'Вынос электросетей',
+}
+
 const navItems = [
   { key: 'hero', label: 'Главная' },
   { key: 'services', label: 'Услуги' },
@@ -155,6 +203,12 @@ const navItems = [
 const selectedService = computed(() => {
   return services.find(s => s.id === selectedServiceId.value)
 })
+
+const selectedServiceImage = computed(() => {
+  return imageMap[selectedService.value?.id] || '/img/service/service-center0.jpg'
+})
+
+const shortServiceName = (service) => labelMap[service?.id] || service?.name || 'Услуга'
 
 useHead(() => {
   const service = selectedService.value
@@ -251,7 +305,7 @@ const scrollToSection = (key) => {
 }
 
 .services-detail-container {
-  padding: 40px 0;
+  padding: 36px 0 56px;
 }
 
 .container-1 {
@@ -262,19 +316,107 @@ const scrollToSection = (key) => {
 }
 
 .services-detail-header {
-  text-align: center;
-  margin-bottom: 48px;
+  min-height: 390px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.58fr);
+  gap: 30px;
+  align-items: stretch;
+  overflow: hidden;
+  margin-bottom: 38px;
+  border-radius: 8px;
+  background: #172334;
 }
 
 .services-detail-header h1 {
-  font-size: clamp(32px, 4vw, 48px);
-  color: #0f172a;
-  margin-bottom: 12px;
+  margin: 0;
+  color: #ffffff;
+  font-size: 44px;
+  font-weight: 850;
+  line-height: 1.06;
 }
 
 .subtitle {
-  color: #61728a;
+  max-width: 760px;
+  margin: 18px 0 0;
+  color: rgba(255, 255, 255, 0.78);
   font-size: 18px;
+  line-height: 1.62;
+}
+
+.detail-header-copy {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  padding: 42px;
+}
+
+.detail-eyebrow {
+  margin: 0 0 12px;
+  color: #f05a28;
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.detail-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 26px;
+}
+
+.detail-highlights span {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  color: #e9f4fb;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.2;
+  border: 1px solid rgba(143, 199, 236, 0.36);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.detail-header-media {
+  position: relative;
+  min-width: 0;
+  min-height: 100%;
+}
+
+.detail-header-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.media-note {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  color: #ffffff;
+  background: rgba(8, 20, 32, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+}
+
+.media-note span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.media-note strong {
+  font-size: 18px;
+  line-height: 1.2;
 }
 
 .services-detail-content {
@@ -604,6 +746,14 @@ const scrollToSection = (key) => {
     grid-template-columns: 1fr;
   }
 
+  .services-detail-header {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-header-media {
+    min-height: 260px;
+  }
+
   .services-list {
     margin-bottom: 32px;
   }
@@ -615,7 +765,7 @@ const scrollToSection = (key) => {
 
 @media (max-width: 768px) {
   .services-detail-header h1 {
-    font-size: 28px;
+    font-size: 34px;
   }
 
   .subtitle {
@@ -666,6 +816,10 @@ const scrollToSection = (key) => {
   .contact-button,
   .back-button {
     width: 100%;
+  }
+
+  .detail-header-copy {
+    padding: 28px;
   }
 }
 </style>
