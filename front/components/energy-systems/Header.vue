@@ -39,7 +39,7 @@
             <span class="office-addresses">
               <span class="office-address">
                 <span class="office-city">Солнечногорск</span>
-                <span>Московская область, г. Солнечногорск, ул. Промышленная, с. 5</span>
+                <span>Промышленная улица, с. 5, Солнечногорск, Московская область</span>
               </span>
               <span class="office-address">
                 <span class="office-city">Москва</span>

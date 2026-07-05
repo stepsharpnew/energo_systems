@@ -23,7 +23,7 @@
           </li>
           <li class="address-item">
             <span class="address-label">Солнечногорск:</span>
-            <span>Московская область, г. Солнечногорск, ул. Промышленная, с. 5</span>
+            <span>Промышленная улица, с. 5, Солнечногорск, Московская область</span>
           </li>
           <li class="address-item">
             <span class="address-label">Москва:</span>
@@ -53,14 +53,6 @@
           >
             <span class="address-label">{{ office.title }}</span>
             <span>{{ office.address }}</span>
-            <a
-              class="map-org-link"
-              :href="office.mapUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Открыть карточку в Яндекс Картах
-            </a>
           </article>
         </div>
         <div class="map-card">
@@ -90,11 +82,10 @@ export default {
       mapOffices: [
         {
           title: 'Солнечногорск',
-          address: 'Московская область, г. Солнечногорск, ул. Промышленная, с. 5',
-          mapUrl: 'https://yandex.ru/maps/-/CTqFiJ8l',
+          address: 'Промышленная улица, с. 5, Солнечногорск, Московская область',
         },
       ],
-      mapSrc: 'https://yandex.ru/map-widget/v1/?ll=36.996500%2C56.186500&z=15&l=map&pt=36.996500%2C56.186500%2Cpm2rdm',
+      mapSrc: 'https://yandex.ru/map-widget/v1/?indoorLevel=1&ll=36.993019%2C56.174625&mode=search&oid=92396911738&ol=biz&z=17.58',
     };
   },
   computed: {
@@ -273,20 +264,6 @@ export default {
   color: rgba(255, 255, 255, 0.78);
   font-size: clamp(13px, 1.5vw, 14px);
   line-height: 1.45;
-}
-
-.map-org-link {
-  width: fit-content;
-  margin-top: 6px;
-  color: #ffffff;
-  font-weight: 700;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.42);
-}
-
-.map-org-link:hover {
-  color: #ff7a2f;
-  border-bottom-color: currentColor;
 }
 
 .map-card {
