@@ -28,12 +28,12 @@
             </svg>
             <div class="addresses">
               <span>
-                <strong>Москва:</strong>
-                улица Руставели, 14с6
-              </span>
-              <span>
                 <strong>Солнечногорск:</strong>
                 Московская область, г. Солнечногорск, ул. Промышленная, с. 5
+              </span>
+              <span>
+                <strong>Москва:</strong>
+                улица Руставели, 14с6
               </span>
             </div>
           </div>

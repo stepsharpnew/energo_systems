@@ -22,12 +22,12 @@
             <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su" class="contact-link">sales@e-systems.su</a>
           </li>
           <li class="address-item">
-            <span class="address-label">Москва:</span>
-            <span>улица Руставели, 14с6</span>
-          </li>
-          <li class="address-item">
             <span class="address-label">Солнечногорск:</span>
             <span>Московская область, г. Солнечногорск, ул. Промышленная, с. 5</span>
+          </li>
+          <li class="address-item">
+            <span class="address-label">Москва:</span>
+            <span>улица Руставели, 14с6</span>
           </li>
         </ul>
       </div>
@@ -42,7 +42,7 @@
 
     <section class="footer-maps" aria-labelledby="footer-maps-title">
       <div class="footer-maps-heading">
-        <h4 id="footer-maps-title">Офисы на карте</h4>
+        <h4 id="footer-maps-title">Офис на карте</h4>
       </div>
       <div class="footer-map-layout">
         <div class="footer-address-list">
@@ -53,13 +53,21 @@
           >
             <span class="address-label">{{ office.title }}</span>
             <span>{{ office.address }}</span>
+            <a
+              class="map-org-link"
+              :href="office.mapUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Открыть карточку в Яндекс Картах
+            </a>
           </article>
         </div>
         <div class="map-card">
           <iframe
             class="map-frame"
             :src="mapSrc"
-            title="Яндекс Карта: офисы в Москве и Солнечногорске"
+            title="Яндекс Карта: офис в Солнечногорске"
             loading="lazy"
             allowfullscreen
             referrerpolicy="no-referrer-when-downgrade"
@@ -81,15 +89,12 @@ export default {
     return {
       mapOffices: [
         {
-          title: 'Москва',
-          address: 'Москва, улица Руставели, 14с6',
-        },
-        {
           title: 'Солнечногорск',
           address: 'Московская область, г. Солнечногорск, ул. Промышленная, с. 5',
+          mapUrl: 'https://yandex.ru/maps/-/CTqFiJ8l',
         },
       ],
-      mapSrc: 'https://yandex.ru/map-widget/v1/?ll=36.996500%2C56.186500&z=8&l=map&pt=37.594900%2C55.814500%2Cpm2blm~36.996500%2C56.186500%2Cpm2rdm',
+      mapSrc: 'https://yandex.ru/map-widget/v1/?ll=36.996500%2C56.186500&z=15&l=map&pt=36.996500%2C56.186500%2Cpm2rdm',
     };
   },
   computed: {
@@ -263,11 +268,25 @@ export default {
 .map-address-card {
   display: grid;
   align-content: start;
-  gap: 4px;
+  gap: 6px;
   padding: 14px 16px;
   color: rgba(255, 255, 255, 0.78);
   font-size: clamp(13px, 1.5vw, 14px);
   line-height: 1.45;
+}
+
+.map-org-link {
+  width: fit-content;
+  margin-top: 6px;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.42);
+}
+
+.map-org-link:hover {
+  color: #ff7a2f;
+  border-bottom-color: currentColor;
 }
 
 .map-card {

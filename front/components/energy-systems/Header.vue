@@ -38,12 +38,12 @@
             <span class="contact-label">Офисы</span>
             <span class="office-addresses">
               <span class="office-address">
-                <span class="office-city">Москва</span>
-                <span>улица Руставели, 14с6</span>
-              </span>
-              <span class="office-address">
                 <span class="office-city">Солнечногорск</span>
                 <span>Московская область, г. Солнечногорск, ул. Промышленная, с. 5</span>
+              </span>
+              <span class="office-address">
+                <span class="office-city">Москва</span>
+                <span>улица Руставели, 14с6</span>
               </span>
             </span>
           </span>
@@ -128,7 +128,7 @@ export default {
 .header-contacts {
   min-width: 0;
   display: grid;
-  grid-template-columns: minmax(176px, 0.72fr) minmax(260px, 1.36fr) minmax(170px, 0.72fr);
+  grid-template-columns: minmax(176px, 0.72fr) minmax(260px, 1.3fr) minmax(205px, 0.84fr);
   gap: 10px;
   align-items: stretch;
   margin: 0;
@@ -235,9 +235,9 @@ export default {
 
 .mail-link {
   color: #2d7aac;
-  overflow-wrap: break-word;
-  white-space: normal;
-  word-break: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .phone-links a:hover,
