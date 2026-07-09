@@ -39,6 +39,9 @@ async function handleLeadSubmit(req, res) {
 }
 
 app.post("/api/lead", handleLeadSubmit);
+app.get("/api/health", (req, res) => {
+  res.json({ ok: true });
+});
 
 app.listen(PORT, () => {
   console.log(`HTTP-сервис заявок запущен на порту ${PORT}`);

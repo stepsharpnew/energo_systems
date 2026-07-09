@@ -32,8 +32,9 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            rm -rf /home/${{ secrets.SERVER_USER }}/app
+            sudo rm -rf /home/${{ secrets.SERVER_USER }}/app
             mkdir -p /home/${{ secrets.SERVER_USER }}/app
+            sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /home/${{ secrets.SERVER_USER }}/app
 
       - name: 🚀 Деплой на сервер по SSH
         uses: appleboy/scp-action@v0.1.7
@@ -83,10 +84,28 @@ jobs:
             fi
             echo ""
 
-            sudo docker compose down
-            timeout 300s sudo docker compose up -d --build
+            echo "Проверка endpoint заявок:"
+            if grep -R "/api/telegram/lead" -n front/components front/src/components tg_bot/src; then
+              echo "❌ Найден старый endpoint /api/telegram/lead"
+              exit 1
+            fi
+            if grep -R "/api/lead" -n front/components front/src/components tg_bot/src >/dev/null; then
+              echo "✅ Используется новый endpoint /api/lead"
+            else
+              echo "❌ Endpoint /api/lead не найден"
+              exit 1
+            fi
+            echo ""
+
+            sudo docker compose down --remove-orphans
+            timeout 300s sudo docker compose build --no-cache frontend tg_bot
+            sudo docker compose up -d --force-recreate --remove-orphans
             sleep 10 # Ожидание запуска контейнеров
 
             echo ""
             echo "=== Статус контейнеров ==="
             sudo docker compose ps
+
+            echo ""
+            echo "=== Проверка API ==="
+            curl -f -i http://127.0.0.1/api/health -H 'Host: e-systems.su'
