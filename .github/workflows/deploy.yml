@@ -22,7 +22,7 @@ jobs:
           fi
 
           printf '%s\n' "$DOTENV" > .env
-          chmod 600 .env
+          chmod 644 .env
 
       - name: 🧹 Очистка старой папки на сервере
         uses: appleboy/ssh-action@master
@@ -65,6 +65,7 @@ jobs:
             echo "Проверка .env:"
             if [ -s .env ]; then
               echo "✅ .env создан из GitHub secret DOTENV"
+              chmod 600 .env
             else
               echo "❌ .env не найден или пустой"
               exit 1
