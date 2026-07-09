@@ -291,7 +291,7 @@ export default {
           service: selectedService ? selectedService.name : undefined,
         };
 
-        const response = await axios.post("/api/telegram/lead", payload, {
+        const response = await axios.post("/api/lead", payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -301,7 +301,7 @@ export default {
         this.$emit("close");
         this.resetForm();
       } catch (error) {
-        console.error("Ошибка при отправке заявки в Telegram:", error);
+        console.error("Ошибка при отправке заявки на email:", error);
         alert("Произошла ошибка при отправке заявки. Попробуйте еще раз позже.");
       } finally {
         this.isSubmitting = false;

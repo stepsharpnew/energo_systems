@@ -291,7 +291,7 @@ export default {
         };
 
         // Используем $fetch из Nuxt (доступен глобально в Nuxt 3)
-        const response = await $fetch("/api/telegram/lead", {
+        const response = await $fetch("/api/lead", {
           method: "POST",
           body: payload,
           headers: {
@@ -303,7 +303,7 @@ export default {
         this.$emit("close");
         this.resetForm();
       } catch (error) {
-        console.error("Ошибка при отправке заявки в Telegram:", error);
+        console.error("Ошибка при отправке заявки на email:", error);
         alert("Произошла ошибка при отправке заявки. Попробуйте еще раз позже.");
       } finally {
         this.isSubmitting = false;

@@ -37,10 +37,15 @@ services:
     expose:
       - "3001"
     environment:
-      - BOT_TOKEN=${BOT_TOKEN}
-      - ADMIN_CHAT_IDS=${ADMIN_CHAT_IDS}
-      - ALLOWED_USER_IDS=${ALLOWED_USER_IDS}
       - PORT=3001
+      - SMTP_HOST=${SMTP_HOST:-smtp.mail.ru}
+      - SMTP_PORT=${SMTP_PORT:-465}
+      - SMTP_SECURE=${SMTP_SECURE:-true}
+      - SMTP_USER=${SMTP_USER:-application@e-systems.su}
+      - SMTP_PASS=${SMTP_PASS:-}
+      - EMAIL_FROM=${EMAIL_FROM:-Энергосистемы <application@e-systems.su>}
+      - EMAIL_TO=${EMAIL_TO:-sales@e-systems.su}
+      - EMAIL_CC=${EMAIL_CC:-inbox@e-systems.su}
     networks:
       - dev
 

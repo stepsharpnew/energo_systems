@@ -14,6 +14,5 @@ COPY src ./src
 # Открываем порт для HTTP API
 EXPOSE 3001
 
-# Запускаем бота
+# Запускаем HTTP-сервис заявок
 CMD ["npm", "start"]
-

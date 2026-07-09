@@ -1,10 +1,10 @@
 {
-  "name": "tg_bot",
+  "name": "lead_mailer",
   "version": "1.0.0",
-  "main": "src/bot.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node src/bot.js",
-    "dev": "NODE_ENV=development node src/bot.js",
+    "start": "node src/server.js",
+    "dev": "NODE_ENV=development node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,9 +12,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "grammy": "^1.38.4",
     "express": "^4.21.2",
-    "cors": "^2.8.5"
+    "nodemailer": "^9.0.3"
   }
 }

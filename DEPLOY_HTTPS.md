@@ -12,6 +12,21 @@ the webroot challenge path:
 NGINX_CONF=./nginx.http.conf docker compose up -d --build
 ```
 
+Before calling Certbot, verify that nginx and Certbot use the same challenge
+directory:
+
+```bash
+mkdir -p certbot/www/.well-known/acme-challenge
+printf 'ok\n' > certbot/www/.well-known/acme-challenge/ping
+curl -i http://127.0.0.1/.well-known/acme-challenge/ping
+curl -i http://e-systems.su/.well-known/acme-challenge/ping
+```
+
+Both `curl` commands must return `ok`. If the public domain returns 404, nginx
+is serving a different webroot or the domain points to another server/address.
+Pay special attention to `AAAA` records: Let's Encrypt may validate the domain
+over IPv6.
+
 Issue the certificate:
 
 ```bash
