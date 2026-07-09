@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
 
 jobs:
   deploy:
@@ -14,6 +11,18 @@ jobs:
     steps:
       - name: 🛎️ Клонирование репозитория
         uses: actions/checkout@v4
+
+      - name: 🔐 Создание .env из секрета DOTENV
+        env:
+          DOTENV: ${{ secrets.DOTENV }}
+        run: |
+          if [ -z "$DOTENV" ]; then
+            echo "❌ GitHub secret DOTENV is empty or missing"
+            exit 1
+          fi
+
+          printf '%s\n' "$DOTENV" > .env
+          chmod 600 .env
 
       - name: 🧹 Очистка старой папки на сервере
         uses: appleboy/ssh-action@master
@@ -51,6 +60,14 @@ jobs:
             # Проверка структуры перед запуском
             echo "Проверка структуры файлов:"
             ls -la
+            echo ""
+            echo "Проверка .env:"
+            if [ -s .env ]; then
+              echo "✅ .env создан из GitHub secret DOTENV"
+            else
+              echo "❌ .env не найден или пустой"
+              exit 1
+            fi
             echo ""
             echo "Проверка front/:"
             ls -la front/ || echo "⚠️ Папка front не найдена"
