@@ -14,7 +14,8 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Энергосистемы - ГНБ под ключ, электромонтажные работы, проектирование и инженерные сети в Москве и Московской области.' }
+        { name: 'description', content: 'Энергосистемы - ГНБ под ключ, электромонтажные работы, проектирование и инженерные сети в Москве и Московской области.' },
+        { name: 'yandex-verification', content: 'ce77c5421bfe46c7' }
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=2' },
