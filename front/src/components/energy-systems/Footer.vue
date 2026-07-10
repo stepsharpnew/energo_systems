@@ -22,6 +22,9 @@
           <li>
             <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su" class="contact-link">sales@e-systems.su</a>
           </li>
+          <li>
+            <a href="mailto:inbox@e-systems.su" class="contact-link">inbox@e-systems.su</a>
+          </li>
         </ul>
       </div>
       <div class="footer-column">

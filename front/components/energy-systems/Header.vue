@@ -57,7 +57,10 @@
           </span>
           <span class="contact-copy">
             <span class="contact-label">Почта</span>
-            <a class="mail-link" href="mailto:sales@e-systems.su?cc=inbox@e-systems.su">sales@e-systems.su</a>
+            <span class="mail-links">
+              <a class="mail-link" href="mailto:sales@e-systems.su?cc=inbox@e-systems.su">sales@e-systems.su</a>
+              <a class="mail-link" href="mailto:inbox@e-systems.su">inbox@e-systems.su</a>
+            </span>
           </span>
         </div>
       </address>
@@ -196,6 +199,12 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 10px;
+}
+
+.mail-links {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
 }
 
 .phone-links a,

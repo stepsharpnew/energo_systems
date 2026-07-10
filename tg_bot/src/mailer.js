@@ -42,7 +42,7 @@ function getEmailConfig() {
 }
 
 function buildLeadEmail(data) {
-  const { type, name, contact, service, message, extra, source } = data;
+  const { type, name, contact, email, service, message, extra, source } = data;
   const leadTypeLabel = getLeadTypeLabel(type);
   const subject = `${leadTypeLabel}: ${name}`;
   const rows = [
@@ -51,6 +51,7 @@ function buildLeadEmail(data) {
     ["Контакт", contact],
   ];
 
+  if (email) rows.push(["Email для обратной связи", email]);
   if (service) rows.push(["Услуга", service]);
   if (message) rows.push(["Сообщение", message]);
   if (extra) rows.push(["Доп. информация", extra]);

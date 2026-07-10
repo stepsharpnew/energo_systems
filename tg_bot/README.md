@@ -17,7 +17,7 @@ POST /api/lead
 }
 ```
 
-Дополнительные поля: `type`, `service`, `message`, `extra`, `source`.
+Дополнительные поля: `email`, `type`, `service`, `message`, `extra`, `source`.
 
 ### Настройка окружения
 

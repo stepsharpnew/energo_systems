@@ -39,6 +39,18 @@
             </div>
 
             <div class="form-group">
+              <label for="email">Email для обратной связи</label>
+              <input
+                id="email"
+                v-model.trim="formData.email"
+                type="email"
+                autocomplete="email"
+                placeholder="name@example.com"
+                class="form-input"
+              />
+            </div>
+
+            <div class="form-group">
               <label for="service">Выберите услугу *</label>
               <div class="custom-select-wrapper">
                 <div
@@ -137,6 +149,7 @@ export default {
       formData: {
         name: "",
         phone: "",
+        email: "",
         service: "",
       },
       isSubmitting: false,
@@ -288,6 +301,7 @@ export default {
           type: "service",
           name: this.formData.name,
           contact: this.formData.phone,
+          email: this.formData.email || undefined,
           service: selectedService ? selectedService.name : undefined,
         };
 
@@ -311,6 +325,7 @@ export default {
       this.formData = {
         name: "",
         phone: "",
+        email: "",
         service: "",
       };
       this.isSubmitting = false;

@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 
 async function handleLeadSubmit(req, res) {
   try {
-    const { type, name, contact, message, service, extra, source } =
+    const { type, name, contact, email, message, service, extra, source } =
       req.body || {};
 
     if (!name || !contact) {
@@ -25,6 +25,7 @@ async function handleLeadSubmit(req, res) {
       type,
       name,
       contact,
+      email,
       service,
       message,
       extra,

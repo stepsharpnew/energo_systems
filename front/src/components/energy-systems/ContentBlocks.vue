@@ -29,6 +29,18 @@
             <span class="highlight-text">выполнение в срок</span>
           </div>
         </div>
+        <a
+          class="presentation-link"
+          :href="presentationUrl"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="presentation-filetype" aria-hidden="true">PDF</span>
+          <span class="presentation-copy">
+            <strong>Презентация компании</strong>
+            <small>Открыть материал об опыте, услугах и проектах</small>
+          </span>
+        </a>
         <!-- <p class="content-description">
           ООО «ЭНЕРГОСИСТЕМЫ» работает в сфере энергетики с 2013 года. За это
           время мы собрали команду первоклассных специалистов, обширную
@@ -256,6 +268,8 @@ import contentImage2 from "@/assets/content/content-3.png";
 import contentImage4 from "@/assets/content/content-4.jpg";
 import contentImage5 from "@/assets/content/content-5.jpg";
 
+const presentationUrl = '/2026-07-02_120344_%D0%AD%D0%BD%D0%B5%D1%80%D0%B3%D0%BE%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B.pdf';
+
 export default {
   name: "ContentBlocks",
   data() {
@@ -266,6 +280,7 @@ export default {
       contentImage3,
       contentImage4,
       contentImage5,
+      presentationUrl,
       rossetiLogo,
       isMobile: false,
     };
@@ -847,6 +862,65 @@ export default {
   color: #64748b;
   font-weight: 500;
   line-height: 1.4;
+}
+
+.presentation-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 24px;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 72, 0, 0.24);
+  border-radius: 8px;
+  color: #162236;
+  background: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.presentation-link:hover {
+  border-color: #ff4800;
+  box-shadow: 0 14px 30px rgba(255, 72, 0, 0.16);
+  transform: translateY(-2px);
+}
+
+.presentation-filetype {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: #ff4800;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.presentation-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.presentation-copy strong {
+  color: #0f172a;
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.2;
+}
+
+.presentation-copy small {
+  color: #64748b;
+  font-size: clamp(12px, 1.4vw, 14px);
+  line-height: 1.35;
 }
 
 /* Стили для блока "Как мы работаем" */
