@@ -15,7 +15,10 @@
       </button>
       <div class="phone-link">
         <span class="phone-icon">📞</span>
-        <a href="tel:+74951780118">+7 (495) 178-01-18</a>
+        <div class="contact-links">
+          <a href="tel:+74951780118">+7 (495) 178-01-18</a>
+          <a href="/Energosistemy_el_vesia_2026.pdf" target="_blank" rel="noopener">Презентация компании PDF</a>
+        </div>
       </div>
     </div>
   </section>
@@ -87,7 +90,7 @@ export default {
 
 .phone-link {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 10px;
   padding: 14px 28px;
@@ -99,6 +102,13 @@ export default {
 .phone-icon {
   font-size: 18px;
   line-height: 1;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
 }
 
 .phone-link a {
@@ -115,12 +125,12 @@ export default {
 
 /* На десктопе ссылка не кликабельна */
 @media (min-width: 769px) {
-  .phone-link a {
+  .phone-link a[href^="tel:"] {
     pointer-events: none;
     cursor: default;
   }
 
-  .phone-link a:hover {
+  .phone-link a[href^="tel:"]:hover {
     opacity: 1;
   }
 }

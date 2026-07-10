@@ -267,7 +267,7 @@ const contentImage3 = '/img/content/content-2.jpg';
 const contentImage2 = '/img/content/content-3.png';
 const contentImage4 = '/img/content/content-4.jpg';
 const contentImage5 = '/img/content/content-5.jpg';
-const presentationUrl = '/2026-07-02_120344_%D0%AD%D0%BD%D0%B5%D1%80%D0%B3%D0%BE%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B.pdf';
+const presentationUrl = '/Energosistemy_el_vesia_2026.pdf';
 
 export default {
   name: "ContentBlocks",

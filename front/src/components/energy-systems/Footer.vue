@@ -25,6 +25,9 @@
           <li>
             <a href="mailto:inbox@e-systems.su" class="contact-link">inbox@e-systems.su</a>
           </li>
+          <li>
+            <a href="/Energosistemy_el_vesia_2026.pdf" class="contact-link" target="_blank" rel="noopener">Презентация компании PDF</a>
+          </li>
         </ul>
       </div>
       <div class="footer-column">
