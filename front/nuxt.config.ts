@@ -33,7 +33,12 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/services/hdd']
+      routes: [
+        '/services/hdd',
+        '/privacy',
+        '/requisites',
+        '/personal-data-consent'
+      ]
     }
   },
 
