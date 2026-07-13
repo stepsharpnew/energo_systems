@@ -18,6 +18,9 @@
                 v-model="formData.name"
                 type="text"
                 required
+                autocomplete="name"
+                minlength="2"
+                maxlength="80"
                 placeholder="Введите ваше имя"
                 class="form-input"
               />
@@ -30,11 +33,13 @@
                 :value="formData.phone"
                 type="tel"
                 required
+                autocomplete="tel"
                 placeholder="+7 (___) ___-__-__"
                 class="form-input"
                 @input="formatPhone"
                 @keydown="handlePhoneKeydown"
                 maxlength="18"
+                pattern="\+7 \(\d{3}\)-\d{3}-\d{2}-\d{2}"
               />
             </div>
 
@@ -108,10 +113,29 @@
               />
             </div>
 
+            <div class="consent-block">
+              <label class="consent-check">
+                <input
+                  v-model="formData.consent"
+                  type="checkbox"
+                  required
+                />
+                <span>
+                  Даю ООО «Энергосистемы»
+                  <a href="/personal-data-consent" target="_blank" rel="noopener">согласие на обработку персональных данных</a>
+                  для ответа на заявку.
+                </span>
+              </label>
+              <p>
+                Порядок обработки и права пользователя описаны в
+                <a href="/privacy" target="_blank" rel="noopener">Политике обработки персональных данных</a>.
+              </p>
+            </div>
+
             <button
               type="submit"
               class="submit-button"
-              :disabled="isSubmitting"
+              :disabled="isSubmitting || !formData.consent"
             >
               <span v-if="!isSubmitting">Отправить</span>
               <span v-else>Отправка...</span>
@@ -150,7 +174,9 @@ export default {
         phone: "",
         email: "",
         service: "",
+        consent: false,
       },
+      consentVersion: "2026-07-13",
       isSubmitting: false,
       isSelectOpen: false,
     };
@@ -302,10 +328,11 @@ export default {
           contact: this.formData.phone,
           email: this.formData.email || undefined,
           service: selectedService ? selectedService.name : undefined,
+          consent: this.formData.consent,
+          consentVersion: this.consentVersion,
         };
 
-        // Используем $fetch из Nuxt (доступен глобально в Nuxt 3)
-        const response = await $fetch("/api/lead", {
+        await $fetch("/api/lead", {
           method: "POST",
           body: payload,
           headers: {
@@ -329,6 +356,7 @@ export default {
         phone: "",
         email: "",
         service: "",
+        consent: false,
       };
       this.isSubmitting = false;
       this.isSelectOpen = false;
@@ -442,6 +470,49 @@ export default {
   color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
   font-weight: 500;
+}
+
+.consent-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.consent-check {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: start;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.consent-check input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #ff4800;
+}
+
+.consent-block p {
+  margin: 0 0 0 30px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.consent-block a {
+  color: #ff9a72;
+}
+
+.consent-block a:hover {
+  color: #fff;
 }
 
 .form-input,

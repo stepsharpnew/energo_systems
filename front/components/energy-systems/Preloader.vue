@@ -18,13 +18,17 @@ export default {
   data() {
     return {
       isLoading: true,
+      hideTimer: null,
     };
   },
   mounted() {
-    // Скрываем прелоадер через 2 секунды
-    setTimeout(() => {
+    // Скрываем прелоадер через 1 секунду
+    this.hideTimer = setTimeout(() => {
       this.isLoading = false;
-    }, 2000);
+    }, 1000);
+  },
+  beforeUnmount() {
+    if (this.hideTimer) clearTimeout(this.hideTimer);
   },
 };
 </script>

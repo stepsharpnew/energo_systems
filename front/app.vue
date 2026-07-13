@@ -1,6 +1,6 @@
 <template>
   <VApp>
-    <Preloader />
+    <Preloader v-if="showPreloader" />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -9,6 +9,9 @@
 
 <script setup>
 import Preloader from "~/components/energy-systems/Preloader.vue";
+
+const route = useRoute();
+const showPreloader = computed(() => route.path !== "/privacy");
 
 useHead({
   title: "Энергосистемы",

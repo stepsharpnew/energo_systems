@@ -8,4 +8,20 @@
     <loc>https://e-systems.su/services/hdd</loc>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://e-systems.su/services</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/privacy</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/personal-data-consent</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/requisites</loc>
+    <priority>0.5</priority>
+  </url>
 </urlset>

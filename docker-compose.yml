@@ -46,6 +46,7 @@ services:
       - EMAIL_FROM=${EMAIL_FROM:-Энергосистемы <application@e-systems.su>}
       - EMAIL_TO=${EMAIL_TO:-sales@e-systems.su}
       - EMAIL_CC=${EMAIL_CC:-inbox@e-systems.su}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://e-systems.su}
     networks:
       - dev
 

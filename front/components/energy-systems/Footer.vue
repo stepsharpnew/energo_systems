@@ -6,7 +6,9 @@
           <img src="/img/image.png" alt="Энергосистемы" class="logo-img">
         </div>
         <p class="footer-description">
-          <b>ООО «Энергосистемы»</b> - надежный партнер с гарантией высокого качества и профессионализма.
+          <b>ООО «Энергосистемы»</b><br>
+          ОГРН 1135044003709<br>
+          ИНН 5044089069
         </p>
       </div>
       <div class="footer-column">
@@ -36,6 +38,14 @@
         </ul>
         <p class="founder">Дмитрий Чернявский - учредитель компании</p>
       </div>
+      <div class="footer-column">
+        <h4>Правовая информация</h4>
+        <ul>
+          <li><NuxtLink class="contact-link" to="/requisites">Реквизиты</NuxtLink></li>
+          <li><NuxtLink class="contact-link" to="/privacy">Политика обработки персональных данных</NuxtLink></li>
+          <li><NuxtLink class="contact-link" to="/personal-data-consent">Согласие на обработку персональных данных</NuxtLink></li>
+        </ul>
+      </div>
     </div>
 
     <section class="footer-maps" aria-labelledby="footer-maps-title">
@@ -50,10 +60,15 @@
             title="Яндекс Карта: офис в Солнечногорске"
             loading="lazy"
             allowfullscreen
-            referrerpolicy="no-referrer-when-downgrade"
+            referrerpolicy="no-referrer"
           ></iframe>
         </div>
       </div>
+      <p class="map-privacy-note">
+        Карта загружается с серверов ООО «ЯНДЕКС», которое может получить
+        технические данные браузера и cookie. Подробнее — в
+        <NuxtLink to="/privacy#yandex-maps">Политике обработки персональных данных</NuxtLink>.
+      </p>
     </section>
 
     <div class="footer-bottom">
@@ -227,6 +242,21 @@ export default {
   height: clamp(300px, 36vw, 420px);
   border: 0;
   background: #1f2933;
+}
+
+.map-privacy-note {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.map-privacy-note a {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.map-privacy-note a:hover {
+  color: #ff4800;
 }
 
 .founder {

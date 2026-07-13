@@ -3,7 +3,7 @@
     <div class="section-heading compact" ref="headingRef">
       <p class="section-kicker">Документы</p>
       <h2>Сертификаты и благодарности</h2>
-      <p>Разрешительные документы, отраслевые сертификаты и благодарственные письма</p>
+      <p>Архивные сертификаты и благодарственные письма</p>
     </div>
     <div class="certificates-grid">
       <div
@@ -20,7 +20,6 @@
             <div class="certificate-info">
               <h3>{{ certificate.title }}</h3>
               <p>{{ certificate.issuer }}</p>
-              <span>{{ certificate.year }}</span>
             </div>
           </div>
         </div>

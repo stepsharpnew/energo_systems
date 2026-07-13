@@ -10,7 +10,7 @@
       <div ref="text1" class="content-text">
         <h2 class="content-title">О компании</h2>
         <p class="content-intro">
-          Ведущая энергетическая компания с более чем 10-летним опытом работы в
+          Энергетическая компания с более чем 10-летним опытом работы в
           Москве и Московской области. Мы специализируемся на комплексных
           решениях в сфере электроснабжения от проектирования до ввода объектов
           в эксплуатацию.
@@ -25,8 +25,8 @@
             <span class="highlight-text">реализованных проектов</span>
           </div>
           <div class="highlight-item">
-            <span class="highlight-number">100%</span>
-            <span class="highlight-text">выполнение в срок</span>
+            <span class="highlight-number">Сроки</span>
+            <span class="highlight-text">контроль на каждом этапе</span>
           </div>
         </div>
         <a

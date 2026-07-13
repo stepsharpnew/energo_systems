@@ -16,8 +16,6 @@ function normalizeBoolean(value, fallback = false) {
 }
 
 function getLeadTypeLabel(type) {
-  if (type === "review") return "Отзыв";
-  if (type === "consult") return "Запрос консультации";
   if (type === "service") return "Заявка на услугу";
   return "Новая заявка с сайта";
 }
@@ -42,20 +40,38 @@ function getEmailConfig() {
 }
 
 function buildLeadEmail(data) {
-  const { type, name, contact, email, service, message, extra, source } = data;
+  const {
+    type,
+    name,
+    contact,
+    email,
+    service,
+    consentRecordId,
+    consentVersion,
+    consentAcceptedAt,
+    ipAddress,
+    userAgent,
+    sourcePage,
+  } = data;
   const leadTypeLabel = getLeadTypeLabel(type);
-  const subject = `${leadTypeLabel}: ${name}`;
+  const subject = leadTypeLabel;
   const rows = [
     ["Тип", leadTypeLabel],
     ["Имя", name],
-    ["Контакт", contact],
+    ["Телефон", contact],
   ];
 
   if (email) rows.push(["Email для обратной связи", email]);
-  if (service) rows.push(["Услуга", service]);
-  if (message) rows.push(["Сообщение", message]);
-  if (extra) rows.push(["Доп. информация", extra]);
-  if (source) rows.push(["Источник", source]);
+  rows.push(
+    ["Услуга", service],
+    ["Согласие", "Получено отдельной отметкой в форме"],
+    ["Идентификатор согласия", consentRecordId],
+    ["Версия согласия", consentVersion],
+    ["Время согласия (UTC)", consentAcceptedAt],
+    ["IP-адрес", ipAddress],
+    ["User-Agent", userAgent || "не передан"],
+    ["Страница отправки", sourcePage]
+  );
 
   const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
   const htmlRows = rows
