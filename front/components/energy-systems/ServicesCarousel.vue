@@ -117,7 +117,9 @@
           type="button"
           @click="goToSlide(index, true)"
           :aria-label="`Показать услугу ${index + 1}`"
+          :aria-current="index === activeIndex ? 'true' : undefined"
         >
+          <span class="carousel-dot-mark" aria-hidden="true"></span>
         </button>
       </div>
     </div>
@@ -568,48 +570,68 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
   margin-top: 18px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 6px 8px;
+  border: 1px solid #c6d5e0;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(16, 34, 52, 0.1);
 }
 
 .carousel-dot {
-  position: relative;
-  width: 28px;
-  height: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 0 0 32px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: 999px;
   padding: 0;
   background: transparent;
+  color: #102234;
+  opacity: 1;
+  visibility: visible;
   cursor: pointer;
+  forced-color-adjust: auto;
 }
 
-.carousel-dot::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  border: 1px solid rgba(16, 34, 52, 0.34);
+.carousel-dot-mark {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #102234;
   border-radius: 999px;
-  background: #ffffff;
-  transform: translate(-50%, -50%);
+  background: #5f7488;
+  box-shadow: 0 0 0 1px #ffffff;
+  opacity: 1;
   transition:
     width 0.18s ease,
     background-color 0.18s ease,
     border-color 0.18s ease,
-    box-shadow 0.18s ease;
+    transform 0.18s ease;
 }
 
-.carousel-dot:hover::before {
-  border-color: #f05a28;
-}
-
-.carousel-dot.active::before {
-  width: 28px;
+.carousel-dot:hover .carousel-dot-mark {
   border-color: #f05a28;
   background: #f05a28;
-  box-shadow: 0 0 0 4px rgba(240, 90, 40, 0.13);
+  transform: scale(1.08);
+}
+
+.carousel-dot.active .carousel-dot-mark {
+  width: 26px;
+  border-color: #f05a28;
+  background: #f05a28;
 }
 
 .copy-fade-enter-active,
@@ -732,12 +754,29 @@ export default {
   .carousel-nav,
   .directory-item,
   .carousel-dot,
-  .carousel-dot::before,
+  .carousel-dot-mark,
   .copy-fade-enter-active,
   .copy-fade-leave-active,
   .image-fade-enter-active,
   .image-fade-leave-active {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .carousel-dots {
+    border: 1px solid CanvasText;
+  }
+
+  .carousel-dot-mark {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .carousel-dot.active .carousel-dot-mark {
+    border-color: Highlight;
+    background: Highlight;
   }
 }
 </style>
