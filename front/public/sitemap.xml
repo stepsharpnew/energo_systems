@@ -9,6 +9,42 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://e-systems.su/services/road</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/water</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/sewer</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/power</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/gas</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/design</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/support</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/heating</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://e-systems.su/services/monitoring</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://e-systems.su/services</loc>
     <priority>0.9</priority>
   </url>

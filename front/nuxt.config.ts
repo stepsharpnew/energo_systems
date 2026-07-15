@@ -34,7 +34,17 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: [
+        '/services',
         '/services/hdd',
+        '/services/road',
+        '/services/water',
+        '/services/sewer',
+        '/services/power',
+        '/services/gas',
+        '/services/design',
+        '/services/support',
+        '/services/heating',
+        '/services/monitoring',
         '/privacy',
         '/requisites',
         '/personal-data-consent'
