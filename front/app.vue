@@ -22,9 +22,9 @@ useHead({
     },
   ],
   link: [
-    { rel: "icon", type: "image/x-icon", href: "/favicon.ico?v=2" },
-    { rel: "icon", type: "image/png", sizes: "32x32", href: "/img/image.png?v=3" },
-    { rel: "apple-touch-icon", href: "/img/image.png?v=3" },
+    { rel: "icon", type: "image/x-icon", href: "/favicon.ico?v=4" },
+    { rel: "icon", type: "image/png", sizes: "32x32", href: "/img/icons/favicon-32x32.png?v=4" },
+    { rel: "apple-touch-icon", sizes: "180x180", href: "/img/icons/apple-touch-icon.png?v=4" },
   ],
 });
 </script>
