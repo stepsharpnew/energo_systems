@@ -29,14 +29,19 @@
                 @click="handleCardClick(idx, $event)"
               ></div>
             </div>
-            <div class="modal-carousel-dots">
+            <div class="modal-carousel-dots" aria-label="Выбор изображения">
               <button
                 v-for="(frame, idx) in service.gallery"
                 :key="`dot-${idx}`"
+                class="modal-carousel-dot"
                 type="button"
                 :class="{ active: idx === activeIndex }"
                 @click="scrollTo(idx)"
-              ></button>
+                :aria-label="`Показать изображение ${idx + 1}`"
+                :aria-current="idx === activeIndex ? 'true' : undefined"
+              >
+                <span class="modal-carousel-dot-mark" aria-hidden="true"></span>
+              </button>
             </div>
           </div>
           <div class="modal-actions">
@@ -212,9 +217,9 @@ export default {
 }
 
 .modal-gallery {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   width: 100%;
 }
 
@@ -238,7 +243,7 @@ export default {
 
 .modal-carousel-card {
   flex: 0 0 clamp(400px, 70vw, 600px);
-  height: clamp(300px, 50vw, 450px);
+  height: clamp(280px, 42vh, 400px);
   border-radius: 24px;
   scroll-snap-align: center;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -255,22 +260,76 @@ export default {
 }
 
 .modal-carousel-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 3;
   display: flex;
-  gap: 8px;
+  align-items: center;
   justify-content: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(2, 8, 23, 0.88);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+  transform: translateX(-50%);
 }
 
-.modal-carousel-dots button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.3);
+.modal-carousel-dot {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 0 0 32px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #ffffff;
+  opacity: 1;
+  visibility: visible;
   cursor: pointer;
+  forced-color-adjust: auto;
 }
 
-.modal-carousel-dots button.active {
-  background: #ff4800;
+.modal-carousel-dot-mark {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  background: #94a3b8;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.7);
+  opacity: 1;
+  transition:
+    width 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.modal-carousel-dot:hover .modal-carousel-dot-mark {
+  background: #ffffff;
+  transform: scale(1.08);
+}
+
+.modal-carousel-dot.active .modal-carousel-dot-mark {
+  width: 26px;
+  border-color: #ff6a2f;
+  background: #ff6a2f;
+}
+
+.modal-carousel-dot:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
 }
 
 .modal-actions {
@@ -282,10 +341,6 @@ export default {
   padding-top: 24px;
   flex-wrap: wrap;
   flex-shrink: 0;
-  position: sticky;
-  bottom: 0;
-  background: linear-gradient(to top, #0f172a 0%, #0f172a 80%, rgba(15, 23, 42, 0.95) 100%);
-  z-index: 10;
 }
 
 .order-button {
@@ -390,14 +445,8 @@ export default {
     gap: 6px;
   }
 
-  .modal-carousel-dots button {
-    width: 8px;
-    height: 8px;
-  }
-
   .modal-actions {
     padding-top: 20px;
-    background: linear-gradient(to top, #0f172a 0%, #0f172a 85%, rgba(15, 23, 42, 0.95) 100%);
   }
 
   .order-button,
@@ -415,6 +464,23 @@ export default {
 
   .modal-carousel {
     gap: 8px;
+  }
+}
+
+@media (forced-colors: active) {
+  .modal-carousel-dots {
+    border: 1px solid CanvasText;
+  }
+
+  .modal-carousel-dot-mark {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .modal-carousel-dot.active .modal-carousel-dot-mark {
+    border-color: Highlight;
+    background: Highlight;
   }
 }
 </style>
