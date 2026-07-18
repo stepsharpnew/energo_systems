@@ -36,6 +36,9 @@ function getEmailConfig() {
       (user ? `"Энергосистемы" <${user}>` : undefined),
     to: process.env.EMAIL_TO || "sales@e-systems.su",
     cc: process.env.EMAIL_CC || "inbox@e-systems.su",
+    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT_MS || 10000),
+    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT_MS || 10000),
+    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT_MS || 15000),
   };
 }
 
@@ -101,6 +104,9 @@ function createTransporter(config) {
     host: config.host,
     port: config.port,
     secure: config.secure,
+    connectionTimeout: config.connectionTimeout,
+    greetingTimeout: config.greetingTimeout,
+    socketTimeout: config.socketTimeout,
     auth: {
       user: config.user,
       pass: config.pass,
