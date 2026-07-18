@@ -24,6 +24,9 @@ jobs:
           printf '%s\n' "$DOTENV" > .env
           chmod 644 .env
 
+      - name: Validate Docker Compose config
+        run: docker compose config
+
       - name: Prepare deploy bundle
         run: |
           mkdir -p deploy

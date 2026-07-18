@@ -44,14 +44,13 @@ services:
       - SMTP_HOST=${SMTP_HOST:-smtp.mail.ru}
       - SMTP_PORT=${SMTP_PORT:-465}
       - SMTP_SECURE=${SMTP_SECURE:-true}
+      - SMTP_FAMILY=${SMTP_FAMILY:-4}
       - SMTP_USER=${SMTP_USER:-application@e-systems.su}
       - SMTP_PASS=${SMTP_PASS:-}
       - EMAIL_FROM=${EMAIL_FROM:-Энергосистемы <application@e-systems.su>}
       - EMAIL_TO=${EMAIL_TO:-sales@e-systems.su}
       - EMAIL_CC=${EMAIL_CC:-inbox@e-systems.su}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://e-systems.su}
-    networks:
-      - dev
 
   certbot:
     image: certbot/certbot:latest
