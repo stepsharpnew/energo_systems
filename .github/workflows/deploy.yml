@@ -137,3 +137,7 @@ jobs:
             echo ""
             echo "=== API health check ==="
             curl -f -i http://127.0.0.1:3001/api/health
+
+            echo ""
+            echo "=== SMTP TCP check ==="
+            sudo docker exec tg_bot node -e 'const net=require("net"); const host=process.env.SMTP_HOST; const port=Number(process.env.SMTP_PORT); const family=Number(process.env.SMTP_FAMILY||4); const socket=net.createConnection({host,port,family,timeout:10000},()=>{console.log(`SMTP TCP OK ${host}:${port}`); socket.end();}); socket.on("timeout",()=>{console.error(`SMTP TCP TIMEOUT ${host}:${port}`); process.exit(1)}); socket.on("error",(error)=>{console.error(`SMTP TCP ERROR ${error.code||""} ${error.message}`); process.exit(1)});'

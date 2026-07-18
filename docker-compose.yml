@@ -38,10 +38,7 @@ services:
       context: ./tg_bot
     container_name: tg_bot
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:3001:3001"
-    expose:
-      - "3001"
+    network_mode: host
     environment:
       - PORT=3001
       - SMTP_HOST=${SMTP_HOST:-smtp.mail.ru}
