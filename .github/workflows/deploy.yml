@@ -9,88 +9,105 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: 🛎️ Клонирование репозитория
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🔐 Создание .env из секрета DOTENV
+      - name: Create .env from DOTENV secret
         env:
           DOTENV: ${{ secrets.DOTENV }}
         run: |
           if [ -z "$DOTENV" ]; then
-            echo "❌ GitHub secret DOTENV is empty or missing"
+            echo "GitHub secret DOTENV is empty or missing"
             exit 1
           fi
 
           printf '%s\n' "$DOTENV" > .env
           chmod 644 .env
 
-      - name: 🧹 Очистка старой папки на сервере
-        uses: appleboy/ssh-action@master
+      - name: Prepare deploy bundle
+        run: |
+          mkdir -p deploy
+          rsync -a --delete \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '.nuxt' \
+            --exclude '.output' \
+            --exclude 'dist' \
+            --exclude '*.log' \
+            docker-compose.yml nginx.conf nginx.http.conf certbot front tg_bot .env deploy/
+
+      - name: Prepare app directory on server
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
+          timeout: 120s
+          command_timeout: 10m
           script: |
-            sudo rm -rf /home/${{ secrets.SERVER_USER }}/app
             mkdir -p /home/${{ secrets.SERVER_USER }}/app
             sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /home/${{ secrets.SERVER_USER }}/app
 
-      - name: 🚀 Деплой на сервер по SSH
+      - name: Copy deploy bundle to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "." # Что копируем (всё содержимое репо)
-          target: "/home/${{ secrets.SERVER_USER }}/app" # Куда копируем
+          source: "deploy"
+          target: "/home/${{ secrets.SERVER_USER }}/app"
           overwrite: true
-          strip_components: 0
+          strip_components: 1
+          timeout: 120s
+          command_timeout: 20m
 
-      - name: 🏃‍♂️ Перезапуск сервиса на сервере
-        uses: appleboy/ssh-action@master
+      - name: Restart service on server
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
+          timeout: 120s
+          command_timeout: 15m
           script: |
             cd /home/${{ secrets.SERVER_USER }}/app
 
-            # Проверка структуры перед запуском
-            echo "Проверка структуры файлов:"
+            echo "Checking deployed files:"
             ls -la
             echo ""
-            echo "Проверка .env:"
+            echo "Checking .env:"
             if [ -s .env ]; then
-              echo "✅ .env создан из GitHub secret DOTENV"
+              echo ".env was created from GitHub secret DOTENV"
               chmod 600 .env
             else
-              echo "❌ .env не найден или пустой"
+              echo ".env is missing or empty"
               exit 1
             fi
             echo ""
-            echo "Проверка front/:"
-            ls -la front/ || echo "⚠️ Папка front не найдена"
+            echo "Checking front/:"
+            ls -la front/ || echo "front directory is missing"
             echo ""
-            echo "Проверка front/Dockerfile:"
+            echo "Checking front/Dockerfile:"
             if [ -f front/Dockerfile ]; then
-              echo "✅ front/Dockerfile найден"
+              echo "front/Dockerfile found"
             else
-              echo "❌ front/Dockerfile НЕ найден!"
-              echo "Содержимое front/:"
-              ls -la front/ 2>/dev/null || echo "Папка front не существует"
+              echo "front/Dockerfile is missing"
+              echo "front directory contents:"
+              ls -la front/ 2>/dev/null || echo "front directory does not exist"
               exit 1
             fi
             echo ""
 
-            echo "Проверка endpoint заявок:"
+            echo "Checking lead endpoint:"
             if grep -R "/api/telegram/lead" -n front/components front/src/components tg_bot/src; then
-              echo "❌ Найден старый endpoint /api/telegram/lead"
+              echo "Old endpoint /api/telegram/lead found"
               exit 1
             fi
             if grep -R "/api/lead" -n front/components front/src/components tg_bot/src >/dev/null; then
-              echo "✅ Используется новый endpoint /api/lead"
+              echo "New endpoint /api/lead is used"
             else
-              echo "❌ Endpoint /api/lead не найден"
+              echo "Endpoint /api/lead was not found"
               exit 1
             fi
             echo ""
@@ -98,12 +115,12 @@ jobs:
             sudo docker compose down --remove-orphans
             timeout 300s sudo docker compose build --no-cache frontend tg_bot
             sudo docker compose up -d --force-recreate --remove-orphans
-            sleep 10 # Ожидание запуска контейнеров
+            sleep 10
 
             echo ""
-            echo "=== Статус контейнеров ==="
+            echo "=== Container status ==="
             sudo docker compose ps
 
             echo ""
-            echo "=== Проверка API ==="
+            echo "=== API health check ==="
             curl -f -i http://127.0.0.1/api/health -H 'Host: e-systems.su'
