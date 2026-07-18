@@ -35,7 +35,7 @@ jobs:
             --exclude '.output' \
             --exclude 'dist' \
             --exclude '*.log' \
-            docker-compose.yml nginx.conf nginx.http.conf certbot front tg_bot .env deploy/
+            docker-compose.yml nginx.conf nginx.http.conf nginx.host.conf certbot front tg_bot .env deploy/
 
       - name: Prepare app directory on server
         uses: appleboy/ssh-action@v1.0.3
