@@ -21,6 +21,21 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=4' },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/icons/favicon-32x32.png?v=4' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/img/icons/apple-touch-icon.png?v=4' }
+      ],
+      script: [
+        {
+          type: 'text/javascript',
+          innerHTML: `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrackBounce:true});`
+        }
+      ],
+      noscript: [
+        {
+          innerHTML: '<div><img src="https://mc.yandex.ru/watch/110919120" style="position:absolute; left:-9999px;" alt="" /></div>',
+          tagPosition: 'bodyClose'
+        }
       ]
     }
   },
