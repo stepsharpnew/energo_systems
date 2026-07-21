@@ -40,6 +40,24 @@ jobs:
             --exclude '*.log' \
             docker-compose.yml nginx.conf nginx.http.conf nginx.host.conf certbot front tg_bot .env deploy/
 
+      - name: Download Docker images for offline deployment
+        run: |
+          set -euo pipefail
+
+          images=(
+            "node:20-alpine"
+            "node:18-alpine"
+            "nginx:stable-alpine"
+            "certbot/certbot:latest"
+          )
+
+          for image in "${images[@]}"; do
+            docker pull "$image"
+          done
+
+          docker image save "${images[@]}" | gzip -1 > deploy/docker-base-images.tar.gz
+          ls -lh deploy/docker-base-images.tar.gz
+
       - name: Prepare app directory on server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -105,6 +123,16 @@ jobs:
             fi
             echo ""
 
+            echo "Loading Docker base images:"
+            sudo docker image load --input docker-base-images.tar.gz
+            sudo docker image inspect \
+              node:20-alpine \
+              node:18-alpine \
+              nginx:stable-alpine \
+              certbot/certbot:latest >/dev/null
+            echo "Docker base images loaded successfully"
+            echo ""
+
             echo "Checking lead endpoint:"
             if grep -R "/api/telegram/lead" -n front/components front/src/components tg_bot/src; then
               echo "Old endpoint /api/telegram/lead found"
@@ -129,7 +157,7 @@ jobs:
               exit 1
             fi
 
-            timeout 300s sudo docker compose build --no-cache frontend tg_bot
+            timeout 300s sudo docker compose build --no-cache --pull=false frontend tg_bot
             sudo docker compose up -d --force-recreate --remove-orphans
             sleep 10
 
