@@ -197,7 +197,7 @@ jobs:
                 sleep 2
               done
 
-              sudo docker compose --profile certbot run --rm certbot certonly \
+              sudo docker compose --profile certbot run --rm -T certbot certonly \
                 --non-interactive \
                 --webroot \
                 --webroot-path /var/www/certbot \
@@ -205,18 +205,30 @@ jobs:
                 --agree-tos \
                 --no-eff-email \
                 -d e-systems.su \
-                -d www.e-systems.su
+                -d www.e-systems.su < /dev/null
             else
               echo "Existing certificate found"
-              sudo docker compose --profile certbot run --rm certbot renew \
+              sudo docker compose --profile certbot run --rm -T certbot renew \
                 --non-interactive \
-                --quiet
+                --quiet < /dev/null
             fi
 
             sudo env NGINX_CONF=./nginx.conf \
               docker compose --profile docker-nginx up -d --force-recreate nginx
 
-            curl -fsS \
-              --resolve e-systems.su:443:127.0.0.1 \
-              https://e-systems.su/ >/dev/null
-            echo "HTTPS is available"
+            for attempt in 1 2 3 4 5; do
+              if curl -fsS \
+                --resolve e-systems.su:443:127.0.0.1 \
+                https://e-systems.su/ >/dev/null 2>&1; then
+                echo "HTTPS is available"
+                break
+              fi
+
+              if [ "$attempt" -eq 5 ]; then
+                echo "HTTPS did not become available"
+                sudo docker compose --profile docker-nginx logs nginx
+                exit 1
+              fi
+
+              sleep 2
+            done
