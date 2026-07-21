@@ -4,9 +4,12 @@ networks:
 services:
   nginx:
     image: nginx:stable-alpine
+    pull_policy: never
     restart: unless-stopped
     profiles:
       - docker-nginx
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "80:80"
       - "443:443"
@@ -54,6 +57,7 @@ services:
 
   certbot:
     image: certbot/certbot:latest
+    pull_policy: never
     profiles:
       - certbot
     volumes:
