@@ -74,25 +74,33 @@
                 <div
                   v-for="(section, idx) in selectedService.sections"
                   :key="idx"
-                  class="service-section"
-                  :class="`section-${section.type}`"
                 >
-                  <h3 class="section-title">{{ section.title }}</h3>
-                  
-                  <div v-if="section.items" class="section-items">
-                    <div
-                      v-for="(item, itemIdx) in section.items"
-                      :key="itemIdx"
-                      class="section-item"
-                    >
-                      <span class="item-icon"></span>
-                      <span class="item-text">{{ item }}</span>
+                  <div
+                    class="service-section"
+                    :class="`section-${section.type}`"
+                  >
+                    <h3 class="section-title">{{ section.title }}</h3>
+
+                    <div v-if="section.items" class="section-items">
+                      <div
+                        v-for="(item, itemIdx) in section.items"
+                        :key="itemIdx"
+                        class="section-item"
+                      >
+                        <span class="item-icon"></span>
+                        <span class="item-text">{{ item }}</span>
+                      </div>
+                    </div>
+
+                    <div v-if="section.content" class="section-content">
+                      <p>{{ section.content }}</p>
                     </div>
                   </div>
-                  
-                  <div v-if="section.content" class="section-content">
-                    <p>{{ section.content }}</p>
-                  </div>
+
+                  <HddPricingSection
+                    v-if="selectedService.id === 'hdd' && section.type === 'price'"
+                    @request-estimate="openContactModal"
+                  />
                 </div>
               </div>
 
@@ -155,6 +163,7 @@ import Header from '~/components/energy-systems/Header.vue'
 import Navigation from '~/components/energy-systems/Navigation.vue'
 import Footer from '~/components/energy-systems/Footer.vue'
 import ContactModal from '~/components/energy-systems/ContactModal.vue'
+import HddPricingSection from '~/components/energy-systems/HddPricingSection.vue'
 import { servicesDetailData } from '~/assets/data/servicesDetail'
 
 const route = useRoute()
@@ -467,11 +476,18 @@ const scrollToSection = (key) => {
 }
 
 .service-details {
+  min-width: 0;
   background: #fff;
   border-radius: 8px;
   padding: 40px;
   box-shadow: 0 12px 40px rgba(35, 40, 45, 0.1);
   min-height: 500px;
+}
+
+.service-details-content,
+.service-sections,
+.service-sections > div {
+  min-width: 0;
 }
 
 .service-details-content h2 {
