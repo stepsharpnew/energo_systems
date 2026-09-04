@@ -5,12 +5,23 @@ on:
     branches:
       - master
 
+# Never interrupt an active production deployment or deploy twice at once.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Test deployment safety
+        run: |
+          bash -n scripts/deploy.sh
+          node --test scripts/deploy.test.mjs
 
       - name: Create .env from DOTENV secret
         env:
@@ -22,10 +33,10 @@ jobs:
           fi
 
           printf '%s\n' "$DOTENV" > .env
-          chmod 644 .env
+          chmod 600 .env
 
       - name: Validate Docker Compose config
-        run: docker compose config
+        run: docker compose config --quiet
 
       - name: Prepare deploy bundle
         run: |
@@ -38,9 +49,9 @@ jobs:
             --exclude '.output' \
             --exclude 'dist' \
             --exclude '*.log' \
-            docker-compose.yml nginx.conf nginx.http.conf nginx.host.conf certbot front tg_bot .env deploy/
+            docker-compose.yml nginx.conf nginx.http.conf nginx.host.conf certbot front tg_bot scripts .env deploy/
 
-      - name: Download Docker images for offline deployment
+      - name: Download Docker base images for server build
         run: |
           set -euo pipefail
 
@@ -83,152 +94,16 @@ jobs:
           timeout: 120s
           command_timeout: 20m
 
-      - name: Restart service on server
+      - name: Build and replace services on server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           timeout: 120s
-          command_timeout: 15m
+          command_timeout: 30m
           script_stop: true
           script: |
             set -euo pipefail
-
             cd /home/${{ secrets.SERVER_USER }}/app
-
-            echo "Checking deployed files:"
-            ls -la
-            echo ""
-            echo "Checking .env:"
-            if [ -s .env ]; then
-              echo ".env was created from GitHub secret DOTENV"
-              chmod 600 .env
-            else
-              echo ".env is missing or empty"
-              exit 1
-            fi
-            echo ""
-            echo "Checking front/:"
-            ls -la front/ || echo "front directory is missing"
-            echo ""
-            echo "Checking front/Dockerfile:"
-            if [ -f front/Dockerfile ]; then
-              echo "front/Dockerfile found"
-            else
-              echo "front/Dockerfile is missing"
-              echo "front directory contents:"
-              ls -la front/ 2>/dev/null || echo "front directory does not exist"
-              exit 1
-            fi
-            echo ""
-
-            echo "Loading Docker base images:"
-            sudo docker image load --input docker-base-images.tar.gz
-            sudo docker image inspect \
-              node:20-alpine \
-              node:18-alpine \
-              nginx:stable-alpine \
-              certbot/certbot:latest >/dev/null
-            echo "Docker base images loaded successfully"
-            echo ""
-
-            echo "Checking lead endpoint:"
-            if grep -R "/api/telegram/lead" -n front/components front/src/components tg_bot/src; then
-              echo "Old endpoint /api/telegram/lead found"
-              exit 1
-            fi
-            if grep -R "/api/lead" -n front/components front/src/components tg_bot/src >/dev/null; then
-              echo "New endpoint /api/lead is used"
-            else
-              echo "Endpoint /api/lead was not found"
-              exit 1
-            fi
-            echo ""
-
-            sudo docker compose down --remove-orphans
-
-            echo "Checking app ports after docker compose down:"
-            if sudo ss -ltnp | grep -E ':(3001|5173)\s'; then
-              echo "Port 3001 or 5173 is already in use by another process."
-              echo ""
-              echo "Running Docker containers:"
-              sudo docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}'
-              exit 1
-            fi
-
-            timeout 300s sudo docker compose build --no-cache --pull=false frontend tg_bot
-            sudo docker compose up -d --force-recreate --remove-orphans
-            sleep 10
-
-            echo ""
-            echo "=== Container status ==="
-            sudo docker compose ps
-
-            echo ""
-            echo "=== API health check ==="
-            curl -f -i http://127.0.0.1:3001/api/health
-
-            echo ""
-            echo "=== HTTPS setup ==="
-            sudo mkdir -p certbot/www/.well-known/acme-challenge
-
-            if [ ! -s /etc/letsencrypt/live/e-systems.su/fullchain.pem ] || \
-               [ ! -s /etc/letsencrypt/live/e-systems.su/privkey.pem ]; then
-              echo "No certificate found; starting temporary HTTP nginx"
-              sudo env NGINX_CONF=./nginx.http.conf \
-                docker compose --profile docker-nginx up -d --force-recreate nginx
-
-              printf 'ok\n' | sudo tee certbot/www/.well-known/acme-challenge/ping >/dev/null
-
-              for attempt in 1 2 3 4 5; do
-                if curl -fsS \
-                  -H 'Host: e-systems.su' \
-                  http://127.0.0.1/.well-known/acme-challenge/ping | grep -qx 'ok'; then
-                  break
-                fi
-
-                if [ "$attempt" -eq 5 ]; then
-                  echo "HTTP ACME challenge endpoint is unavailable"
-                  sudo docker compose --profile docker-nginx logs nginx
-                  exit 1
-                fi
-
-                sleep 2
-              done
-
-              sudo docker compose --profile certbot run --rm -T certbot certonly \
-                --non-interactive \
-                --webroot \
-                --webroot-path /var/www/certbot \
-                --email sales@e-systems.su \
-                --agree-tos \
-                --no-eff-email \
-                -d e-systems.su \
-                -d www.e-systems.su < /dev/null
-            else
-              echo "Existing certificate found"
-              sudo docker compose --profile certbot run --rm -T certbot renew \
-                --non-interactive \
-                --quiet < /dev/null
-            fi
-
-            sudo env NGINX_CONF=./nginx.conf \
-              docker compose --profile docker-nginx up -d --force-recreate nginx
-
-            for attempt in 1 2 3 4 5; do
-              if curl -fsS \
-                --resolve e-systems.su:443:127.0.0.1 \
-                https://e-systems.su/ >/dev/null 2>&1; then
-                echo "HTTPS is available"
-                break
-              fi
-
-              if [ "$attempt" -eq 5 ]; then
-                echo "HTTPS did not become available"
-                sudo docker compose --profile docker-nginx logs nginx
-                exit 1
-              fi
-
-              sleep 2
-            done
+            bash scripts/deploy.sh

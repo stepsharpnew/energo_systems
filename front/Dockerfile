@@ -1,12 +1,15 @@
-FROM node:20-alpine as build
+FROM node:20-alpine AS build
 WORKDIR /app
 
 # Копируем файлы зависимостей
 COPY package.json package-lock.json ./
 
-# Устанавливаем зависимости
-# Используем npm install вместо npm ci для большей гибкости
-RUN npm install --legacy-peer-deps
+# Строго используем lockfile; сетевые ошибки видны до общего таймаута сборки.
+# Аудит зависимостей выполняется отдельно, а не блокирует выпуск сайта.
+RUN npm ci --legacy-peer-deps --no-audit --no-fund \
+    --fetch-timeout=30000 --fetch-retries=2 \
+    --fetch-retry-mintimeout=2000 --fetch-retry-maxtimeout=10000 \
+    --loglevel=verbose --foreground-scripts
 
 # Копируем остальные файлы
 COPY . .
