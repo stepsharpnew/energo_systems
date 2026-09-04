@@ -12,6 +12,8 @@
       @open-service-modal="openServiceModal"
     />
 
+    <EquipmentCatalogTeaser />
+
     <main class="main">
       <div class="container-1">
         <ContentBlocks ref="aboutSection" />
@@ -68,6 +70,7 @@ import ClientsSection from "./energy-systems/ClientsSection.vue";
 import ContactCTA from "./energy-systems/ContactCTA.vue";
 import ContactModal from "./energy-systems/ContactModal.vue";
 import ContentBlocks from "./energy-systems/ContentBlocks.vue";
+import EquipmentCatalogTeaser from "./equipment/EquipmentCatalogTeaser.vue";
 import Footer from "./energy-systems/Footer.vue";
 import Header from "./energy-systems/Header.vue";
 import HeroSection from "./energy-systems/HeroSection.vue";
@@ -84,6 +87,7 @@ export default {
     Navigation,
     HeroSection,
     ServicesCarousel,
+    EquipmentCatalogTeaser,
     ContentBlocks,
     ProjectsShowcase,
     ClientsSection,
@@ -379,6 +383,7 @@ export default {
         { key: "gnb", label: "ГНБ под ключ", href: "/services/hdd", featured: true },
         { key: "hero", label: "Главная" },
         { key: "services", label: "Услуги" },
+        { key: "equipment", label: "Оборудование", href: "/equipment" },
         { key: "about", label: "О нас" },
         { key: "projects", label: "Проекты" },
         { key: "clients", label: "Клиенты" },

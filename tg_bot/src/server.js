@@ -52,7 +52,27 @@ app.use(
     maxAge: 600,
   })
 );
-app.use(express.json({ limit: "16kb", strict: true }));
+app.use(express.json({ limit: "64kb", strict: true }));
+
+const COMMON_LEAD_FIELDS = [
+  "type",
+  "name",
+  "contact",
+  "email",
+  "consent",
+  "consentVersion",
+];
+const SERVICE_LEAD_FIELDS = new Set([...COMMON_LEAD_FIELDS, "service"]);
+const EQUIPMENT_LEAD_FIELDS = new Set([
+  ...COMMON_LEAD_FIELDS,
+  "product",
+  "organization",
+  "location",
+  "comment",
+  "answers",
+]);
+const MAX_EQUIPMENT_ANSWERS = 80;
+const MAX_ANSWER_OPTIONS = 24;
 
 function normalizeText(value) {
   return typeof value === "string" ? value.trim() : "";
@@ -60,6 +80,77 @@ function normalizeText(value) {
 
 function isValidEmail(value) {
   return !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isSingleLine(value) {
+  return !/[\r\n]/.test(value);
+}
+
+function hasUnexpectedFields(payload, allowedFields) {
+  return Object.keys(payload).some((field) => !allowedFields.has(field));
+}
+
+function normalizeAnswers(value) {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.length > MAX_EQUIPMENT_ANSWERS) {
+    return null;
+  }
+
+  const normalized = [];
+
+  for (const answer of value) {
+    if (
+      !answer ||
+      Array.isArray(answer) ||
+      typeof answer !== "object" ||
+      Object.keys(answer).some(
+        (field) => field !== "label" && field !== "value"
+      )
+    ) {
+      return null;
+    }
+
+    const label = normalizeText(answer.label);
+    if (
+      typeof answer.label !== "string" ||
+      label.length < 1 ||
+      label.length > 160 ||
+      !isSingleLine(label)
+    ) {
+      return null;
+    }
+
+    let answerValue;
+    if (typeof answer.value === "boolean") {
+      answerValue = answer.value;
+    } else if (typeof answer.value === "string") {
+      answerValue = answer.value.trim();
+      if (answerValue.length > 2000) return null;
+    } else if (Array.isArray(answer.value)) {
+      if (answer.value.length > MAX_ANSWER_OPTIONS) return null;
+
+      answerValue = [];
+      for (const option of answer.value) {
+        if (typeof option !== "string") return null;
+
+        const normalizedOption = option.trim();
+        if (
+          normalizedOption.length < 1 ||
+          normalizedOption.length > 200 ||
+          !isSingleLine(normalizedOption)
+        ) {
+          return null;
+        }
+        answerValue.push(normalizedOption);
+      }
+    } else {
+      return null;
+    }
+
+    normalized.push({ label, value: answerValue });
+  }
+
+  return normalized;
 }
 
 function getSourcePage(referer) {
@@ -98,47 +189,34 @@ async function handleLeadSubmit(req, res) {
       return res.status(400).json({ ok: false, error: "invalid_payload" });
     }
 
-    const allowedFields = new Set([
-      "type",
-      "name",
-      "contact",
-      "email",
-      "service",
-      "consent",
-      "consentVersion",
-    ]);
-    const hasUnexpectedFields = Object.keys(req.body).some(
-      (field) => !allowedFields.has(field)
-    );
-
-    if (hasUnexpectedFields) {
-      return res.status(400).json({ ok: false, error: "unexpected_fields" });
-    }
-
     const type = normalizeText(req.body.type);
     const name = normalizeText(req.body.name);
     const contact = normalizeText(req.body.contact);
     const email = normalizeText(req.body.email);
-    const service = normalizeText(req.body.service);
 
-    if (type !== "service") {
+    if (type !== "service" && type !== "equipment") {
       return res.status(400).json({ ok: false, error: "invalid_type" });
+    }
+
+    const allowedFields =
+      type === "equipment" ? EQUIPMENT_LEAD_FIELDS : SERVICE_LEAD_FIELDS;
+    if (hasUnexpectedFields(req.body, allowedFields)) {
+      return res.status(400).json({ ok: false, error: "unexpected_fields" });
     }
 
     if (name.length < 2 || name.length > 80) {
       return res.status(400).json({ ok: false, error: "invalid_name" });
     }
 
-    if (!/^\+7 \(\d{3}\)-\d{3}-\d{2}-\d{2}$/.test(contact)) {
+    if (
+      (type === "service" || contact) &&
+      !/^\+7 \(\d{3}\)-\d{3}-\d{2}-\d{2}$/.test(contact)
+    ) {
       return res.status(400).json({ ok: false, error: "invalid_contact" });
     }
 
     if (email.length > 254 || !isValidEmail(email)) {
       return res.status(400).json({ ok: false, error: "invalid_email" });
-    }
-
-    if (service.length < 2 || service.length > 200) {
-      return res.status(400).json({ ok: false, error: "invalid_service" });
     }
 
     if (
@@ -151,19 +229,78 @@ async function handleLeadSubmit(req, res) {
     const consentRecordId = randomUUID();
     const consentAcceptedAt = new Date().toISOString();
 
-    await sendLeadEmail({
+    const lead = {
       type,
       name,
       contact,
       email,
-      service,
       consentRecordId,
       consentVersion: CONSENT_VERSION,
       consentAcceptedAt,
       ipAddress: req.ip,
       userAgent: normalizeText(req.get("user-agent")).slice(0, 500),
       sourcePage: getSourcePage(req.get("referer")),
-    });
+    };
+
+    if (type === "service") {
+      const service = normalizeText(req.body.service);
+      if (service.length < 2 || service.length > 200) {
+        return res.status(400).json({ ok: false, error: "invalid_service" });
+      }
+      lead.service = service;
+    } else {
+      if (
+        typeof req.body.product !== "string" ||
+        (req.body.organization !== undefined &&
+          typeof req.body.organization !== "string") ||
+        (req.body.location !== undefined &&
+          typeof req.body.location !== "string") ||
+        (req.body.comment !== undefined && typeof req.body.comment !== "string")
+      ) {
+        return res.status(400).json({ ok: false, error: "invalid_payload" });
+      }
+
+      const product = normalizeText(req.body.product);
+      const organization = normalizeText(req.body.organization);
+      const location = normalizeText(req.body.location);
+      const comment = normalizeText(req.body.comment);
+      const answers = normalizeAnswers(req.body.answers);
+
+      if (
+        product.length < 2 ||
+        product.length > 160 ||
+        !isSingleLine(product)
+      ) {
+        return res.status(400).json({ ok: false, error: "invalid_product" });
+      }
+      if (
+        organization.length > 200 ||
+        (organization && !isSingleLine(organization))
+      ) {
+        return res
+          .status(400)
+          .json({ ok: false, error: "invalid_organization" });
+      }
+      if (location.length > 200 || (location && !isSingleLine(location))) {
+        return res.status(400).json({ ok: false, error: "invalid_location" });
+      }
+      if (comment.length > 5000) {
+        return res.status(400).json({ ok: false, error: "invalid_comment" });
+      }
+      if (answers === null) {
+        return res.status(400).json({ ok: false, error: "invalid_answers" });
+      }
+
+      Object.assign(lead, {
+        product,
+        organization,
+        location,
+        comment,
+        answers,
+      });
+    }
+
+    await sendLeadEmail(lead);
 
     console.info("Согласие на обработку персональных данных зафиксировано", {
       consentRecordId,

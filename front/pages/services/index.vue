@@ -159,6 +159,7 @@ const contactModalServiceId = ref(null)
 const navItems = [
   { key: 'hero', label: 'Главная' },
   { key: 'services', label: 'Услуги' },
+  { key: 'equipment', label: 'Оборудование', href: '/equipment' },
   { key: 'about', label: 'О нас' },
   { key: 'projects', label: 'Проекты' },
   { key: 'clients', label: 'Клиенты' },

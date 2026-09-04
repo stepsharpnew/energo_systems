@@ -8,6 +8,9 @@ front/dist/
 front/.nuxt/
 front/.output/
 
+# Original photo archive; website images live in front/public/img/
+/ФОТО/
+
 # Environment files
 .env
 .env.example
