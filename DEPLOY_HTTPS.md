@@ -18,6 +18,14 @@ The uploaded `scripts/deploy.sh` performs the server-side steps:
 4. Wait for HTTP responses from the API and frontend, refresh nginx without
    recreating its dependencies, then verify the site and API over HTTPS.
 
+Bundle transfer uses the pinned composite version of `appleboy/scp-action`
+(v1.0.0, drone-scp 1.8.0). Packing runs as the same GitHub Runner user that
+created `.env`, so its `600` permissions can be preserved during preparation,
+transfer, and extraction. Do not switch back to the v0 Docker action: its
+different filesystem user cannot read the private file. A real tar-read check
+runs before downloading base images or modifying the server, and bundle tests
+cover packaging/extraction with a dummy private `.env`.
+
 The base-image archive does **not** contain npm packages. Server builds still
 require access to `registry.npmjs.org`. Both Dockerfiles use `npm ci` with the
 committed lockfile, no deployment-time audit/funding requests, verbose HTTP and
@@ -35,7 +43,7 @@ Run the deployment control-flow tests without Docker, credentials, or network ac
 
 ```bash
 bash -n scripts/deploy.sh
-node --test scripts/deploy.test.mjs
+node --test scripts/*.test.mjs
 ```
 
 The tests replace Docker, curl, sudo, and timeout with fixtures; they do not replace

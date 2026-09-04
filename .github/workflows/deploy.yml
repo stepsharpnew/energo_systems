@@ -21,7 +21,7 @@ jobs:
       - name: Test deployment safety
         run: |
           bash -n scripts/deploy.sh
-          node --test scripts/deploy.test.mjs
+          node --test scripts/*.test.mjs
 
       - name: Create .env from DOTENV secret
         env:
@@ -50,6 +50,12 @@ jobs:
             --exclude 'dist' \
             --exclude '*.log' \
             docker-compose.yml nginx.conf nginx.http.conf nginx.host.conf certbot front tg_bot scripts .env deploy/
+
+      - name: Verify deploy bundle permissions
+        run: |
+          test -s deploy/.env
+          test -r deploy/.env
+          tar -cf /dev/null deploy
 
       - name: Download Docker base images for server build
         run: |
@@ -82,8 +88,11 @@ jobs:
             sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /home/${{ secrets.SERVER_USER }}/app
 
       - name: Copy deploy bundle to server
-        uses: appleboy/scp-action@v0.1.7
+        # v1 is a composite action: tar runs as the runner user who owns the
+        # mode-600 .env. The old Docker action used a different filesystem user.
+        uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
         with:
+          version: "1.8.0"
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
