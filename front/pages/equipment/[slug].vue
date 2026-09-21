@@ -87,9 +87,11 @@
         </div>
       </section>
 
-      <section id="equipment-request" class="request-section">
+      <section id="equipment-request" class="request-section" :class="{ 'request-section--quiz': equipment.slug === 'ktp' }">
         <div class="section-inner">
+          <KtpQuiz v-if="equipment.slug === 'ktp'" :questionnaire-file="equipment.questionnaireFile" />
           <EquipmentRequestForm
+            v-else
             :equipment="equipment"
             :questionnaire="questionnaire"
           />
@@ -126,6 +128,7 @@ import Navigation from '~/components/energy-systems/Navigation.vue'
 import Footer from '~/components/energy-systems/Footer.vue'
 import EquipmentGallery from '~/components/equipment/EquipmentGallery.vue'
 import EquipmentRequestForm from '~/components/equipment/EquipmentRequestForm.vue'
+import KtpQuiz from '~/components/equipment/KtpQuiz.vue'
 import { equipmentCatalog } from '~/assets/data/equipmentCatalog'
 import { equipmentQuestionnaires } from '~/assets/data/equipmentQuestionnaires'
 
@@ -763,6 +766,11 @@ const handleNavigation = (key) => {
 .request-section {
   scroll-margin-top: 70px;
   padding: 96px 0;
+}
+
+.request-section--quiz {
+  padding: 64px 0;
+  background: #fff;
 }
 
 .related-section {
