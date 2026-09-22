@@ -6,8 +6,6 @@
 
     <HeroSection ref="heroSection" @open-contact-modal="openContactModal" />
 
-    <GeneratorQuiz />
-
     <ServicesCarousel
       ref="servicesSection"
       :services="services"
@@ -76,7 +74,6 @@ import EquipmentCatalogTeaser from "./equipment/EquipmentCatalogTeaser.vue";
 import Footer from "./energy-systems/Footer.vue";
 import Header from "./energy-systems/Header.vue";
 import HeroSection from "./energy-systems/HeroSection.vue";
-import GeneratorQuiz from "./energy-systems/GeneratorQuiz.vue";
 import Navigation from "./energy-systems/Navigation.vue";
 import ProjectsShowcase from "./energy-systems/ProjectsShowcase.vue";
 import ScrollToTop from "./energy-systems/ScrollToTop.vue";
@@ -89,7 +86,6 @@ export default {
     Header,
     Navigation,
     HeroSection,
-    GeneratorQuiz,
     ServicesCarousel,
     EquipmentCatalogTeaser,
     ContentBlocks,

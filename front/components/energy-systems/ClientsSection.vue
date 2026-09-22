@@ -1,30 +1,68 @@
 <template>
-  <section class="clients-section" ref="clientsSection">
-    <div class="section-heading" ref="headingRef">
+  <section id="clients" class="clients-section" aria-labelledby="clients-title">
+    <div class="section-heading">
       <p class="section-kicker">Наши клиенты</p>
-      <h2>Нам доверяют лидеры отраслей</h2>
-      <p>
+      <h2 id="clients-title">Нам доверяют лидеры отраслей</h2>
+      <p class="section-description">
         Подрядчики, муниципалитеты и девелоперы, которым важна скорость и
         безупречное качество
       </p>
     </div>
-    <div class="clients-grid">
+
+    <div class="clients-marquee" :class="{ 'is-paused': isPaused }">
       <div
-        v-for="(client, index) in clients"
-        :key="client.id"
-        :ref="(el) => setCardRef(el, index)"
-        class="client-card"
+        id="clients-track"
+        class="clients-track"
+        :style="{ '--marquee-duration': `${clients.length * 8}s` }"
       >
-        <div class="client-logo" :style="getClientStyle(client)"></div>
-        <p>{{ client.name }}</p>
+        <ul
+          v-for="copy in 2"
+          :key="copy"
+          class="clients-list"
+          :aria-hidden="copy === 2 ? 'true' : undefined"
+          :aria-label="copy === 1 ? 'Наши клиенты' : undefined"
+        >
+          <li v-for="client in clients" :key="client.id" class="client-card">
+            <img
+              v-if="client.image"
+              class="client-logo"
+              :src="client.image"
+              alt=""
+              width="180"
+              height="80"
+              loading="lazy"
+              decoding="async"
+            >
+            <span v-else class="client-logo client-logo--fallback" :style="{ backgroundColor: client.color }" aria-hidden="true">
+              {{ client.name.slice(0, 1) }}
+            </span>
+            <p>{{ client.name }}</p>
+          </li>
+        </ul>
       </div>
+    </div>
+
+    <div class="clients-controls">
+      <button
+        class="motion-toggle"
+        type="button"
+        aria-controls="clients-track"
+        :aria-label="isPaused ? 'Продолжить движение логотипов' : 'Приостановить движение логотипов'"
+        @click="isPaused = !isPaused"
+      >
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path v-if="isPaused" d="M6 3.5 16 10 6 16.5Z" />
+          <path v-else d="M5 4h3v12H5zm7 0h3v12h-3z" />
+        </svg>
+        {{ isPaused ? 'Продолжить' : 'Пауза' }}
+      </button>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: "ClientsSection",
+  name: 'ClientsSection',
   props: {
     clients: {
       type: Array,
@@ -32,152 +70,22 @@ export default {
     },
   },
   data() {
-    return {
-      cardRefs: [],
-      scrollTriggers: [],
-    };
-  },
-  mounted() {
-    this.initScrollTriggers();
-    window.addEventListener("resize", this.handleResize, { passive: true });
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-    if (this.scrollTriggers) {
-      this.scrollTriggers.forEach((st) => st.kill());
-      this.scrollTriggers = [];
-    }
-  },
-  methods: {
-    setCardRef(el, index) {
-      if (el) {
-        this.cardRefs[index] = el;
-      }
-    },
-    initScrollTriggers() {
-      this.$nextTick(() => {
-        const gsap = this.$gsap;
-        const ScrollTrigger = this.$ScrollTrigger;
-
-        if (!gsap || !ScrollTrigger) return;
-
-        const isMobile = window.innerWidth <= 992;
-
-        // Очищаем предыдущие триггеры
-        if (this.scrollTriggers.length > 0) {
-          this.scrollTriggers.forEach((st) => st.kill());
-          this.scrollTriggers = [];
-        }
-
-        // Анимация для заголовка секции
-        if (this.$refs.headingRef) {
-          const headingAnim = gsap.fromTo(
-            this.$refs.headingRef,
-            {
-              opacity: 0,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.2,
-              ease: "none",
-              scrollTrigger: {
-                trigger: this.$refs.headingRef,
-                start: "top 85%",
-                toggleActions: "play reverse play reverse",
-              },
-            }
-          );
-          if (headingAnim.scrollTrigger) {
-            this.scrollTriggers.push(headingAnim.scrollTrigger);
-          }
-        }
-
-        // Анимации для карточек клиентов
-        this.cardRefs.forEach((card, index) => {
-          if (!card) return;
-
-          const offset = isMobile ? 25 : 40;
-
-          // Чередуем направления и создаем эффект волны
-          const row = Math.floor(index / (isMobile ? 2 : 4));
-          const col = index % (isMobile ? 2 : 4);
-          const xDirection = col % 2 === 0 ? -1 : 1;
-
-          const cardAnim = gsap.fromTo(
-            card,
-            {
-              opacity: 0,
-              x: offset * xDirection,
-              y: 20,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              y: 0,
-              duration: 0.2,
-              ease: "none",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 85%",
-                toggleActions: "play reverse play reverse",
-              },
-            }
-          );
-
-          if (cardAnim.scrollTrigger) {
-            this.scrollTriggers.push(cardAnim.scrollTrigger);
-          }
-        });
-
-        // Обновляем ScrollTrigger после создания всех анимаций
-        this.refreshScrollTrigger();
-      });
-    },
-    refreshScrollTrigger() {
-      const ScrollTrigger = this.$ScrollTrigger;
-      if (ScrollTrigger) {
-        setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100);
-      }
-    },
-    handleResize() {
-      // При изменении размера пересоздаем анимации
-      if (this.scrollTriggers.length > 0) {
-        this.scrollTriggers.forEach((st) => st.kill());
-        this.scrollTriggers = [];
-      }
-      this.initScrollTriggers();
-    },
-    getClientStyle(client) {
-      if (client.image) {
-        return {
-          backgroundImage: `url(${client.image})`,
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        };
-      } else if (client.color) {
-        return {
-          background: client.color,
-        };
-      }
-      return {};
-    },
+    return { isPaused: false };
   },
 };
 </script>
 
 <style scoped>
 .clients-section {
+  --client-card-width: 300px;
+  --client-gap: 20px;
   padding: clamp(50px, 8vw, 90px) 0;
+  scroll-margin-top: 72px;
 }
 
 .section-heading {
   text-align: center;
-  margin-bottom: clamp(32px, 5vw, 60px);
+  margin-bottom: clamp(24px, 4vw, 44px);
 }
 
 .section-kicker {
@@ -194,66 +102,128 @@ export default {
   color: #0f172a;
 }
 
-.section-heading p {
+.section-description {
   color: #61728a;
   font-size: 16px;
 }
 
-.clients-grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: clamp(10px, 1.5vw, 18px);
-  max-width: 1280px;
-  margin: 0 auto;
+.clients-marquee {
+  overflow: hidden;
+  padding: 16px 0;
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+
+.clients-track {
+  display: flex;
+  width: max-content;
+  animation: clients-drift var(--marquee-duration) linear infinite;
+}
+
+.clients-list {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--client-gap);
+  margin: 0;
+  padding: 0 var(--client-gap) 0 0;
+  list-style: none;
 }
 
 .client-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(216, 228, 237, 0.9);
-  border-radius: 8px;
-  padding: 16px 12px;
-  text-align: center;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  will-change: transform, opacity;
+  display: flex;
+  flex: 0 0 var(--client-card-width);
+  flex-direction: column;
+  justify-content: space-between;
+  width: var(--client-card-width);
+  min-height: 180px;
+  padding: 24px;
+  border: 1px solid #dedfda;
+  border-radius: 20px;
+  background: #f4f4f1;
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .client-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
+  background: #fff;
+  border-color: #cdd0cd;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
 }
 
 .client-logo {
-  width: 100%;
-  height: 72px;
+  display: block;
+  width: 180px;
+  max-width: 100%;
+  height: 80px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.client-logo--fallback {
+  display: grid;
+  place-items: center;
   border-radius: 8px;
-  margin-bottom: 12px;
-  background-color: #ffffff;
+  font-size: 32px;
 }
 
 .client-card p {
-  margin: 0;
+  margin: 16px 0 0;
+  color: #171b20;
+  font-size: 15px;
   font-weight: 600;
+  line-height: 1.4;
+}
+
+.is-paused .clients-track { animation-play-state: paused; }
+
+.clients-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #61728a;
+  font: inherit;
   font-size: 13px;
-  line-height: 1.25;
-  color: #334155;
+  cursor: pointer;
 }
 
-@media (max-width: 1023px) {
-  .clients-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+.motion-toggle svg { width: 16px; height: 16px; }
+.motion-toggle:hover { color: #171b20; background: #f4f4f1; }
+.motion-toggle:focus-visible { outline: 2px solid #896522; outline-offset: 3px; }
+
+@keyframes clients-drift {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+@media (hover: hover) {
+  .clients-marquee:hover .clients-track { animation-play-state: paused; }
+}
+
+@media (max-width: 600px) {
+  .clients-section { --client-card-width: 240px; --client-gap: 16px; }
+  .client-card { min-height: 168px; padding: 20px; }
+  .client-logo { width: 164px; height: 76px; }
+  .clients-marquee {
+    mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
   }
 }
 
-@media (max-width: 768px) {
-  .clients-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 560px) {
-  .clients-grid {
-    grid-template-columns: 1fr;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .clients-marquee { overflow: visible; mask-image: none; -webkit-mask-image: none; }
+  .clients-track { display: block; width: 100%; animation: none; }
+  .clients-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); padding: 0; }
+  .clients-list[aria-hidden="true"], .clients-controls { display: none; }
+  .client-card { width: auto; transition: none; }
 }
 </style>

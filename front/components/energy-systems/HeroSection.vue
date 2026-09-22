@@ -30,6 +30,8 @@
         </div>
       </div>
 
+      <GeneratorQuiz embedded />
+
       <dl class="hero-facts" aria-label="Ключевые факты">
         <div>
           <dt>Техника под задачу</dt>
@@ -49,8 +51,11 @@
 </template>
 
 <script>
+import GeneratorQuiz from './GeneratorQuiz.vue';
+
 export default {
   name: "HeroSection",
+  components: { GeneratorQuiz },
   emits: ["open-contact-modal"],
   data() {
     return {
@@ -75,11 +80,11 @@ export default {
 .hero-inner {
   width: min(100% - 48px, 1280px);
   margin: 0 auto;
-  padding: clamp(64px, 9vw, 118px) 0;
+  padding: clamp(32px, 4vw, 56px) 0;
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.55fr);
-  align-items: end;
-  gap: clamp(36px, 7vw, 92px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 32px clamp(28px, 4vw, 56px);
 }
 
 .hero-copy {
@@ -105,7 +110,7 @@ export default {
   max-width: 760px;
   margin: 0;
   color: #ffffff;
-  font-size: clamp(42px, 6vw, 78px);
+  font-size: clamp(40px, 4.5vw, 64px);
   font-weight: 850;
   line-height: 0.98;
   text-wrap: balance;
@@ -115,7 +120,7 @@ export default {
   max-width: 720px;
   margin: 24px 0 0;
   color: rgba(255, 255, 255, 0.88);
-  font-size: clamp(17px, 2vw, 21px);
+  font-size: clamp(17px, 1.4vw, 20px);
   line-height: 1.55;
   text-wrap: pretty;
 }
@@ -203,7 +208,9 @@ export default {
 }
 
 .hero-facts {
+  grid-column: 1 / -1;
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
   margin: 0;
 }

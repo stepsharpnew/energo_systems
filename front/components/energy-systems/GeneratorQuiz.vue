@@ -1,5 +1,5 @@
 <template>
-  <section id="generator-quiz" class="generator-quiz" aria-labelledby="generator-quiz-title">
+  <section id="generator-quiz" class="generator-quiz" :class="{ 'generator-quiz--embedded': embedded }" aria-labelledby="generator-quiz-title">
     <div class="quiz-container">
       <header class="quiz-intro">
         <p class="quiz-eyebrow">Резервное питание для дома</p>
@@ -155,6 +155,8 @@
 import { aliases as icons } from 'vuetify/iconsets/mdi-svg'
 import { useGeneratorQuiz } from '~/composables/useGeneratorQuiz'
 import { handlePhoneInput, handlePhoneKeydown } from '~/utils/phoneFormatter'
+
+defineProps({ embedded: Boolean })
 
 const {
   currentStep, answers, contact, totalSteps, activeQuestion, isContactStep,
@@ -386,6 +388,30 @@ function startAgain() {
 .quiz-success > .v-icon { color: #9b6c22; }
 .quiz-success p { max-width: 560px; margin: 0; color: var(--quiz-muted); font-size: 15px; line-height: 1.6; }
 
+.generator-quiz--embedded {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(4, 16, 28, 0.18);
+}
+.generator-quiz--embedded .quiz-container { width: 100%; }
+.generator-quiz--embedded .quiz-intro { margin-bottom: 18px; }
+.generator-quiz--embedded .quiz-intro h2 { font-size: 26px; }
+.generator-quiz--embedded .quiz-intro > p:last-child { font-size: 13px; }
+.generator-quiz--embedded .quiz-frame { padding: 5px; border-radius: 18px; }
+.generator-quiz--embedded .quiz-card { border-radius: 12px; }
+.generator-quiz--embedded .quiz-form { padding: 20px; }
+.generator-quiz--embedded .quiz-form h3 { font-size: 22px; }
+.generator-quiz--embedded .quiz-options { gap: 8px; margin-top: 18px; }
+.generator-quiz--embedded .quiz-option { min-height: 62px; gap: 10px; padding: 12px; font-size: 14px; }
+.generator-quiz--embedded .quiz-actions { gap: 12px; margin-top: 20px; }
+.generator-quiz--embedded .quiz-contact-layout { grid-template-columns: 1fr; gap: 20px; }
+.generator-quiz--embedded .quiz-summary { padding: 16px; }
+.generator-quiz--embedded .quiz-summary dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.generator-quiz--embedded .quiz-contact-step + .quiz-actions { flex-wrap: wrap; }
+.generator-quiz--embedded .quiz-contact-step + .quiz-actions .quiz-buttons { flex: 1 1 auto; justify-content: flex-end; }
+
 @media (max-width: 767px) {
   .generator-quiz { padding: 36px 0 42px; }
   .quiz-container { width: calc(100% - 32px); }
@@ -411,6 +437,9 @@ function startAgain() {
   .quiz-success { gap: 16px; padding: 26px 20px; }
   .quiz-contact-step + .quiz-actions { flex-wrap: wrap; }
   .quiz-contact-step + .quiz-actions .quiz-buttons { flex: 1 1 auto; justify-content: flex-end; }
+  .generator-quiz--embedded { padding: 20px 14px 14px; }
+  .generator-quiz--embedded .quiz-form { padding: 20px 14px; }
+  .generator-quiz--embedded .quiz-summary dl { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 420px) {
