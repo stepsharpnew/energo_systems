@@ -46,6 +46,11 @@ ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrack
     host: '0.0.0.0'
   },
 
+  // короткий адрес лендинга ГНБ ведёт на саму страницу услуги
+  routeRules: {
+    '/hdd': { redirect: { to: '/services/hdd', statusCode: 301 } }
+  },
+
   nitro: {
     prerender: {
       routes: [
