@@ -248,14 +248,8 @@
 
           <!-- Результат -->
           <div class="quiz__step quiz__result" data-result>
-            <h3 class="quiz__q" tabindex="-1">Ваш прокол</h3>
-            <dl class="result">
-              <div><dt>Назначение</dt><dd data-r="purpose"></dd></div>
-              <div><dt>Длина</dt><dd data-r="length"></dd></div>
-              <div><dt>Диаметр</dt><dd data-r="diameter"></dd></div>
-              <div><dt>Количество труб</dt><dd data-r="pipes"></dd></div>
-            </dl>
-            <p class="quiz__hint">Расчёт по вашему объекту пришлём в течение 30 минут.</p>
+            <h3 class="quiz__q" tabindex="-1">Спасибо за предоставленную информацию</h3>
+            <p class="quiz__thanks">В ближайшее время с вами свяжется наш инженер и даст информацию по стоимости.</p>
             <p class="quiz__hint quiz__hint--warn" data-small-note hidden>Минимальный заказ — от 50 метров. Менеджер подскажет, как выгоднее объединить работы.</p>
             <button type="button" class="quiz__restart" data-restart>Пройти заново</button>
           </div>
@@ -520,9 +514,12 @@
         </ul>
       </div>
 
-      <a class="steps__btn price-cta" href="#quiz">Рассчитать по объекту
+      <button class="steps__btn price-cta" type="button" data-callback-open
+              data-cb-title="Рассчитать по объекту"
+              data-cb-lead="Оставьте телефон — инженер посчитает стоимость по вашему диаметру и длине и перезвонит">
+        Рассчитать по объекту
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
+      </button>
     </div>
   </section>
 
@@ -1472,20 +1469,7 @@ img { display: block; max-width: 100%; }
 .quiz.is-done .quiz__nav { display: none; }
 
 /* результат */
-.result {
-  margin: 28px 0 20px;
-  border: 1px solid var(--line-strong);
-  border-radius: 18px;
-}
-.result div {
-  display: grid; grid-template-columns: 180px 1fr; gap: 16px;
-  padding: 18px 24px;
-  border-top: 1px solid var(--line);
-}
-.result div:first-child { border-top: 0; }
-.result dt { font-size: 14px; color: var(--muted); padding-top: 2px; }
-.result dd { margin: 0; font-size: 17px; font-weight: 600; }
-.result dd[data-r="diameter"] { font-size: 28px; color: var(--accent-ink); letter-spacing: -.02em; }
+.quiz__thanks { margin-top: 18px; max-width: 46ch; font-size: 18px; line-height: 1.5; color: var(--text-2); }
 .quiz__restart {
   margin-top: 20px;
   padding: 0; border: 0; background: none;
@@ -1787,7 +1771,7 @@ img { display: block; max-width: 100%; }
   width: 10px; height: 1.5px; background: var(--line-strong);
 }
 
-.price-cta { margin-top: 28px; }
+.price-cta { margin-top: 28px; border: 0; font-family: inherit; cursor: pointer; }
 
 /* ============ БЛОК 5 — УСЛОВИЯ РАБОТ ============ */
 /* цветная полоса во всю ширину: рядом стоят расценки, и два белых блока подряд сливались */
@@ -2411,7 +2395,6 @@ img { display: block; max-width: 100%; }
   .quiz__count { text-align: center; }
   .quiz__next { flex: 1; justify-content: center; height: 58px; }
   .quiz__back { width: 58px; height: 58px; flex-shrink: 0; }
-  .result div { grid-template-columns: 1fr; gap: 4px; padding: 14px 18px; }
   .mgr__bubble { padding: 14px 16px; }
   .mgr__role { display: none; }
   .mgr__msg { margin-top: 6px; font-size: 14px; }

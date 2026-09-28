@@ -225,13 +225,10 @@ export function initHddPage() {
       steps.forEach(function (s) { s.classList.remove('is-active'); });
       result.classList.add('is-active');
       root.classList.add('is-done');
-      result.querySelector('[data-r="purpose"]').textContent = p.purpose.join(', ');
-      result.querySelector('[data-r="length"]').textContent = p.length;
-      result.querySelector('[data-r="diameter"]').textContent = p.diameter;
-      result.querySelector('[data-r="pipes"]').textContent = p.pipes;
+      // параметры прокола на экране больше не показываем: они уже ушли в заявку
       result.querySelector('[data-small-note]').hidden = !p.small;
       setProgress(100);
-      say('Спасибо, ' + p.name + '! Уже смотрю ваш объект — пришлю расчёт в течение 30 минут.');
+      say('Спасибо, ' + p.name + '! Передал ваш объект инженеру — он свяжется и назовёт стоимость.');
       result.querySelector('.quiz__q').focus({ preventScroll: true });
     }
 
