@@ -62,7 +62,14 @@ const COMMON_LEAD_FIELDS = [
   "consent",
   "consentVersion",
 ];
-const SERVICE_LEAD_FIELDS = new Set([...COMMON_LEAD_FIELDS, "service"]);
+// У заявок с услуг тоже бывают технические параметры: опрос по ГНБ передаёт
+// назначение, длину, диаметр и количество труб в том же формате answers.
+const SERVICE_LEAD_FIELDS = new Set([
+  ...COMMON_LEAD_FIELDS,
+  "service",
+  "comment",
+  "answers",
+]);
 const EQUIPMENT_LEAD_FIELDS = new Set([
   ...COMMON_LEAD_FIELDS,
   "product",
@@ -243,11 +250,35 @@ async function handleLeadSubmit(req, res) {
     };
 
     if (type === "service") {
+      if (
+        (req.body.comment !== undefined &&
+          typeof req.body.comment !== "string") ||
+        (req.body.answers !== undefined && !Array.isArray(req.body.answers))
+      ) {
+        return res.status(400).json({ ok: false, error: "invalid_payload" });
+      }
+
       const service = normalizeText(req.body.service);
       if (service.length < 2 || service.length > 200) {
         return res.status(400).json({ ok: false, error: "invalid_service" });
       }
+
+      const serviceComment = normalizeText(req.body.comment);
+      if (serviceComment.length > 5000) {
+        return res.status(400).json({ ok: false, error: "invalid_comment" });
+      }
+
+      const serviceAnswers =
+        req.body.answers === undefined
+          ? []
+          : normalizeAnswers(req.body.answers);
+      if (serviceAnswers === null) {
+        return res.status(400).json({ ok: false, error: "invalid_answers" });
+      }
+
       lead.service = service;
+      lead.comment = serviceComment;
+      lead.answers = serviceAnswers;
     } else {
       if (
         typeof req.body.product !== "string" ||

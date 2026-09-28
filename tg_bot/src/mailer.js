@@ -109,12 +109,13 @@ function buildLeadEmail(data) {
     if (comment) rows.push(["Описание задачи", comment]);
   } else {
     rows.push(["Услуга", service]);
+    if (comment) rows.push(["Описание задачи", comment]);
   }
 
-  const answerRows =
-    type === "equipment" && Array.isArray(answers)
-      ? answers.map(({ label, value }) => [label, formatAnswerValue(value)])
-      : [];
+  // параметры объекта приходят и от опроса по услуге, и от опросников оборудования
+  const answerRows = Array.isArray(answers)
+    ? answers.map(({ label, value }) => [label, formatAnswerValue(value)])
+    : [];
   const auditRows = [
     ["Согласие", "Получено отдельной отметкой в форме"],
     ["Идентификатор согласия", consentRecordId],

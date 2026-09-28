@@ -217,6 +217,7 @@ export function initHddPage() {
         address: f.address.value.trim(),
         channel: form.querySelector('input[name="channel"]:checked').value,
         small: isSmall,
+        type: 'Опрос по ГНБ: прокол под ключ',
         page: location.href
       };
     }
@@ -235,20 +236,51 @@ export function initHddPage() {
     show(0, false);
   }
 
-  // Куда уходят заявки. Пока пусто — заявка только пишется в консоль браузера.
-  // Когда заказчик выберет канал (почта, Telegram-бот или CRM), сюда вписывается адрес
-  // приёмника, и форма начинает работать: больше ничего менять не нужно.
-  var LEAD_ENDPOINT = '';
+  // Заявки уходят в общий приёмник сайта: POST /api/lead → письмо на sales@e-systems.su.
+  // Приёмник принимает строго свой набор полей, поэтому здесь payload формы
+  // переводится в его формат. Версия согласия должна совпадать с CONSENT_VERSION
+  // в tg_bot/src/server.js — при её смене поправить и тут.
+  var LEAD_ENDPOINT = '/api/lead';
+  var CONSENT_VERSION = '2026-07-13';
+
+  // приёмник ждёт телефон строго как +7 (999)-000-00-00, у нас на странице пробел
+  function apiPhone(value) {
+    return String(value || '').replace(') ', ')-');
+  }
+
+  function toApiLead(p) {
+    var answers = [];
+    var add = function (label, value) {
+      if (value && value.length) answers.push({ label: label, value: value });
+    };
+    add('Что прокладываем', p.purpose);
+    add('Длина прокола', p.length);
+    add('Диаметр трубы или футляра', p.diameter);
+    add('Количество труб', p.pipes);
+    add('Адрес объекта', p.address);
+    add('Как удобнее связаться', p.channel);
+    if (p.small) answers.push({ label: 'Отметка', value: 'Объём меньше 50 метров' });
+
+    var body = {
+      type: 'service',
+      name: p.name,
+      contact: apiPhone(p.phone),
+      // куда смотреть менеджеру: опрос, кнопка расценок, форма в контактах
+      service: p.type || 'Опрос по ГНБ',
+      consent: true,
+      consentVersion: CONSENT_VERSION
+    };
+    if (p.email) body.email = p.email;
+    if (p.task) body.comment = p.task;
+    if (answers.length) body.answers = answers;
+    return body;
+  }
 
   function submitLead(payload) {
-    if (!LEAD_ENDPOINT) {
-      console.info('Заявка:', payload);
-      return Promise.resolve();
-    }
     return fetch(LEAD_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(toApiLead(payload))
     }).then(function (r) {
       if (!r.ok) throw new Error('Сервер ответил ' + r.status);
     });
