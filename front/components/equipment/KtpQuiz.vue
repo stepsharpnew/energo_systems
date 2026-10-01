@@ -77,7 +77,7 @@
               </details>
               <label class="ktp-consent"><input v-model="contact.consent" name="consent" type="checkbox" required><span>Даю ООО «Энергосистемы» <NuxtLink to="/personal-data-consent" target="_blank" rel="noopener">согласие на обработку персональных данных</NuxtLink> для ответа на заявку.</span></label>
               <p class="ktp-privacy">Подробнее — в <NuxtLink to="/privacy" target="_blank" rel="noopener">политике обработки персональных данных</NuxtLink>.</p>
-              <p v-if="errorMessage" class="ktp-error" role="alert">{{ errorMessage }} <a href="tel:+74951780118">+7 (495) 178-01-18</a></p>
+              <p v-if="errorMessage" class="ktp-error" role="alert">{{ errorMessage }} <a href="tel:+79251640560">+7 (925) 164-05-60</a></p>
             </fieldset>
           </div>
 

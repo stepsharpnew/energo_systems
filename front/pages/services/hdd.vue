@@ -25,8 +25,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
         </a>
         <div class="phone">
-          <a class="phone__num" href="tel:+74951780118">+7 (495) 178-01-18</a>
-          <a class="phone__num phone__num--second" href="tel:+79251640560">+7 (925) 164-05-60</a>
+          <a class="phone__num" href="tel:+79251640560">+7 (925) 164-05-60</a>
           <a class="phone__mail" href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           <span class="phone__note" data-status-box><i class="phone__dot" aria-hidden="true"></i><span data-status>Ответим за 30 минут</span></span>
         </div>
@@ -711,15 +710,15 @@
           <p class="contacts__note">Не хотите отвечать на вопросы опроса — напишите пару строк, остальное спросим сами.</p>
 
           <div class="contacts__done" data-contact-done hidden>
-            <b>Заявка принята</b>
-            <span>Ответим в рабочее время. Если срочно — звоните: <a href="tel:+74951780118">+7 (495) 178-01-18</a></span>
+            <b>Спасибо за обращение!</b>
+            <span>Мы получили вашу заявку и свяжемся с вами в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
+            <span>Будем рады помочь и по телефону: <a href="tel:+79251640560">+7 (925) 164-05-60</a></span>
           </div>
         </form>
 
         <div class="contacts__side">
           <div class="cnt">
-            <span class="cnt__label">Телефоны</span>
-            <a class="cnt__value" href="tel:+74951780118">+7 (495) 178-01-18</a>
+            <span class="cnt__label">Телефон</span>
             <a class="cnt__value" href="tel:+79251640560">+7 (925) 164-05-60</a>
           </div>
           <div class="cnt">
@@ -790,7 +789,7 @@
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <h2 class="modal__title" id="cb-title">Заказать звонок</h2>
-      <p class="modal__lead">Перезвоним в рабочее время: Пн–Пт с 9:00 до 18:00.</p>
+      <p class="modal__lead">Оставьте номер — мы перезвоним и ответим на ваши вопросы. Работаем Пн–Пт с 9:00 до 18:00.</p>
 
       <form class="modal__form" data-callback-form novalidate>
         <label class="field">
@@ -820,8 +819,9 @@
       </form>
 
       <div class="modal__done" data-callback-done hidden>
-        <b>Заявка принята</b>
-        <span>Перезвоним в рабочее время. Если срочно — звоните сами: <a href="tel:+74951780118">+7 (495) 178-01-18</a></span>
+        <b>Спасибо за обращение!</b>
+        <span>Мы получили вашу заявку и перезвоним вам в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
+        <span>Будем рады помочь и по телефону: <a href="tel:+79251640560">+7 (925) 164-05-60</a></span>
       </div>
     </div>
   </div>
@@ -829,7 +829,7 @@
   <!-- липкая кнопка на узких экранах; прячется, когда виден сам опрос -->
   <div class="sticky-cta" data-sticky>
     <a class="sticky-cta__btn" href="#quiz">Рассчитать стоимость</a>
-    <a class="sticky-cta__call" href="tel:+74951780118" aria-label="Позвонить">
+    <a class="sticky-cta__call" href="tel:+79251640560" aria-label="Позвонить">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
     </a>
   </div>

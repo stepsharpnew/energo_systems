@@ -24,7 +24,7 @@
                 <button type="button" class="primary-action" @click="scrollToRequest">
                   Подобрать оборудование
                 </button>
-                <a class="secondary-action" href="tel:+74951780118">Позвонить менеджеру</a>
+                <a class="secondary-action" href="tel:+79251640560">Позвонить менеджеру</a>
               </div>
             </div>
 
@@ -68,7 +68,6 @@
             </ol>
             <div class="passport-contacts">
               <span>Позвонить сейчас</span>
-              <a href="tel:+74951780118">+7 (495) 178-01-18</a>
               <a href="tel:+79251640560">+7 (925) 164-05-60</a>
             </div>
           </aside>
