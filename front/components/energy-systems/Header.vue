@@ -58,8 +58,7 @@
           <span class="contact-copy">
             <span class="contact-label">Почта</span>
             <span class="mail-links">
-              <a class="mail-link" href="mailto:sales@e-systems.su?cc=inbox@e-systems.su">sales@e-systems.su</a>
-              <a class="mail-link" href="mailto:inbox@e-systems.su">inbox@e-systems.su</a>
+              <a class="mail-link" href="mailto:sales@e-systems.su">sales@e-systems.su</a>
             </span>
           </span>
         </div>

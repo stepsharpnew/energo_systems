@@ -104,7 +104,7 @@
             <span>Прямой контакт</span>
             <a href="tel:+74951780118">+7 (495) 178-01-18</a>
             <a href="tel:+79251640560">+7 (925) 164-05-60</a>
-            <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su">sales@e-systems.su</a>
+            <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           </div>
         </div>
       </section>

@@ -21,10 +21,7 @@
             <a href="tel:+79251640560" class="contact-link">+7 (925) 164-05-60</a>
           </li>
           <li>
-            <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su" class="contact-link">sales@e-systems.su</a>
-          </li>
-          <li>
-            <a href="mailto:inbox@e-systems.su" class="contact-link">inbox@e-systems.su</a>
+            <a href="mailto:sales@e-systems.su" class="contact-link">sales@e-systems.su</a>
           </li>
           <li>
             <a href="/Energosistemy_el_vesia_2026.pdf" class="contact-link" target="_blank" rel="noopener">Презентация компании PDF</a>

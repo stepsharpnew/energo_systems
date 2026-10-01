@@ -238,7 +238,7 @@ useHead(() => {
         provider: {
           '@type': 'LocalBusiness',
           name: 'Энергосистемы',
-          email: ['sales@e-systems.su', 'inbox@e-systems.su'],
+          email: ['sales@e-systems.su'],
           telephone: ['+7 495 178-01-18', '+7 925 164-05-60'],
           address: {
             '@type': 'PostalAddress',

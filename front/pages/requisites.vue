@@ -20,7 +20,7 @@
       <dt>Телефоны</dt>
       <dd><a href="tel:+74951780118">+7 (495) 178-01-18</a>, <a href="tel:+79251640560">+7 (925) 164-05-60</a></dd>
       <dt>Электронная почта</dt>
-      <dd><a href="mailto:sales@e-systems.su">sales@e-systems.su</a>, <a href="mailto:inbox@e-systems.su">inbox@e-systems.su</a></dd>
+      <dd><a href="mailto:sales@e-systems.su">sales@e-systems.su</a></dd>
     </dl>
 
     <p class="legal-note">Сведения о членстве в саморегулируемых организациях, допусках, аккредитациях и документах, необходимых для выполнения конкретного вида работ, предоставляются вместе с предложением по соответствующей услуге.</p>

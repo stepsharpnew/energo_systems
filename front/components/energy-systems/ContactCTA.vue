@@ -18,8 +18,7 @@
         <div class="contact-links">
           <a href="tel:+74951780118">+7 (495) 178-01-18</a>
           <a href="tel:+79251640560">+7 (925) 164-05-60</a>
-          <a href="mailto:sales@e-systems.su?cc=inbox@e-systems.su">sales@e-systems.su</a>
-          <a href="mailto:inbox@e-systems.su">inbox@e-systems.su</a>
+          <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           <a href="/Energosistemy_el_vesia_2026.pdf" target="_blank" rel="noopener">Презентация компании PDF</a>
         </div>
       </div>
