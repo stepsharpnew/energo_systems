@@ -16,7 +16,7 @@
       <div class="phone-link">
         <span class="phone-icon">☎</span>
         <div class="contact-links">
-          <a href="tel:+79251640560">+7 (925) 164-05-60</a>
+          <PhoneLink />
           <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           <a href="/Energosistemy_el_vesia_2026.pdf" target="_blank" rel="noopener">Презентация компании PDF</a>
         </div>

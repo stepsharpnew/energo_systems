@@ -25,7 +25,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
         </a>
         <div class="phone">
-          <a class="phone__num" href="tel:+79251640560">+7 (925) 164-05-60</a>
+          <PhoneLink class="phone__num" number-id="number_phone_1ats" />
           <a class="phone__mail" href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           <span class="phone__note" data-status-box><i class="phone__dot" aria-hidden="true"></i><span data-status>Ответим за 30 минут</span></span>
         </div>
@@ -712,14 +712,14 @@
           <div class="contacts__done" data-contact-done hidden>
             <b>Спасибо за обращение!</b>
             <span>Мы получили вашу заявку и свяжемся с вами в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
-            <span>Будем рады помочь и по телефону: <a href="tel:+79251640560">+7 (925) 164-05-60</a></span>
+            <span>Будем рады помочь и по телефону: <PhoneLink /></span>
           </div>
         </form>
 
         <div class="contacts__side">
           <div class="cnt">
             <span class="cnt__label">Телефон</span>
-            <a class="cnt__value" href="tel:+79251640560">+7 (925) 164-05-60</a>
+            <PhoneLink class="cnt__value" />
           </div>
           <div class="cnt">
             <span class="cnt__label">Почта</span>
@@ -821,7 +821,7 @@
       <div class="modal__done" data-callback-done hidden>
         <b>Спасибо за обращение!</b>
         <span>Мы получили вашу заявку и перезвоним вам в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
-        <span>Будем рады помочь и по телефону: <a href="tel:+79251640560">+7 (925) 164-05-60</a></span>
+        <span>Будем рады помочь и по телефону: <PhoneLink /></span>
       </div>
     </div>
   </div>
@@ -829,9 +829,9 @@
   <!-- липкая кнопка на узких экранах; прячется, когда виден сам опрос -->
   <div class="sticky-cta" data-sticky>
     <a class="sticky-cta__btn" href="#quiz">Рассчитать стоимость</a>
-    <a class="sticky-cta__call" href="tel:+79251640560" aria-label="Позвонить">
+    <PhoneLink class="sticky-cta__call" aria-label="Позвонить">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
-    </a>
+    </PhoneLink>
   </div>
   </div>
 </template>

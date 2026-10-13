@@ -121,7 +121,7 @@
                   </fieldset>
                   <div v-if="errorMessage" class="quiz-error" role="alert">
                     <p>{{ errorMessage }}</p>
-                    <a href="tel:+79251640560">+7 (925) 164-05-60</a>
+                    <PhoneLink />
                   </div>
                 </div>
               </div>

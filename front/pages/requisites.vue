@@ -18,7 +18,7 @@
       <dt>Режим работы</dt>
       <dd>Понедельник — пятница, 09:00–18:00</dd>
       <dt>Телефоны</dt>
-      <dd><a href="tel:+79251640560">+7 (925) 164-05-60</a></dd>
+      <dd><PhoneLink /></dd>
       <dt>Электронная почта</dt>
       <dd><a href="mailto:sales@e-systems.su">sales@e-systems.su</a></dd>
     </dl>

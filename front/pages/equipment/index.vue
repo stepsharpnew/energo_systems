@@ -17,7 +17,7 @@
             </p>
             <div class="hero-actions">
               <a class="primary-action" href="#equipment-catalog">Выбрать оборудование</a>
-              <a class="secondary-action" href="tel:+79251640560">+7 (925) 164-05-60</a>
+              <PhoneLink class="secondary-action" />
             </div>
           </div>
 
@@ -102,7 +102,7 @@
           </div>
           <div class="contact-rail">
             <span>Прямой контакт</span>
-            <a href="tel:+79251640560">+7 (925) 164-05-60</a>
+            <PhoneLink />
             <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           </div>
         </div>

@@ -15,7 +15,7 @@
         <h4>Контакты</h4>
         <ul>
           <li>
-            <a href="tel:+79251640560" class="contact-link">+7 (925) 164-05-60</a>
+            <PhoneLink class="contact-link" />
           </li>
           <li>
             <a href="mailto:sales@e-systems.su" class="contact-link">sales@e-systems.su</a>
