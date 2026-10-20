@@ -324,7 +324,7 @@ const submitRequest = async () => {
   submitState.value = 'idle'
 
   try {
-    await $fetch('/api/lead', {
+    const response = await $fetch('/api/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: {
@@ -342,6 +342,7 @@ const submitRequest = async () => {
       },
     })
 
+    if (response?.ok !== true) throw new Error('Заявка не подтверждена сервером')
     submitState.value = 'success'
     nextTick(() => successPanel.value?.focus())
   } catch (error) {

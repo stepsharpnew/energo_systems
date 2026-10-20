@@ -194,7 +194,7 @@ async function sendLeadEmail(data) {
   const transporter = createTransporter(config);
   const { subject, text, html } = buildLeadEmail(data);
 
-  await transporter.sendMail({
+  const result = await transporter.sendMail({
     from: config.from,
     to: config.to,
     cc: config.cc,
@@ -202,6 +202,43 @@ async function sendLeadEmail(data) {
     text,
     html,
   });
+
+  // SMTP can accept only the CC recipient and still resolve sendMail().
+  // Do not acknowledge the lead unless every primary mailbox was accepted.
+  const accepted = (result.accepted || []).map((address) => address.toLowerCase());
+  const primaryRecipients = config.to.split(",").map((address) => {
+    const match = address.match(/<([^>]+)>/);
+    return (match ? match[1] : address).trim().toLowerCase();
+  }).filter(Boolean);
+  const rejectedPrimary = primaryRecipients.filter((address) => !accepted.includes(address));
+  if (!primaryRecipients.length || rejectedPrimary.length) {
+    const error = new Error("SMTP не принял заявку для основного получателя");
+    error.code = "EMAIL_RECIPIENT_REJECTED";
+    error.rejected = rejectedPrimary;
+    throw error;
+  }
+
+  return {
+    messageId: result.messageId,
+    accepted: result.accepted,
+    rejected: result.rejected || [],
+  };
 }
 
-module.exports = { buildLeadEmail, sendLeadEmail };
+async function verifyEmailConfiguration() {
+  const config = getEmailConfig();
+  if (!config.enabled) {
+    const error = new Error("SMTP_USER/SMTP_PASS не заданы");
+    error.code = "SMTP_NOT_CONFIGURED";
+    throw error;
+  }
+  const transporter = createTransporter(config);
+  try {
+    await transporter.verify();
+    return { host: config.host, port: config.port, to: config.to, cc: config.cc };
+  } finally {
+    transporter.close();
+  }
+}
+
+module.exports = { buildLeadEmail, sendLeadEmail, verifyEmailConfiguration };

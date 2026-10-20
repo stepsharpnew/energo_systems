@@ -706,6 +706,7 @@
           </div>
           <span class="field__err field__err--consent">Отметьте оба пункта — без них не сможем принять заявку</span>
 
+          <p class="field__err is-shown" data-submit-error role="alert" hidden></p>
           <button class="contacts__submit" type="submit">Отправить заявку</button>
           <p class="contacts__note">Не хотите отвечать на вопросы опроса — напишите пару строк, остальное спросим сами.</p>
 
@@ -815,6 +816,7 @@
           </label>
         </div>
         <span class="field__err field__err--consent">Отметьте оба пункта — без них не сможем принять заявку</span>
+        <p class="field__err is-shown" data-submit-error role="alert" hidden></p>
         <button class="modal__submit" type="submit">Жду звонка</button>
       </form>
 
@@ -1392,7 +1394,7 @@ img { display: block; max-width: 100%; }
 .field__input[aria-invalid="true"] { border-color: #E5634D; }
 .field__err { display: none; font-size: 13px; color: #F08A76; }
 .field__input[aria-invalid="true"] ~ .field__err,
-.field__err--consent.is-shown { display: block; }
+.field__err.is-shown { display: block; }
 .field__err--consent { grid-column: 1 / -1; margin-top: -12px; }
 
 .seg {

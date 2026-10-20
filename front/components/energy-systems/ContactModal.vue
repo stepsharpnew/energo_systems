@@ -332,13 +332,15 @@ export default {
           consentVersion: this.consentVersion,
         };
 
-        await $fetch("/api/lead", {
+        const response = await $fetch("/api/lead", {
           method: "POST",
           body: payload,
           headers: {
             "Content-Type": "application/json",
           },
         });
+
+        if (response?.ok !== true) throw new Error("Заявка не подтверждена сервером");
 
         alert("Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.");
         this.$emit("close");

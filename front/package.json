@@ -7,7 +7,9 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "node --test tests/*.test.mjs",
+    "test:forms": "node --test tests/browser/*.test.mjs"
   },
   "dependencies": {
     "axios": "^1.7.9",
@@ -17,6 +19,7 @@
     "vuetify": "^3.6.0"
   },
   "devDependencies": {
+    "playwright": "^1.64.1",
     "sass": "^1.60.0",
     "vite-plugin-vuetify": "^2.0.2"
   }

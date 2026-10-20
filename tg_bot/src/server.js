@@ -331,12 +331,15 @@ async function handleLeadSubmit(req, res) {
       });
     }
 
-    await sendLeadEmail(lead);
+    const delivery = await sendLeadEmail(lead);
 
-    console.info("Согласие на обработку персональных данных зафиксировано", {
+    console.info("Заявка принята SMTP-сервером, согласие зафиксировано", {
       consentRecordId,
       consentVersion: CONSENT_VERSION,
       consentAcceptedAt,
+      messageId: delivery.messageId,
+      acceptedRecipients: delivery.accepted,
+      rejectedRecipients: delivery.rejected,
     });
 
     return res.json({ ok: true, requestId: consentRecordId });
@@ -364,6 +367,10 @@ app.use((error, req, res, next) => {
   return res.status(500).json({ ok: false, error: "internal_error" });
 });
 
-app.listen(PORT, () => {
-  console.log(`HTTP-сервис заявок запущен на порту ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`HTTP-сервис заявок запущен на порту ${PORT}`);
+  });
+}
+
+module.exports = { app };

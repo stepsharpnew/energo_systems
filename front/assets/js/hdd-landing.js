@@ -282,8 +282,22 @@ export function initHddPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(toApiLead(payload))
     }).then(function (r) {
-      if (!r.ok) throw new Error('Сервер ответил ' + r.status);
+      if (!r.ok) {
+        var error = new Error('Сервер ответил ' + r.status);
+        error.status = r.status;
+        throw error;
+      }
+      return r.json();
+    }).then(function (result) {
+      if (!result || result.ok !== true) throw new Error('Заявка не подтверждена сервером');
+      return result;
     });
+  }
+
+  function submitErrorMessage(error) {
+    return error.status === 429
+      ? 'Слишком много попыток. Попробуйте через 15 минут или позвоните нам. Введённые данные сохранены.'
+      : 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз или позвоните нам. Введённые данные сохранены.';
   }
 
   // маска телефона — общая для квиза и окна «Заказать звонок»
@@ -319,6 +333,7 @@ export function initHddPage() {
     var titleEl = root.querySelector('.modal__title');
     var leadEl = root.querySelector('.modal__lead');
     var submitBtn = form.querySelector('.modal__submit');
+    var submitError = form.querySelector('[data-submit-error]');
     var defTitle = titleEl.textContent;
     var defLead = leadEl.textContent;
     var lastFocus = null;
@@ -334,6 +349,7 @@ export function initHddPage() {
       form.hidden = false;
       done.hidden = true;
       submitBtn.disabled = false;
+      submitError.hidden = true;
       root.hidden = false;
       document.body.classList.add('is-locked');
       nameInput.focus();
@@ -365,6 +381,8 @@ export function initHddPage() {
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (submitBtn.disabled) return;
+      submitError.hidden = true;
       var ok = true;
       if (nameInput.value.trim().length < 2) { nameInput.setAttribute('aria-invalid', 'true'); ok = false; }
       if (!validPhone(phoneInput.value)) { phoneInput.setAttribute('aria-invalid', 'true'); ok = false; }
@@ -383,7 +401,11 @@ export function initHddPage() {
       }).then(function () {
         form.hidden = true;
         done.hidden = false;
-      }).catch(function () { submitBtn.disabled = false; });
+      }).catch(function (error) {
+        submitBtn.disabled = false;
+        submitError.textContent = submitErrorMessage(error);
+        submitError.hidden = false;
+      });
     });
   }
 
@@ -399,6 +421,7 @@ export function initHddPage() {
     var privacy = form.elements.ctprivacy;
     var consentErr = form.querySelector('.field__err--consent');
     var submitBtn = form.querySelector('.contacts__submit');
+    var submitError = form.querySelector('[data-submit-error]');
     var done = form.querySelector('[data-contact-done]');
 
     phoneInput.addEventListener('input', function () {
@@ -412,6 +435,8 @@ export function initHddPage() {
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (submitBtn.disabled) return;
+      submitError.hidden = true;
       var ok = true;
       if (nameInput.value.trim().length < 2) { nameInput.setAttribute('aria-invalid', 'true'); ok = false; }
       if (!validPhone(phoneInput.value)) { phoneInput.setAttribute('aria-invalid', 'true'); ok = false; }
@@ -434,7 +459,11 @@ export function initHddPage() {
           .forEach(function (el) { el.hidden = true; });
         consentErr.classList.remove('is-shown');
         done.hidden = false;
-      }).catch(function () { submitBtn.disabled = false; });
+      }).catch(function (error) {
+        submitBtn.disabled = false;
+        submitError.textContent = submitErrorMessage(error);
+        submitError.hidden = false;
+      });
     });
   }
 
