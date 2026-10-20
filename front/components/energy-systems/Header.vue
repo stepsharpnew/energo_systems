@@ -22,7 +22,7 @@
           <span class="contact-copy">
             <span class="contact-label">Звонок по проекту</span>
             <span class="phone-links">
-              <PhoneLink number-id="number_phone_1ats" />
+              <PhoneLink />
             </span>
           </span>
         </div>

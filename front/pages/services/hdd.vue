@@ -25,7 +25,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
         </a>
         <div class="phone">
-          <PhoneLink class="phone__num" number-id="number_phone_1ats" />
+          <PhoneLink class="phone__num" />
           <a class="phone__mail" href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           <span class="phone__note" data-status-box><i class="phone__dot" aria-hidden="true"></i><span data-status>Ответим за 30 минут</span></span>
         </div>

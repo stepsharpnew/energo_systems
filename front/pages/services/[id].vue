@@ -290,7 +290,11 @@ onMounted(() => {
 const selectService = (serviceId) => {
   selectedServiceId.value = serviceId
   // Обновляем URL без перезагрузки страницы
-  router.replace(`/services/${serviceId}`)
+  router.replace({
+    path: `/services/${serviceId}`,
+    query: route.query,
+    hash: route.hash,
+  })
 }
 
 const openContactModal = () => {
