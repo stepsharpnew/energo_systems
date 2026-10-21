@@ -1,11 +1,7 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
 <title>ИБП под ключ</title>
-<!-- Novofon -->
-<script type="text/javascript" async src="https://widget.novofon.ru/novofon.js?k=eAYAknhHnXHvGm2aloYuaoi6Bkrnc1dw"></script>
-<!-- Novofon -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
 <style>
-[hidden] { display: none !important; }
 /* ============ ТОКЕНЫ ============ */
 :root {
   --bg: #FFFFFF;
@@ -1198,7 +1194,17 @@ main > .section:last-child { padding-bottom: 120px; }
   .maps { grid-template-columns: 1fr; gap: 20px; }
   .map__frame { border: 0; width: 100%; height: 260px; border-radius: 22px; }
 }
-</style>
+
+/* ===== мобильные правки: текст не обрезается, кнопки не вылезают за экран ===== */
+@media (max-width: 1080px) {
+  .tgrid { grid-template-columns: minmax(0, 1fr); }
+  .fears, .fear > div { min-width: 0; }
+  .fear { grid-template-columns: 34px minmax(0, 1fr); }
+  .fear__q { display: block; overflow-wrap: anywhere; }
+}
+@media (max-width: 640px) {
+  .btn-pill { max-width: 100%; height: auto; min-height: 64px; padding-block: 8px; white-space: normal; text-align: left; }
+}</style>
 
 
 <!-- ============ ШАПКА ============ -->
@@ -1451,7 +1457,7 @@ main > .section:last-child { padding-bottom: 120px; }
             <p class="quiz__done-note">Точный состав и стоимость инженер пришлёт после уточнения нагрузки. Заявка отправлена.</p>
           </div>
 
-          <p class="quiz__error" data-quiz-error role="alert" hidden></p>
+          <p class="quiz__error" data-quiz-error hidden></p>
 
           <div class="quiz__foot" data-quiz-foot>
             <span class="quiz__step">Шаг: <b data-quiz-n>1</b>/5</span>
@@ -2085,7 +2091,6 @@ main > .section:last-child { padding-bottom: 120px; }
           <label class="cconsent"><input type="checkbox" id="ct-privacy" name="ctprivacy"><span class="cconsent__ind"></span><span>Ознакомлен с <a href="https://e-systems.su/privacy" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>
         </div>
         <span class="cfield__err" data-contact-consent-err>Отметьте оба пункта — без них не сможем принять заявку</span>
-        <p class="cfield__err is-shown" data-contact-error role="alert" hidden></p>
         <button class="contacts__submit" type="submit">Отправить заявку</button>
         <p class="contacts__note">Не хотите отвечать на вопросы опроса — напишите пару строк, остальное спросим сами.</p>
         <div class="contacts__done" data-contact-done hidden>
@@ -2141,7 +2146,8 @@ main > .section:last-child { padding-bottom: 120px; }
       <span>Согласен на <a href="https://e-systems.su/personal-data-consent" target="_blank" rel="noopener">обработку персональных данных</a></span></label>
     <label class="check"><input type="checkbox" name="policy" required>
       <span>Ознакомлен с <a href="https://e-systems.su/privacy" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>
-    <p class="modal__error" data-modal-error role="alert" hidden></p>
+    <p class="modal__error" data-modal-error hidden></p>
+    <!-- TODO: подключить отправку на POST /api/lead (поля и формат — раздел 11 мастер-промта) -->
     <button class="btn-pill btn-pill--full" type="button" data-modal-submit><span>Отправить</span></button>
   </form>
 </dialog>
@@ -2151,34 +2157,6 @@ main > .section:last-child { padding-bottom: 120px; }
 <script>
 (function () {
   'use strict';
-
-  function submitLead(payload) {
-    var body = Object.assign({}, payload, {
-      contact: payload.contact.replace(') ', ')-'),
-      consentVersion: '2026-07-13'
-    });
-    return fetch('/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    }).then(function (response) {
-      if (!response.ok) {
-        var error = new Error('Не удалось подтвердить отправку');
-        error.status = response.status;
-        throw error;
-      }
-      return response.json();
-    }).then(function (result) {
-      if (!result || result.ok !== true) throw new Error('Заявка не подтверждена сервером');
-      return result;
-    });
-  }
-
-  function submitErrorMessage(error) {
-    return error.status === 429
-      ? 'Слишком много попыток. Попробуйте через 15 минут или позвоните нам. Введённые данные сохранены.'
-      : 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз или позвоните нам. Введённые данные сохранены.';
-  }
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -2239,7 +2217,6 @@ main > .section:last-child { padding-bottom: 120px; }
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMore(); closeDrawer(); } });
 
   /* ---------- окно «Заказать звонок»: одно на все кнопки ---------- */
-  var callbackPending = false;
   var modal = $('[data-modal]');
   var form = $('[data-modal-form]');
   var errBox = $('[data-modal-error]');
@@ -2247,7 +2224,7 @@ main > .section:last-child { padding-bottom: 120px; }
   var defText = $('[data-modal-text]') ? $('[data-modal-text]').textContent : '';
 
   var openModal = function (btn) {
-    if (!modal || callbackPending || typeof modal.showModal !== 'function') return;
+    if (!modal || typeof modal.showModal !== 'function') return;
     form.classList.remove('is-sent'); errBox.hidden = true;
     $('[data-modal-title]').textContent = btn.getAttribute('data-callback-title') || defTitle;
     $('[data-modal-text]').textContent = btn.getAttribute('data-callback-text') || defText;
@@ -2281,32 +2258,19 @@ main > .section:last-child { padding-bottom: 120px; }
   var submit = $('[data-modal-submit]');
   if (submit) {
     submit.addEventListener('click', function () {
-      if (callbackPending || form.classList.contains('is-sent')) return;
       var name = form.elements.name.value.trim();
       var digits = form.elements.phone.value.replace(/\D/g, '');
       var msg = '';
-      if (name.length < 2 || name.length > 80) msg = 'Укажите имя от 2 до 80 символов';
+      if (!name) msg = 'Укажите имя';
       else if (digits.length !== 11) msg = 'Введите телефон полностью';
       else if (!form.elements.consent.checked || !form.elements.policy.checked) msg = 'Отметьте обе галочки — без них заявку не отправить';
       errBox.hidden = !msg; errBox.textContent = msg;
       if (msg) return;
-      callbackPending = true;
-      submit.disabled = true;
-      submitLead({
-        type: 'service', name: name, contact: form.elements.phone.value,
-        service: 'ИБП — ' + $('[data-modal-title]').textContent,
-        consent: form.elements.consent.checked
-      }).then(function () {
-        form.classList.add('is-sent');
-        $('[data-modal-title]').textContent = 'Заявка принята';
-        $('[data-modal-text]').textContent = 'Перезвоним в рабочее время, с 9:00 до 18:00 по Москве.';
-      }).catch(function (error) {
-        errBox.textContent = submitErrorMessage(error);
-        errBox.hidden = false;
-      }).finally(function () {
-        callbackPending = false;
-        submit.disabled = false;
-      });
+      // TODO: отправка на POST /api/lead (формат полей — раздел 11 мастер-промта)
+      if (window.console) console.log('lead', { name: name, contact: form.elements.phone.value });
+      form.classList.add('is-sent');
+      $('[data-modal-title]').textContent = 'Заявка принята';
+      $('[data-modal-text]').textContent = 'Перезвоним в рабочее время, с 9:00 до 18:00 по Москве.';
     });
   }
 
@@ -2343,7 +2307,6 @@ main > .section:last-child { padding-bottom: 120px; }
     var qdone = $('[data-quiz-done]', quiz);
     var mgr = $('[data-manager-text]', quiz);
     var kwInput = $('#quiz-kw', quiz);
-    var quizPending = false;
     var cur = 0;
     var last = qsteps.length - 1;
 
@@ -2371,8 +2334,7 @@ main > .section:last-child { padding-bottom: 120px; }
       return true;
     };
     var finalProblem = function () {
-      var nameLength = qform.elements.name.value.trim().length;
-      if (nameLength < 2 || nameLength > 80) return 'Укажите имя от 2 до 80 символов';
+      if (!qform.elements.name.value.trim()) return 'Укажите имя';
       if (!phoneOk()) return 'Введите телефон полностью';
       if (!qform.elements.consent.checked || !qform.elements.policy.checked) return 'Отметьте обе галочки — без них заявку не отправить';
       return '';
@@ -2390,12 +2352,12 @@ main > .section:last-child { padding-bottom: 120px; }
       qn.textContent = cur + 1;
       qback.hidden = cur === 0;
       qnextText.textContent = cur === last ? 'Получить расчёт' : 'Далее';
-      qnext.disabled = quizPending || quiz.classList.contains('is-done') || (cur < last && !valid(cur));
+      qnext.disabled = cur < last && !valid(cur);
       qerr.hidden = true;
       say(cur === 2 && powerSmall() ? softFilter : replies[cur]);
     };
     var refresh = function () {
-      qnext.disabled = quizPending || quiz.classList.contains('is-done') || (cur < last && !valid(cur));
+      qnext.disabled = cur < last && !valid(cur);
       if (cur === 2) say(powerSmall() ? softFilter : replies[2]);
     };
 
@@ -2407,10 +2369,9 @@ main > .section:last-child { padding-bottom: 120px; }
       if (kwInput.value) $$('input[name="power"]', qform).forEach(function (r) { r.checked = false; });
       refresh();
     });
-    qback.addEventListener('click', function () { if (!quizPending && cur > 0) { cur--; render(); } });
+    qback.addEventListener('click', function () { if (cur > 0) { cur--; render(); } });
 
     var finish = function () {
-      if (quizPending || quiz.classList.contains('is-done')) return;
       var power = kw() > 0 ? String(kw()).replace('.', ',') + ' кВт' : one('power');
       var loads = checked('loads').map(function (c) { return c.value; });
       var sum = {
@@ -2420,6 +2381,7 @@ main > .section:last-child { padding-bottom: 120px; }
         autonomy: one('autonomy')
       };
       Object.keys(sum).forEach(function (k) { $('[data-sum="' + k + '"]', quiz).textContent = sum[k]; });
+      // TODO: отправка на POST /api/lead; формат — раздел 11 мастер-промта (поля name, contact, service, answers[])
       var lead = {
         type: 'service', name: qform.elements.name.value.trim(), contact: qform.elements.phone.value,
         service: 'Опрос по ИБП',
@@ -2430,30 +2392,18 @@ main > .section:last-child { padding-bottom: 120px; }
         ],
         consent: true
       };
-      quizPending = true;
-      qnext.disabled = true;
-      qback.disabled = true;
-      submitLead(lead).then(function () {
-        qsteps.forEach(function (s) { s.hidden = true; });
-        qdone.hidden = false;
-        quiz.classList.add('is-done');
-        qbar.style.width = '100%';
-        qerr.hidden = true;
-        say('Заявка принята. Свяжусь выбранным способом и уточню исходные данные по нагрузке.');
-        qdone.focus({ preventScroll: true });
-      }).catch(function (error) {
-        qerr.textContent = submitErrorMessage(error);
-        qerr.hidden = false;
-      }).finally(function () {
-        quizPending = false;
-        qback.disabled = false;
-        qnext.disabled = quiz.classList.contains('is-done');
-      });
+      if (window.console) console.log('lead', lead);
+      qsteps.forEach(function (s) { s.hidden = true; });
+      qdone.hidden = false;
+      quiz.classList.add('is-done');
+      qbar.style.width = '100%';
+      qerr.hidden = true;
+      say('Заявка принята. Свяжусь выбранным способом и уточню исходные данные по нагрузке.');
+      qdone.focus({ preventScroll: true });
     };
 
     // «Далее» — обычная кнопка, не submit: в изолированной рамке форма не отправляется
     qnext.addEventListener('click', function () {
-      if (quizPending || quiz.classList.contains('is-done')) return;
       if (cur < last) {
         if (!valid(cur)) return;
         cur++; render();
@@ -2787,13 +2737,14 @@ main > .section:last-child { padding-bottom: 120px; }
       setTimeout(function () { applyDim(false); backup(); }, 3400);
     }
   }
-  /* ---------- форма в контактах ---------- */
-  (function () {
+})();
+
+</script>
+<script>
+(function () {
   var form = document.querySelector('[data-contact-form]');
   if (!form) return;
   var done = form.querySelector('[data-contact-done]');
-  var submitButton = form.querySelector('.contacts__submit');
-  var submitError = form.querySelector('[data-contact-error]');
   var consentErr = form.querySelector('[data-contact-consent-err]');
   var name = form.elements.ctname, phone = form.elements.ctphone;
   var mark = function (el, bad) { if (bad) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid'); };
@@ -2804,28 +2755,17 @@ main > .section:last-child { padding-bottom: 120px; }
   });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (submitButton.disabled || !done.hidden) return;
-    submitError.hidden = true;
-    var badName = name.value.trim().length < 2 || name.value.trim().length > 80;
+    var badName = !name.value.trim();
     var badPhone = phone.value.replace(/\D/g, '').length !== 11;
     var badConsent = !form.elements.ctconsent.checked || !form.elements.ctprivacy.checked;
     mark(name, badName); mark(phone, badPhone);
     consentErr.classList.toggle('is-shown', badConsent);
     if (badName || badPhone || badConsent) return;
-    submitButton.disabled = true;
-    submitLead({
-      type: 'service', name: name.value.trim(), contact: phone.value,
-      service: 'ИБП — форма в контактах', comment: form.elements.cttask.value.trim(),
-      consent: form.elements.ctconsent.checked
-    }).then(function () {
-      done.hidden = false;
-    }).catch(function (error) {
-      submitError.textContent = submitErrorMessage(error);
-      submitError.hidden = false;
-      submitButton.disabled = false;
-    });
+    // TODO: отправка на POST /api/lead
+    if (window.console) console.log('lead', { name: name.value.trim(), phone: phone.value, task: form.elements.cttask.value.trim() });
+    form.querySelector('.contacts__submit').disabled = true;
+    done.hidden = false;
   });
-  })();
 })();
 </script>
 </body></html>
