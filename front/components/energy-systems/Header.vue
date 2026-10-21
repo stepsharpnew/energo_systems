@@ -12,54 +12,55 @@
         >
       </NuxtLink>
 
+      <!-- Keep generic span-based call tracking rules away from contact labels and icons. -->
       <address class="header-contacts" aria-label="Контакты">
         <div class="contact-item contact-item-phone">
-          <span class="contact-icon" aria-hidden="true">
+          <div class="contact-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
               <path d="M6.6 4.5 8.9 4c.7-.1 1.4.3 1.6 1l.8 2.5c.2.6 0 1.2-.5 1.6l-1.1.8c.9 1.8 2.4 3.4 4.2 4.3l.9-1.1c.4-.5 1-.7 1.6-.5l2.5.8c.7.2 1.1.9 1 1.6l-.5 2.3c-.1.7-.7 1.2-1.4 1.2h-.5C10.9 18.5 5.5 13.1 5.5 6.5V6c0-.7.4-1.3 1.1-1.5Z" />
             </svg>
-          </span>
-          <span class="contact-copy">
-            <span class="contact-label">Звонок по проекту</span>
-            <span class="phone-links">
+          </div>
+          <div class="contact-copy">
+            <div class="contact-label">Звонок по проекту</div>
+            <div class="phone-links">
               <PhoneLink />
-            </span>
-          </span>
+            </div>
+          </div>
         </div>
 
         <div class="contact-item contact-item-offices">
-          <span class="contact-icon" aria-hidden="true">
+          <div class="contact-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
               <path d="M12 3.8a5.7 5.7 0 0 0-5.7 5.7c0 4.2 5.7 10.7 5.7 10.7s5.7-6.5 5.7-10.7A5.7 5.7 0 0 0 12 3.8Zm0 7.9a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z" />
             </svg>
-          </span>
-          <span class="contact-copy">
-            <span class="contact-label">Офисы</span>
-            <span class="office-addresses">
-              <span class="office-address">
-                <span class="office-city">Солнечногорск</span>
-                <span>Промышленная улица, с. 5, Солнечногорск, Московская область</span>
-              </span>
-              <span class="office-address">
-                <span class="office-city">Москва</span>
-                <span>улица Руставели, 14с6</span>
-              </span>
-            </span>
-          </span>
+          </div>
+          <div class="contact-copy">
+            <div class="contact-label">Офисы</div>
+            <div class="office-addresses">
+              <div class="office-address">
+                <div class="office-city">Солнечногорск</div>
+                <div>Промышленная улица, с. 5, Солнечногорск, Московская область</div>
+              </div>
+              <div class="office-address">
+                <div class="office-city">Москва</div>
+                <div>улица Руставели, 14с6</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="contact-item">
-          <span class="contact-icon" aria-hidden="true">
+          <div class="contact-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
               <path d="M4.8 6.5h14.4c.8 0 1.3.6 1.3 1.3v8.4c0 .8-.6 1.3-1.3 1.3H4.8c-.8 0-1.3-.6-1.3-1.3V7.8c0-.8.6-1.3 1.3-1.3Zm.4 2.1 6.1 4.1c.4.3.9.3 1.3 0l6.1-4.1" />
             </svg>
-          </span>
-          <span class="contact-copy">
-            <span class="contact-label">Почта</span>
-            <span class="mail-links">
+          </div>
+          <div class="contact-copy">
+            <div class="contact-label">Почта</div>
+            <div class="mail-links">
               <a class="mail-link" href="mailto:sales@e-systems.su">sales@e-systems.su</a>
-            </span>
-          </span>
+            </div>
+          </div>
         </div>
       </address>
 
