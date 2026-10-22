@@ -1,6 +1,6 @@
 <template>
-  <a ref="phoneLink" class="phone-link" href="tel:+74951795920">
-    <slot><span>+7 (495) 179-59-20</span></slot>
+  <a ref="phoneLink" class="phone-link" href="tel:+74951795920" data-calltracking-phone="+74951795920">
+    <slot><span data-calltracking-number>+7 (495) 179-59-20</span></slot>
   </a>
 </template>
 

@@ -1,8 +1,5 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ИБП под ключ</title>
-<!-- Novofon -->
-<script type="text/javascript" async src="https://widget.novofon.ru/novofon.js?k=eAYAknhHnXHvGm2aloYuaoi6Bkrnc1dw"></script>
-<!-- Novofon -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
 <style>
 [hidden] { display: none !important; }
@@ -1249,7 +1246,7 @@ main > .section:last-child { padding-bottom: 120px; }
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
       </a>
       <div class="phone">
-        <a class="phone__num" href="tel:+74951795920">+7 (495) 179-59-20</a>
+        <a class="phone__num" href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a>
         <a class="phone__num" href="tel:+79251640560">+7 (925) 164-05-60</a>
         <span class="phone__note" data-status-box><i class="phone__dot" aria-hidden="true"></i><span data-status>На связи, ответим за 30 минут</span></span>
       </div>
@@ -1275,7 +1272,7 @@ main > .section:last-child { padding-bottom: 120px; }
       <a href="#contacts">Контакты</a>
     </nav>
     <div class="drawer__contacts">
-      <a href="tel:+74951795920">+7 (495) 179-59-20</a>
+      <a href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a>
       <a href="tel:+79251640560">+7 (925) 164-05-60</a>
       <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
     </div>
@@ -2103,12 +2100,12 @@ main > .section:last-child { padding-bottom: 120px; }
         <div class="contacts__done" data-contact-done hidden>
           <b>Спасибо за обращение!</b>
           <span>Мы получили вашу заявку и свяжемся с вами в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
-          <span>Будем рады помочь и по телефону: <a href="tel:+74951795920">+7 (495) 179-59-20</a></span>
+          <span>Будем рады помочь и по телефону: <a href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a></span>
         </div>
       </form>
 
       <div class="contacts__side">
-        <div class="cnt"><span class="cnt__label">Телефон</span><a class="cnt__value" href="tel:+74951795920">+7 (495) 179-59-20</a></div>
+        <div class="cnt"><span class="cnt__label">Телефон</span><a class="cnt__value" href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a></div>
         <div class="cnt"><span class="cnt__label">Дополнительный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+74951780118">+7 (495) 178-01-18</a></div>
         <div class="cnt"><span class="cnt__label">Мобильный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+79251640560">+7 (925) 164-05-60</a></div>
         <div class="cnt"><span class="cnt__label">Почта</span><a class="cnt__value" href="mailto:sales@e-systems.su">sales@e-systems.su <i>по заявкам и расчётам</i></a></div>
@@ -2164,6 +2161,7 @@ main > .section:last-child { padding-bottom: 120px; }
 
 <script type="module">
 import { getLeadAttribution, withAttributionUrl } from '/scripts/attribution.js';
+import { loadCallTracking } from '/scripts/callTracking.js';
 
 // Capture on entry as well as on submit, including visits that leave this page.
 getLeadAttribution();
@@ -2854,5 +2852,6 @@ for (const event of ['pointerdown', 'click', 'contextmenu']) {
   });
   })();
 })();
+loadCallTracking();
 </script>
 </body></html>

@@ -24,12 +24,6 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/img/icons/apple-touch-icon.png?v=4' }
       ],
       script: [
-        // Novofon
-        {
-          type: 'text/javascript',
-          async: true,
-          src: 'https://widget.novofon.ru/novofon.js?k=eAYAknhHnXHvGm2aloYuaoi6Bkrnc1dw'
-        },
         {
           type: 'text/javascript',
           innerHTML: `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
