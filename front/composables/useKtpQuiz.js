@@ -1,4 +1,5 @@
 import { computed, reactive, ref } from 'vue'
+import { getLeadAttribution } from '../utils/attribution.js'
 import { ktpFields, ktpQuizSteps as steps } from '../assets/data/ktpQuiz.js'
 
 const emptyContact = () => ({ name: '', organization: '', phone: '', email: '', location: '', comment: '', consent: false })
@@ -55,6 +56,7 @@ export function useKtpQuiz(request) {
       const response = await request('/api/lead', {
         method: 'POST', retry: 0, timeout: 20000,
         body: {
+          attribution: getLeadAttribution(),
           type: 'equipment', product: 'КТП', name: contact.name.trim(),
           organization: contact.organization.trim(), contact: contact.phone,
           email: contact.email.trim(), location: contact.location.trim(),

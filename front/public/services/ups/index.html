@@ -1160,6 +1160,7 @@ main > .section:last-child { padding-bottom: 120px; }
 .cnt:last-child { border-bottom: 1px solid var(--line); }
 .cnt__label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .cnt__plain, .cnt__value { font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.cnt__value--secondary { font-size: 16px; font-weight: 400; }
 .cnt__value { transition: color .25s; }
 .cnt__value i { margin-left: 8px; font-size: 13px; font-style: normal; font-weight: 500; color: var(--muted); }
 .cnt__value:hover, .cnt__value:hover i { color: var(--accent-ink); }
@@ -1248,7 +1249,7 @@ main > .section:last-child { padding-bottom: 120px; }
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
       </a>
       <div class="phone">
-        <a class="phone__num" href="tel:+74951780118">+7 (495) 178-01-18</a>
+        <a class="phone__num" href="tel:+74951795920">+7 (495) 179-59-20</a>
         <a class="phone__num" href="tel:+79251640560">+7 (925) 164-05-60</a>
         <span class="phone__note" data-status-box><i class="phone__dot" aria-hidden="true"></i><span data-status>На связи, ответим за 30 минут</span></span>
       </div>
@@ -1274,7 +1275,7 @@ main > .section:last-child { padding-bottom: 120px; }
       <a href="#contacts">Контакты</a>
     </nav>
     <div class="drawer__contacts">
-      <a href="tel:+74951780118">+7 (495) 178-01-18</a>
+      <a href="tel:+74951795920">+7 (495) 179-59-20</a>
       <a href="tel:+79251640560">+7 (925) 164-05-60</a>
       <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
     </div>
@@ -2102,12 +2103,14 @@ main > .section:last-child { padding-bottom: 120px; }
         <div class="contacts__done" data-contact-done hidden>
           <b>Спасибо за обращение!</b>
           <span>Мы получили вашу заявку и свяжемся с вами в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
-          <span>Будем рады помочь и по телефону: <a href="tel:+79251640560">+7 (925) 164-05-60</a></span>
+          <span>Будем рады помочь и по телефону: <a href="tel:+74951795920">+7 (495) 179-59-20</a></span>
         </div>
       </form>
 
       <div class="contacts__side">
-        <div class="cnt"><span class="cnt__label">Телефон</span><a class="cnt__value" href="tel:+79251640560">+7 (925) 164-05-60</a></div>
+        <div class="cnt"><span class="cnt__label">Телефон</span><a class="cnt__value" href="tel:+74951795920">+7 (495) 179-59-20</a></div>
+        <div class="cnt"><span class="cnt__label">Дополнительный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+74951780118">+7 (495) 178-01-18</a></div>
+        <div class="cnt"><span class="cnt__label">Мобильный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+79251640560">+7 (925) 164-05-60</a></div>
         <div class="cnt"><span class="cnt__label">Почта</span><a class="cnt__value" href="mailto:sales@e-systems.su">sales@e-systems.su <i>по заявкам и расчётам</i></a></div>
         <div class="cnt"><span class="cnt__label">Мессенджеры</span>
           <div class="cnt__msgrs">
@@ -2159,12 +2162,25 @@ main > .section:last-child { padding-bottom: 120px; }
 
 
 
-<script>
+<script type="module">
+import { getLeadAttribution, withAttributionUrl } from '/scripts/attribution.js';
+
+// Capture on entry as well as on submit, including visits that leave this page.
+getLeadAttribution();
+for (const event of ['pointerdown', 'click', 'contextmenu']) {
+  document.addEventListener(event, function (event) {
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!link || link.hasAttribute('download')) return;
+    link.setAttribute('href', withAttributionUrl(link.getAttribute('href'), window.location.href, getLeadAttribution()));
+  }, true);
+}
+
 (function () {
   'use strict';
 
   function submitLead(payload) {
     var body = Object.assign({}, payload, {
+      attribution: getLeadAttribution(),
       contact: payload.contact.replace(') ', ')-'),
       consentVersion: '2026-07-13'
     });

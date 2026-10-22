@@ -72,9 +72,9 @@ test('call tracking changes only the header phone and keeps its dial link in syn
 
     await page.goto(base + '/equipment/mtp', { waitUntil: 'networkidle' })
     const custom = page.locator('a.phone-link.secondary-action')
-    assert.equal(await custom.getAttribute('href'), 'tel:+74951780118')
+    assert.equal(await custom.getAttribute('href'), 'tel:+74951795920')
     await custom.evaluate(link => { link.textContent = 'Связаться по телефону' })
-    assert.equal(await custom.getAttribute('href'), 'tel:+74951780118')
+    assert.equal(await custom.getAttribute('href'), 'tel:+74951795920')
     assert.deepEqual(errors, [])
   } finally {
     await browser?.close()

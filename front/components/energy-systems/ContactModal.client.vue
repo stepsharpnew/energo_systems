@@ -148,6 +148,7 @@
 </template>
 
 <script>
+import { getLeadAttribution } from "~/utils/attribution";
 import { handlePhoneKeydown } from "~/utils/phoneFormatter";
 
 export default {
@@ -323,6 +324,7 @@ export default {
         );
 
         const payload = {
+          attribution: getLeadAttribution(),
           type: "service",
           name: this.formData.name,
           contact: this.formData.phone,

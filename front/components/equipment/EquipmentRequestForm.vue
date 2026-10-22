@@ -138,7 +138,7 @@
               autocomplete="tel"
               inputmode="tel"
               pattern="\+7 \(\d{3}\)-\d{3}-\d{2}-\d{2}"
-              placeholder="Например, +7 (495)-178-01-18"
+              placeholder="Например, +7 (495)-179-59-20"
               @input="onPhoneInput"
               @keydown="handlePhoneKeydown"
             >
@@ -220,6 +220,7 @@
 </template>
 
 <script setup>
+import { getLeadAttribution } from '~/utils/attribution'
 import { handlePhoneInput, handlePhoneKeydown } from '~/utils/phoneFormatter'
 
 const props = defineProps({
@@ -328,6 +329,7 @@ const submitRequest = async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: {
+        attribution: getLeadAttribution(),
         type: 'equipment',
         product: props.equipment.name,
         name: contact.name,

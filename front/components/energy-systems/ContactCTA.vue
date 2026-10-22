@@ -17,6 +17,10 @@
         <span class="phone-icon">☎</span>
         <div class="contact-links">
           <PhoneLink />
+          <div class="additional-phone">
+            <span>Дополнительный телефон</span>
+            <a href="tel:+74951780118">+7 (495) 178-01-18</a>
+          </div>
           <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           <a href="/Energosistemy_el_vesia_2026.pdf" target="_blank" rel="noopener">Презентация компании PDF</a>
         </div>
@@ -118,6 +122,20 @@ export default {
   flex-direction: column;
   gap: 6px;
   text-align: left;
+}
+
+.additional-phone {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+}
+
+.additional-phone a {
+  color: inherit;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .phone-link a:hover {

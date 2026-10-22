@@ -1,4 +1,5 @@
 import vuetify from 'vite-plugin-vuetify'
+import { fileURLToPath } from 'node:url'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -58,6 +59,9 @@ ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrack
   },
 
   nitro: {
+    publicAssets: [
+      { dir: fileURLToPath(new URL('./lib/browser', import.meta.url)), baseURL: '/scripts', maxAge: 0 }
+    ],
     prerender: {
       routes: [
         '/services',

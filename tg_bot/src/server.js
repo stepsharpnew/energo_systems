@@ -4,6 +4,7 @@ const { randomUUID } = require("crypto");
 const express = require("express");
 const cors = require("cors");
 const { sendLeadEmail } = require("./mailer");
+const { normalizeAttribution } = require("./attribution");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -61,6 +62,7 @@ const COMMON_LEAD_FIELDS = [
   "email",
   "consent",
   "consentVersion",
+  "attribution",
 ];
 // У заявок с услуг тоже бывают технические параметры: опрос по ГНБ передаёт
 // назначение, длину, диаметр и количество труб в том же формате answers.
@@ -233,6 +235,11 @@ async function handleLeadSubmit(req, res) {
       return res.status(400).json({ ok: false, error: "consent_required" });
     }
 
+    const attribution = normalizeAttribution(req.body.attribution);
+    if (attribution === null) {
+      return res.status(400).json({ ok: false, error: "invalid_attribution" });
+    }
+
     const consentRecordId = randomUUID();
     const consentAcceptedAt = new Date().toISOString();
 
@@ -247,6 +254,7 @@ async function handleLeadSubmit(req, res) {
       ipAddress: req.ip,
       userAgent: normalizeText(req.get("user-agent")).slice(0, 500),
       sourcePage: getSourcePage(req.get("referer")),
+      attribution,
     };
 
     if (type === "service") {

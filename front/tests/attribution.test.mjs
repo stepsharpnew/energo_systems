@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createAttributionSession, getAttributionQuery, withAttributionUrl } from '../utils/attribution.js'
+import { createAttributionSession, getAttributionQuery, getLeadAttribution, withAttributionUrl } from '../utils/attribution.js'
 
 const campaign = { utm_source: 'google', utm_medium: 'cpc', utm_campaign: 'sale' }
 
@@ -73,9 +73,34 @@ test('native links preserve destination queries, hashes and encoded campaign val
 test('external, contact, download, API and anchor links are left intact', () => {
   for (const href of [
     'https://example.com/', '//example.com/', 'mailto:sales@e-systems.su',
-    'tel:+74951780118', 'javascript:void(0)', '/catalog.pdf', '/api/lead',
+    'tel:+74951795920', 'javascript:void(0)', '/catalog.pdf', '/api/lead',
     '#contacts', '',
   ]) {
     assert.equal(withAttributionUrl(href, 'https://e-systems.su/', campaign), href)
   }
+})
+
+test('lead attribution excludes unrelated queries and falls back to the stored campaign', () => {
+  assert.deepEqual(getLeadAttribution(), {}, 'prerendering must not read browser storage')
+  const previousWindow = globalThis.window
+  globalThis.window = { location: { search: '?' + new URLSearchParams({ ...campaign, email: 'private@example.test' }) }, sessionStorage: memoryStorage() }
+  try {
+    assert.deepEqual(getLeadAttribution(), campaign)
+    window.location.search = '?category=ktp'
+    assert.deepEqual(getLeadAttribution(), campaign)
+    window.location.search = '?utm_source=yandex&yclid=new-click'
+    assert.deepEqual(getLeadAttribution(), { utm_source: 'yandex', yclid: 'new-click' })
+    window.location.search = ''
+    assert.deepEqual(getLeadAttribution(), { utm_source: 'yandex', yclid: 'new-click' })
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window
+    else globalThis.window = previousWindow
+  }
+})
+
+test('malformed URL metadata is omitted so it cannot prevent a valid lead submission', () => {
+  assert.deepEqual(getAttributionQuery({
+    utm_source: ' yandex ', utm_medium: '   ', utm_campaign: 'x'.repeat(1001),
+    utm_content: 'banner\r\nInjected: value', utm_term: 'ГНБ + область & <тест>',
+  }), { utm_source: 'yandex', utm_term: 'ГНБ + область & <тест>' })
 })

@@ -239,7 +239,7 @@ useHead(() => {
           '@type': 'LocalBusiness',
           name: 'Энергосистемы',
           email: ['sales@e-systems.su'],
-          telephone: ['+7 495 178-01-18'],
+          telephone: ['+7 495 179-59-20'],
           address: {
             '@type': 'PostalAddress',
             addressLocality: 'Москва',

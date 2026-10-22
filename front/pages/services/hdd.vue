@@ -723,6 +723,10 @@
             <PhoneLink class="cnt__value" />
           </div>
           <div class="cnt">
+            <span class="cnt__label">Дополнительный телефон</span>
+            <a class="cnt__value cnt__value--secondary" href="tel:+74951780118">+7 (495) 178-01-18</a>
+          </div>
+          <div class="cnt">
             <span class="cnt__label">Почта</span>
             <a class="cnt__value" href="mailto:sales@e-systems.su">sales@e-systems.su <i>по заявкам и расчётам</i></a>
           </div>
@@ -2072,6 +2076,7 @@ img { display: block; max-width: 100%; }
 .cnt:last-child { border-bottom: 1px solid var(--line); }
 .cnt__label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .cnt__value, .cnt__plain { font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.cnt__value--secondary { font-size: 16px; font-weight: 400; }
 /* подпись канала связи рядом со значением, а не отдельной строкой */
 .cnt__value i { margin-left: 8px; font-size: 13px; font-style: normal; font-weight: 500; color: var(--muted); }
 .cnt__value { transition: color .25s; }

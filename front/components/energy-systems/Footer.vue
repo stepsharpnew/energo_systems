@@ -17,6 +17,10 @@
           <li>
             <PhoneLink class="contact-link" />
           </li>
+          <li class="additional-phone">
+            <span>Дополнительный телефон</span>
+            <a href="tel:+74951780118" class="contact-link">+7 (495) 178-01-18</a>
+          </li>
           <li>
             <a href="mailto:sales@e-systems.su" class="contact-link">sales@e-systems.su</a>
           </li>
@@ -196,6 +200,25 @@ export default {
 }
 
 .contact-link:hover {
+  color: #ff4800;
+}
+
+.additional-phone {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.additional-phone span {
+  font-size: 12px;
+}
+
+.additional-phone .contact-link {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
+}
+
+.additional-phone .contact-link:hover {
   color: #ff4800;
 }
 

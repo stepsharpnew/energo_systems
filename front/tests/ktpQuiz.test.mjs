@@ -111,3 +111,20 @@ for (const failure of [new TypeError('Network error'), { statusCode: 429 }, { st
     assert.equal(await quiz.submit(), true)
   })
 }
+
+test('quiz sends campaign metadata with its answers even when storage is blocked', async () => {
+  const previousWindow = globalThis.window
+  globalThis.window = { location: { search: '?utm_source=yandexdirect&utm_campaign=712977221&utm_term=%D0%93%D0%9D%D0%91' },
+    get sessionStorage() { throw new Error('Storage blocked') } }
+  try {
+    let sent
+    const quiz = useKtpQuiz(async (_, options) => { sent = options.body; return { ok: true } })
+    complete(quiz)
+    assert.equal(await quiz.submit(), true)
+    assert.deepEqual(sent.attribution, { utm_source: 'yandexdirect', utm_campaign: '712977221', utm_term: 'ГНБ' })
+    assert.ok(sent.answers.length > 0)
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window
+    else globalThis.window = previousWindow
+  }
+})

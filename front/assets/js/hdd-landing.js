@@ -1,6 +1,8 @@
 // Логика лендинга ГНБ: опрос, счётчики, ленты, всплывающее окно.
 // Запускается из pages/services/hdd.vue после монтирования; cleanup снимает
 // слушатели окна и таймеры, чтобы ничего не осталось при уходе со страницы.
+import { getLeadAttribution } from '../../utils/attribution.js'
+
 export function initHddPage() {
   var ac = new AbortController();
   var timers = [];
@@ -262,6 +264,7 @@ export function initHddPage() {
     if (p.small) answers.push({ label: 'Отметка', value: 'Объём меньше 50 метров' });
 
     var body = {
+      attribution: getLeadAttribution(),
       type: 'service',
       name: p.name,
       contact: apiPhone(p.phone),

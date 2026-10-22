@@ -44,6 +44,26 @@ const server = createServer(async (req, res) => {
   }
 })
 
+const campaign = {
+  utm_source: 'yandexdirect', utm_medium: 'cpc', utm_campaign: '712977221',
+  utm_content: '17786149843', utm_term: 'ГНБ + область & <тест>', yclid: 'test-click-123',
+}
+async function visitFromCampaign(page, base, destination) {
+  // Exercise both directions across Nuxt and the standalone UPS landing.
+  const landing = destination.startsWith('/services/ups') ? '/' : '/services/ups/'
+  await page.goto(base + landing + '?' + new URLSearchParams(campaign), { waitUntil: 'networkidle' })
+  await page.goto(base + destination, { waitUntil: 'networkidle' })
+  // Submission must also work if the address bar no longer contains the tags.
+  await page.evaluate(() => history.replaceState(history.state, '', location.pathname))
+}
+function assertCampaignEmail(message) {
+  for (const [key, value] of Object.entries(campaign)) {
+    assert.ok(message.text.includes(`${key}: ${value}`), `${key} must reach the text email`)
+    assert.ok(message.html.includes(key), `${key} must reach the HTML email`)
+  }
+  assert.ok(message.html.includes('ГНБ + область &amp; &lt;тест&gt;'))
+}
+
 const check = locator => locator.evaluate(element => element.click())
 async function enterContact(form, names) {
   await form.locator(`[name=${names.name}]`).fill('Тестовая заявка')
@@ -87,7 +107,7 @@ test('landing forms send validated leads and never report an unacknowledged subm
           return route.continue()
         })
         try {
-          await page.goto(base + item.path, { waitUntil: 'networkidle' })
+          await visitFromCampaign(page, base, item.path)
           assert.equal(await page.locator(item.success).isVisible(), false, 'success must start hidden')
           if (item.opener) await page.locator(item.opener).first().click()
           const form = page.locator(item.form)
@@ -122,8 +142,10 @@ test('landing forms send validated leads and never report an unacknowledged subm
           assert.equal(payloads.length, 3)
           assert.equal(mail.length, before + 1)
           assert.equal(mail.at(-1).to, 'sales@e-systems.su')
+          assertCampaignEmail(mail.at(-1))
           assert.ok(mail.at(-1).text.includes('Тестовая заявка'))
           const payload = payloads.at(-1)
+          assert.deepEqual(payload.attribution, campaign)
           assert.equal(payload.consent, true)
           assert.equal(payload.consentVersion, '2026-07-13')
           assert.equal(payload.contact, '+7 (999)-000-00-00')
@@ -149,7 +171,7 @@ test('landing forms send validated leads and never report an unacknowledged subm
         })
         page.on('dialog', dialog => dialog.accept())
         try {
-          await page.goto(base + (kind === 'service' ? '/' : '/equipment/mtp'), { waitUntil: 'networkidle' })
+          await visitFromCampaign(page, base, kind === 'service' ? '/' : '/equipment/mtp')
           let form
           if (kind === 'service') {
             await page.locator('.request-button').click()
@@ -186,6 +208,7 @@ test('landing forms send validated leads and never report an unacknowledged subm
           }
           assert.equal(mail.length, before + 1)
           assert.equal(mail.at(-1).to, 'sales@e-systems.su')
+          assertCampaignEmail(mail.at(-1))
         } finally {
           await context.close()
         }

@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const { ATTRIBUTION_KEYS } = require("./attribution");
 
 function escapeHtml(text) {
   if (!text) return "";
@@ -80,6 +81,7 @@ function buildLeadEmail(data) {
     ipAddress,
     userAgent,
     sourcePage,
+    attribution = {},
   } = data;
   const leadTypeLabel = getLeadTypeLabel(type);
   const safeProduct = String(product || "")
@@ -116,6 +118,9 @@ function buildLeadEmail(data) {
   const answerRows = Array.isArray(answers)
     ? answers.map(({ label, value }) => [label, formatAnswerValue(value)])
     : [];
+  const attributionRows = ATTRIBUTION_KEYS
+    .filter((key) => attribution[key])
+    .map((key) => [key, attribution[key]]);
   const auditRows = [
     ["Согласие", "Получено отдельной отметкой в форме"],
     ["Идентификатор согласия", consentRecordId],
@@ -136,6 +141,10 @@ function buildLeadEmail(data) {
         .join("\n")}`
     );
   }
+  textSections.push(attributionRows.length
+    ? `UTM-метки и рекламные идентификаторы\n${attributionRows.map(([key, value]) => `${key}: ${value}`).join("\n")}`
+    : "UTM-метки: не переданы"
+  );
   textSections.push(
     `Сведения об отправке\n${auditRows
       .map(([label, value]) => `${label}: ${value}`)
@@ -156,6 +165,10 @@ function buildLeadEmail(data) {
         ${buildHtmlRows(rows)}
       </table>
       ${technicalSection}
+      <h3 style="margin:24px 0 10px;font-size:17px;">UTM-метки и рекламные идентификаторы</h3>
+      ${attributionRows.length
+        ? `<table style="border-collapse:collapse;border:1px solid #d8dde6;">${buildHtmlRows(attributionRows)}</table>`
+        : '<p>UTM-метки: не переданы</p>'}
       <h3 style="margin:24px 0 10px;font-size:17px;">Сведения об отправке</h3>
       <table style="border-collapse:collapse;border:1px solid #d8dde6;">
         ${buildHtmlRows(auditRows)}

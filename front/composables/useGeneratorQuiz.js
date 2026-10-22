@@ -1,4 +1,5 @@
 import { computed, reactive, ref } from 'vue'
+import { getLeadAttribution } from '../utils/attribution.js'
 import { generatorQuizQuestions as questions } from '../assets/data/generatorQuiz.js'
 
 const emptyAnswers = () => Object.fromEntries(questions.map((question) => [question.id, question.multiple ? [] : '']))
@@ -70,6 +71,7 @@ export function useGeneratorQuiz(request) {
         retry: 0,
         timeout: 20000,
         body: {
+          attribution: getLeadAttribution(),
           type: 'equipment',
           product: 'Подбор генератора — резервное питание',
           name: contact.name.trim(),
