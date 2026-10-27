@@ -156,8 +156,8 @@
             <legend class="quiz__q" tabindex="-1">Какая длина прокола?</legend>
             <div class="quiz__opts">
               <!-- TODO: подтвердить минимальный заказ «от 50 м» — на сайте написано «минимальный заказ уточняется» -->
-              <label class="opt"><input type="radio" name="length" value="до 50 м" data-small><span class="opt__ind"></span>До 50 м</label>
-              <label class="opt"><input type="radio" name="length" value="50–150 м"><span class="opt__ind"></span>50–150 м</label>
+              <label class="opt"><input type="radio" name="length" value="до 100 м" data-small><span class="opt__ind"></span>До 100 м</label>
+              <label class="opt"><input type="radio" name="length" value="100–150 м"><span class="opt__ind"></span>100–150 м</label>
               <label class="opt"><input type="radio" name="length" value="150–250 м"><span class="opt__ind"></span>150–250 м</label>
               <label class="opt"><input type="radio" name="length" value="250–500 м"><span class="opt__ind"></span>250–500 м</label>
               <label class="opt"><input type="radio" name="length" value="свыше 500 м"><span class="opt__ind"></span>Свыше 500 м</label>
