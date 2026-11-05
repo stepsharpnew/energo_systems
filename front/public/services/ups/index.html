@@ -1,6 +1,7 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="ИБП под ключ для частных домов и коттеджных посёлков: аккумуляторы, ДГУ, автоматика. Расчёт, проектирование, монтаж и обслуживание. Москва и область."><link rel="icon" type="image/x-icon" href="/favicon.ico?v=4"><link rel="icon" type="image/png" sizes="32x32" href="/img/icons/favicon-32x32.png?v=4"><link rel="apple-touch-icon" sizes="180x180" href="/img/icons/apple-touch-icon.png?v=4"><script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(110919120,"init",{defer:true,clickmap:true,trackLinks:true,accurateTrackBounce:true});</script></head><body>
 <title>ИБП под ключ</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/callback-preferences.css">
 <style>
 /* ============ ТОКЕНЫ ============ */
 :root {
@@ -903,7 +904,7 @@ main > .section:last-child { padding-bottom: 120px; }
 .check a { text-decoration: underline; text-underline-offset: 2px; }
 .modal__error { color: #C8323A; font-size: 13.5px; font-weight: 600; }
 .modal__error[hidden] { display: none; }
-.modal__form.is-sent .field, .modal__form.is-sent .check, .modal__form.is-sent [data-modal-submit] { display: none; }
+.modal__form.is-sent .callback-preferences, .modal__form.is-sent .field, .modal__form.is-sent .check, .modal__form.is-sent [data-modal-submit] { display: none; }
 
 /* ============ АДАПТИВ ============ */
 @media (max-width: 1280px) {
@@ -1634,6 +1635,7 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
 .cs__img, .cs__th img { pointer-events: none; }
 
 .map__frame { border: 0; width: 100%; }
+.cnt__value--secondary { font-size: 16px; font-weight: 400; }
 </style>
 
 
@@ -1672,7 +1674,7 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
       </a>
       <div class="phone">
-        <a class="phone__num" href="tel:+74951780118">+7 (495) 178-01-18</a>
+        <a class="phone__num" href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a>
         <a class="phone__num" href="tel:+79251640560">+7 (925) 164-05-60</a>
         <span class="phone__note" data-status-box><i class="phone__dot" aria-hidden="true"></i><span data-status>На связи, ответим за 30 минут</span></span>
       </div>
@@ -1697,7 +1699,7 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
       <a href="#contacts">Контакты</a>
     </nav>
     <div class="drawer__contacts">
-      <a href="tel:+74951780118">+7 (495) 178-01-18</a>
+      <a href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a>
       <a href="tel:+79251640560">+7 (925) 164-05-60</a>
       <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
     </div>
@@ -1855,6 +1857,23 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
             <div class="qfields">
               <label class="field"><span>Имя</span><input id="quiz-name" type="text" name="name" autocomplete="name"></label>
               <label class="field"><span>Телефон</span><input id="quiz-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" data-phone></label>
+    <fieldset class="callback-preferences" data-callback-preferences aria-label="Пожелания к звонку">
+      <label class="callback-preferences__field">
+        <span class="callback-preferences__heading">Удобное время звонка <span class="callback-preferences__hint">МСК · необязательно</span></span>
+        <select name="callbackTimeSlot" class="callback-preferences__control">
+          <option value="">В рабочее время · 9:00–18:00</option>
+          <option value="09:00–12:00">09:00–12:00</option>
+          <option value="12:00–15:00">12:00–15:00</option>
+          <option value="15:00–18:00">15:00–18:00</option>
+          <option value="custom">Своё время</option>
+        </select>
+      </label>
+      <label class="callback-preferences__field" data-callback-custom hidden>
+        <span class="callback-preferences__hint">Когда вам удобно?</span>
+        <input name="callbackTimeCustom" class="callback-preferences__control" type="text" maxlength="120" placeholder="Например, с 10:00 до 18:00">
+      </label>
+      <label class="callback-preferences__check"><input name="allowNonWorkingDays" type="checkbox"><span>Можно звонить в выходные и праздники</span></label>
+    </fieldset>
             </div>
             <p class="qlabel">Как с вами связаться</p>
           <div class="chips">
@@ -1885,7 +1904,7 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
             <p class="quiz__done-note">Точный состав и стоимость инженер пришлёт после уточнения нагрузки. Заявка отправлена.</p>
           </div>
 
-          <p class="quiz__error" data-quiz-error hidden></p>
+          <p class="quiz__error" data-quiz-error role="alert" hidden></p>
 
           <div class="quiz__foot" data-quiz-foot>
             <span class="quiz__step">Шаг: <b data-quiz-n>1</b>/5</span>
@@ -2545,6 +2564,23 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
         <label class="cfield" for="ct-phone"><span class="cfield__label">Телефон</span>
           <input class="cfield__input" id="ct-phone" type="tel" name="ctphone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" data-phone>
           <span class="cfield__err">Проверьте номер телефона</span></label>
+    <fieldset class="callback-preferences" data-callback-preferences aria-label="Пожелания к звонку">
+      <label class="callback-preferences__field">
+        <span class="callback-preferences__heading">Удобное время звонка <span class="callback-preferences__hint">МСК · необязательно</span></span>
+        <select name="callbackTimeSlot" class="callback-preferences__control">
+          <option value="">В рабочее время · 9:00–18:00</option>
+          <option value="09:00–12:00">09:00–12:00</option>
+          <option value="12:00–15:00">12:00–15:00</option>
+          <option value="15:00–18:00">15:00–18:00</option>
+          <option value="custom">Своё время</option>
+        </select>
+      </label>
+      <label class="callback-preferences__field" data-callback-custom hidden>
+        <span class="callback-preferences__hint">Когда вам удобно?</span>
+        <input name="callbackTimeCustom" class="callback-preferences__control" type="text" maxlength="120" placeholder="Например, с 10:00 до 18:00">
+      </label>
+      <label class="callback-preferences__check"><input name="allowNonWorkingDays" type="checkbox"><span>Можно звонить в выходные и праздники</span></label>
+    </fieldset>
         <label class="cfield" for="ct-task"><span class="cfield__label">Коротко об объекте <i class="cfield__opt">по желанию</i></span>
           <textarea class="cfield__input cfield__input--area" id="ct-task" name="cttask" rows="3" placeholder="Например: дом 450 м² в коттеджном посёлке, нужен резерв для котла, насосов и видеонаблюдения"></textarea></label>
         <div class="cconsents">
@@ -2552,17 +2588,20 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
           <label class="cconsent"><input type="checkbox" id="ct-privacy" name="ctprivacy"><span class="cconsent__ind"></span><span>Ознакомлен с <a href="https://e-systems.su/privacy" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>
         </div>
         <span class="cfield__err" data-contact-consent-err>Отметьте оба пункта — без них не сможем принять заявку</span>
+        <p class="cfield__err is-shown" data-contact-error role="alert" hidden></p>
         <button class="contacts__submit" type="submit">Отправить заявку</button>
         <p class="contacts__note">Не хотите отвечать на вопросы опроса — напишите пару строк, остальное спросим сами.</p>
         <div class="contacts__done" data-contact-done hidden>
           <b>Спасибо за обращение!</b>
-          <span>Мы получили вашу заявку и свяжемся с вами в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
-          <span>Будем рады помочь и по телефону: <a href="tel:+79251640560">+7 (925) 164-05-60</a></span>
+          <span>Мы получили вашу заявку. Учтём ваши пожелания по времени звонка.</span>
+          <span>Будем рады помочь и по телефону: <a href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a></span>
         </div>
       </form>
 
       <div class="contacts__side">
-        <div class="cnt"><span class="cnt__label">Телефон</span><a class="cnt__value" href="tel:+79251640560">+7 (925) 164-05-60</a></div>
+        <div class="cnt"><span class="cnt__label">Телефон</span><a class="cnt__value" href="tel:+74951795920" data-calltracking-phone="+74951795920"><span data-calltracking-number>+7 (495) 179-59-20</span></a></div>
+        <div class="cnt"><span class="cnt__label">Дополнительный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+74951780118">+7 (495) 178-01-18</a></div>
+        <div class="cnt"><span class="cnt__label">Мобильный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+79251640560">+7 (925) 164-05-60</a></div>
         <div class="cnt"><span class="cnt__label">Почта</span><a class="cnt__value" href="mailto:sales@e-systems.su">sales@e-systems.su <i>по заявкам и расчётам</i></a></div>
         <div class="cnt"><span class="cnt__label">Мессенджеры</span>
           <div class="cnt__msgrs">
@@ -2600,25 +2639,85 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
     </button>
     <h2 class="modal__title" id="modal-title" data-modal-title>Заказать звонок</h2>
-    <p class="modal__text" data-modal-text>Перезвоним в течение 30 минут в рабочее время</p>
+    <p class="modal__text" data-modal-text>Оставьте номер и выберите удобное время звонка</p>
     <label class="field"><span>Имя</span><input type="text" name="name" autocomplete="name" required></label>
     <label class="field"><span>Телефон</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required data-phone></label>
+    <fieldset class="callback-preferences" data-callback-preferences aria-label="Пожелания к звонку">
+      <label class="callback-preferences__field">
+        <span class="callback-preferences__heading">Удобное время звонка <span class="callback-preferences__hint">МСК · необязательно</span></span>
+        <select name="callbackTimeSlot" class="callback-preferences__control">
+          <option value="">В рабочее время · 9:00–18:00</option>
+          <option value="09:00–12:00">09:00–12:00</option>
+          <option value="12:00–15:00">12:00–15:00</option>
+          <option value="15:00–18:00">15:00–18:00</option>
+          <option value="custom">Своё время</option>
+        </select>
+      </label>
+      <label class="callback-preferences__field" data-callback-custom hidden>
+        <span class="callback-preferences__hint">Когда вам удобно?</span>
+        <input name="callbackTimeCustom" class="callback-preferences__control" type="text" maxlength="120" placeholder="Например, с 10:00 до 18:00">
+      </label>
+      <label class="callback-preferences__check"><input name="allowNonWorkingDays" type="checkbox"><span>Можно звонить в выходные и праздники</span></label>
+    </fieldset>
     <label class="check"><input type="checkbox" name="consent" required>
       <span>Согласен на <a href="https://e-systems.su/personal-data-consent" target="_blank" rel="noopener">обработку персональных данных</a></span></label>
     <label class="check"><input type="checkbox" name="policy" required>
       <span>Ознакомлен с <a href="https://e-systems.su/privacy" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>
-    <p class="modal__error" data-modal-error hidden></p>
-    <!-- TODO: подключить отправку на POST /api/lead (поля и формат — раздел 11 мастер-промта) -->
+    <p class="modal__error" data-modal-error role="alert" hidden></p>
     <button class="btn-pill btn-pill--full" type="button" data-modal-submit><span>Отправить</span></button>
   </form>
 </dialog>
 
 
 
-<script>
+<script type="module">
+import { getLeadAttribution, withAttributionUrl } from '/scripts/attribution.js';
+import { initCallbackPreferences, readCallbackPreferences } from '/scripts/callbackPreferences.js';
+import { loadCallTracking } from '/scripts/callTracking.js';
+
+initCallbackPreferences();
+
+// Capture on entry as well as on submit, including visits that leave this page.
+getLeadAttribution();
+for (const event of ['pointerdown', 'click', 'contextmenu']) {
+  document.addEventListener(event, function (event) {
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!link || link.hasAttribute('download')) return;
+    link.setAttribute('href', withAttributionUrl(link.getAttribute('href'), window.location.href, getLeadAttribution()));
+  }, true);
+}
+
 (function () {
   'use strict';
 
+  function submitLead(payload) {
+    var body = Object.assign({}, payload, {
+      attribution: getLeadAttribution(),
+      contact: payload.contact.replace(') ', ')-'),
+      consentVersion: '2026-07-13'
+    });
+    return fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (response) {
+      if (!response.ok) {
+        var error = new Error('Не удалось подтвердить отправку');
+        error.status = response.status;
+        throw error;
+      }
+      return response.json();
+    }).then(function (result) {
+      if (!result || result.ok !== true) throw new Error('Заявка не подтверждена сервером');
+      return result;
+    });
+  }
+
+  function submitErrorMessage(error) {
+    return error.status === 429
+      ? 'Слишком много попыток. Попробуйте через 15 минут или позвоните нам. Введённые данные сохранены.'
+      : 'Не удалось подтвердить отправку заявки. Попробуйте ещё раз или позвоните нам. Введённые данные сохранены.';
+  }
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2678,6 +2777,7 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMore(); closeDrawer(); } });
 
   /* ---------- окно «Заказать звонок»: одно на все кнопки ---------- */
+  var callbackPending = false;
   var modal = $('[data-modal]');
   var form = $('[data-modal-form]');
   var errBox = $('[data-modal-error]');
@@ -2685,7 +2785,7 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
   var defText = $('[data-modal-text]') ? $('[data-modal-text]').textContent : '';
 
   var openModal = function (btn) {
-    if (!modal || typeof modal.showModal !== 'function') return;
+    if (!modal || callbackPending || typeof modal.showModal !== 'function') return;
     form.classList.remove('is-sent'); errBox.hidden = true;
     $('[data-modal-title]').textContent = btn.getAttribute('data-callback-title') || defTitle;
     $('[data-modal-text]').textContent = btn.getAttribute('data-callback-text') || defText;
@@ -2719,19 +2819,33 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
   var submit = $('[data-modal-submit]');
   if (submit) {
     submit.addEventListener('click', function () {
+      if (callbackPending || form.classList.contains('is-sent')) return;
       var name = form.elements.name.value.trim();
       var digits = form.elements.phone.value.replace(/\D/g, '');
       var msg = '';
-      if (!name) msg = 'Укажите имя';
+      if (name.length < 2 || name.length > 80) msg = 'Укажите имя от 2 до 80 символов';
       else if (digits.length !== 11) msg = 'Введите телефон полностью';
       else if (!form.elements.consent.checked || !form.elements.policy.checked) msg = 'Отметьте обе галочки — без них заявку не отправить';
       errBox.hidden = !msg; errBox.textContent = msg;
       if (msg) return;
-      // TODO: отправка на POST /api/lead (формат полей — раздел 11 мастер-промта)
-      if (window.console) console.log('lead', { name: name, contact: form.elements.phone.value });
-      form.classList.add('is-sent');
-      $('[data-modal-title]').textContent = 'Заявка принята';
-      $('[data-modal-text]').textContent = 'Перезвоним в рабочее время, с 9:00 до 18:00 по Москве.';
+      callbackPending = true;
+      submit.disabled = true;
+      submitLead({
+        type: 'service', name: name, contact: form.elements.phone.value,
+        callbackPreferences: readCallbackPreferences(form),
+        service: 'ИБП — ' + $('[data-modal-title]').textContent,
+        consent: form.elements.consent.checked
+      }).then(function () {
+        form.classList.add('is-sent');
+        $('[data-modal-title]').textContent = 'Заявка принята';
+        $('[data-modal-text]').textContent = 'Учтём ваши пожелания по времени звонка.';
+      }).catch(function (error) {
+        errBox.textContent = submitErrorMessage(error);
+        errBox.hidden = false;
+      }).finally(function () {
+        callbackPending = false;
+        submit.disabled = false;
+      });
     });
   }
 
@@ -2768,6 +2882,7 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
     var qdone = $('[data-quiz-done]', quiz);
     var mgr = $('[data-manager-text]', quiz);
     var kwInput = $('#quiz-kw', quiz);
+    var quizPending = false;
     var cur = 0;
     var last = qsteps.length - 1;
 
@@ -2795,7 +2910,8 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
       return true;
     };
     var finalProblem = function () {
-      if (!qform.elements.name.value.trim()) return 'Укажите имя';
+      var nameLength = qform.elements.name.value.trim().length;
+      if (nameLength < 2 || nameLength > 80) return 'Укажите имя от 2 до 80 символов';
       if (!phoneOk()) return 'Введите телефон полностью';
       if (!qform.elements.consent.checked || !qform.elements.policy.checked) return 'Отметьте обе галочки — без них заявку не отправить';
       return '';
@@ -2813,12 +2929,12 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
       qn.textContent = cur + 1;
       qback.hidden = cur === 0;
       qnextText.textContent = cur === last ? 'Получить расчёт' : 'Далее';
-      qnext.disabled = cur < last && !valid(cur);
+      qnext.disabled = quizPending || quiz.classList.contains('is-done') || (cur < last && !valid(cur));
       qerr.hidden = true;
       say(cur === 2 && powerSmall() ? softFilter : replies[cur]);
     };
     var refresh = function () {
-      qnext.disabled = cur < last && !valid(cur);
+      qnext.disabled = quizPending || quiz.classList.contains('is-done') || (cur < last && !valid(cur));
       if (cur === 2) say(powerSmall() ? softFilter : replies[2]);
     };
 
@@ -2830,9 +2946,10 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
       if (kwInput.value) $$('input[name="power"]', qform).forEach(function (r) { r.checked = false; });
       refresh();
     });
-    qback.addEventListener('click', function () { if (cur > 0) { cur--; render(); } });
+    qback.addEventListener('click', function () { if (!quizPending && cur > 0) { cur--; render(); } });
 
     var finish = function () {
+      if (quizPending || quiz.classList.contains('is-done')) return;
       var power = kw() > 0 ? String(kw()).replace('.', ',') + ' кВт' : one('power');
       var loads = checked('loads').map(function (c) { return c.value; });
       var sum = {
@@ -2842,10 +2959,10 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
         autonomy: one('autonomy')
       };
       Object.keys(sum).forEach(function (k) { $('[data-sum="' + k + '"]', quiz).textContent = sum[k]; });
-      // TODO: отправка на POST /api/lead; формат — раздел 11 мастер-промта (поля name, contact, service, answers[])
       var lead = {
         type: 'service', name: qform.elements.name.value.trim(), contact: qform.elements.phone.value,
         service: 'Опрос по ИБП',
+        callbackPreferences: readCallbackPreferences(qform),
         answers: [
           { label: 'Объект', value: sum.object }, { label: 'Нагрузки', value: sum.loads },
           { label: 'Мощность', value: sum.power }, { label: 'Автономная работа', value: sum.autonomy },
@@ -2853,18 +2970,30 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
         ],
         consent: true
       };
-      if (window.console) console.log('lead', lead);
-      qsteps.forEach(function (s) { s.hidden = true; });
-      qdone.hidden = false;
-      quiz.classList.add('is-done');
-      qbar.style.width = '100%';
-      qerr.hidden = true;
-      say('Заявка принята. Свяжусь выбранным способом и уточню исходные данные по нагрузке.');
-      qdone.focus({ preventScroll: true });
+      quizPending = true;
+      qnext.disabled = true;
+      qback.disabled = true;
+      submitLead(lead).then(function () {
+        qsteps.forEach(function (s) { s.hidden = true; });
+        qdone.hidden = false;
+        quiz.classList.add('is-done');
+        qbar.style.width = '100%';
+        qerr.hidden = true;
+        say('Заявка принята. Свяжусь выбранным способом и уточню исходные данные по нагрузке.');
+        qdone.focus({ preventScroll: true });
+      }).catch(function (error) {
+        qerr.textContent = submitErrorMessage(error);
+        qerr.hidden = false;
+      }).finally(function () {
+        quizPending = false;
+        qback.disabled = false;
+        qnext.disabled = quiz.classList.contains('is-done');
+      });
     };
 
     // «Далее» — обычная кнопка, не submit: в изолированной рамке форма не отправляется
     qnext.addEventListener('click', function () {
+      if (quizPending || quiz.classList.contains('is-done')) return;
       if (cur < last) {
         if (!valid(cur)) return;
         cur++; render();
@@ -3115,14 +3244,13 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
       setTimeout(function () { applyDim(false); backup(); }, 3400);
     }
   }
-})();
-
-</script>
-<script>
-(function () {
+  /* ---------- форма в контактах ---------- */
+  (function () {
   var form = document.querySelector('[data-contact-form]');
   if (!form) return;
   var done = form.querySelector('[data-contact-done]');
+  var submitButton = form.querySelector('.contacts__submit');
+  var submitError = form.querySelector('[data-contact-error]');
   var consentErr = form.querySelector('[data-contact-consent-err]');
   var name = form.elements.ctname, phone = form.elements.ctphone;
   var mark = function (el, bad) { if (bad) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid'); };
@@ -3133,18 +3261,31 @@ img::selection, .cs__stage::selection, .cs__stage *::selection, .rp__ph *::selec
   });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var badName = !name.value.trim();
+    if (submitButton.disabled || !done.hidden) return;
+    submitError.hidden = true;
+    var badName = name.value.trim().length < 2 || name.value.trim().length > 80;
     var badPhone = phone.value.replace(/\D/g, '').length !== 11;
     var badConsent = !form.elements.ctconsent.checked || !form.elements.ctprivacy.checked;
     mark(name, badName); mark(phone, badPhone);
     consentErr.classList.toggle('is-shown', badConsent);
     if (badName || badPhone || badConsent) return;
-    // TODO: отправка на POST /api/lead
-    if (window.console) console.log('lead', { name: name.value.trim(), phone: phone.value, task: form.elements.cttask.value.trim() });
-    form.querySelector('.contacts__submit').disabled = true;
-    done.hidden = false;
+    submitButton.disabled = true;
+    submitLead({
+      type: 'service', name: name.value.trim(), contact: phone.value,
+      callbackPreferences: readCallbackPreferences(form, 'ctphone'),
+      service: 'ИБП — форма в контактах', comment: form.elements.cttask.value.trim(),
+      consent: form.elements.ctconsent.checked
+    }).then(function () {
+      done.hidden = false;
+    }).catch(function (error) {
+      submitError.textContent = submitErrorMessage(error);
+      submitError.hidden = false;
+      submitButton.disabled = false;
+    });
   });
+  })();
 })();
+loadCallTracking();
 </script>
 
 <script>
