@@ -106,6 +106,7 @@
                         >
                       </label>
                     </div>
+                    <CallbackPreferences v-model="contact.callbackPreferences" :dark="embedded" class="quiz-callback" />
                     <label class="quiz-consent">
                       <input v-model="contact.consent" type="checkbox" name="consent" required>
                       <span>
@@ -384,6 +385,7 @@ function startAgain() {
 .quiz-summary dl { display: grid; gap: 14px; margin: 0; }
 .quiz-summary dt { margin-bottom: 4px; color: var(--quiz-muted); font-size: 12px; line-height: 1.4; }
 .quiz-summary dd { margin: 0; font-size: 14px; line-height: 1.45; }
+.quiz-callback { margin-top: 16px; --callback-ink: var(--quiz-ink); --callback-muted: var(--quiz-muted); --callback-line: var(--quiz-line); --callback-surface: var(--quiz-option-surface); --callback-accent: var(--quiz-eyebrow); }
 .quiz-inputs { display: grid; grid-template-columns: 1fr; gap: 14px; }
 .quiz-field { display: flex; flex-direction: column; gap: 7px; font-size: 13px; }
 .quiz-field input {

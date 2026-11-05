@@ -128,3 +128,19 @@ test('quiz sends campaign metadata with its answers even when storage is blocked
     else globalThis.window = previousWindow
   }
 })
+
+
+test('callback preferences are omitted without a phone and submitted with a phone', async () => {
+  let sent
+  const quiz = useKtpQuiz(async (url, { body }) => { sent = body; return { ok: true } })
+  complete(quiz)
+  Object.assign(quiz.contact.callbackPreferences, { slot: '12:00–15:00', allowNonWorkingDays: true })
+  assert.equal(await quiz.submit(), true)
+  assert.equal(sent.callbackPreferences, undefined)
+  quiz.reset()
+  complete(quiz)
+  quiz.contact.phone = '+7 (999)-123-45-67'
+  quiz.contact.callbackPreferences.slot = '15:00–18:00'
+  assert.equal(await quiz.submit(), true)
+  assert.deepEqual(sent.callbackPreferences, { time: '15:00–18:00', allowNonWorkingDays: false })
+})

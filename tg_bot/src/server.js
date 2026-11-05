@@ -3,6 +3,7 @@ require("dotenv").config();
 const { randomUUID } = require("crypto");
 const express = require("express");
 const cors = require("cors");
+const { normalizeCallbackPreferences } = require("./callback-preferences");
 const { sendLeadEmail } = require("./mailer");
 const { normalizeAttribution } = require("./attribution");
 
@@ -59,6 +60,7 @@ const COMMON_LEAD_FIELDS = [
   "type",
   "name",
   "contact",
+  "callbackPreferences",
   "email",
   "consent",
   "consentVersion",
@@ -240,6 +242,11 @@ async function handleLeadSubmit(req, res) {
       return res.status(400).json({ ok: false, error: "invalid_attribution" });
     }
 
+    const callbackPreferences = normalizeCallbackPreferences(req.body.callbackPreferences, contact);
+    if (callbackPreferences === null) {
+      return res.status(400).json({ ok: false, error: "invalid_callback_preferences" });
+    }
+
     const consentRecordId = randomUUID();
     const consentAcceptedAt = new Date().toISOString();
 
@@ -247,6 +254,7 @@ async function handleLeadSubmit(req, res) {
       type,
       name,
       contact,
+      callbackPreferences,
       email,
       consentRecordId,
       consentVersion: CONSENT_VERSION,

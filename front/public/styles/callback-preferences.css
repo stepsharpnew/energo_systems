@@ -1,0 +1,49 @@
+.callback-preferences {
+  --callback-ink: #23252a;
+  --callback-muted: #626970;
+  --callback-line: #d9dfe3;
+  --callback-surface: #fff;
+  --callback-accent: #b86a00;
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--callback-ink);
+  font-family: inherit;
+  grid-column: 1 / -1;
+}
+.callback-preferences--dark {
+  --callback-ink: #f1f5f9;
+  --callback-muted: #b0b9c9;
+  --callback-line: #485164;
+  --callback-surface: #202a3d;
+  --callback-accent: #ff9a72;
+  color-scheme: dark;
+}
+.callback-preferences[hidden], .callback-preferences [hidden] { display: none !important; }
+.callback-preferences__field { display: grid; gap: 7px; min-width: 0; }
+.callback-preferences__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; font-size: 13px; font-weight: 600; line-height: 1.5; }
+.callback-preferences__hint { color: var(--callback-muted); font-size: 11px; font-weight: 400; }
+.callback-preferences .callback-preferences__control {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--callback-line);
+  border-radius: 10px;
+  background: var(--callback-surface);
+  color: var(--callback-ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.callback-preferences select.callback-preferences__control { appearance: auto; cursor: pointer; }
+.callback-preferences__control::placeholder { color: var(--callback-muted); opacity: 1; }
+.callback-preferences__check { display: flex; align-items: flex-start; gap: 9px; min-height: 28px; padding: 3px 0; font-size: 12px; line-height: 1.6; cursor: pointer; }
+.callback-preferences .callback-preferences__check input { appearance: auto; position: static; opacity: 1; width: 17px; height: 17px; flex: 0 0 17px; margin: 1px 0 0; accent-color: var(--callback-accent); }
+.callback-preferences :is(input, select):focus-visible { outline: 2px solid var(--callback-accent); outline-offset: 3px; }
+.callback-preferences:disabled { opacity: .65; }

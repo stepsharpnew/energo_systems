@@ -8,7 +8,7 @@
         <div class="modal-body">
           <p class="section-kicker">Обратная связь</p>
           <h2>Заполните форму</h2>
-          <p class="modal-description">Мы свяжемся с вами в ближайшее время</p>
+          <p class="modal-description">Учтём ваши пожелания по времени звонка</p>
 
           <form @submit.prevent="handleSubmit" class="contact-form">
             <div class="form-group">
@@ -42,6 +42,8 @@
                 pattern="\+7 \(\d{3}\)-\d{3}-\d{2}-\d{2}"
               />
             </div>
+
+            <CallbackPreferences v-model="formData.callbackPreferences" dark />
 
             <div class="form-group">
               <label for="email">Email для обратной связи</label>
@@ -148,6 +150,7 @@
 </template>
 
 <script>
+import { emptyCallbackPreferences, getCallbackPreferences } from "~/lib/browser/callbackPreferences.js";
 import { getLeadAttribution } from "~/utils/attribution";
 import { handlePhoneKeydown } from "~/utils/phoneFormatter";
 
@@ -173,6 +176,7 @@ export default {
       formData: {
         name: "",
         phone: "",
+        callbackPreferences: emptyCallbackPreferences(),
         email: "",
         service: "",
         consent: false,
@@ -328,6 +332,7 @@ export default {
           type: "service",
           name: this.formData.name,
           contact: this.formData.phone,
+          callbackPreferences: getCallbackPreferences(this.formData.phone, this.formData.callbackPreferences),
           email: this.formData.email || undefined,
           service: selectedService ? selectedService.name : undefined,
           consent: this.formData.consent,
@@ -344,7 +349,7 @@ export default {
 
         if (response?.ok !== true) throw new Error("Заявка не подтверждена сервером");
 
-        alert("Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.");
+        alert("Спасибо! Ваша заявка отправлена. Учтём ваши пожелания по времени звонка.");
         this.$emit("close");
         this.resetForm();
       } catch (error) {
@@ -358,6 +363,7 @@ export default {
       this.formData = {
         name: "",
         phone: "",
+        callbackPreferences: emptyCallbackPreferences(),
         email: "",
         service: "",
         consent: false,

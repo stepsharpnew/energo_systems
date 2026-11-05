@@ -1,9 +1,10 @@
 import { computed, reactive, ref } from 'vue'
+import { emptyCallbackPreferences, getCallbackPreferences } from '../lib/browser/callbackPreferences.js'
 import { getLeadAttribution } from '../utils/attribution.js'
 import { generatorQuizQuestions as questions } from '../assets/data/generatorQuiz.js'
 
 const emptyAnswers = () => Object.fromEntries(questions.map((question) => [question.id, question.multiple ? [] : '']))
-const emptyContact = () => ({ name: '', phone: '', consent: false })
+const emptyContact = () => ({ name: '', phone: '', callbackPreferences: emptyCallbackPreferences(), consent: false })
 
 export function useGeneratorQuiz(request) {
   const currentStep = ref(0)
@@ -76,6 +77,7 @@ export function useGeneratorQuiz(request) {
           product: 'Подбор генератора — резервное питание',
           name: contact.name.trim(),
           contact: contact.phone,
+          callbackPreferences: getCallbackPreferences(contact.phone, contact.callbackPreferences),
           answers: summary.value,
           consent: true,
           consentVersion: '2026-07-13',

@@ -90,7 +90,8 @@ ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrack
 
   // Включение CSS
   css: [
-    'vuetify/styles'
+    'vuetify/styles',
+    '~/public/styles/callback-preferences.css'
   ],
 
   // Настройка сборки

@@ -209,6 +209,7 @@
                 <input class="field__input" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__">
                 <span class="field__err">Проверьте номер телефона</span>
               </label>
+              <CallbackPreferences />
               <label class="field">
                 <span class="field__label">Почта <i class="field__opt">по желанию</i></span>
                 <input class="field__input" type="email" name="email" autocomplete="email" placeholder="пришлём расчёт письмом">
@@ -687,6 +688,7 @@
             <input class="field__input" type="tel" name="ctphone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__">
             <span class="field__err">Проверьте номер телефона</span>
           </label>
+          <CallbackPreferences />
           <label class="field">
             <span class="field__label">Коротко об объекте <i class="field__opt">по желанию</i></span>
             <textarea class="field__input field__input--area" name="cttask" rows="3" placeholder="Например: прокол под Ленинградским шоссе, 90 м, труба 315"></textarea>
@@ -712,7 +714,7 @@
 
           <div class="contacts__done" data-contact-done hidden>
             <b>Спасибо за обращение!</b>
-            <span>Мы получили вашу заявку и свяжемся с вами в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
+            <span>Мы получили вашу заявку. Учтём ваши пожелания по времени звонка.</span>
             <span>Будем рады помочь и по телефону: <PhoneLink /></span>
           </div>
         </form>
@@ -807,6 +809,7 @@
           <input class="field__input" type="tel" name="cbphone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__">
           <span class="field__err">Проверьте номер телефона</span>
         </label>
+        <CallbackPreferences />
         <div class="consents">
           <label class="consent">
             <input type="checkbox" name="cbconsent">
@@ -826,7 +829,7 @@
 
       <div class="modal__done" data-callback-done hidden>
         <b>Спасибо за обращение!</b>
-        <span>Мы получили вашу заявку и перезвоним вам в рабочее время: Пн–Пт с 9:00 до 18:00.</span>
+        <span>Мы получили вашу заявку. Учтём ваши пожелания по времени звонка.</span>
         <span>Будем рады помочь и по телефону: <PhoneLink /></span>
       </div>
     </div>

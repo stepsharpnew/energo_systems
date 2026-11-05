@@ -68,6 +68,7 @@ function buildLeadEmail(data) {
     type,
     name,
     contact,
+    callbackPreferences,
     email,
     service,
     product,
@@ -104,6 +105,10 @@ function buildLeadEmail(data) {
     rows.push(["Организация", organization]);
   }
   if (type === "service" || contact) rows.push(["Телефон", contact]);
+  if (contact && callbackPreferences) {
+    rows.push(["Удобное время звонка (МСК)", callbackPreferences.time || "В рабочее время, 09:00–18:00"]);
+    rows.push(["Звонки в выходные и праздники", callbackPreferences.allowNonWorkingDays ? "Разрешены клиентом" : "Не звонить — только рабочие дни"]);
+  }
   if (email) rows.push(["Email для обратной связи", email]);
 
   if (type === "equipment") {

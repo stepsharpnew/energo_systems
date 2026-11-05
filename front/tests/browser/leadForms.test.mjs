@@ -65,6 +65,15 @@ function assertCampaignEmail(message) {
 }
 
 const check = locator => locator.evaluate(element => element.click())
+async function selectCallbackPreferences(form, custom = false) {
+  assert.equal(await form.locator('[name=allowNonWorkingDays]').isChecked(), false)
+  await form.locator('[name=callbackTimeSlot]').selectOption('12:00–15:00')
+  if (custom) {
+    await form.locator('[name=callbackTimeSlot]').selectOption('custom')
+    await form.locator('[name=callbackTimeCustom]').fill('с 10:00 до 18:00')
+    await form.locator('[name=allowNonWorkingDays]').check()
+  }
+}
 async function enterContact(form, names) {
   await form.locator(`[name=${names.name}]`).fill('Тестовая заявка')
   await form.locator(`[name=${names.phone}]`).fill('79990000000')
@@ -119,6 +128,7 @@ test('landing forms send validated leads and never report an unacknowledged subm
             }
           }
           await enterContact(form, item.names)
+          await selectCallbackPreferences(form, Boolean(item.quiz))
           if (item.quiz === 'hdd') await form.locator('[name=address]').fill('Тестовый адрес объекта')
           const button = page.locator(item.button)
           const error = item.quiz ? page.locator(item.error) : form.locator(item.error)
@@ -149,6 +159,9 @@ test('landing forms send validated leads and never report an unacknowledged subm
           assert.equal(payload.consent, true)
           assert.equal(payload.consentVersion, '2026-07-13')
           assert.equal(payload.contact, '+7 (999)-000-00-00')
+          assert.deepEqual(payload.callbackPreferences, { time: item.quiz ? 'с 10:00 до 18:00' : '12:00–15:00', allowNonWorkingDays: Boolean(item.quiz) })
+          assert.ok(mail.at(-1).text.includes(payload.callbackPreferences.time))
+          assert.ok(mail.at(-1).text.includes(item.quiz ? 'Разрешены клиентом' : 'Не звонить — только рабочие дни'))
           if (item.quiz) assert.ok(payload.answers.length >= 4)
           assert.deepEqual(errors, [])
         } finally {
@@ -180,7 +193,8 @@ test('landing forms send validated leads and never report an unacknowledged subm
             await form.locator('#phone').fill('79990000000')
             await form.locator('.custom-select').click()
             await form.locator('.custom-select-option').first().click()
-            await check(form.locator('input[type=checkbox]'))
+            await check(form.locator('.consent-check input'))
+            await selectCallbackPreferences(form, true)
             const dialog = page.waitForEvent('dialog')
             await form.locator('[type=submit]').click()
             assert.match((await dialog).message(), /ошибка/)
@@ -189,6 +203,11 @@ test('landing forms send validated leads and never report an unacknowledged subm
             form = page.locator('.request-form')
             await form.locator('[name=name]').fill('Тестовая заявка')
             await form.locator('[name=email]').fill('test@example.test')
+            assert.equal(await form.locator('.callback-preferences').count(), 0)
+            await form.locator('[name=phone]').fill('79990000000')
+            await selectCallbackPreferences(form, true)
+            await form.locator('[name=phone]').fill('')
+            assert.equal(await form.locator('.callback-preferences').count(), 0)
             await form.locator('[name=location]').fill('Тестовый город')
             await form.locator('[name=comment]').fill('Тестовая задача')
             await check(form.locator('[name=consent]'))
@@ -209,6 +228,10 @@ test('landing forms send validated leads and never report an unacknowledged subm
           assert.equal(mail.length, before + 1)
           assert.equal(mail.at(-1).to, 'sales@e-systems.su')
           assertCampaignEmail(mail.at(-1))
+          if (kind === 'service') {
+            assert.ok(mail.at(-1).text.includes('с 10:00 до 18:00'))
+            assert.ok(mail.at(-1).text.includes('Разрешены клиентом'))
+          } else assert.doesNotMatch(mail.at(-1).text, /Удобное время звонка/)
         } finally {
           await context.close()
         }

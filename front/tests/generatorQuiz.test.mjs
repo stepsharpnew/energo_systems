@@ -136,7 +136,7 @@ test('restart clears every answer, personal data and consent', async () => {
   await quiz.submit()
   quiz.reset()
   assert.deepEqual(quiz.answers, { loads: [], area: '', fuel: '', timing: '' })
-  assert.deepEqual(quiz.contact, { name: '', phone: '', consent: false })
+  assert.deepEqual(quiz.contact, { name: '', phone: '', callbackPreferences: { slot: '', customTime: '', allowNonWorkingDays: false }, consent: false })
   assert.equal(quiz.submitState.value, 'idle')
   assert.equal(quiz.currentStep.value, 0)
   assert.equal(quiz.progress.value, 20)
@@ -157,4 +157,23 @@ test('quiz sends campaign metadata with its answers even when storage is blocked
     if (previousWindow === undefined) delete globalThis.window
     else globalThis.window = previousWindow
   }
+})
+
+
+test('callback preferences survive errors, reach the lead and reset with contact details', async () => {
+  let sent
+  let fail = true
+  const quiz = useGeneratorQuiz(async (url, { body }) => {
+    sent = body
+    if (fail) throw new Error('offline')
+    return { ok: true }
+  })
+  completeQuiz(quiz)
+  Object.assign(quiz.contact.callbackPreferences, { slot: 'custom', customTime: ' с 10:00 до 18:00 ', allowNonWorkingDays: true })
+  assert.equal(await quiz.submit(), false)
+  fail = false
+  assert.equal(await quiz.submit(), true)
+  assert.deepEqual(sent.callbackPreferences, { time: 'с 10:00 до 18:00', allowNonWorkingDays: true })
+  quiz.reset()
+  assert.deepEqual(quiz.contact.callbackPreferences, { slot: '', customTime: '', allowNonWorkingDays: false })
 })

@@ -149,6 +149,8 @@
             <input v-model.trim="contact.email" name="email" type="email" required maxlength="254" autocomplete="email" spellcheck="false" placeholder="Например, name@company.ru">
           </label>
 
+          <CallbackPreferences v-model="contact.callbackPreferences" :phone="contact.phone" />
+
           <label class="field wide">
             <span>Регион или город объекта<b aria-hidden="true"> *</b></span>
             <input v-model.trim="contact.location" name="location" type="text" required minlength="2" maxlength="180" autocomplete="address-level2" placeholder="Например, Московская область, Солнечногорск…">
@@ -220,6 +222,7 @@
 </template>
 
 <script setup>
+import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
 import { getLeadAttribution } from '~/utils/attribution'
 import { handlePhoneInput, handlePhoneKeydown } from '~/utils/phoneFormatter'
 
@@ -246,6 +249,7 @@ const contact = reactive({
   name: '',
   organization: '',
   phone: '',
+  callbackPreferences: emptyCallbackPreferences(),
   email: '',
   location: '',
   comment: '',
@@ -335,6 +339,7 @@ const submitRequest = async () => {
         name: contact.name,
         organization: contact.organization,
         contact: contact.phone,
+        callbackPreferences: getCallbackPreferences(contact.phone, contact.callbackPreferences),
         email: contact.email,
         location: contact.location,
         comment: contact.comment || undefined,
@@ -362,6 +367,7 @@ const resetForm = () => {
     name: '',
     organization: '',
     phone: '',
+    callbackPreferences: emptyCallbackPreferences(),
     email: '',
     location: '',
     comment: '',

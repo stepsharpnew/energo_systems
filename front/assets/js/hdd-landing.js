@@ -1,6 +1,7 @@
 // Логика лендинга ГНБ: опрос, счётчики, ленты, всплывающее окно.
 // Запускается из pages/services/hdd.vue после монтирования; cleanup снимает
 // слушатели окна и таймеры, чтобы ничего не осталось при уходе со страницы.
+import { readCallbackPreferences } from '../../lib/browser/callbackPreferences.js'
 import { getLeadAttribution } from '../../utils/attribution.js'
 
 export function initHddPage() {
@@ -215,6 +216,7 @@ export function initHddPage() {
         pipes: form.querySelector('input[name="pipes"]:checked').value,
         name: f.name.value.trim(),
         phone: f.phone.value,
+        callbackPreferences: readCallbackPreferences(form),
         email: f.email.value.trim(),
         address: f.address.value.trim(),
         channel: form.querySelector('input[name="channel"]:checked').value,
@@ -268,6 +270,7 @@ export function initHddPage() {
       type: 'service',
       name: p.name,
       contact: apiPhone(p.phone),
+      callbackPreferences: p.callbackPreferences,
       // куда смотреть менеджеру: опрос, кнопка расценок, форма в контактах
       service: p.type || 'Опрос по ГНБ',
       consent: true,
@@ -398,6 +401,7 @@ export function initHddPage() {
       submitBtn.disabled = true;
       submitLead({
         type: source,
+        callbackPreferences: readCallbackPreferences(form, 'cbphone'),
         name: nameInput.value.trim(),
         phone: phoneInput.value,
         page: location.href
@@ -452,13 +456,14 @@ export function initHddPage() {
       submitBtn.disabled = true;
       submitLead({
         type: 'Форма в контактах',
+        callbackPreferences: readCallbackPreferences(form, 'ctphone'),
         name: nameInput.value.trim(),
         phone: phoneInput.value,
         task: task.value.trim(),
         page: location.href
       }).then(function () {
         // поля прячем, подтверждение показываем на их месте
-        [].slice.call(form.querySelectorAll('.field, .consents, .contacts__submit, .contacts__note'))
+        [].slice.call(form.querySelectorAll('.field, .callback-preferences, .consents, .contacts__submit, .contacts__note'))
           .forEach(function (el) { el.hidden = true; });
         consentErr.classList.remove('is-shown');
         done.hidden = false;

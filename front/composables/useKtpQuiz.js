@@ -1,8 +1,9 @@
 import { computed, reactive, ref } from 'vue'
+import { emptyCallbackPreferences, getCallbackPreferences } from '../lib/browser/callbackPreferences.js'
 import { getLeadAttribution } from '../utils/attribution.js'
 import { ktpFields, ktpQuizSteps as steps } from '../assets/data/ktpQuiz.js'
 
-const emptyContact = () => ({ name: '', organization: '', phone: '', email: '', location: '', comment: '', consent: false })
+const emptyContact = () => ({ name: '', organization: '', phone: '', callbackPreferences: emptyCallbackPreferences(), email: '', location: '', comment: '', consent: false })
 const emptyAnswers = () => Object.fromEntries(ktpFields.map((field) => [field.key, '']))
 const phonePattern = /^\+7 \(\d{3}\)-\d{3}-\d{2}-\d{2}$/
 
@@ -59,6 +60,7 @@ export function useKtpQuiz(request) {
           attribution: getLeadAttribution(),
           type: 'equipment', product: 'КТП', name: contact.name.trim(),
           organization: contact.organization.trim(), contact: contact.phone,
+          callbackPreferences: getCallbackPreferences(contact.phone, contact.callbackPreferences),
           email: contact.email.trim(), location: contact.location.trim(),
           comment: contact.comment.trim() || undefined, answers: summary.value,
           consent: true, consentVersion: '2026-07-13',

@@ -68,6 +68,7 @@
                 <label class="ktp-input"><span>Телефон <em>необязательно</em></span><input :value="contact.phone" name="phone" type="tel" maxlength="18" autocomplete="tel" inputmode="tel" pattern="\+7 \(\d{3}\)-\d{3}-\d{2}-\d{2}" placeholder="+7 (999)-123-45-67" @input="onPhoneInput" @keydown="handlePhoneKeydown"></label>
                 <label class="ktp-input"><span>Город или регион объекта</span><input ref="locationInput" v-model="contact.location" name="location" type="text" required minlength="2" maxlength="180" autocomplete="address-level2" placeholder="Где будет установлена КТП" @input="$event.target.setCustomValidity('')"></label>
               </div>
+              <CallbackPreferences v-model="contact.callbackPreferences" :phone="contact.phone" class="ktp-callback" />
               <details class="ktp-details ktp-contact-extra">
                 <summary><span>Компания и комментарий<small>Необязательно</small></span><VIcon class="ktp-chevron" :icon="icons.dropdown" size="21" aria-hidden="true" /></summary>
                 <div class="ktp-extra-fields">
@@ -200,6 +201,7 @@ h3:focus:not(:focus-visible) { outline: none; }
 .ktp-input input, .ktp-input textarea { box-sizing: border-box; width: 100%; min-height: 46px; padding: 12px; border: 1px solid var(--ktp-line); border-radius: 10px; background: #fff; color: var(--ktp-ink); font: inherit; font-size: 14px; line-height: 1.45; }
 .ktp-input textarea { resize: vertical; }
 .ktp-input input::placeholder, .ktp-input textarea::placeholder { color: #878a8d; opacity: 1; }
+.ktp-callback { margin-top: 18px; }
 .ktp-contact-extra { margin-top: 18px; }
 .ktp-consent { display: flex; align-items: flex-start; gap: 10px; margin-top: 20px; font-size: 11px; line-height: 1.6; color: #696c72; cursor: pointer; }
 .ktp-consent input { flex-shrink: 0; width: 17px; height: 17px; margin-top: 1px; accent-color: var(--ktp-accent); }
