@@ -6,7 +6,7 @@
           src="/img/image.png"
           alt="Энергосистемы"
           class="brand-logo"
-          width="300"
+          width="258"
           height="58"
           fetchpriority="high"
         >

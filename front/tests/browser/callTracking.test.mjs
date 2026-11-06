@@ -59,7 +59,7 @@ async function replace(page, id, phone = assignedPhone) {
 }
 
 async function assertLanding(page, kind) {
-  assert.match(await page.locator('h1').innerText(), kind === 'hdd' ? /ГНБ под ключ/ : /Свет в доме не гаснет/)
+  assert.match(await page.locator('h1').innerText(), kind === 'hdd' ? /ГНБ под ключ/ : /Бесперебойное питание частного дома под ключ/)
   const heroButton = page.locator('.hero a.btn-pill[href="#quiz"]')
   assert.match(await heroButton.innerText(), /Рассчитать стоимость/)
   assert.equal(await heroButton.locator('.btn-pill__icon svg').count(), 1)

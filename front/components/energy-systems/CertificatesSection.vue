@@ -12,10 +12,16 @@
         :ref="el => setCardRef(el, index)"
         class="certificate-card"
       >
-        <div
-          class="certificate-image"
-          :style="{ backgroundImage: `url(${certificate.image})` }"
-        >
+        <div class="certificate-image">
+          <img
+            class="certificate-preview"
+            :src="certificate.thumbnail || certificate.image"
+            alt=""
+            :width="certificate.thumbnailWidth"
+            :height="certificate.thumbnailHeight"
+            loading="lazy"
+            decoding="async"
+          />
           <div class="certificate-overlay">
             <div class="certificate-info">
               <h3>{{ certificate.title }}</h3>
@@ -222,12 +228,18 @@ export default {
 .certificate-image {
   width: 100%;
   aspect-ratio: 1 / 1.414;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
   background-color: #fff;
   position: relative;
   overflow: hidden;
+}
+
+.certificate-preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: contain;
 }
 
 .certificate-overlay {

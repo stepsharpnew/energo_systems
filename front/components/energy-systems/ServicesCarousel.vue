@@ -72,10 +72,18 @@
               v-if="activeService"
               :key="activeService.id"
               class="media-image"
-              :style="getImageStyle(activeService)"
-              role="img"
-              :aria-label="activeService.name"
-            ></div>
+            >
+              <img
+                v-if="activeService.image"
+                class="media-photo"
+                :src="activeService.image"
+                :alt="activeService.name"
+                :width="activeService.imageWidth"
+                :height="activeService.imageHeight"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </transition>
 
           <div class="media-caption" aria-hidden="true">
@@ -180,19 +188,6 @@ export default {
       };
 
       return labels[service?.id] || service?.name || "Услуга";
-    },
-    getImageStyle(service) {
-      const layers = [
-        "linear-gradient(90deg, rgba(8, 22, 35, 0.1), rgba(8, 22, 35, 0.34))",
-      ];
-
-      if (service?.image) {
-        layers.push(`url(${service.image})`);
-      }
-
-      return {
-        backgroundImage: layers.join(", "),
-      };
     },
     openActiveService() {
       if (!this.activeService) return;
@@ -502,9 +497,22 @@ export default {
 .media-image {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
   transform: scale(1.01);
+}
+
+.media-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(8, 22, 35, 0.1), rgba(8, 22, 35, 0.34));
+  pointer-events: none;
 }
 
 .media-caption {

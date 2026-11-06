@@ -14,10 +14,15 @@
           { 'card-left': index < 2, 'card-right': index >= 2 && index < 4 }
         ]"
       >
-        <div
+        <img
           class="project-cover"
-          :style="{ backgroundImage: `url(${project.image})` }"
-        ></div>
+          :src="project.image"
+          alt=""
+          :width="project.imageWidth || 750"
+          :height="project.imageHeight || 600"
+          loading="lazy"
+          decoding="async"
+        />
         <div class="project-meta">
           <span class="project-client">{{ project.client }}</span>
           <h3 class="project-name">{{ project.name }}</h3>
@@ -221,11 +226,11 @@ export default {
 }
 
 .project-cover {
+  display: block;
   width: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  object-fit: cover;
   flex-shrink: 0;
 }
 

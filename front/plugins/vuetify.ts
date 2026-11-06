@@ -1,11 +1,8 @@
 import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
 
 export default defineNuxtPlugin((nuxtApp) => {
+  // Components are imported on demand by vite-plugin-vuetify in nuxt.config.ts.
   const vuetify = createVuetify({
-    components,
-    directives,
     theme: {
       defaultTheme: 'light'
     },

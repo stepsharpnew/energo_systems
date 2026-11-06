@@ -3,7 +3,7 @@
     <div class="footer-content">
       <div class="footer-column">
         <div class="footer-logo">
-          <img src="/img/image.png" alt="Энергосистемы" class="logo-img">
+          <img src="/img/image.png" alt="Энергосистемы" class="logo-img" width="258" height="58" loading="lazy" decoding="async">
         </div>
         <p class="footer-description">
           <b>ООО «Энергосистемы»</b><br>

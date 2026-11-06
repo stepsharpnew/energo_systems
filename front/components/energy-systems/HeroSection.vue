@@ -59,7 +59,7 @@ export default {
   emits: ["open-contact-modal"],
   data() {
     return {
-      backgroundImage: "/img/background.jpg",
+      backgroundImage: "/img/background.webp",
     };
   },
 };

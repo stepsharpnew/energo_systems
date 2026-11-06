@@ -5,6 +5,10 @@
         ref="image1"
         :src="contentImage1"
         alt="О компании"
+        width="921"
+        height="707"
+        loading="lazy"
+        decoding="async"
         class="content-image content-image-1"
       />
       <div ref="text1" class="content-text">
@@ -142,6 +146,10 @@
           ref="image2"
           :src="contentImage2"
           alt="Как мы работаем"
+          width="1200"
+          height="715"
+          loading="lazy"
+          decoding="async"
           class="content-image content-image-2"
         />
         <img
@@ -149,6 +157,10 @@
           ref="image4"
           :src="contentImage4"
           alt="Как мы работаем"
+          width="1200"
+          height="800"
+          loading="lazy"
+          decoding="async"
           class="content-image content-image-4"
         />
       </div>
@@ -160,6 +172,10 @@
           ref="image3"
           :src="contentImage3"
           alt="Наши преимущества"
+          width="626"
+          height="351"
+          loading="lazy"
+          decoding="async"
           class="content-image content-image-3"
         />
         <img
@@ -167,6 +183,10 @@
           ref="image5"
           :src="contentImage5"
           alt="Наши преимущества"
+          width="1200"
+          height="795"
+          loading="lazy"
+          decoding="async"
           class="content-image content-image-5"
         />
       </div>
@@ -240,6 +260,10 @@
           <img
             :src="rossetiLogo"
             alt="ПАО Россети Московский регион"
+            width="985"
+            height="251"
+            loading="lazy"
+            decoding="async"
             class="partner-logo-img"
           />
         </div>
@@ -262,11 +286,11 @@
 
 <script>
 const rossetiLogo = '/img/clients/client-5.png';
-const contentImage1 = '/img/content/content-1.png';
-const contentImage3 = '/img/content/content-2.jpg';
-const contentImage2 = '/img/content/content-3.png';
-const contentImage4 = '/img/content/content-4.jpg';
-const contentImage5 = '/img/content/content-5.jpg';
+const contentImage1 = '/img/content/content-1.webp';
+const contentImage3 = '/img/content/content-2.webp';
+const contentImage2 = '/img/content/content-3.webp';
+const contentImage4 = '/img/content/content-4.webp';
+const contentImage5 = '/img/content/content-5.webp';
 const presentationUrl = '/Energosistemy_el_vesia_2026.pdf';
 
 export default {
@@ -768,6 +792,7 @@ export default {
 
 .content-image {
   width: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
   border-radius: 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);

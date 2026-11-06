@@ -103,7 +103,11 @@ ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrack
   modules: [
     async (options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
-        config.plugins?.push(vuetify())
+        config.plugins?.push(vuetify({
+          styles: {
+            configFile: fileURLToPath(new URL('./assets/styles/vuetify-settings.scss', import.meta.url))
+          }
+        }))
       })
     }
   ],
