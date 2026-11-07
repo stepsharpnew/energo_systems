@@ -1,0 +1,42 @@
+/* «Как работаем»: раскрываемая плашка */
+.ups .chapter__bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; cursor: pointer; }
+.ups .chapter__bar .chapter__title { margin: 0; }
+.ups .chapter__tg {
+  position: relative; flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px 9px 16px; border: 0; border-radius: 999px; cursor: pointer;
+  font: inherit; font-size: 13.5px; font-weight: 700; color: #14171C; background: var(--accent); transition: background .2s;
+}
+.ups .chapter__tg:hover { background: var(--accent-hover); }
+.ups .chapter__tg svg { transition: transform .45s cubic-bezier(.2, .8, .2, 1); }
+.ups .chapter.is-open .chapter__tg svg { transform: rotate(180deg); }
+.ups .chapter:not(.is-open) .chapter__tg::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 2px solid var(--accent); animation: ups-tgpulse 2s ease-out infinite; pointer-events: none; }
+@keyframes ups-tgpulse { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.3, 1.6); opacity: 0; } }
+@media (min-width: 901px) {
+  .ups .chapter .steps { overflow: hidden; max-height: 640px; transition: max-height .6s cubic-bezier(.2, .8, .2, 1), opacity .4s ease, margin .4s; }
+  .ups .chapter:not(.is-open) .steps { max-height: 0; opacity: 0; }
+  .ups .chapter .chapter__title { transition: margin .4s; }
+  .ups .chapter__card { padding-bottom: 20px; transition: opacity .5s ease, transform .6s ease, padding .4s; }
+  .ups .chapter:not(.is-open) .chapter__card { padding-top: 16px; padding-bottom: 16px; }
+  .ups .chapter:not(.is-open) .chapter__title { font-size: 22px; }
+  .ups .chapter.is-open .chapter__bar { margin-bottom: 8px; }
+}
+@media (max-width: 900px) { .ups .chapter__tg { display: none; } .ups .chapter__bar { cursor: default; } }
+@media (prefers-reduced-motion: reduce) { .ups .chapter__tg::after { animation: none !important; } }
+
+/* логотипы опыта: ряд из семи, без пустоты справа */
+.ups .exp__logos { flex: 1; flex-wrap: wrap; justify-content: space-between; gap: 22px 36px; }
+.ups .exp__logos img { max-height: 40px; max-width: 120px; }
+@media (max-width: 900px) { .ups .exp__logos { justify-content: flex-start; } }
+
+/* единый стандарт: кнопки-призывы по центру */
+.ups .process__cta, .ups .cfg__cta, .ups .cases__cta, .ups .trust-sec__cta { display: flex; justify-content: center; text-align: center; }
+
+/* фото не выделяются синим при двойном клике и перетаскивании */
+.ups img, .ups .cs__stage, .ups .rp__ph, .ups .cs__thumbs, .ups .cs__nav { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+.ups img { -webkit-user-drag: none; }
+.ups img::selection, .ups .cs__stage::selection, .ups .cs__stage *::selection, .ups .rp__ph *::selection { background: transparent; color: inherit; }
+.ups .cs__img, .ups .cs__th img { pointer-events: none; }
+
+.ups .map__frame { border: 0; width: 100%; }
+.ups .cnt__value--secondary { font-size: 16px; font-weight: 400; }
+
+@media (max-width: 768px) { html.ups-document { scroll-padding-top: 80px; } }

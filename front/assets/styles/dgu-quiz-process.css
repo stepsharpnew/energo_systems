@@ -1,0 +1,236 @@
+
+/* ============ БЛОК 2 — ОПРОС ============ */
+.dgu .quiz {
+  display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 40px;
+  padding: 20px; border-radius: 40px; background: var(--surface);
+}
+.dgu .quiz__card {
+  position: relative; overflow: hidden; border-radius: 28px; background: #fff;
+  display: flex; flex-direction: column; min-height: 640px;
+}
+.dgu .quiz__bar { height: 6px; background: #E9E9E4; }
+.dgu .quiz__bar i { display: block; height: 100%; width: 20%; background: var(--accent); border-radius: 0 6px 6px 0; transition: width .45s ease; }
+.dgu .quiz__form { flex: 1; display: flex; flex-direction: column; padding: 56px 56px 40px; }
+.dgu .qstep { border: 0; padding: 0; margin: 0; min-width: 0; }
+.dgu .qstep[hidden] { display: none; }
+.dgu .qstep__title { padding: 0; font-size: clamp(26px, 2.6vw, 36px); line-height: 1.1; letter-spacing: -.02em; font-weight: 700; }
+.dgu .qstep__hint { margin: 10px 0 32px; font-size: 15px; color: var(--muted); }
+.dgu .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.dgu .opt { position: relative; display: flex; cursor: pointer; }
+.dgu .opt input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.dgu .opt__text {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 84px;
+  padding: 16px 20px 16px 68px; border: 1px solid var(--line-strong); border-radius: 24px;
+  font-size: 17px; line-height: 1.3; transition: border-color .2s, background .2s, transform .2s;
+}
+.dgu .opt__sub { font-size: 13.5px; color: var(--muted); }
+.dgu .opt__mark {
+  position: absolute; left: 22px; top: 50%; width: 28px; height: 28px; translate: 0 -50%;
+  border: 1px solid var(--line-strong); border-radius: 9px; background: #fff; pointer-events: none;
+  transition: background .2s, border-color .2s;
+}
+.dgu .opt__mark::after {
+  content: ""; position: absolute; left: 9px; top: 4px; width: 8px; height: 14px;
+  border: solid #14171C; border-width: 0 2.5px 2.5px 0; rotate: 45deg; opacity: 0; transition: opacity .15s;
+}
+.dgu .opt:hover .opt__text { border-color: var(--text-2); transform: translateY(-1px); }
+.dgu .opt input:focus-visible ~ .opt__text { outline: 2px solid var(--accent); outline-offset: 3px; }
+.dgu .opt input:checked ~ .opt__text { border-color: var(--accent); background: #FFF9EE; }
+.dgu .opt input:checked ~ .opt__mark { background: var(--accent); border-color: var(--accent); }
+.dgu .opt input:checked ~ .opt__mark::after { opacity: 1; }
+.dgu .field { display: grid; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.dgu .field input {
+  height: 58px; padding: 0 20px; border: 1px solid var(--line-strong); border-radius: 18px;
+  font: inherit; font-size: 17px; font-weight: 500; color: var(--text); background: #fff;
+}
+.dgu .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+.dgu .field--kw { margin-top: 20px; max-width: 420px; }
+.dgu .qfields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.dgu .qlabel { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.dgu .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.dgu .chip { position: relative; cursor: pointer; }
+.dgu .chip input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.dgu .chip span {
+  display: inline-block; padding: 12px 22px; border: 1px solid var(--line-strong); border-radius: 999px;
+  font-size: 15px; font-weight: 600; transition: border-color .2s, background .2s;
+}
+.dgu .chip:hover span { border-color: var(--text-2); }
+.dgu .chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 3px; }
+.dgu .chip input:checked + span { border-color: var(--accent); background: var(--accent); color: #14171C; }
+.dgu .qstep .check { margin-top: 8px; }
+.dgu .qstep .check input { width: 20px; height: 20px; }
+.dgu .qstep .check span { font-size: 14px; }
+.dgu .quiz__error { margin-top: 18px; color: #C8323A; font-size: 14px; font-weight: 600; }
+.dgu .quiz__error[hidden], .dgu .quiz__done[hidden], .dgu .quiz__back[hidden] { display: none; }
+.dgu .quiz__foot { margin-top: auto; padding-top: 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.dgu .quiz__step { font-size: 16px; color: var(--muted); }
+.dgu .quiz__step b { color: var(--text); font-weight: 700; }
+.dgu .quiz__nav { display: flex; align-items: center; gap: 12px; }
+.dgu .quiz__back {
+  width: 56px; height: 56px; border: 1px solid var(--line-strong); border-radius: 50%; background: #fff;
+  color: var(--text); cursor: pointer; display: grid; place-items: center; transition: background .2s;
+}
+.dgu .quiz__back:hover { background: var(--surface); }
+.dgu .btn-pill--quiz { height: 64px; min-width: 200px; padding: 0 32px; justify-content: center; gap: 14px; }
+.dgu .btn-pill--quiz:disabled { background: #F6DDB4; color: rgba(20, 23, 28, .45); box-shadow: none; cursor: not-allowed; transform: none; }
+.dgu .quiz__done { padding-top: 8px; }
+.dgu .quiz__done:focus { outline: none; }
+.dgu .summary { margin: 28px 0 0; display: grid; gap: 0; }
+.dgu .summary div { display: grid; grid-template-columns: 180px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); }
+.dgu .summary div:last-child { border-bottom: 1px solid var(--line); }
+.dgu .summary dt { color: var(--muted); font-size: 15px; }
+.dgu .summary dd { margin: 0; font-size: 18px; font-weight: 600; }
+.dgu .quiz__done-note { margin-top: 24px; color: var(--text-2); }
+.dgu .quiz.is-done .quiz__foot { display: none; }
+/* правая колонка: инженер и реплики */
+.dgu .quiz__side { display: flex; flex-direction: column; padding: 28px 8px 8px 0; min-width: 0; }
+.dgu .manager__photo { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; margin-bottom: 22px; }
+.dgu .manager__bubble {
+  position: relative; padding: 24px 26px; border-radius: 24px; background: #fff;
+}
+.dgu .manager__bubble::before {
+  content: ""; position: absolute; left: 30px; top: -9px; width: 18px; height: 18px; background: #fff; rotate: 45deg; border-radius: 3px;
+}
+.dgu .manager__bubble b { display: block; font-size: 19px; line-height: 1.2; }
+.dgu .manager__role { display: block; margin-top: 2px; font-size: 13.5px; color: var(--muted); }
+.dgu .manager__bubble p { margin-top: 14px; font-size: 16px; line-height: 1.5; color: var(--text-2); }
+.dgu .manager__bubble p.is-swap { animation: dgu-swap .35s ease; }
+@keyframes dgu-swap { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0; } }
+.dgu .quiz__aside-text { margin-top: auto; padding-top: 40px; }
+.dgu .quiz__aside-title { font-size: 21px; line-height: 1.3; font-weight: 700; color: var(--text-2); letter-spacing: -.01em; }
+.dgu .quiz__aside-sub { margin-top: 12px; font-size: 16px; color: var(--muted); }
+.dgu .quiz__msg { margin-top: 22px; display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); }
+.dgu .quiz__msg .msg { width: 40px; height: 40px; margin: 0; }
+/* ============ БЛОК 3 — ЛЕНТА КЛИЕНТОВ ============ */
+.dgu .section--clients { overflow: hidden; padding-bottom: 150px; }
+/* мягкие стыки секций: цвет перетекает по плавной кривой, без резкой линии */
+.dgu #quiz { position: relative; }
+.dgu #quiz::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 170px; pointer-events: none;
+  background: linear-gradient(180deg, #0A0C10 0%, rgba(10, 12, 16, .82) 14%, rgba(10, 12, 16, .55) 30%, rgba(10, 12, 16, .3) 48%, rgba(10, 12, 16, .12) 68%, rgba(10, 12, 16, .03) 86%, rgba(10, 12, 16, 0) 100%);
+}
+.dgu .process::before, .dgu .prices::before, .dgu .trust-sec::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 260px; pointer-events: none;
+  background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, .9) 12%, rgba(255, 255, 255, .7) 28%, rgba(255, 255, 255, .45) 46%, rgba(255, 255, 255, .22) 64%, rgba(255, 255, 255, .07) 82%, rgba(255, 255, 255, 0) 100%);
+}
+.dgu .process .container { position: relative; }
+.dgu .marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+.dgu .marquee__track {
+  display: flex; width: max-content;
+}
+.dgu .marquee.is-running .marquee__track { animation: dgu-marquee 70s linear infinite; }
+.dgu .marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes dgu-marquee { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.dgu .client {
+  flex: 0 0 374px; margin-right: 24px; min-height: 248px; padding: 30px 30px 28px;
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card);
+}
+.dgu .client__logo { height: 52px; width: auto; max-width: 100%; object-fit: contain; object-position: left center; margin-bottom: 28px; }
+.dgu .client__name { min-height: 52px; margin-bottom: 28px; font-size: 25px; line-height: 1.15; font-weight: 700; letter-spacing: -.01em; text-transform: uppercase; color: var(--text-2); }
+.dgu .client b { font-size: 16.5px; line-height: 1.3; font-weight: 700; }
+.dgu .client span:not(.client__name) { font-size: 15px; line-height: 1.45; color: var(--muted); }
+/* ============ БЛОК 4 — КАК РАБОТАЕМ ============ */
+.dgu .section--dark {
+  --text: #F2F1EC; --text-2: #D9D8D2; --muted: #A7A9AE; --line: rgba(242, 241, 236, .16);
+  position: relative; color: var(--text); background: #0B0D11; padding-block: 230px 120px;
+}
+.dgu .process__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: -40px 0 40px; }
+.dgu .process__lead { max-width: 560px; font-size: 18px; line-height: 1.5; color: var(--text-2); }
+.dgu .process__ctrl { display: flex; gap: 10px; flex-shrink: 0; }
+.dgu .ctrl {
+  width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  border: 1px solid rgba(242, 241, 236, .28); background: transparent; color: var(--text);
+  transition: background .25s, color .25s, border-color .25s;
+}
+.dgu .ctrl:hover { background: var(--accent); border-color: var(--accent); color: #14171C; }
+.dgu .ctrl:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+/* три кадра идут по порядку; активный раскрывается и приближается */
+.dgu .stage { display: flex; gap: 12px; height: clamp(540px, 68vh, 700px); user-select: none; -webkit-user-select: none; }
+.dgu .chapter {
+  position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; isolation: isolate;
+  border-radius: 28px; background: #14171C; cursor: pointer;
+  transition: flex-grow .9s cubic-bezier(.65, 0, .2, 1);
+}
+.dgu .chapter.is-active { flex-grow: 2.5; cursor: default; }
+.dgu .chapter:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.dgu .chapter img {
+  pointer-events: none; -webkit-user-drag: none;
+  position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%;
+  filter: brightness(.5) saturate(.7); transform: scale(1.02);
+  transition: filter .9s ease, transform 9s ease-out;
+}
+.dgu .chapter.is-active img { filter: none; transform: scale(1.1); }
+.dgu .chapter[data-chapter="2"] img { object-position: 55% 22%; }
+.dgu .chapter__shade {
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(0deg, rgba(8, 10, 14, .92) 0%, rgba(8, 10, 14, .45) 42%, rgba(8, 10, 14, 0) 72%);
+}
+.dgu .chapter__rail {
+  position: absolute; left: 24px; top: 24px; bottom: 28px;
+  display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+  transition: opacity .4s ease;
+}
+.dgu .chapter.is-active .chapter__rail { opacity: 0; pointer-events: none; }
+.dgu .chapter__no { white-space: nowrap; font-size: 14px; font-weight: 700; padding: 7px 12px; border-radius: 999px; background: var(--accent); color: #14171C; }
+.dgu .chapter__vname {
+  writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap;
+  font-size: 22px; font-weight: 700; letter-spacing: -.01em;
+}
+.dgu .chapter__card {
+  position: absolute; left: 20px; right: 20px; bottom: 20px; padding: 26px 28px 20px;
+  border-radius: 22px; background: rgba(10, 12, 16, .58);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+  opacity: 0; transform: translateY(14px); pointer-events: none;
+  transition: opacity .5s ease, transform .6s ease;
+}
+.dgu .chapter.is-active .chapter__card { opacity: 1; transform: none; pointer-events: auto; transition-delay: .45s; }
+/* в первом кадре люди внизу, поэтому плашка стоит сверху */
+.dgu .chapter[data-pos="top"] .chapter__card { top: 20px; bottom: auto; transform: translateY(-14px); }
+.dgu .chapter[data-pos="top"].is-active .chapter__card { transform: none; }
+.dgu .chapter[data-pos="top"] .chapter__shade { background: linear-gradient(180deg, rgba(8, 10, 14, .78) 0%, rgba(8, 10, 14, .3) 45%, rgba(8, 10, 14, 0) 70%); }
+.dgu .chapter__title { font-size: 28px; line-height: 1.1; letter-spacing: -.02em; font-weight: 700; margin-bottom: 8px; }
+.dgu .steps { margin: 0; }
+.dgu .step {
+  display: grid; grid-template-columns: 34px 1fr; gap: 16px; padding: 16px 0;
+  border-top: 1px solid var(--line); opacity: .5; transition: opacity .5s ease;
+}
+.dgu .step.is-current { opacity: 1; }
+.dgu .step__no {
+  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid var(--accent); color: var(--accent); font-size: 14px; font-weight: 700;
+  transition: background .4s, color .4s;
+}
+.dgu .step.is-current .step__no { background: var(--accent); color: #14171C; }
+.dgu .step__title { display: block; font-size: 19px; line-height: 1.25; font-weight: 700; }
+.dgu .step__more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s ease; }
+.dgu .step.is-current .step__more { grid-template-rows: 1fr; }
+.dgu .step__more > div { overflow: hidden; }
+.dgu .step__text { margin-top: 4px; font-size: 15px; line-height: 1.45; color: var(--text-2); }
+.dgu .step__get { margin-top: 8px; font-size: 14px; line-height: 1.4; color: var(--accent); font-weight: 600; }
+/* линия этапов под лентой */
+.dgu .track { position: relative; margin-top: 36px; }
+.dgu .track__line { position: absolute; left: 10%; right: 10%; top: 9px; height: 2px; background: var(--line); }
+.dgu .track__line b { display: block; height: 100%; width: 0; background: var(--accent); transition: width .9s cubic-bezier(.65, 0, .2, 1); }
+.dgu .track__list { position: relative; display: flex; margin: 0; }
+.dgu .track__list li { flex: 1 1 0; }
+.dgu .track__btn {
+  width: 100%; display: grid; justify-items: center; gap: 14px; padding: 0 6px; border: 0; background: none;
+  color: var(--muted); font-size: 15px; font-weight: 600; text-align: center; cursor: pointer; transition: color .3s;
+}
+.dgu .track__btn:hover { color: var(--text); }
+.dgu .track__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.dgu .track__dot {
+  width: 20px; height: 20px; border-radius: 50%; background: #0B0D11; border: 2px solid var(--line-strong, rgba(242, 241, 236, .3));
+  transition: background .4s, border-color .4s, box-shadow .4s;
+}
+.dgu .track__btn.is-done { color: var(--text-2); }
+.dgu .track__btn.is-done .track__dot { background: var(--accent); border-color: var(--accent); }
+.dgu .track__btn.is-active { color: var(--text); }
+.dgu .track__btn.is-active .track__dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 6px rgba(242, 169, 59, .22); }
+.dgu .process__cta { margin-top: 64px; display: flex; justify-content: center; }

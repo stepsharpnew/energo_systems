@@ -1,0 +1,35 @@
+/* ============ БЛОК 3 — ЛЕНТА КЛИЕНТОВ ============ */
+.ups .section--clients { overflow: hidden; padding-bottom: 150px; }
+
+/* мягкие стыки секций: цвет перетекает по плавной кривой, без резкой линии */
+.ups #quiz { position: relative; }
+.ups #quiz::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 170px; pointer-events: none;
+  background: linear-gradient(180deg, #0A0C10 0%, rgba(10, 12, 16, .82) 14%, rgba(10, 12, 16, .55) 30%, rgba(10, 12, 16, .3) 48%, rgba(10, 12, 16, .12) 68%, rgba(10, 12, 16, .03) 86%, rgba(10, 12, 16, 0) 100%);
+}
+.ups .process::before, .ups .prices::before, .ups .trust-sec::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 260px; pointer-events: none;
+  background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, .9) 12%, rgba(255, 255, 255, .7) 28%, rgba(255, 255, 255, .45) 46%, rgba(255, 255, 255, .22) 64%, rgba(255, 255, 255, .07) 82%, rgba(255, 255, 255, 0) 100%);
+}
+.ups .process .container { position: relative; }
+.ups .marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+.ups .marquee__track {
+  display: flex; width: max-content;
+}
+.ups .marquee.is-running .marquee__track { animation: ups-marquee 70s linear infinite; }
+.ups .marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes ups-marquee { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.ups .client {
+  flex: 0 0 374px; margin-right: 24px; min-height: 248px; padding: 30px 30px 28px;
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card);
+}
+.ups .client__logo { height: 52px; width: auto; max-width: 100%; object-fit: contain; object-position: left center; margin-bottom: 28px; }
+.ups .client__name { min-height: 52px; margin-bottom: 28px; font-size: 25px; line-height: 1.15; font-weight: 700; letter-spacing: -.01em; text-transform: uppercase; color: var(--text-2); }
+.ups .client b { font-size: 16.5px; line-height: 1.3; font-weight: 700; }
+.ups .client span:not(.client__name) { font-size: 15px; line-height: 1.45; color: var(--muted); }
+

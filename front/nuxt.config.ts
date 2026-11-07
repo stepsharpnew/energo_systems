@@ -60,6 +60,8 @@ ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrack
       routes: [
         '/services',
         '/services/hdd',
+        '/services/ups',
+        '/services/dgu',
         '/services/road',
         '/services/water',
         '/services/sewer',

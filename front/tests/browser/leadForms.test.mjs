@@ -49,7 +49,7 @@ const campaign = {
   utm_content: '17786149843', utm_term: 'ГНБ + область & <тест>', yclid: 'test-click-123',
 }
 async function visitFromCampaign(page, base, destination) {
-  // Exercise both directions across Nuxt and the standalone UPS landing.
+  // Campaign attribution survives navigation between Nuxt service pages.
   const landing = destination.startsWith('/services/ups') ? '/' : '/services/ups/'
   await page.goto(base + landing + '?' + new URLSearchParams(campaign), { waitUntil: 'networkidle' })
   await page.goto(base + destination, { waitUntil: 'networkidle' })
@@ -87,6 +87,9 @@ const cases = [
   { name: 'ИБП: форма в контактах', path: '/services/ups', form: '[data-contact-form]', button: '.contacts__submit', error: '[data-contact-error]', success: '[data-contact-done]', names: { name: 'ctname', phone: 'ctphone', consent: ['ctconsent', 'ctprivacy'] } },
   { name: 'ИБП: обратный звонок', path: '/services/ups', opener: '[data-callback-open]', form: '[data-modal-form]', button: '[data-modal-submit]', error: '[data-modal-error]', success: '[data-modal-form].is-sent', names: { name: 'name', phone: 'phone', consent: ['consent', 'policy'] } },
   { name: 'ИБП: опрос', path: '/services/ups', form: '[data-quiz-form]', quiz: 'ups', button: '[data-quiz-next]', error: '[data-quiz-error]', success: '[data-quiz-done]', names: { name: 'name', phone: 'phone', consent: ['consent', 'policy'] } },
+  { name: 'ДГУ: форма в контактах', path: '/services/dgu', form: '[data-contact-form]', button: '.contacts__submit', error: '[data-contact-error]', success: '[data-contact-done]', names: { name: 'ctname', phone: 'ctphone', consent: ['ctconsent', 'ctprivacy'] } },
+  { name: 'ДГУ: обратный звонок', path: '/services/dgu', opener: '[data-callback-open]', form: '[data-modal-form]', button: '[data-modal-submit]', error: '[data-modal-error]', success: '[data-modal-form].is-sent', names: { name: 'name', phone: 'phone', consent: ['consent', 'policy'] } },
+  { name: 'ДГУ: опрос', path: '/services/dgu', form: '[data-quiz-form]', quiz: 'dgu', questions: 5, button: '[data-quiz-next]', error: '[data-quiz-error]', success: '[data-quiz-done]', names: { name: 'name', phone: 'phone', consent: ['consent', 'policy'] } },
 ]
 
 test('landing forms send validated leads and never report an unacknowledged submission as successful', async t => {
@@ -121,9 +124,9 @@ test('landing forms send validated leads and never report an unacknowledged subm
           if (item.opener) await page.locator(item.opener).first().click()
           const form = page.locator(item.form)
           if (item.quiz) {
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < (item.questions || 4); i++) {
               const step = item.quiz === 'hdd' ? page.locator('[data-step].is-active') : page.locator('.qstep:visible')
-              await check(step.locator('input[type=radio], input[type=checkbox]').first())
+              await check(step.locator('label:visible').locator('input[type=radio], input[type=checkbox]').first())
               await page.locator(item.button).click()
             }
           }
@@ -163,6 +166,15 @@ test('landing forms send validated leads and never report an unacknowledged subm
           assert.ok(mail.at(-1).text.includes(payload.callbackPreferences.time))
           assert.ok(mail.at(-1).text.includes(item.quiz ? 'Разрешены клиентом' : 'Не звонить — только рабочие дни'))
           if (item.quiz) assert.ok(payload.answers.length >= 4)
+          if (item.quiz === 'dgu') {
+            assert.equal(payload.service, 'Опрос по ДГУ')
+            assert.deepEqual(payload.answers.map(answer => answer.label), [
+              'Направление', 'Объект', 'Нагрузки', 'Мощность',
+              'Категория надёжности', 'Способ связи', 'Срок установки',
+            ])
+            assert.equal(payload.answers[0].value, 'Для бизнеса')
+            assert.equal(payload.answers[1].value, 'Торговый центр')
+          }
           assert.deepEqual(errors, [])
         } finally {
           await context.close()

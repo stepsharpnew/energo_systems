@@ -1,0 +1,101 @@
+/* ============ БЛОК 8 — ПРИЧИНЫ ДОВЕРЯТЬ ============ */
+.ups .tgrid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 64px; align-items: center; }
+.ups .fears { margin: 0; }
+.ups .fear { display: grid; grid-template-columns: 40px 1fr; gap: 18px; padding: 24px 0; border-top: 1px solid var(--line); }
+.ups .fear:last-child { border-bottom: 1px solid var(--line); }
+.ups .fear__no {
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; font-weight: 700;
+  border: 1px solid var(--line); color: var(--muted); transition: background .5s, color .5s, border-color .5s;
+}
+.ups .fear__q { position: relative; display: inline-block; font-size: 24px; line-height: 1.2; letter-spacing: -.015em; font-weight: 700; color: var(--text); transition: color .6s; }
+.ups .fear__q span { background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 55% / 0 3px; transition: background-size 1.9s cubic-bezier(.45, 0, .25, 1); }
+.ups .fear__a { max-height: 0; overflow: hidden; opacity: 0; margin-top: 0; font-size: 16px; line-height: 1.5; color: var(--text-2); transition: max-height 1s ease 1.2s, opacity .9s ease 1.4s, margin 1s ease 1.2s; }
+.ups .fear.is-done .fear__q { color: var(--muted); }
+.ups .fear.is-done .fear__q span { background-size: 100% 3px; }
+.ups .fear.is-done .fear__a { max-height: 120px; opacity: 1; margin-top: 10px; }
+.ups .fear.is-done .fear__no { background: var(--accent); border-color: var(--accent); color: #14171C; }
+.ups .fear.is-hot .fear__no { box-shadow: 0 0 0 6px rgba(242, 169, 59, .2); }
+
+/* планшет с договором: металлический зажим, лист с загнутым углом */
+.ups .doc { perspective: 1400px; display: grid; justify-items: center; }
+.ups .board {
+  position: relative; width: min(100%, 500px); padding: 66px 26px 28px; border-radius: 22px;
+  background: linear-gradient(150deg, #8EA4D8 0%, #6580BB 55%, #566FA6 100%);
+  box-shadow: 0 54px 100px rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(255, 255, 255, .22), inset 0 -10px 24px rgba(20, 30, 70, .25);
+  transform: rotate(-3.2deg) translateY(34px) rotateX(10deg); opacity: 0; transform-origin: center bottom;
+  transition: transform 1.2s cubic-bezier(.2, .8, .2, 1), opacity .8s ease;
+}
+.ups .doc.is-in .board { transform: rotate(-3.2deg); opacity: 1; }
+.ups .board::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(120% 70% at 30% 0%, rgba(255, 255, 255, .22), transparent 60%); }
+.ups .board__clip {
+  position: absolute; z-index: 3; top: 12px; left: 50%; width: 138px; height: 66px; translate: -50% 0; border-radius: 12px 12px 22px 22px;
+  background: linear-gradient(180deg, #F7F9FC 0%, #B7BEC9 38%, #EEF1F5 52%, #8A93A1 100%);
+  box-shadow: 0 10px 18px rgba(10, 18, 50, .45), inset 0 1px 0 #fff;
+}
+.ups .board__clip::before { content: ""; position: absolute; left: 50%; top: -17px; width: 46px; height: 30px; translate: -50% 0; border-radius: 22px 22px 0 0; border: 6px solid #C9CFD8; border-bottom: 0; background: transparent; box-shadow: 0 -2px 5px rgba(10, 18, 50, .3); }
+.ups .board__clip::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 11px; height: 14px; border-radius: 8px; background: linear-gradient(180deg, #5E6674, #9AA2AF); box-shadow: inset 0 2px 3px rgba(0, 0, 0, .5); }
+
+.ups .doc__paper {
+  position: relative; color: #1A1D22; border-radius: 3px;
+  background: linear-gradient(180deg, #FBFAF6 0%, #F0EDE4 100%);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 66px), calc(100% - 66px) 100%, 0 100%);
+  filter: drop-shadow(0 6px 10px rgba(12, 20, 60, .35));
+}
+.ups .doc__paper::after {
+  content: ""; position: absolute; z-index: 2; right: 0; bottom: 0; width: 66px; height: 66px; pointer-events: none;
+  background: linear-gradient(135deg, #FFFFFF 0%, #DAD6C9 100%); clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+/* текст договора листается внутри листа */
+.ups .doc__scroll {
+  height: 520px; overflow-y: auto; padding: 34px 30px 70px; font-family: "PT Serif", Georgia, "Times New Roman", serif;
+  font-size: 12.5px; line-height: 1.5; color: #23262B;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 26px, #000 calc(100% - 64px), transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 26px, #000 calc(100% - 64px), transparent 100%);
+  scrollbar-width: thin; scrollbar-color: #B8B4A6 transparent; overscroll-behavior: contain;
+}
+.ups .doc__scroll:focus-visible { outline: 2px solid #5B73AC; outline-offset: -4px; }
+.ups .doc__scroll::-webkit-scrollbar { width: 6px; }
+.ups .doc__scroll::-webkit-scrollbar-thumb { background: #B8B4A6; border-radius: 6px; }
+.ups .c-title { margin: 0; text-align: center; font-size: 17px; letter-spacing: .02em; text-transform: uppercase; font-weight: 700; }
+.ups .c-sub { margin-top: 4px; text-align: center; font-size: 12.5px; font-weight: 700; }
+.ups .c-place { margin-top: 14px; display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; }
+.ups .c-pre { margin-top: 12px; text-align: justify; }
+.ups .doc__scroll h4 { margin: 18px 0 6px; font-size: 12.5px; letter-spacing: .03em; text-transform: uppercase; font-weight: 700; }
+.ups .doc__scroll p { margin: 0 0 6px; text-align: justify; hyphens: auto; }
+.ups .doc__scroll p.key { position: relative; margin-inline: -10px; padding: 3px 10px 3px 34px; border-radius: 3px; isolation: isolate; }
+.ups .key::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 3px; background: linear-gradient(90deg, rgba(242, 169, 59, .38), rgba(242, 169, 59, .16));
+  transform: scaleX(0); transform-origin: left; transition: transform 1.3s cubic-bezier(.45, 0, .25, 1) .5s;
+}
+.ups .key::after {
+  content: "✓"; position: absolute; left: 10px; top: 5px; width: 17px; height: 17px; border-radius: 50%; background: #1F7A46; color: #fff;
+  display: grid; place-items: center; font: 700 11px/1 Manrope, system-ui, sans-serif;
+  transform: scale(0) rotate(-40deg); transition: transform .5s cubic-bezier(.3, 1.5, .5, 1) 1.5s;
+}
+.ups .key.is-done::before { transform: scaleX(1); }
+.ups .key.is-done::after { transform: none; }
+.ups .key.is-hot::before { background: linear-gradient(90deg, rgba(242, 169, 59, .6), rgba(242, 169, 59, .3)); }
+.ups .c-table { width: 100%; margin: 10px 0 4px; border-collapse: collapse; font-size: 12px; }
+.ups .c-table caption { margin-bottom: 4px; text-align: left; font-weight: 700; font-size: 12px; }
+.ups .c-table td { padding: 5px 6px; border: 1px solid rgba(26, 29, 34, .25); vertical-align: top; }
+.ups .c-table td:last-child { width: 96px; text-align: right; white-space: nowrap; }
+.ups .c-total td { font-weight: 700; background: rgba(26, 29, 34, .05); }
+.ups .c-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 11.5px; line-height: 1.5; }
+.ups .c-parties b { display: block; margin-bottom: 3px; font-size: 12px; }
+.ups .doc__sign { position: relative; margin-top: 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; min-height: 112px; padding-right: 52px; }
+.ups .doc__sign .doc__who { margin: 0; text-align: left; }
+.ups .sig { width: 180px; height: auto; margin-top: 4px; }
+.ups .sig__p { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.ups .seal { width: 100px; height: 100px; flex-shrink: 0; opacity: 0; transform: rotate(-24deg) scale(1.9); transform-origin: center; mix-blend-mode: multiply; }
+.ups .doc.is-signed .sig__p { animation: ups-sign 1.6s cubic-bezier(.5, 0, .3, 1) forwards; }
+.ups .doc.is-signed .sig__p--2 { animation-delay: 1.5s; animation-duration: .6s; }
+.ups .doc.is-signed .seal { animation: ups-stamp .55s cubic-bezier(.3, 1.4, .5, 1) 1.9s forwards; }
+@keyframes ups-sign { to { stroke-dashoffset: 0; } }
+@keyframes ups-stamp { 0% { opacity: 0; transform: rotate(-24deg) scale(1.9); } 70% { opacity: .95; transform: rotate(-12deg) scale(.94); } 100% { opacity: .92; transform: rotate(-12deg) scale(1); } }
+
+.ups .req { margin: 72px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+.ups .req > div { padding: 26px 28px 4px 0; }
+.ups .req > div + div { padding-left: 28px; border-left: 1px solid var(--line); }
+.ups .req dt { font-size: 14px; color: var(--muted); }
+.ups .req dd { margin: 8px 0 0; font-size: 17px; line-height: 1.45; font-weight: 600; }
+.ups .trust-sec__cta { margin-top: 44px; display: flex; justify-content: flex-start; }
+

@@ -1,0 +1,43 @@
+.ups [hidden] { display: none !important; }
+
+/* ============ ТОКЕНЫ ============ */
+.ups {
+  --bg: #FFFFFF;
+  --surface: #F3F3F0;
+  --line: rgba(20, 23, 28, .1);
+  --line-strong: rgba(20, 23, 28, .22);
+  --text: #14171C;
+  --text-2: #3F434A;
+  --muted: #71747A;
+  --accent: #F2A93B;
+  --accent-hover: #FFB65C;
+  --accent-ink: #A8660A;
+  --max: linear-gradient(135deg, #00EAFF 0%, #1B6CFF 52%, #8109FC 100%);
+  --tg: #2AA1DA;
+  --signal: #2B6BFF;       /* синий экранов ИБП: единственный холодный акцент */
+
+  --r-card: 28px;
+  --r-hero: 32px;
+  --r-btn: 6px;
+
+  --font: "Manrope", "PT Sans", system-ui, -apple-system, sans-serif;
+  --container: 1360px;
+  --gutter: 40px;
+  --header-h: 84px;
+}
+
+.ups *, .ups *::before, .ups *::after { box-sizing: border-box; }
+html.ups-document { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h, 84px) + 12px); -webkit-text-size-adjust: 100%; }
+.ups {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--font); font-size: 16px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body:has(.ups).is-locked { overflow: hidden; }
+.ups img { display: block; max-width: 100%; height: auto; }
+.ups a { color: inherit; text-decoration: none; }
+.ups button { font-family: inherit; }
+.ups ol, .ups ul { margin: 0; padding: 0; list-style: none; }
+.ups h1, .ups h2, .ups p { margin: 0; }
+.ups :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+

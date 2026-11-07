@@ -1,0 +1,230 @@
+
+/* ============ КОНТАКТЫ ============ */
+.dgu #contacts { padding-bottom: 0; }
+.dgu .contacts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.dgu .contacts__form { display: flex; flex-direction: column; gap: 18px; background: var(--surface); border-radius: var(--r-card); padding: 36px; }
+.dgu .cfield { display: flex; flex-direction: column; gap: 8px; }
+.dgu .cfield__label { font-size: 14px; color: var(--text-2); }
+.dgu .cfield__opt { font-style: normal; color: var(--muted); }
+.dgu .cfield__input {
+  font: inherit; font-size: 17px; color: var(--text); background: #fff;
+  border: 1px solid var(--line-strong); border-radius: 14px; height: 60px; padding: 0 20px;
+  transition: border-color .2s;
+}
+.dgu .cfield__input::placeholder { color: var(--muted); }
+.dgu .cfield__input:focus { outline: none; border-color: var(--accent); }
+.dgu .cfield__input[aria-invalid="true"] { border-color: #E5634D; }
+.dgu .cfield__input--area { height: auto; min-height: 104px; padding: 16px 20px; line-height: 1.45; resize: vertical; }
+.dgu .cfield__err { display: none; font-size: 13px; color: #F08A76; }
+.dgu .cfield__input[aria-invalid="true"] ~ .cfield__err, .dgu .cfield__err.is-shown { display: block; }
+.dgu .cconsents { display: flex; flex-direction: column; gap: 10px; }
+.dgu .cconsent { position: relative; display: flex; align-items: flex-start; gap: 12px; font-size: 14px; line-height: 1.45; color: var(--muted); cursor: pointer; }
+.dgu .cconsent input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.dgu .cconsent__ind { position: relative; flex-shrink: 0; width: 22px; height: 22px; margin-top: 1px; border: 1.5px solid var(--line-strong); border-radius: 7px; transition: border-color .2s; }
+.dgu .cconsent__ind::after {
+  content: ""; position: absolute; inset: 0; border-radius: 5px; transform: scale(0); transition: transform .2s;
+  background: var(--accent) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%2314171c' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E") center / 16px no-repeat;
+}
+.dgu .cconsent input:checked + .cconsent__ind { border-color: var(--accent); }
+.dgu .cconsent input:checked + .cconsent__ind::after { transform: scale(1); }
+.dgu .cconsent:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.dgu .cconsent a { color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; }
+.dgu .cconsent a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
+.dgu .contacts__submit {
+  height: 62px; margin-top: 6px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--accent); color: #14171C; font: inherit; font-size: 17px; font-weight: 700;
+  transition: background .2s, transform .2s;
+}
+.dgu .contacts__submit:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.dgu .contacts__submit:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.dgu .contacts__note { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.dgu .contacts__done { display: flex; flex-direction: column; gap: 6px; }
+.dgu .contacts__done b { font-size: 19px; }
+.dgu .contacts__done span { font-size: 15px; line-height: 1.5; color: var(--muted); }
+.dgu .contacts__done a { color: var(--accent-ink); font-weight: 700; }
+.dgu .contacts__side { display: flex; flex-direction: column; }
+.dgu .cnt { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 22px 0; border-top: 1px solid var(--line); }
+.dgu .cnt:last-child { border-bottom: 1px solid var(--line); }
+.dgu .cnt__label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.dgu .cnt__plain, .dgu .cnt__value { font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.dgu .cnt__value { transition: color .25s; }
+.dgu .cnt__value i { margin-left: 8px; font-size: 13px; font-style: normal; font-weight: 500; color: var(--muted); }
+.dgu .cnt__value:hover, .dgu .cnt__value:hover i { color: var(--accent-ink); }
+.dgu .cnt__msgrs { display: flex; gap: 10px; margin-top: 2px; flex-wrap: wrap; }
+.dgu .cnt__msg { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border: 1px solid var(--line); border-radius: 999px; font-size: 15px; font-weight: 600; transition: border-color .25s, background .25s; }
+.dgu .cnt__msg:hover { background: var(--surface); border-color: var(--line-strong); }
+.dgu .cnt__msg .msg { width: 28px; height: 28px; margin: 0; }
+.dgu .maps { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+.dgu .map { margin: 0; }
+.dgu .map__frame {
+  position: relative; display: block; height: 320px; border-radius: var(--r-card); overflow: hidden;
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.dgu .map__frame::before, .dgu .map__frame::after { content: ""; position: absolute; background: rgba(20,23,28,.07); }
+.dgu .map__frame::before { left: -10%; right: -10%; top: 58%; height: 22px; transform: rotate(-8deg); }
+.dgu .map__frame::after { top: -10%; bottom: -10%; left: 36%; width: 16px; transform: rotate(14deg); }
+.dgu .map__pin { position: absolute; left: 50%; top: 46%; z-index: 1; width: 44px; height: 44px; margin: -44px 0 0 -22px; display: grid; place-items: center; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--accent); box-shadow: 0 10px 24px rgba(242,169,59,.45); }
+.dgu .map__pin::after { content: ""; width: 14px; height: 14px; border-radius: 50%; background: #14171C; }
+.dgu .map__open {
+  position: absolute; z-index: 1; left: 50%; bottom: 22px; transform: translateX(-50%);
+  white-space: nowrap; padding: 12px 22px; border-radius: 999px; background: #14171C; color: #fff;
+  font-size: 15px; font-weight: 600; transition: background .2s;
+}
+.dgu .map__open:hover { background: #2a2f37; }
+.dgu .map__cap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-top: 12px; }
+.dgu .map__cap b { font-size: 17px; }
+.dgu .map__cap a { font-size: 15px; color: var(--text-2); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; transition: color .25s; }
+.dgu .map__cap a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
+@media (max-width: 1080px) { .dgu .contacts { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .dgu .contacts__form { border-radius: 22px; padding: 20px 16px; }
+  .dgu .contacts__submit { width: 100%; }
+  .dgu .maps { grid-template-columns: 1fr; gap: 20px; }
+  .dgu .map__frame { height: 260px; border-radius: 22px; }
+}
+/* ===== сервис, вопросы, подвал ===== */
+.dgu .service, .dgu .faq { padding-top: 120px; }
+.dgu .svc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.dgu .svc__item { padding: 32px 28px 34px; border-radius: 28px; background: var(--surface); }
+.dgu .svc__t { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: -.02em; font-weight: 700; }
+.dgu .svc__d { margin: 14px 0 0; font-size: 16px; line-height: 1.5; color: var(--text-2); }
+.dgu .svc__cta { margin-top: 40px; }
+.dgu .faq__list { max-width: 920px; border-top: 1px solid var(--line); }
+.dgu .qa { border-bottom: 1px solid var(--line); }
+.dgu .qa summary {
+  position: relative; display: block; padding: 24px 56px 24px 0; cursor: pointer; list-style: none;
+  font-size: clamp(18px, 1.7vw, 22px); line-height: 1.3; font-weight: 700; letter-spacing: -.01em;
+}
+.dgu .qa summary::-webkit-details-marker { display: none; }
+.dgu .qa summary::after {
+  content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 14px; margin-top: -9px;
+  border-right: 2.5px solid var(--text); border-bottom: 2.5px solid var(--text); transform: rotate(45deg); transition: transform .25s;
+}
+.dgu .qa[open] summary::after { transform: rotate(-135deg); margin-top: -3px; }
+.dgu .qa summary:hover { color: var(--accent-ink); }
+.dgu .qa summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.dgu .qa p { margin: 0 0 24px; max-width: 760px; font-size: 17px; line-height: 1.55; color: var(--text-2); }
+.dgu .footer { margin-top: 120px; background: #0B0D11; color: #F2F1EC; padding-block: 56px 28px; }
+.dgu .footer__in { display: grid; grid-template-columns: 1.4fr .6fr 1fr 1fr; gap: 32px 40px; align-items: start; }
+.dgu .footer__brand b { font-size: 20px; }
+.dgu .footer__brand p { margin: 10px 0 0; max-width: 380px; font-size: 15px; line-height: 1.5; color: #A7A9AE; }
+.dgu .footer__req { display: grid; gap: 10px; margin: 0; }
+.dgu .footer__req dt { font-size: 12px; color: #A7A9AE; }
+.dgu .footer__req dd { margin: 2px 0 0; font-size: 15px; font-variant-numeric: tabular-nums; }
+.dgu .footer__links, .dgu .footer__docs { display: grid; gap: 10px; font-size: 15px; }
+.dgu .footer__links a { font-weight: 700; font-variant-numeric: tabular-nums; }
+.dgu .footer__docs a { color: #D9D8D2; text-decoration: underline; text-decoration-color: rgba(242,241,236,.3); text-underline-offset: 3px; }
+.dgu .footer a:hover { color: var(--accent); }
+.dgu .footer__copy { margin: 40px auto 0; padding-top: 20px; border-top: 1px solid rgba(242,241,236,.16); font-size: 13px; line-height: 1.5; color: #A7A9AE; }
+.dgu [hidden] { display: none !important; }
+.dgu.in-contacts .sticky-cta { display: none !important; }
+/* девять пунктов меню не должны выталкивать телефоны и кнопку за экран */
+@media (min-width: 1241px) and (max-width: 1700px) {
+  .dgu .nav { gap: 18px; margin-left: 0; }
+  .dgu .nav a { font-size: 14px; }
+  .dgu .nav a[href="#hero"], .dgu .nav a[href="#advantages"] { display: none; }
+}
+@media (min-width: 1241px) and (max-width: 1500px) {
+  .dgu .nav a[href="#faq"] { display: none; }
+}
+@media (max-width: 1080px) {
+  .dgu .svc { grid-template-columns: 1fr; }
+  .dgu .footer__in { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .dgu .service, .dgu .faq { padding-top: 72px; }
+  .dgu .svc__item { padding: 24px 20px 26px; border-radius: 22px; }
+  .dgu .svc__t { font-size: 21px; }
+  .dgu .svc__cta .btn-pill { width: 100%; }
+  .dgu .qa summary { padding: 18px 40px 18px 0; font-size: 17px; }
+  .dgu .qa p { font-size: 15.5px; margin-bottom: 18px; }
+  .dgu .footer { margin-top: 72px; padding-block: 40px 20px; }
+  .dgu .footer__in { grid-template-columns: 1fr; }
+}
+/* ===== «Преимущества»: после последней карточки отступ до тёмного блока, градиент её не перекрывает ===== */
+.dgu .section--adv { padding-bottom: 110px; }
+@media (max-width: 1080px) { .dgu .section--adv { padding-bottom: 80px; } }
+@media (max-width: 640px) { .dgu .section--adv { padding-bottom: 56px; } }
+/* ===== ровные строки: заголовки и подписи кнопок переносятся сбалансированно ===== */
+.dgu h1, .dgu h2, .dgu h3, .dgu h4, .dgu .section__title, .dgu .hero__title, .dgu .qstep__title, .dgu .svc__t, .dgu .pw-card--cta__t, .dgu .case__place, .dgu .quiz__aside-title { text-wrap: balance; }
+.dgu p, .dgu li, .dgu dd, .dgu .hero__lead, .dgu .process__lead, .dgu .power__lead, .dgu .qa p { text-wrap: pretty; }
+.dgu .btn-pill > span:first-child, .dgu .quiz__next > span, .dgu .contacts__submit, .dgu .btn-cta { text-align: center; text-wrap: balance; }
+.dgu .h1-line--sub { font-size: max(.42em, 13px); }
+.dgu .case__nums dt { font-size: max(11px, .72rem); }
+/* ===== первый экран: компактнее, без анимации света ===== */
+.dgu .hero__title { font-size: clamp(28px, 2.7vw, 42px); }
+.dgu .h1-line--sub { margin-top: .5em; font-size: .42em; line-height: 1.3; font-weight: 500; letter-spacing: -.005em; color: var(--text-2); }
+.dgu .hero__lead { margin-top: 18px; max-width: 480px; font-size: 16px; line-height: 1.45; }
+.dgu .hero__badges { margin-bottom: 22px; }
+.dgu .hero__solutions { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
+.dgu .hero__solutions button {
+  padding: 10px 16px; border-radius: 999px; font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer;
+  color: var(--text); background: rgba(255, 255, 255, .06); border: 1px solid var(--line); transition: background .2s, border-color .2s, color .2s;
+}
+.dgu .hero__solutions button:hover { border-color: var(--accent); color: var(--accent); }
+.dgu .hero__cta { margin-top: 24px; }
+.dgu .hero__bg img { transition: none; }
+/* ===== мобильная версия ===== */
+.dgu .pw-card__img img, .dgu .chapter img, .dgu .cmp__img { transform: translateZ(0); }
+/* «Гарантии»: список не шире экрана, текст переносится */
+@media (max-width: 1080px) {
+  .dgu .tgrid { grid-template-columns: minmax(0, 1fr); }
+  .dgu .fears, .dgu .fear > div { min-width: 0; }
+  .dgu .fear { grid-template-columns: 34px minmax(0, 1fr); }
+  .dgu .fear__q { display: block; overflow-wrap: anywhere; }
+}
+/* «Объекты»: три показателя в карточке помещаются в ширину телефона */
+@media (max-width: 640px) {
+  .dgu .case__nums { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 8px; }
+  .dgu .case__nums > div { min-width: 0; }
+  .dgu .case__nums dt { font-size: 12px; }
+  .dgu .case__nums dd { font-size: 21px; line-height: 1.1; overflow-wrap: anywhere; }
+  .dgu .case__nums dd small { display: block; margin: 2px 0 0; font-size: 11px; }
+}
+@media (max-width: 1080px) {
+  .dgu .process::before, .dgu .power::before { height: 120px; }
+  .dgu .section--dark.process, .dgu .section--dark.power { padding-top: 150px; }
+}
+@media (max-width: 900px) {
+  /* «Как работаем»: карточки этапов компактнее */
+  .dgu .stage { gap: 10px; }
+  .dgu .chapter, .dgu .chapter.is-active { flex-basis: 90%; border-radius: 20px; }
+  .dgu .chapter img, .dgu .chapter.is-active img { height: 130px; }
+  .dgu .chapter__card, .dgu .chapter.is-active .chapter__card { padding: 14px 12px 16px; }
+  .dgu .chapter__title { font-size: 19px; margin-bottom: 2px; }
+  .dgu .step { grid-template-columns: 26px minmax(0, 1fr); gap: 8px; padding-block: 10px; }
+  .dgu .step__no { width: 26px; height: 26px; font-size: 12.5px; }
+  .dgu .step__title { font-size: 16px; line-height: 1.25; }
+  .dgu .step__text { font-size: 14px; line-height: 1.4; margin-top: 2px; }
+  .dgu .step__get { font-size: 13px; margin-top: 6px; }
+  .dgu .process__lead { font-size: 15px; }
+  .dgu .process__cta { margin-top: 28px; }
+}
+@media (max-width: 520px) {
+  /* подписи «Типовой комплект / Инженерный проект» не налезают друг на друга */
+  .dgu .cmp__tag { top: 10px; padding: 6px 10px; font-size: 11.5px; }
+  .dgu .cmp__tag--l { left: 10px; }
+  .dgu .cmp__tag--r { right: 10px; }
+}
+@media (max-width: 640px) {
+  .dgu .hero__title { font-size: 26px; line-height: 1.08; }
+  .dgu .hero__lead { font-size: 15px; margin-top: 14px; }
+  .dgu .hero__badges li { font-size: 12px; padding: 7px 11px; }
+  .dgu .hero__solutions { margin-top: 18px; }
+  .dgu .hero__solutions button { padding: 9px 13px; font-size: 13.5px; }
+  .dgu .hero__offer { font-size: 13px; }
+  .dgu .btn-pill { max-width: 100%; height: auto; min-height: 60px; padding-block: 8px; font-size: 16px; white-space: normal; text-align: center; }
+  .dgu .btn-pill > span:first-child { flex: 1; text-align: center; padding-left: 8px; }
+  .dgu .btn-pill--sm > span:first-child { padding-left: 0; }
+}
+@media (max-width: 768px) {
+  .dgu .process::before, .dgu .power::before { height: 90px; }
+  .dgu .section--dark.process, .dgu .section--dark.power { padding-top: 130px; }
+  /* размытие фона на телефоне дорого: заменяем на сплошную заливку */
+  .dgu * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .dgu .header { background: #fff; }
+  .dgu .pw-card:hover { transform: none; }
+}

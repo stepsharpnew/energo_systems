@@ -1,0 +1,36 @@
+/* ============ ЛИПКАЯ КНОПКА НА ТЕЛЕФОНЕ ============ */
+.ups .sticky-cta {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: none;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(255, 255, 255, .96) 60%, rgba(255, 255, 255, 0));
+  transform: translateY(110%); transition: transform .3s;
+}
+.ups .sticky-cta.is-visible { transform: none; }
+
+/* ============ ОКНО «ЗАКАЗАТЬ ЗВОНОК» ============ */
+.ups .modal {
+  width: min(460px, calc(100vw - 32px)); padding: 0; border: 0; border-radius: var(--r-card);
+  color: var(--text); background: #fff; box-shadow: 0 40px 100px rgba(0, 0, 0, .4);
+}
+.ups .modal::backdrop { background: rgba(10, 12, 16, .6); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.ups .modal__form { position: relative; padding: 36px 32px 32px; display: grid; gap: 14px; }
+.ups .modal__close {
+  position: absolute; top: 14px; right: 14px; width: 40px; height: 40px;
+  border: 0; border-radius: 50%; background: var(--surface); color: var(--text); cursor: pointer;
+  display: grid; place-items: center;
+}
+.ups .modal__title { font-size: 26px; line-height: 1.15; letter-spacing: -.02em; font-weight: 700; padding-right: 36px; }
+.ups .modal__text { color: var(--text-2); font-size: 15px; margin-bottom: 6px; }
+.ups .field { display: grid; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.ups .field input {
+  height: 54px; padding: 0 18px; border: 1px solid var(--line-strong); border-radius: 14px;
+  font: inherit; font-size: 16px; color: var(--text); background: #fff;
+}
+.ups .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+.ups .check { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.4; color: var(--text-2); }
+.ups .check input { width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--accent); }
+.ups .check a { text-decoration: underline; text-underline-offset: 2px; }
+.ups .modal__error { color: #C8323A; font-size: 13.5px; font-weight: 600; }
+.ups .modal__error[hidden] { display: none; }
+.ups .modal__form.is-sent .callback-preferences, .ups .modal__form.is-sent .field, .ups .modal__form.is-sent .check, .ups .modal__form.is-sent [data-modal-submit] { display: none; }
+

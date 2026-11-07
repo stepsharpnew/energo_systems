@@ -1,0 +1,62 @@
+/* ====================================================================
+   ПРАВКИ ЗАКАЗЧИКА: блоки «Для жизни за городом», «Как работаем» (6 этапов),
+   «Решения», «Состав системы», «Расчётные сценарии», «Сервис»
+   ==================================================================== */
+
+/* первая строка заголовка длиннее — делаем её чуть меньше */
+.ups .hero__title > .h1-line:first-child { font-size: .74em; line-height: 1.18; margin-bottom: 14px; max-width: 600px; }
+
+/* ---------- БЛОК «ДЛЯ ЖИЗНИ ЗА ГОРОДОМ» ---------- */
+.ups .aud { padding-bottom: 150px; overflow: hidden; }
+.ups .aud .section__title { margin-bottom: 56px; }
+.ups .needs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px; }
+.ups .need {
+  position: relative; padding: 36px 22px 26px; margin-inline: -22px; border-radius: 22px;
+  --mx: 50%; --my: 0%;
+}
+.ups .need::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .35s;
+  background: radial-gradient(280px circle at var(--mx) var(--my), rgba(242, 169, 59, .16), transparent 70%);
+}
+.ups .need:hover::after { opacity: 1; }
+.ups .need__line { position: absolute; left: 22px; right: 22px; top: 0; height: 1px; background: var(--line-strong); transform-origin: left; }
+.ups .need__no { position: relative; display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 26px; }
+.ups .need__no svg { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; overflow: visible; }
+.ups .need__no circle { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; }
+.ups .need__no b { font-size: 13px; font-weight: 700; color: var(--accent-ink); }
+.ups .need__t { margin: 0 0 14px; font-size: 25px; line-height: 1.2; letter-spacing: -.025em; font-weight: 700; }
+.ups .need__p { font-size: 16.5px; line-height: 1.55; color: var(--text-2); }
+.ups .need__note { display: block; margin-top: 18px; font-size: 13.5px; line-height: 1.4; color: var(--muted); }
+.ups .need:hover .need__no circle { stroke-width: 2.4; }
+.ups .need:hover .need__no { animation: ups-needPulse .9s ease; }
+@keyframes ups-needPulse { 40% { transform: scale(1.12); } }
+
+.ups .exp { display: flex; align-items: center; gap: 48px; margin-top: 56px; padding-top: 30px; border-top: 1px solid var(--line); }
+.ups .exp__label { min-width: 160px; font-size: 13.5px; line-height: 1.4; color: var(--muted); }
+.ups .exp__label b { color: var(--text-2); font-weight: 700; }
+.ups .exp__logos { display: flex; align-items: center; gap: 52px; margin: 0; }
+.ups .exp__logos li { display: flex; align-items: center; }
+.ups .exp__logos img { max-height: 46px; max-width: 132px; width: auto; object-fit: contain; filter: grayscale(1); opacity: .66; transition: filter .3s, opacity .3s, transform .3s; }
+.ups .exp__logos li:hover img { filter: none; opacity: 1; transform: translateY(-2px); }
+.ups .exp__note { margin-left: auto; font-size: 12.5px; line-height: 1.4; color: var(--muted); text-align: right; }
+
+/* появление: включается только если скрипт отработал (is-armed) */
+.ups .aud.is-armed .need { opacity: 0; transform: translateY(28px); }
+.ups .aud.is-armed .need__line { transform: scaleX(0); }
+.ups .aud.is-armed .need__no circle { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.ups .aud.is-armed .exp, .ups .aud.is-armed .exp__logos li { opacity: 0; transform: translateY(14px); }
+.ups .aud.is-in .need { opacity: 1; transform: none; transition: opacity .85s ease, transform .95s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--i) * .16s + .1s); }
+.ups .aud.is-in .need__line { transform: scaleX(1); transition: transform 1.2s cubic-bezier(.65, 0, .2, 1); transition-delay: calc(var(--i) * .16s); }
+.ups .aud.is-in .need__no circle { stroke-dashoffset: 0; transition: stroke-dashoffset 1.5s cubic-bezier(.65, 0, .2, 1), stroke-width .25s; transition-delay: calc(var(--i) * .16s + .35s); }
+.ups .aud.is-in .exp { opacity: 1; transform: none; transition: opacity .8s ease .75s, transform .9s ease .75s; }
+.ups .aud.is-in .exp__logos li { opacity: 1; transform: none; transition: opacity .7s ease, transform .8s ease; transition-delay: calc(var(--i) * .15s + 1s); }
+
+/* ---------- «КАК РАБОТАЕМ»: шесть этапов ---------- */
+.ups .step { cursor: pointer; }
+.ups .step:hover .step__title { color: var(--accent); }
+.ups .step.is-current:hover .step__title { color: inherit; }
+.ups .step:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 12px; }
+.ups .track__line { left: 8.333%; right: 8.333%; }
+.ups .chapter[data-chapter="3"] img { object-position: 74% 50%; }
+.ups .track__btn { font-size: 14.5px; }
+

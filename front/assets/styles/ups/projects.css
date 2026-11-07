@@ -1,0 +1,42 @@
+/* ============ БЛОК 7 — ОБЪЕКТЫ ============ */
+.ups .cases { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.3fr); gap: 36px; align-items: stretch; }
+.ups .ctabs { margin: 0; display: grid; grid-template-rows: repeat(3, 1fr); gap: 12px; }
+.ups .ctabs li { display: flex; }
+.ups .ctab { align-content: center; }
+.ups .ctab {
+  position: relative; width: 100%; display: grid; gap: 3px; padding: 22px 26px 24px; text-align: left; cursor: pointer; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 24px; background: var(--surface); color: var(--text); font: inherit;
+  transition: background .35s, border-color .35s, transform .35s;
+}
+.ups .ctab__place { font-size: 14px; color: var(--muted); }
+.ups .ctab b { font-size: 21px; line-height: 1.2; letter-spacing: -.015em; font-weight: 700; }
+.ups .ctab__spec { margin-top: 4px; font-size: 15px; font-weight: 600; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.ups .ctab:hover { border-color: var(--line-strong); }
+.ups .ctab.is-active { background: #fff; border-color: var(--accent); transform: translateX(6px); box-shadow: 0 18px 44px rgba(20, 23, 28, .1); }
+.ups .ctab:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ups .ctab__bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+.ups .ctab.is-active .ctab__bar { transform: scaleX(1); transition: transform var(--case-ms, 6000ms) linear; }
+
+.ups .cstage { position: relative; height: clamp(540px, 80vh, 720px); width: 100%; border-radius: 32px; overflow: hidden; isolation: isolate; background: #1b1e24; box-shadow: 0 34px 90px rgba(20, 23, 28, .2); }
+.ups .case { position: absolute; inset: 0; visibility: hidden; clip-path: inset(0 0 0 100%); transition: clip-path .9s cubic-bezier(.65, 0, .2, 1), visibility 0s .9s; }
+.ups .case.is-active { visibility: visible; clip-path: inset(0); z-index: 1; transition: clip-path .9s cubic-bezier(.65, 0, .2, 1), visibility 0s; }
+.ups .case.is-prev { visibility: visible; clip-path: inset(0); z-index: 0; transition: none; }
+.ups .case > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); transition: transform 7s ease-out; -webkit-user-drag: none; }
+.ups .case.is-active > img { transform: scale(1.02); }
+.ups .case__shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(8, 10, 14, .94) 0%, rgba(8, 10, 14, .78) 36%, rgba(8, 10, 14, .1) 62%, rgba(8, 10, 14, 0) 100%); }
+.ups .case__panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 32px 30px; color: #F2F1EC; opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .6s ease; }
+.ups .case.is-active .case__panel { opacity: 1; transform: none; transition-delay: .5s; }
+.ups .case__place { font-size: 15px; color: #D9D8D2; margin-bottom: 14px; }
+.ups .case__nums { margin: 0; display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 12px 34px; padding-bottom: 18px; border-bottom: 1px solid rgba(242, 241, 236, .2); }
+.ups .case__nums dt { font-size: 12.5px; color: #A7A9AE; }
+.ups .case__nums dd { margin: 2px 0 0; font-size: clamp(28px, 3vw, 42px); line-height: 1.05; letter-spacing: -.025em; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ups .case__nums small { margin-left: 5px; font-size: 14px; font-weight: 600; color: var(--accent); letter-spacing: 0; }
+.ups .case__txt { margin-top: 16px; display: grid; gap: 10px; }
+.ups .case__txt p { font-size: 14.5px; line-height: 1.45; color: #D9D8D2; }
+.ups .case__txt b { display: inline-block; min-width: 108px; margin-right: 8px; color: #fff; font-weight: 700; }
+
+.ups .cstage__ctrl { position: absolute; top: 20px; right: 20px; z-index: 3; display: flex; gap: 8px; }
+.ups .ctrl--light { width: 48px; height: 48px; border: 0; background: rgba(255, 255, 255, .92); color: #14171C; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.ups .ctrl--light:hover { background: var(--accent); color: #14171C; }
+.ups .cases__cta { margin-top: 56px; display: flex; justify-content: center; }
+

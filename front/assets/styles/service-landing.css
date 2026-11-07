@@ -1,0 +1,6 @@
+/* Clipping must not turn a Nuxt ancestor into the sticky header's scroll container. */
+html.service-landing-document,
+html.service-landing-document body,
+html.service-landing-document #__nuxt {
+  overflow-x: clip;
+}
