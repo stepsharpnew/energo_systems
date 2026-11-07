@@ -2,8 +2,8 @@
   <section
     class="hdd-hero"
     ref="heroSection"
-    :style="{ backgroundImage: `linear-gradient(90deg, rgba(10, 24, 38, 0.86), rgba(10, 24, 38, 0.55)), url(${backgroundImage})` }"
   >
+    <img class="hero-background" v-bind="heroImage" alt="" aria-hidden="true" fetchpriority="high" loading="eager" />
     <div class="hero-inner">
       <div class="hero-copy">
         <p class="hero-kicker">ГНБ под ключ в Москве и области</p>
@@ -52,6 +52,7 @@
 
 <script>
 import GeneratorQuiz from './GeneratorQuiz.vue';
+import { imageAttrs } from '~/utils/responsiveImage.js';
 
 export default {
   name: "HeroSection",
@@ -59,7 +60,7 @@ export default {
   emits: ["open-contact-modal"],
   data() {
     return {
-      backgroundImage: "/img/background.webp",
+      heroImage: imageAttrs('/img/background.webp', { width: 1200, sizes: '100vw' }),
     };
   },
 };
@@ -71,13 +72,34 @@ export default {
   min-height: clamp(560px, 72vh, 760px);
   display: flex;
   align-items: center;
-  background-size: cover;
-  background-position: center;
+  background: #0a1826;
   color: #ffffff;
   overflow: hidden;
 }
 
+.hero-background,
+.hdd-hero::before {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-background {
+  object-fit: cover;
+  object-position: center;
+}
+
+.hdd-hero::before {
+  content: '';
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(10, 24, 38, 0.86), rgba(10, 24, 38, 0.55));
+}
+
 .hero-inner {
+  position: relative;
+  z-index: 2;
   width: min(100% - 48px, 1280px);
   margin: 0 auto;
   padding: clamp(32px, 4vw, 56px) 0;

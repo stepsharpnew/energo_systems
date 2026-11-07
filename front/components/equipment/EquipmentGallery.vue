@@ -19,13 +19,15 @@
           <img
             :key="activeImage"
             class="equipment-gallery__photo"
-            :src="activeImage"
+            :src="imageSource(activeImage, 1200)"
+            :srcset="imageAttrs(activeImage).srcset"
+            sizes="(max-width: 760px) calc(100vw - 32px), min(1280px, calc(100vw - 64px))"
             :alt="`${equipment.name} — пример исполнения, фото ${activeImageIndex + 1} из ${photoCount}`"
-            width="1600"
-            height="1000"
+            :width="imageDimensions(activeImage).width"
+            :height="imageDimensions(activeImage).height"
+            decoding="async"
             loading="lazy"
             :style="{ objectPosition: previewPosition }"
-            @load="rememberImageDimensions($event, activeImage)"
           >
         </Transition>
 
@@ -83,12 +85,14 @@
         @click="selectImage(index)"
       >
         <img
-          :src="image"
+          :src="imageSource(image, 240)"
+          :srcset="imageAttrs(image).srcset"
+          sizes="150px"
           alt=""
-          width="180"
-          height="110"
+          :width="imageDimensions(image).width"
+          :height="imageDimensions(image).height"
+          decoding="async"
           loading="lazy"
-          @load="rememberImageDimensions($event, image)"
         >
         <span>{{ String(index + 1).padStart(2, '0') }}</span>
       </button>
@@ -101,7 +105,7 @@
 </template>
 
 <script setup>
-import 'photoswipe/style.css'
+import { imageAttrs, imageDimensions, imageSource } from '~/utils/responsiveImage.js'
 
 const props = defineProps({
   equipment: {
@@ -111,9 +115,9 @@ const props = defineProps({
 })
 
 const activeImageIndex = ref(0)
-const imageDimensions = reactive({})
 let lightbox = null
-let dimensionsPromise = null
+let lightboxPromise = null
+let disposed = false
 
 const photoCount = computed(() => props.equipment.gallery.length)
 const activeImage = computed(() => props.equipment.gallery[activeImageIndex.value])
@@ -125,82 +129,53 @@ const previewPosition = computed(() => {
 
 const slides = computed(() => props.equipment.gallery.map((src, index) => ({
   src,
-  msrc: src,
-  width: imageDimensions[src]?.width || 1600,
-  height: imageDimensions[src]?.height || 1200,
+  msrc: imageSource(src, 480),
+  width: imageDimensions(src).width || 1600,
+  height: imageDimensions(src).height || 1200,
   alt: `${props.equipment.name} — пример исполнения, фото ${index + 1} из ${photoCount.value}`,
 })))
-
-const rememberImageDimensions = (event, src) => {
-  const image = event.currentTarget
-  if (!image?.naturalWidth || !image?.naturalHeight) return
-
-  imageDimensions[src] = {
-    width: image.naturalWidth,
-    height: image.naturalHeight,
-  }
-}
-
-const loadImageDimensions = () => {
-  if (!import.meta.client) return Promise.resolve()
-  if (dimensionsPromise) return dimensionsPromise
-
-  dimensionsPromise = Promise.all(props.equipment.gallery.map((src) => new Promise((resolve) => {
-    if (imageDimensions[src]) {
-      resolve()
-      return
-    }
-
-    const image = new Image()
-    image.onload = () => {
-      imageDimensions[src] = { width: image.naturalWidth, height: image.naturalHeight }
-      resolve()
-    }
-    image.onerror = resolve
-    image.src = src
-  })))
-
-  return dimensionsPromise
-}
 
 const ensureLightbox = async () => {
   if (lightbox) return lightbox
 
-  const { default: PhotoSwipeLightbox } = await import('photoswipe/lightbox')
-  lightbox = new PhotoSwipeLightbox({
-    pswpModule: () => import('photoswipe'),
-    mainClass: 'pswp--equipment',
-    initialZoomLevel: 'fit',
-    secondaryZoomLevel: 1.5,
-    maxZoomLevel: 3,
-    wheelToZoom: true,
-    imageClickAction: 'zoom',
-    tapAction: 'toggle-controls',
-    doubleTapAction: 'zoom',
-    bgOpacity: 0.96,
-    showHideAnimationType: 'fade',
-    preload: [1, 2],
-    errorMsg: 'Не удалось загрузить фотографию',
-    closeTitle: 'Закрыть',
-    zoomTitle: 'Изменить масштаб',
-    arrowPrevTitle: 'Предыдущая фотография',
-    arrowNextTitle: 'Следующая фотография',
-  })
+  if (lightboxPromise) return lightboxPromise
+  lightboxPromise = Promise.all([import('photoswipe/lightbox'), import('photoswipe/style.css')]).then(([{ default: PhotoSwipeLightbox }]) => {
+    if (disposed) return null
+    lightbox = new PhotoSwipeLightbox({
+      pswpModule: () => import('photoswipe'),
+      mainClass: 'pswp--equipment',
+      initialZoomLevel: 'fit',
+      secondaryZoomLevel: 1.5,
+      maxZoomLevel: 3,
+      wheelToZoom: true,
+      imageClickAction: 'zoom',
+      tapAction: 'toggle-controls',
+      doubleTapAction: 'zoom',
+      bgOpacity: 0.96,
+      showHideAnimationType: 'fade',
+      preload: [1, 2],
+      errorMsg: 'Не удалось загрузить фотографию',
+      closeTitle: 'Закрыть',
+      zoomTitle: 'Изменить масштаб',
+      arrowPrevTitle: 'Предыдущая фотография',
+      arrowNextTitle: 'Следующая фотография',
+    })
 
-  lightbox.on('change', () => {
-    const currentIndex = lightbox?.pswp?.currIndex
-    if (Number.isInteger(currentIndex)) activeImageIndex.value = currentIndex
-  })
-  lightbox.init()
+    lightbox.on('change', () => {
+      const currentIndex = lightbox?.pswp?.currIndex
+      if (Number.isInteger(currentIndex)) activeImageIndex.value = currentIndex
+    })
+    lightbox.init()
 
-  return lightbox
+    return lightbox
+  })
+  try { return await lightboxPromise } finally { lightboxPromise = null }
 }
 
 const openGallery = async (index, event) => {
   activeImageIndex.value = index
-  await loadImageDimensions()
   const viewer = await ensureLightbox()
-  viewer.loadAndOpen(index, slides.value, event ? { x: event.clientX, y: event.clientY } : undefined)
+  viewer?.loadAndOpen(index, slides.value, event ? { x: event.clientX, y: event.clientY } : undefined)
 }
 
 const selectImage = (index) => {
@@ -215,11 +190,8 @@ const showNextImage = () => {
   activeImageIndex.value = (activeImageIndex.value + 1) % photoCount.value
 }
 
-onMounted(() => {
-  void loadImageDimensions()
-})
-
 onBeforeUnmount(() => {
+  disposed = true
   lightbox?.destroy()
   lightbox = null
 })
@@ -328,7 +300,7 @@ onBeforeUnmount(() => {
   gap: 9px;
   padding: 0 15px;
   border-radius: 6px;
-  background: #f05a28;
+  background: #c94218;
   color: #fff;
   font-size: 13px;
   font-weight: 900;
@@ -383,9 +355,9 @@ onBeforeUnmount(() => {
 }
 
 .equipment-gallery__arrow:hover {
-  border-color: #f05a28;
+  border-color: #c94218;
   color: #fff;
-  background: #f05a28;
+  background: #c94218;
 }
 
 .equipment-gallery__thumbs {
@@ -415,13 +387,13 @@ onBeforeUnmount(() => {
   bottom: 0;
   left: 0;
   height: 3px;
-  background: #f05a28;
+  background: #c94218;
   content: '';
   opacity: 0;
 }
 
 .equipment-gallery__thumbs button.active {
-  border-color: #f05a28;
+  border-color: #c94218;
   box-shadow: 0 7px 16px rgba(16, 34, 52, 0.12);
   opacity: 1;
 }
@@ -457,7 +429,7 @@ onBeforeUnmount(() => {
 
 .equipment-gallery__help {
   margin: 12px 0 0;
-  color: #647789;
+  color: #52687a;
   font-size: 13px;
   text-align: center;
 }

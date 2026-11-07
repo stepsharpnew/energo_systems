@@ -1,5 +1,6 @@
 <template>
   <div class="services-detail">
+    <a class="skip-link" href="#main-content">Перейти к содержанию</a>
     <Header @open-contact-modal="openContactModal" />
     
     <Navigation 
@@ -7,7 +8,7 @@
       @scroll-to="scrollToSection"
     />
 
-    <div class="services-detail-container">
+    <main id="main-content" class="services-detail-container" tabindex="-1">
       <div class="container-1">
         <div class="services-detail-header">
           <div class="detail-header-copy">
@@ -28,7 +29,8 @@
 
           <div v-if="selectedService" class="detail-header-media">
             <img
-              :src="selectedServiceImage"
+              v-bind="imageAttrs(selectedServiceImage, { sizes: '(max-width: 900px) 100vw, 45vw', width: 800 })"
+              fetchpriority="high"
               :alt="selectedService.name"
             >
             <div class="media-note">
@@ -119,14 +121,14 @@
               <div class="service-gallery">
                 <h3>Галерея</h3>
                 <div class="gallery-grid">
-                  <div
+                  <img
                     v-for="(image, idx) in selectedService.gallery"
-                    :key="idx"
+                    :key="image"
                     class="gallery-item"
-                    :style="{ backgroundImage: `url(${image})` }"
-                    role="img"
-                    :aria-label="`${selectedService.name}: фото ${idx + 1}`"
-                  ></div>
+                    v-bind="imageAttrs(image, { sizes: '(max-width: 700px) 100vw, 33vw', width: 480 })"
+                    :alt="`${selectedService.name}: фото ${idx + 1}`"
+                    loading="lazy"
+                  >
                 </div>
               </div>
               
@@ -145,9 +147,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </main>
 
     <ContactModal
+      v-if="contactModalRequested"
       :show="showContactModal"
       :services="services"
       :selected-service-id="selectedServiceId"
@@ -162,8 +165,10 @@
 import Header from '~/components/energy-systems/Header.vue'
 import Navigation from '~/components/energy-systems/Navigation.vue'
 import Footer from '~/components/energy-systems/Footer.vue'
-import ContactModal from '~/components/energy-systems/ContactModal.vue'
+import { defineAsyncComponent } from 'vue'
+const ContactModal = defineAsyncComponent(() => import('~/components/energy-systems/ContactModal.vue'))
 import HddPricingSection from '~/components/energy-systems/HddPricingSection.vue'
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { servicesDetailData } from '~/assets/data/servicesDetail'
 
 const route = useRoute()
@@ -172,18 +177,19 @@ const router = useRouter()
 const services = servicesDetailData
 const selectedServiceId = ref(route.params.id || services[0]?.id || null)
 const showContactModal = ref(false)
+const contactModalRequested = ref(false)
 
 const imageMap = {
-  hdd: '/img/service/service-center0.jpg',
-  road: '/img/service/service-center1.jpg',
-  water: '/img/service/service-center2.jpg',
-  sewer: '/img/service/service-center3.jpg',
-  power: '/img/service/service-center4.jpg',
-  gas: '/img/service/service-center5.jpg',
-  design: '/img/service/service-center6.jpg',
-  support: '/img/service/service-center7.jpg',
-  heating: '/img/service/service-center8.jpg',
-  monitoring: '/img/service/service-center9.jpg',
+  hdd: '/img/service/service-center0.webp',
+  road: '/img/service/service-center1.webp',
+  water: '/img/service/service-center2.webp',
+  sewer: '/img/service/service-center3.webp',
+  power: '/img/service/service-center4.webp',
+  gas: '/img/service/service-center5.webp',
+  design: '/img/service/service-center6.webp',
+  support: '/img/service/service-center7.webp',
+  heating: '/img/service/service-center8.webp',
+  monitoring: '/img/service/service-center9.webp',
 }
 
 const labelMap = {
@@ -215,7 +221,7 @@ const selectedService = computed(() => {
 })
 
 const selectedServiceImage = computed(() => {
-  return imageMap[selectedService.value?.id] || '/img/service/service-center0.jpg'
+  return imageMap[selectedService.value?.id] || '/img/service/service-center0.webp'
 })
 
 const shortServiceName = (service) => labelMap[service?.id] || service?.name || 'Услуга'
@@ -260,7 +266,7 @@ useHead(() => {
       { property: 'og:description', content: description },
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: `https://e-systems.su${servicePath}` },
-      { property: 'og:image', content: 'https://e-systems.su/img/background.jpg' }
+      { property: 'og:image', content: 'https://e-systems.su/img/background.webp' }
     ],
     link: [
       { rel: 'canonical', href: `https://e-systems.su${servicePath}` }
@@ -298,6 +304,7 @@ const selectService = (serviceId) => {
 }
 
 const openContactModal = () => {
+  contactModalRequested.value = true
   showContactModal.value = true
 }
 
@@ -313,6 +320,9 @@ const scrollToSection = (key) => {
 </script>
 
 <style scoped>
+.skip-link { position: fixed; top: -100px; left: 16px; z-index: 10010; padding: 12px 18px; border-radius: 8px; background: #102234; color: #fff; font-weight: 700; text-decoration: none; }
+.skip-link:focus { top: 12px; outline: 3px solid #f7aa33; }
+
 .services-detail {
   min-height: 100vh;
   background: #fff;
@@ -366,7 +376,7 @@ const scrollToSection = (key) => {
 
 .detail-eyebrow {
   margin: 0 0 12px;
-  color: #f05a28;
+  color: #ff9a72;
   font-size: 13px;
   font-weight: 850;
   line-height: 1.2;
@@ -468,8 +478,8 @@ const scrollToSection = (key) => {
 }
 
 .service-item.active {
-  background: #ff4800;
-  border-color: #ff4800;
+  background: #c94218;
+  border-color: #c94218;
   color: #fff;
 }
 
@@ -709,9 +719,10 @@ const scrollToSection = (key) => {
 }
 
 .gallery-item {
+  width: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

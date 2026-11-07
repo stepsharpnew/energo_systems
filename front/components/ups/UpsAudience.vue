@@ -33,13 +33,13 @@
     <div class="exp">
       <p class="exp__label">Опыт компании<br><b>в электроснабжении</b></p>
       <ul class="exp__logos" aria-label="Корпоративные заказчики">
-        <li style="--i:0"><img src="/ups/client-rosseti.png" alt="Россети" height="46" loading="lazy"></li>
-        <li style="--i:1"><img src="/ups/client-gazprom.png" alt="Газпром" height="46" loading="lazy"></li>
-        <li style="--i:2"><img src="/ups/client-rzd.png" alt="РЖД" height="46" loading="lazy"></li>
-        <li style="--i:3"><img src="/ups/client-oek.png" alt="ОЭК" height="46" loading="lazy"></li>
-        <li style="--i:4"><img src="/ups/client-mosoblenergo.png" alt="Мособлэнерго" height="46" loading="lazy"></li>
-        <li style="--i:5"><img src="/ups/client-rostelecom.png" alt="Ростелеком" height="46" loading="lazy"></li>
-        <li style="--i:6"><img src="/ups/client-avtodor.png" alt="Автодор" height="46" loading="lazy"></li>
+        <li style="--i:0"><img v-bind="imageAttrs('/ups/client-rosseti.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Россети" loading="lazy"></li>
+        <li style="--i:1"><img v-bind="imageAttrs('/ups/client-gazprom.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Газпром" loading="lazy"></li>
+        <li style="--i:2"><img v-bind="imageAttrs('/ups/client-rzd.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="РЖД" loading="lazy"></li>
+        <li style="--i:3"><img v-bind="imageAttrs('/ups/client-oek.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="ОЭК" loading="lazy"></li>
+        <li style="--i:4"><img v-bind="imageAttrs('/ups/client-mosoblenergo.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Мособлэнерго" loading="lazy"></li>
+        <li style="--i:5"><img v-bind="imageAttrs('/ups/client-rostelecom.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Ростелеком" loading="lazy"></li>
+        <li style="--i:6"><img v-bind="imageAttrs('/ups/client-avtodor.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Автодор" loading="lazy"></li>
       </ul>
     </div>
   </div>
@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { useUpsVisibility } from '~/composables/useUpsVisibility.js'
 const section = ref(null)
 const revealed = ref(false)

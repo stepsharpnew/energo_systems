@@ -1,5 +1,6 @@
 <template>
   <div class="services-page">
+    <a class="skip-link" href="#main-content">Перейти к содержанию</a>
     <Header @open-contact-modal="openContactModal()" />
 
     <Navigation
@@ -7,11 +8,9 @@
       @scroll-to="scrollToSection"
     />
 
-    <main>
-      <section
-        class="services-hero"
-        :style="{ backgroundImage: servicesHeroBackground }"
-      >
+    <main id="main-content" tabindex="-1">
+      <section class="services-hero">
+        <img class="services-hero-image" v-bind="imageAttrs('/img/service/service-center0.webp', { width: 1200 })" alt="" fetchpriority="high">
         <div class="services-hero-inner">
           <div class="services-hero-copy">
             <p class="eyebrow">Инженерные услуги</p>
@@ -75,7 +74,7 @@
               >
                 <NuxtLink class="service-media" :to="`/services/${service.id}`">
                   <img
-                    :src="serviceImage(service, index)"
+                    v-bind="imageAttrs(serviceImage(service, index), { sizes: '(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw', width: 800 })"
                     :alt="service.name"
                     loading="lazy"
                   >
@@ -135,6 +134,7 @@
     </main>
 
     <ContactModal
+      v-if="contactModalRequested"
       :show="showContactModal"
       :services="services"
       :selected-service-id="contactModalServiceId"
@@ -149,11 +149,14 @@
 import Header from '~/components/energy-systems/Header.vue'
 import Navigation from '~/components/energy-systems/Navigation.vue'
 import Footer from '~/components/energy-systems/Footer.vue'
-import ContactModal from '~/components/energy-systems/ContactModal.vue'
+import { defineAsyncComponent } from 'vue'
+const ContactModal = defineAsyncComponent(() => import('~/components/energy-systems/ContactModal.vue'))
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { servicesDetailData } from '~/assets/data/servicesDetail'
 
 const services = servicesDetailData
 const showContactModal = ref(false)
+const contactModalRequested = ref(false)
 const contactModalServiceId = ref(null)
 
 const navItems = [
@@ -186,22 +189,17 @@ const workflowSteps = [
   },
 ]
 
-const servicesHeroBackground = [
-  'linear-gradient(90deg, rgba(8, 20, 32, 0.9), rgba(8, 20, 32, 0.62))',
-  "url('/img/service/service-center0.jpg')",
-].join(', ')
-
 const imageMap = {
-  hdd: '/img/service/service-center0.jpg',
-  road: '/img/service/service-center1.jpg',
-  water: '/img/service/service-center2.jpg',
-  sewer: '/img/service/service-center3.jpg',
-  power: '/img/service/service-center4.jpg',
-  gas: '/img/service/service-center5.jpg',
-  design: '/img/service/service-center6.jpg',
-  support: '/img/service/service-center7.jpg',
-  heating: '/img/service/service-center8.jpg',
-  monitoring: '/img/service/service-center9.jpg',
+  hdd: '/img/service/service-center0.webp',
+  road: '/img/service/service-center1.webp',
+  water: '/img/service/service-center2.webp',
+  sewer: '/img/service/service-center3.webp',
+  power: '/img/service/service-center4.webp',
+  gas: '/img/service/service-center5.webp',
+  design: '/img/service/service-center6.webp',
+  support: '/img/service/service-center7.webp',
+  heating: '/img/service/service-center8.webp',
+  monitoring: '/img/service/service-center9.webp',
 }
 
 const labelMap = {
@@ -235,10 +233,11 @@ const formatNumber = (value) => String(value).padStart(2, '0')
 const shortServiceName = (service) => labelMap[service?.id] || service?.name || 'Услуга'
 
 const serviceImage = (service, index) => {
-  return imageMap[service?.id] || `/img/service/service-center${index % 10}.jpg`
+  return imageMap[service?.id] || `/img/service/service-center${index % 10}.webp`
 }
 
 const openContactModal = (serviceId = null) => {
+  contactModalRequested.value = true
   contactModalServiceId.value = serviceId
   showContactModal.value = true
 }
@@ -264,6 +263,9 @@ const scrollToSection = (key) => {
 </script>
 
 <style scoped>
+.skip-link { position: fixed; top: -100px; left: 16px; z-index: 10010; padding: 12px 18px; border-radius: 8px; background: #102234; color: #fff; font-weight: 700; text-decoration: none; }
+.skip-link:focus { top: 12px; outline: 3px solid #f7aa33; }
+
 .services-page {
   min-height: 100vh;
   background: #f6f8fb;
@@ -271,10 +273,23 @@ const scrollToSection = (key) => {
 }
 
 .services-hero {
+  position: relative;
+  isolation: isolate;
   color: #ffffff;
-  background-position: center;
-  background-size: cover;
+  background: #172334;
 }
+
+.services-hero-image,
+.services-hero::after {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.services-hero-image { object-fit: cover; }
+.services-hero::after { content: ''; background: linear-gradient(90deg, rgba(8, 20, 32, 0.9), rgba(8, 20, 32, 0.62)); }
+.services-hero-inner { position: relative; z-index: 1; }
 
 .services-hero-inner,
 .catalog-inner,
@@ -298,7 +313,7 @@ const scrollToSection = (key) => {
 
 .eyebrow {
   margin: 0 0 12px;
-  color: #f05a28;
+  color: #c94218;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.2;
@@ -350,7 +365,7 @@ const scrollToSection = (key) => {
 .service-card-actions button {
   color: #ffffff;
   border: 1px solid #f05a28;
-  background: #f05a28;
+  background: #c94218;
 }
 
 .secondary-action,
@@ -436,7 +451,7 @@ const scrollToSection = (key) => {
 }
 
 .catalog-sidebar a:hover {
-  color: #f05a28;
+  color: #c94218;
 }
 
 .catalog-heading {
@@ -450,7 +465,7 @@ const scrollToSection = (key) => {
 .catalog-heading p {
   max-width: 420px;
   margin: 0;
-  color: #65758a;
+  color: #586b7d;
   font-size: 16px;
   line-height: 1.55;
 }
@@ -513,7 +528,7 @@ const scrollToSection = (key) => {
 
 .service-label {
   margin: 0 0 8px;
-  color: #f05a28;
+  color: #c94218;
   font-size: 12px;
   font-weight: 850;
   line-height: 1.2;
@@ -596,7 +611,7 @@ const scrollToSection = (key) => {
 .workflow-step span {
   display: inline-flex;
   margin-bottom: 24px;
-  color: #f05a28;
+  color: #c94218;
   font-size: 14px;
   font-weight: 850;
 }
@@ -610,7 +625,7 @@ const scrollToSection = (key) => {
 
 .workflow-step p {
   margin: 10px 0 0;
-  color: #65758a;
+  color: #586b7d;
   font-size: 14px;
   line-height: 1.5;
 }

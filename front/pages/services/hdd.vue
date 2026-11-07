@@ -1,10 +1,11 @@
 <template>
   <div class="hdd">
+  <a class="hdd-skip-link" href="#hdd-main-content">Перейти к содержанию</a>
   <!-- ============ ШАПКА ============ -->
   <header class="header">
     <div class="header__inner">
       <a class="logo" href="/" aria-label="На главную">
-        <img src="/hdd/logo-dark.png" alt="Энергосистемы — эксперты в сфере энергетики" height="38"
+        <img v-bind="imageAttrs('/hdd/logo-dark.png', { sizes: '258px', width: 480 })" alt="Энергосистемы — эксперты в сфере энергетики"
              onerror="this.hidden=true;this.nextElementSibling.hidden=false">
         <span class="logo__fallback" hidden>Энергосистемы</span>
       </a>
@@ -35,13 +36,13 @@
     </div>
   </header>
 
-  <main>
+  <main id="hdd-main-content" tabindex="-1">
 
   <!-- ============ БЛОК 1 — HERO ============ -->
   <section class="hero-wrap" id="directions">
     <div class="hero">
       <div class="hero__media" aria-hidden="true">
-        <img src="/hdd/hero-gnb.jpg" alt="" width="1672" height="941" fetchpriority="high">
+        <img v-bind="imageAttrs('/hdd/hero-gnb.jpg', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
         <!-- Для видео-фона:
         <video autoplay muted loop playsinline poster="/hdd/hero-gnb.jpg"><source src="/hdd/hero.mp4" type="video/mp4"></video>
         -->
@@ -95,21 +96,21 @@
       <div class="trust">
         <div class="trust__label">Нам доверяют:</div>
         <div class="trust__item">
-          <span class="trust__logo trust__logo--rosseti"><img src="/hdd/partners/rosseti.png" alt="" decoding="async"></span>
+          <span class="trust__logo trust__logo--rosseti"><img v-bind="imageAttrs('/hdd/partners/rosseti.png', { sizes: '160px', width: 480 })" alt="" loading="lazy"></span>
           <div class="trust__text">
             <b>РОССЕТИ</b>
             <span>5000+ объектов спроектировано и построено</span>
           </div>
         </div>
         <div class="trust__item">
-          <span class="trust__logo trust__logo--avtodor"><img src="/hdd/partners/avtodor.png" alt="" decoding="async"></span>
+          <span class="trust__logo trust__logo--avtodor"><img v-bind="imageAttrs('/hdd/partners/avtodor.png', { sizes: '160px', width: 480 })" alt="" loading="lazy"></span>
           <div class="trust__text">
             <b>АВТОДОР</b>
             <span>ЦКАД: переустройство ТП «Васильково»</span>
           </div>
         </div>
         <div class="trust__item">
-          <span class="trust__logo trust__logo--misk"><img src="/hdd/partners/misk.png" alt="" decoding="async"></span>
+          <span class="trust__logo trust__logo--misk"><img v-bind="imageAttrs('/hdd/partners/misk.png', { sizes: '160px', width: 480 })" alt="" loading="lazy"></span>
           <div class="trust__text">
             <b>МИСК</b>
             <span>Электрификация развязки на М-10</span>
@@ -271,7 +272,7 @@
           <div class="mgr">
             <div class="mgr__photo">
               <!-- TODO: фото и имя реального менеджера -->
-              <img src="/hdd/manager.jpg" alt="Алексей Смирнов" width="72" height="72">
+              <img v-bind="imageAttrs('/hdd/manager.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Алексей Смирнов" loading="lazy">
               <span class="mgr__online" aria-hidden="true"></span>
             </div>
             <div class="mgr__bubble">
@@ -314,22 +315,22 @@
     </div>
 
     <!-- TODO: все кейсы электромонтажные — запросить у заказчика объекты именно по ГНБ -->
-    <div class="marquee" data-marquee>
+    <div class="marquee" data-marquee tabindex="0" role="region" aria-label="Лента клиентов">
       <ul class="marquee__track">
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/rosseti-mr.png" alt=""></span><b>ПАО «Россети Московский регион»</b><span>Благодарность за оперативное восстановление электроснабжения</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/avtodor.png" alt=""></span><b>ГК «Автодор»</b><span>Подготовка территории строительства ЦКАД</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/rosseti-mr.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>ПАО «Россети Московский регион»</b><span>Благодарность за оперативное восстановление электроснабжения</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/avtodor.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>ГК «Автодор»</b><span>Подготовка территории строительства ЦКАД</span></li>
         <li class="client"><span class="client__logo client__logo--text">МИСК</span><b>АО «МИСК»</b><span>Развязка на М-10 для завода Mercedes-Benz</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/monotek.png" alt=""></span><b>ООО «Монотек Строй»</b><span>Переустройство кабельных сетей 10/0,4 кВ</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/rsv.png" alt=""></span><b>АНО «Россия — страна возможностей»</b><span>2БКТП и сети 0,4 кВ для «Сенежа»</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/monotek.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>ООО «Монотек Строй»</b><span>Переустройство кабельных сетей 10/0,4 кВ</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/rsv.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>АНО «Россия — страна возможностей»</b><span>2БКТП и сети 0,4 кВ для «Сенежа»</span></li>
         <li class="client"><span class="client__logo client__logo--text">Триумф</span><b>ООО «Триумф»</b><span>ТП и электромонтаж СК «Металлург» к ЧМ-2018</span></li>
         <li class="client"><span class="client__logo client__logo--text">Оптимум</span><b>ООО «Оптимум»</b><span>Электромонтаж СК «Глебовец» к ЧМ-2018</span></li>
         <li class="client"><span class="client__logo client__logo--text">Политехстрой</span><b>АО «Политехстрой»</b><span>Электроснабжение жилого дома, Новые Черёмушки</span></li>
         <li class="client"><span class="client__logo client__logo--text">БарсПром-М</span><b>ООО «БарсПром-М»</b><span>Силовое оборудование и освещение, Капотня</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/gazprom.png" alt=""></span><b>Газпром</b><span>Газовая отрасль</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/rzd.png" alt=""></span><b>РЖД</b><span>Железные дороги</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/rostelecom.png" alt=""></span><b>Ростелеком</b><span>Оператор связи</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/oek.png" alt=""></span><b>ОЭК</b><span>Электросетевая компания Москвы</span></li>
-        <li class="client"><span class="client__logo"><img decoding="async" src="/hdd/clients/mosoblenergo.png" alt=""></span><b>Мособлэнерго</b><span>Электросетевая компания Подмосковья</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/gazprom.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>Газпром</b><span>Газовая отрасль</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/rzd.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>РЖД</b><span>Железные дороги</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/rostelecom.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>Ростелеком</b><span>Оператор связи</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/oek.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>ОЭК</b><span>Электросетевая компания Москвы</span></li>
+        <li class="client"><span class="client__logo"><img v-bind="imageAttrs('/hdd/clients/mosoblenergo.png', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></span><b>Мособлэнерго</b><span>Электросетевая компания Подмосковья</span></li>
       </ul>
     </div>
   </section>
@@ -346,8 +347,7 @@
     </div>
 
     <div class="steps__stage">
-      <!-- loading="lazy" не ставить: в собранном файле картинка вшита как data-URI и тогда не отрисуется -->
-      <img class="steps__photo" src="/hdd/steps-gnb.jpg" alt="" decoding="async" width="1916" height="821">
+      <img class="steps__photo" v-bind="imageAttrs('/hdd/steps-gnb.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy">
       <div class="container steps__inner">
         <div class="steps__line" aria-hidden="true"><span class="steps__fill"></span><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>
         <!-- TODO: сроки этапов по ГНБ не подтверждены — оранжевым выделено действие, а не срок -->
@@ -415,8 +415,8 @@
            Прежние инлайновые SVG убраны: разрез теперь на одной картинке и читается
            одинаково на компьютере и на телефоне -->
       <div class="scheme">
-        <img class="scheme__img" src="/hdd/scheme-gnb.jpg" width="1179" height="445" decoding="async"
-             alt="Разрез: буровая установка слева, под дорогой по дуге идёт скважина, расширитель тянет по ней трубу от правого приямка к левому, дорожное полотно остаётся целым, движение не перекрыто">
+        <img class="scheme__img" v-bind="imageAttrs('/hdd/scheme-gnb.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })"
+             alt="Разрез: буровая установка слева, под дорогой по дуге идёт скважина, расширитель тянет по ней трубу от правого приямка к левому, дорожное полотно остаётся целым, движение не перекрыто" loading="lazy">
       </div>
 
       <div class="cond">
@@ -480,7 +480,7 @@
       </div>
 
       <!-- цены взяты с e-systems.su/services/hdd; TODO: подтвердить, что расценки 2026 года действующие -->
-      <div class="price-scroll">
+      <div class="price-scroll" tabindex="0" role="region" aria-label="Расценки на прокол">
         <table class="price-table" data-price-table>
           <thead>
             <tr><th scope="col">Диаметр трубы</th><th scope="col" data-tier="near">До 250 м</th><th scope="col" data-tier="far">Свыше 250 м</th></tr>
@@ -534,9 +534,9 @@
 
       <!-- Место и дата взяты из штампов на самих фотографиях и метаданных.
            TODO: от заказчика — точные адреса, диаметры, длины, заказчики и результат (анкета в корне проекта) -->
-      <div class="projects">
+      <div class="projects" tabindex="0" role="region" aria-label="Фотографии объектов">
         <article class="proj">
-          <img class="proj__img" src="/hdd/projects/01.jpg" alt="Зеленоград, 16-й мкр, октябрь 2025" width="600" height="800" decoding="async">
+          <img class="proj__img" v-bind="imageAttrs('/hdd/projects/01.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Зеленоград, 16-й мкр, октябрь 2025" loading="lazy">
           <div class="proj__body">
             <span class="proj__date">октябрь 2025</span>
             <b class="proj__place">Зеленоград, 16-й мкр</b>
@@ -544,7 +544,7 @@
           </div>
         </article>
         <article class="proj">
-          <img class="proj__img" src="/hdd/projects/02.jpg" alt="Солнечногорск, Поварово, ноябрь 2025" width="600" height="800" decoding="async">
+          <img class="proj__img" v-bind="imageAttrs('/hdd/projects/02.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Солнечногорск, Поварово, ноябрь 2025" loading="lazy">
           <div class="proj__body">
             <span class="proj__date">ноябрь 2025</span>
             <b class="proj__place">Солнечногорск, Поварово</b>
@@ -552,7 +552,7 @@
           </div>
         </article>
         <article class="proj">
-          <img class="proj__img" src="/hdd/projects/03.jpg" alt="Солнечногорск, декабрь 2025" width="600" height="800" decoding="async">
+          <img class="proj__img" v-bind="imageAttrs('/hdd/projects/03.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Солнечногорск, декабрь 2025" loading="lazy">
           <div class="proj__body">
             <span class="proj__date">декабрь 2025</span>
             <b class="proj__place">Солнечногорск</b>
@@ -576,15 +576,15 @@
         <button class="shots__nav shots__nav--next" type="button" data-shots-next aria-label="Следующие фотографии">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
         </button>
-        <div class="shots" data-shots>
-        <figure class="shot"><img src="/hdd/shots/01.jpg" alt="Буровая установка на объекте" width="520" height="520" decoding="async"></figure>
-        <figure class="shot"><img src="/hdd/shots/02.jpg" alt="Пучок труб в приямке у проезжей части" width="520" height="520" decoding="async"></figure>
-        <figure class="shot"><img src="/hdd/shots/03.jpg" alt="Установка на обочине во время работ" width="520" height="520" decoding="async"></figure>
-        <figure class="shot"><img src="/hdd/shots/04.jpg" alt="Протяжка труб на объекте" width="520" height="520" decoding="async"></figure>
-        <figure class="shot"><img src="/hdd/shots/05.jpg" alt="Протяжка трубы через приямок" width="520" height="520" decoding="async"></figure>
-        <figure class="shot"><img src="/hdd/shots/06.jpg" alt="Трубы, уложенные проколом под проездом" width="520" height="520" decoding="async"></figure>
-        <figure class="shot"><img src="/hdd/shots/07.jpg" alt="Выход труб из прокола" width="520" height="520" decoding="async"></figure>
-          <figure class="shot"><img src="/hdd/shots/08.jpg" alt="Установка и трубы на площадке" width="520" height="520" decoding="async"></figure>
+        <div class="shots" data-shots tabindex="0" role="region" aria-label="Фотографии с выездов">
+        <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/01.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Буровая установка на объекте" loading="lazy"></figure>
+        <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/02.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Пучок труб в приямке у проезжей части" loading="lazy"></figure>
+        <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/03.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Установка на обочине во время работ" loading="lazy"></figure>
+        <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/04.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Протяжка труб на объекте" loading="lazy"></figure>
+        <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/05.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Протяжка трубы через приямок" loading="lazy"></figure>
+        <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/06.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Трубы, уложенные проколом под проездом" loading="lazy"></figure>
+        <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/07.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Выход труб из прокола" loading="lazy"></figure>
+          <figure class="shot"><img v-bind="imageAttrs('/hdd/shots/08.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Установка и трубы на площадке" loading="lazy"></figure>
         </div>
       </div>
       <p class="shots__note">С наших объектов в Москве и области</p>
@@ -752,12 +752,11 @@
         </div>
       </div>
 
-      <!-- Метки ставит сам Яндекс по адресу: координаты не выдумываем.
-           loading="lazy" не ставим — в собранном файле это ломает отрисовку. -->
+      <!-- Метки ставит Яндекс по адресу. Карты загружаются при приближении к контактам. -->
       <div class="maps">
         <figure class="map">
           <iframe class="map__frame" src="https://yandex.ru/map-widget/v1/?text=Солнечногорск%2C%20Промышленная%20улица%2C%20строение%205&z=16"
-                  title="Офис в Солнечногорске на карте" allowfullscreen></iframe>
+                  title="Офис в Солнечногорске на карте" loading="lazy" allowfullscreen></iframe>
           <figcaption class="map__cap">
             <b>Солнечногорск</b>
             <a href="https://yandex.ru/maps/?text=Солнечногорск%2C%20Промышленная%20улица%2C%20строение%205" target="_blank" rel="noopener">Промышленная ул., с. 5</a>
@@ -765,7 +764,7 @@
         </figure>
         <figure class="map">
           <iframe class="map__frame" src="https://yandex.ru/map-widget/v1/?text=Москва%2C%20улица%20Руставели%2C%2014с6&z=16"
-                  title="Офис в Москве на карте" allowfullscreen></iframe>
+                  title="Офис в Москве на карте" loading="lazy" allowfullscreen></iframe>
           <figcaption class="map__cap">
             <b>Москва</b>
             <a href="https://yandex.ru/maps/?text=Москва%2C%20улица%20Руставели%2C%2014с6" target="_blank" rel="noopener">ул. Руставели, 14с6</a>
@@ -789,9 +788,9 @@
   </footer>
 
   <!-- ============ ФОРМА «ЗАКАЗАТЬ ЗВОНОК» ============ -->
-  <div class="modal" data-callback hidden>
+  <dialog class="modal" data-callback aria-labelledby="cb-title" hidden>
     <div class="modal__backdrop" data-callback-close></div>
-    <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="cb-title">
+    <div class="modal__box">
       <button class="modal__close" type="button" data-callback-close aria-label="Закрыть">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
@@ -827,25 +826,28 @@
         <button class="modal__submit" type="submit">Жду звонка</button>
       </form>
 
-      <div class="modal__done" data-callback-done hidden>
+      <div class="modal__done" data-callback-done tabindex="-1" role="status" hidden>
         <b>Спасибо за обращение!</b>
         <span>Мы получили вашу заявку. Учтём ваши пожелания по времени звонка.</span>
         <span>Будем рады помочь и по телефону: <PhoneLink /></span>
       </div>
     </div>
-  </div>
+  </dialog>
 
   <!-- липкая кнопка на узких экранах; прячется, когда виден сам опрос -->
-  <div class="sticky-cta" data-sticky>
+  <aside class="sticky-cta" data-sticky aria-label="Быстрая связь">
     <a class="sticky-cta__btn" href="#quiz">Рассчитать стоимость</a>
     <PhoneLink class="sticky-cta__call" aria-label="Позвонить">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
     </PhoneLink>
-  </div>
+  </aside>
   </div>
 </template>
 
 <script setup>
+import '~/assets/styles/landing-fonts.css'
+import { landingFontPreloads } from '~/utils/landingFonts.js'
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { onMounted, onBeforeUnmount } from 'vue'
 import { initHddPage } from '~/assets/js/hdd-landing.js'
 
@@ -859,14 +861,7 @@ useHead({
         'Диаметры 110–800 мм, свой отдел проектирования, работы под ключ в Москве и области.'
     }
   ],
-  link: [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-    {
-      rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap'
-    }
-  ]
+  link: landingFontPreloads
 })
 
 let cleanup = null
@@ -884,7 +879,7 @@ onBeforeUnmount(() => { if (cleanup) cleanup() })
   --line-strong: rgba(20, 23, 28, .22);
   --text: #14171C;
   --text-2: #3F434A;
-  --muted: #71747A;
+  --muted: #696C72;
   --accent-ink: #A8660A;
   --card: #F2F1EC;
   --card-text: #14171C;
@@ -928,6 +923,13 @@ img { display: block; max-width: 100%; }
   margin: 0 auto;
   padding-inline: var(--gutter);
 }
+
+.hdd-skip-link {
+  position: fixed; top: -100px; left: 16px; z-index: 110;
+  padding: 12px 18px; border-radius: 8px;
+  background: var(--text); color: var(--bg);
+}
+.hdd-skip-link:focus { top: 12px; }
 
 /* ============ ШАПКА ============ */
 .header { border-bottom: 1px solid var(--line); }
@@ -1517,7 +1519,7 @@ img { display: block; max-width: 100%; }
   min-height: 4.5em;
   transition: opacity .3s;
 }
-.mgr__msg.is-typing { opacity: .6; }
+.mgr__msg.is-typing { opacity: 1; }
 .typing { display: inline-flex; gap: 4px; padding: 6px 0; }
 .typing i {
   width: 6px; height: 6px; border-radius: 50%; background: var(--muted);
@@ -2129,7 +2131,15 @@ img { display: block; max-width: 100%; }
 .footer__links a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
 
 /* ============ ОКНО «ЗАКАЗАТЬ ЗВОНОК» ============ */
-.modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; }
+.modal {
+  position: fixed; inset: 0; z-index: 100;
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; border: 0; padding: 20px;
+  display: grid; place-items: center;
+  background: transparent; color: inherit;
+}
+.modal:not([open]) { display: none; }
+.modal::backdrop { background: transparent; }
 .modal__backdrop {
   position: absolute; inset: 0;
   background: rgba(20, 23, 28, .6);

@@ -1,13 +1,17 @@
 <template>
-  <VApp>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </VApp>
+  <div class="site-app">
+    <div class="site-app__wrap">
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </div>
+  </div>
 </template>
 
 <script setup>
+import criticalBase from '~/assets/styles/critical-base.css?raw'
 useHead({
+  style: [{ key: 'critical-base', innerHTML: criticalBase }],
   title: "Энергосистемы",
   meta: [
     {
@@ -22,32 +26,3 @@ useHead({
   ],
 });
 </script>
-
-<style>
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-  background: #fff;
-  color: #142233;
-  font-family: Arial, sans-serif;
-}
-
-button,
-a {
-  touch-action: manipulation;
-}
-
-#__nuxt {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-</style>

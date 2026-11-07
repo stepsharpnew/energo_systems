@@ -1,44 +1,48 @@
 <template>
   <div class="energy-systems">
+    <a class="skip-link" href="#main-content" @click.prevent="skipToContent">Перейти к содержанию</a>
     <Header @open-contact-modal="openContactModal" />
 
     <Navigation :nav-items="navItems" @scroll-to="scrollToSection" />
 
-    <HeroSection ref="heroSection" @open-contact-modal="openContactModal" />
+    <main id="main-content" ref="mainContent" tabindex="-1">
+      <HeroSection ref="heroSection" @open-contact-modal="openContactModal" />
 
-    <ServicesCarousel
-      ref="servicesSection"
-      :services="services"
-      @open-service-modal="openServiceModal"
-    />
+      <ServicesCarousel
+        ref="servicesSection"
+        :services="services"
+        @open-service-modal="openServiceModal"
+      />
 
-    <EquipmentCatalogTeaser />
+      <EquipmentCatalogTeaser />
 
-    <main class="main">
-      <div class="container-1">
-        <ContentBlocks ref="aboutSection" />
+      <div class="main">
+        <div class="container-1">
+          <ContentBlocks ref="aboutSection" />
 
-        <ProjectsShowcase
-          ref="projectsSection"
-          :projects="projects"
-        />
+          <ProjectsShowcase
+            ref="projectsSection"
+            :projects="projects"
+          />
 
-        <ClientsSection ref="clientsSection" :clients="clients" />
+          <ClientsSection ref="clientsSection" :clients="clients" />
 
-        <CertificatesSection
-          ref="certificatesSection"
-          :certificates="certificates"
-        />
+          <CertificatesSection
+            ref="certificatesSection"
+            :certificates="certificates"
+          />
 
-        <ContactCTA
-          ref="contactSection"
-          @open-contact-modal="openContactModal"
-        />
+          <ContactCTA
+            ref="contactSection"
+            @open-contact-modal="openContactModal"
+          />
+        </div>
       </div>
     </main>
 
     <Teleport to="body">
       <ServiceModal
+        v-if="serviceModalRequested"
         :show="showServiceModal"
         :service="modalService"
         @close="closeServiceModal"
@@ -49,6 +53,7 @@
 
     <Teleport to="body">
       <ContactModal
+        v-if="contactModalRequested"
         :show="showContactModal"
         :services="services"
         :selected-service-id="contactModalServiceId"
@@ -65,10 +70,12 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
+import { scrollToPageSection } from '~/utils/nativeScroll.js';
 import CertificatesSection from "./energy-systems/CertificatesSection.vue";
 import ClientsSection from "./energy-systems/ClientsSection.vue";
 import ContactCTA from "./energy-systems/ContactCTA.vue";
-import ContactModal from "./energy-systems/ContactModal.vue";
+const ContactModal = defineAsyncComponent(() => import("./energy-systems/ContactModal.vue"));
 import ContentBlocks from "./energy-systems/ContentBlocks.vue";
 import EquipmentCatalogTeaser from "./equipment/EquipmentCatalogTeaser.vue";
 import Footer from "./energy-systems/Footer.vue";
@@ -77,7 +84,7 @@ import HeroSection from "./energy-systems/HeroSection.vue";
 import Navigation from "./energy-systems/Navigation.vue";
 import ProjectsShowcase from "./energy-systems/ProjectsShowcase.vue";
 import ScrollToTop from "./energy-systems/ScrollToTop.vue";
-import ServiceModal from "./energy-systems/ServiceModal.vue";
+const ServiceModal = defineAsyncComponent(() => import("./energy-systems/ServiceModal.vue"));
 import ServicesCarousel from "./energy-systems/ServicesCarousel.vue";
 
 export default {
@@ -379,6 +386,8 @@ export default {
           title: "Архивный сертификат: система менеджмента качества",
           issuer: "Орган по сертификации ООО «Бизнес Эксперт»",
           image: '/img/certificate/certificate-1.jpg',
+          imageWidth: 634,
+          imageHeight: 895,
           thumbnail: '/img/certificate/certificate-1-preview.webp',
           thumbnailWidth: 602,
           thumbnailHeight: 850,
@@ -388,6 +397,8 @@ export default {
           title: "Архивный сертификат: система экологического менеджмента",
           issuer: "Орган по сертификации ООО «Бизнес Эксперт»",
           image: '/img/certificate/certificate-2.jpg',
+          imageWidth: 631,
+          imageHeight: 893,
           thumbnail: '/img/certificate/certificate-2-preview.webp',
           thumbnailWidth: 601,
           thumbnailHeight: 850,
@@ -397,6 +408,8 @@ export default {
           title: "Архивный сертификат: система менеджмента охраны здоровья и безопасности труда",
           issuer: "Орган по сертификации ООО «Бизнес Эксперт»",
           image: '/img/certificate/certificate-3.jpg',
+          imageWidth: 633,
+          imageHeight: 894,
           thumbnail: '/img/certificate/certificate-3-preview.webp',
           thumbnailWidth: 602,
           thumbnailHeight: 850,
@@ -406,6 +419,8 @@ export default {
           title: "Благодарность за оперативное восстановление электроснабжения",
           issuer: "ПАО «Россети Московский регион»",
           image: '/img/1234.jpg',
+          imageWidth: 1700,
+          imageHeight: 2338,
           thumbnail: '/img/1234-preview.webp',
           thumbnailWidth: 618,
           thumbnailHeight: 850,
@@ -422,35 +437,25 @@ export default {
         { key: "certificates", label: "Документы" },
         { key: "contact", label: "Контакты" },
       ],
+      serviceModalRequested: false,
       showServiceModal: false,
       modalService: null,
+      contactModalRequested: false,
       showContactModal: false,
       contactModalServiceId: null,
       showScrollTop: false,
-      scrollSmoother: null,
     };
   },
   mounted() {
     window.addEventListener("scroll", this.onWindowScroll, { passive: true });
-    window.addEventListener("resize", this.handleResize, { passive: true });
-    // Небольшая задержка для гарантии готовности DOM
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.initScrollSmoother();
-      }, 100);
-    });
+    this.onWindowScroll();
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.onWindowScroll);
-    window.removeEventListener("resize", this.handleResize);
-    // Уничтожаем ScrollSmoother
-    if (this.scrollSmoother) {
-      this.scrollSmoother.kill();
-      this.scrollSmoother = null;
-    }
   },
   methods: {
     openServiceModal(service) {
+      this.serviceModalRequested = true;
       this.modalService = service;
       this.showServiceModal = true;
     },
@@ -459,6 +464,7 @@ export default {
       this.modalService = null;
     },
     openContactModal() {
+      this.contactModalRequested = true;
       this.contactModalServiceId = null;
       this.showContactModal = true;
     },
@@ -467,6 +473,7 @@ export default {
       this.contactModalServiceId = null;
     },
     handleServiceModalContact(service) {
+      this.contactModalRequested = true;
       // Закрываем модалку услуги перед открытием контактной модалки
       this.closeServiceModal();
       // Устанавливаем выбранную услугу и открываем контактную модалку
@@ -474,27 +481,6 @@ export default {
       this.showContactModal = true;
     },
     scrollToSection(key) {
-      const gsap = this.$gsap;
-      const ScrollTrigger = this.$ScrollTrigger;
-
-      if (!gsap || !ScrollTrigger) {
-        // Fallback на нативный скролл, если GSAP недоступен
-        const map = {
-          hero: this.$refs.heroSection?.$el,
-          services: this.$refs.servicesSection?.$el,
-          about: this.$refs.aboutSection?.$el,
-          projects: this.$refs.projectsSection?.$el,
-          clients: this.$refs.clientsSection?.$el,
-          certificates: this.$refs.certificatesSection?.$el,
-          contact: this.$refs.contactSection?.$el,
-        };
-        const target = map[key];
-        if (target && target.scrollIntoView) {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-        return;
-      }
-
       const map = {
         hero: this.$refs.heroSection?.$el,
         services: this.$refs.servicesSection?.$el,
@@ -504,115 +490,14 @@ export default {
         certificates: this.$refs.certificatesSection?.$el,
         contact: this.$refs.contactSection?.$el,
       };
-
-      const target = map[key];
-      if (!target) return;
-
-      // Используем GSAP ScrollTo для плавного скролла
-      const targetY = target.getBoundingClientRect().top + window.pageYOffset;
-
-      // Если используется ScrollSmoother, используем его метод скролла
-      if (this.scrollSmoother) {
-        gsap.to(this.scrollSmoother, {
-          duration: 1.2,
-          scrollTop: targetY,
-          ease: "power2.inOut",
-          onComplete: () => {
-            // Обновляем ScrollTrigger после завершения скролла
-            ScrollTrigger.refresh();
-            // Обновляем ScrollTrigger в дочерних компонентах
-            if (
-              this.$refs.aboutSection &&
-              this.$refs.aboutSection.refreshScrollTrigger
-            ) {
-              this.$refs.aboutSection.refreshScrollTrigger();
-            }
-          },
-        });
-      } else {
-        // Обычный скролл через GSAP ScrollTo
-        gsap.to(window, {
-          duration: 1.2,
-          scrollTo: {
-            y: targetY,
-            offsetY: 0,
-          },
-          ease: "power2.inOut",
-          onComplete: () => {
-            // Обновляем ScrollTrigger после завершения скролла
-            ScrollTrigger.refresh();
-            // Обновляем ScrollTrigger в дочерних компонентах
-            if (
-              this.$refs.aboutSection &&
-              this.$refs.aboutSection.refreshScrollTrigger
-            ) {
-              this.$refs.aboutSection.refreshScrollTrigger();
-            }
-          },
-        });
-      }
+      scrollToPageSection(map[key], this.$el.querySelector('.main-nav'));
+    },
+    skipToContent() {
+      this.$refs.mainContent?.focus({ preventScroll: true });
+      scrollToPageSection(this.$refs.mainContent, this.$el.querySelector('.main-nav'));
     },
     onWindowScroll() {
       this.showScrollTop = window.scrollY > 400;
-    },
-    handleResize() {
-      // Переинициализируем ScrollSmoother при изменении размера окна
-      if (this.scrollSmoother) {
-        const isMobile = window.innerWidth <= 992;
-        if (isMobile && this.scrollSmoother) {
-          this.scrollSmoother.kill();
-          this.scrollSmoother = null;
-        } else if (!isMobile && !this.scrollSmoother) {
-          this.initScrollSmoother();
-        } else if (this.scrollSmoother) {
-          this.scrollSmoother.refresh();
-        }
-      }
-    },
-    initScrollSmoother() {
-      // Проверяем, не мобильное ли устройство (отключаем на мобильных для производительности)
-      const isMobile = window.innerWidth <= 992;
-      if (isMobile) return;
-
-      // Если ScrollSmoother уже создан, не создаем повторно
-      if (this.scrollSmoother) return;
-
-      const ScrollSmoother = this.$ScrollSmoother;
-      const ScrollTrigger = this.$ScrollTrigger;
-      const gsap = this.$gsap;
-
-      if (!ScrollSmoother || !ScrollTrigger || !gsap) return;
-
-      // Проверяем наличие необходимых элементов в DOM
-      const wrapper = document.querySelector("#app");
-      const content = document.querySelector(".energy-systems");
-      if (!wrapper || !content) {
-        console.warn("ScrollSmoother: необходимые элементы не найдены в DOM");
-        return;
-      }
-
-      // Инициализируем ScrollSmoother
-      this.scrollSmoother = ScrollSmoother.create({
-        wrapper: "#app",
-        content: ".energy-systems",
-        smooth: 1.5,
-        effects: true,
-        smoothTouch: 0.1,
-        normalizeScroll: true,
-      });
-
-      // Применяем эффект data-speed для элементов с параллаксом
-      this.$nextTick(() => {
-        const speedElements = document.querySelectorAll("[data-speed]");
-        speedElements.forEach((el) => {
-          const speed = parseFloat(el.getAttribute("data-speed")) || 1;
-
-          // Используем ScrollSmoother effects для параллакса
-          this.scrollSmoother.effects(el, {
-            speed: speed,
-          });
-        });
-      });
     },
   },
 };
@@ -643,4 +528,16 @@ export default {
 .main {
   padding: 40px 0;
 }
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 18px;
+  border-radius: 8px;
+  color: #fff;
+  background: #102234;
+  text-decoration: none;
+}
+.skip-link:focus { top: 12px; outline: 3px solid #f7aa33; }
 </style>

@@ -1,24 +1,25 @@
 <template>
-  <section class="certificates-section" ref="certificatesSection">
+  <section id="certificates" class="certificates-section" ref="certificatesSection">
     <div class="section-heading compact" ref="headingRef">
       <p class="section-kicker">Документы</p>
       <h2>Сертификаты и благодарности</h2>
       <p>Архивные сертификаты и благодарственные письма</p>
     </div>
     <div class="certificates-grid">
-      <div
+      <a
         v-for="(certificate, index) in certificates"
         :key="certificate.id"
-        :ref="el => setCardRef(el, index)"
+        :href="certificate.image"
+        target="_blank"
+        rel="noopener"
+        @click.prevent="openDocument(index)"
         class="certificate-card"
       >
         <div class="certificate-image">
           <img
             class="certificate-preview"
-            :src="certificate.thumbnail || certificate.image"
+            v-bind="imageAttrs(certificate.thumbnail || certificate.image, { sizes: '(max-width: 560px) 100vw, (max-width: 1023px) 50vw, 25vw', width: 640 })"
             alt=""
-            :width="certificate.thumbnailWidth"
-            :height="certificate.thumbnailHeight"
             loading="lazy"
             decoding="async"
           />
@@ -29,141 +30,71 @@
             </div>
           </div>
         </div>
-      </div>
+      </a>
     </div>
+    <p v-if="failedDocument" class="document-error" role="alert">
+      Не получилось открыть просмотр. <a :href="failedDocument.image" target="_blank" rel="noopener">Открыть документ отдельной вкладкой</a>
+    </p>
   </section>
 </template>
 
-<script>
-export default {
-  name: 'CertificatesSection',
-  props: {
-    certificates: {
-      type: Array,
-      required: true
-    }
-  },
-  data() {
-    return {
-      cardRefs: [],
-      scrollTriggers: [],
-    };
-  },
-  mounted() {
-    this.initScrollTriggers();
-    window.addEventListener("resize", this.handleResize, { passive: true });
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-    if (this.scrollTriggers) {
-      this.scrollTriggers.forEach((st) => st.kill());
-      this.scrollTriggers = [];
-    }
-  },
-  methods: {
-    setCardRef(el, index) {
-      if (el) {
-        this.cardRefs[index] = el;
-      }
-    },
-    initScrollTriggers() {
-      this.$nextTick(() => {
-        const gsap = this.$gsap;
-        const ScrollTrigger = this.$ScrollTrigger;
+<script setup>
+import { revealOnVisible } from '~/utils/revealOnVisible.js'
+import { imageAttrs } from '~/utils/responsiveImage.js'
+import '~/assets/styles/progressive-reveal.css'
 
-        if (!gsap || !ScrollTrigger) return;
+const props = defineProps({ certificates: { type: Array, required: true } })
+const certificatesSection = ref(null)
+const failedDocument = ref(null)
+let lightbox, lightboxPromise, stopReveals, disposed = false, openRequest = 0
 
-        const isMobile = window.innerWidth <= 992;
-
-        // Очищаем предыдущие триггеры
-        if (this.scrollTriggers.length > 0) {
-          this.scrollTriggers.forEach((st) => st.kill());
-          this.scrollTriggers = [];
-        }
-
-        // Анимация для заголовка секции
-        if (this.$refs.headingRef) {
-          const headingAnim = gsap.fromTo(
-            this.$refs.headingRef,
-            {
-              opacity: 0,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.2,
-              ease: "none",
-              scrollTrigger: {
-                trigger: this.$refs.headingRef,
-                start: "top 85%",
-                toggleActions: "play reverse play reverse",
-              },
-            }
-          );
-          if (headingAnim.scrollTrigger) {
-            this.scrollTriggers.push(headingAnim.scrollTrigger);
-          }
-        }
-
-        // Анимации для карточек сертификатов
-        this.cardRefs.forEach((card, index) => {
-          if (!card) return;
-
-          const xOffset = isMobile ? 30 : 50;
-          const yOffset = isMobile ? 20 : 30;
-          
-          // Чередуем направления для визуального интереса
-          const direction = index % 2 === 0 ? -1 : 1;
-          
-          const cardAnim = gsap.fromTo(
-            card,
-            {
-              opacity: 0,
-              x: xOffset * direction,
-              y: yOffset,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              y: 0,
-              duration: 0.2,
-              ease: "none",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 85%",
-                toggleActions: "play reverse play reverse",
-              },
-            }
-          );
-
-          if (cardAnim.scrollTrigger) {
-            this.scrollTriggers.push(cardAnim.scrollTrigger);
-          }
-        });
-
-        // Обновляем ScrollTrigger после создания всех анимаций
-        this.refreshScrollTrigger();
-      });
-    },
-    refreshScrollTrigger() {
-      const ScrollTrigger = this.$ScrollTrigger;
-      if (ScrollTrigger) {
-        setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100);
-      }
-    },
-    handleResize() {
-      // При изменении размера пересоздаем анимации
-      if (this.scrollTriggers.length > 0) {
-        this.scrollTriggers.forEach((st) => st.kill());
-        this.scrollTriggers = [];
-      }
-      this.initScrollTriggers();
-    },
-  },
+const slides = computed(() => props.certificates.map(document => ({
+  src: document.image,
+  msrc: document.thumbnail || document.image,
+  width: document.imageWidth,
+  height: document.imageHeight,
+  alt: `${document.title}. ${document.issuer}`,
+})))
+async function ensureLightbox() {
+  if (lightbox) return lightbox
+  if (!lightboxPromise) {
+    lightboxPromise = Promise.all([
+      import('photoswipe/lightbox'),
+      import('photoswipe/style.css'),
+    ]).then(([{ default: PhotoSwipeLightbox }]) => {
+      if (disposed) return null
+      lightbox = new PhotoSwipeLightbox({
+        pswpModule: () => import('photoswipe'),
+        mainClass: 'pswp--documents',
+        initialZoomLevel: 'fit',
+        secondaryZoomLevel: 2,
+        maxZoomLevel: 4,
+        imageClickAction: 'zoom',
+        tapAction: 'toggle-controls',
+        preload: [0, 0],
+        showHideAnimationType: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'none' : 'fade',
+        closeTitle: 'Закрыть', zoomTitle: 'Увеличить документ',
+        arrowPrevTitle: 'Предыдущий документ', arrowNextTitle: 'Следующий документ',
+        errorMsg: 'Не удалось загрузить документ',
+      })
+      lightbox.init()
+      return lightbox
+    }).catch(error => { lightboxPromise = null; throw error })
+  }
+  return lightboxPromise
 }
+async function openDocument(index) {
+  const request = ++openRequest
+  failedDocument.value = null
+  try {
+    const viewer = await ensureLightbox()
+    if (!disposed && viewer && request === openRequest) viewer.loadAndOpen(index, slides.value)
+  } catch {
+    if (!disposed && request === openRequest) failedDocument.value = props.certificates[index]
+  }
+}
+onMounted(() => { stopReveals = revealOnVisible(certificatesSection.value, '.section-heading, .certificate-card') })
+onBeforeUnmount(() => { disposed = true; stopReveals?.(); lightbox?.destroy() })
 </script>
 
 <style scoped>
@@ -185,7 +116,7 @@ export default {
 .section-kicker {
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #ff4800;
+  color: #c94218;
   font-size: 12px;
   margin-bottom: 12px;
 }
@@ -210,6 +141,9 @@ export default {
 }
 
 .certificate-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
   background: #fff;
   border: 1px solid rgba(216, 228, 237, 0.9);
   border-radius: 8px;
@@ -217,8 +151,12 @@ export default {
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  will-change: transform, opacity;
 }
+
+.certificate-card:focus-visible { outline: 3px solid #175f8f; outline-offset: 4px; }
+
+.document-error { margin-top: 16px; color: #8b2716; }
+.document-error a { color: inherit; text-decoration: underline; }
 
 .certificate-card:hover {
   transform: translateY(-5px);

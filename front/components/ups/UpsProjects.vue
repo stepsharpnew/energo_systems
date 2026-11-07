@@ -9,19 +9,19 @@
 
     <div class="cases">
       <ul class="ctabs" @mouseenter="paused = true" @mouseleave="paused = false" role="tablist" aria-label="Расчётные сценарии">
-        <li><button class="ctab" :class="{ 'is-active': current === 0 }" type="button" role="tab" :aria-selected="current === 0" data-case="0" @click="select(0)">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': current === 0 }" type="button" role="tab" :aria-selected="current === 0" data-case="0" @click="select(0)">
           <span class="ctab__place">Частный дом</span>
           <b>Тепло, вода и связь</b>
           <span class="ctab__spec">15 кВт · 20,48 кВт·ч</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': current === 1 }" type="button" role="tab" :aria-selected="current === 1" data-case="1" @click="select(1)">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': current === 1 }" type="button" role="tab" :aria-selected="current === 1" data-case="1" @click="select(1)">
           <span class="ctab__place">Дом с постройками</span>
           <b>Больше нагрузок и ДГУ</b>
           <span class="ctab__spec">30 кВт · 40,96 кВт·ч · ДГУ 32 кВт</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': current === 2 }" type="button" role="tab" :aria-selected="current === 2" data-case="2" @click="select(2)">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': current === 2 }" type="button" role="tab" :aria-selected="current === 2" data-case="2" @click="select(2)">
           <span class="ctab__place">Коттеджный посёлок</span>
           <b>Общая инфраструктура</b>
           <span class="ctab__spec">40 кВт · 61,44 кВт·ч · ДГУ 64 кВт</span>
@@ -30,7 +30,7 @@
       </ul>
       <div class="cstage" @mouseenter="paused = true" @mouseleave="paused = false" data-cstage>
         <article class="case" :class="{ 'is-active': current === 0, 'is-prev': previous === 0 }" data-case-view="0" :aria-hidden="current !== 0">
-          <img src="/ups/example-home.webp" alt="Резервное питание инженерных систем дома: инвертор, аккумуляторы и щит в техническом помещении" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/ups/example-home.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Резервное питание инженерных систем дома: инвертор, аккумуляторы и щит в техническом помещении" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place"><span class="ex__tag">Расчётный сценарий</span> Критические нагрузки дома</p>
@@ -46,7 +46,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': current === 1, 'is-prev': previous === 1 }" data-case-view="1" :aria-hidden="current !== 1">
-          <img src="/ups/example-estate.webp" alt="Резервное питание дома с постройками: инверторы, аккумуляторный шкаф и щит в гараже" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/ups/example-estate.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Резервное питание дома с постройками: инверторы, аккумуляторный шкаф и щит в гараже" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place"><span class="ex__tag">Расчётный сценарий</span> Дом с постройками и ДГУ</p>
@@ -62,7 +62,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': current === 2, 'is-prev': previous === 2 }" data-case-view="2" :aria-hidden="current !== 2">
-          <img src="/ups/example-village.webp" alt="Дизельная генераторная установка у дома: резерв общих сетей посёлка" width="1100" height="520" loading="lazy">
+          <img v-bind="imageAttrs('/ups/example-village.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная генераторная установка у дома: резерв общих сетей посёлка" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place"><span class="ex__tag">Расчётный сценарий</span> Общие сети коттеджного посёлка</p>
@@ -105,6 +105,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { useUpsVisibility } from '~/composables/useUpsVisibility.js'
 const section = ref(null)
 const current = ref(0)

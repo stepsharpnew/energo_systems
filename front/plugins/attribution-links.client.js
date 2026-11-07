@@ -1,6 +1,9 @@
-import { withAttributionUrl } from '~/utils/attribution'
+import { getLeadAttribution, withAttributionUrl } from '~/utils/attribution'
 
 export default defineNuxtPlugin((nuxtApp) => {
+  // Capture campaigns independently of whether a lazily loaded form is opened.
+  getLeadAttribution()
+  nuxtApp.$router.afterEach(() => getLeadAttribution())
   const decorated = new WeakMap()
   const decorateLink = (event) => {
     const link = event.target instanceof Element ? event.target.closest('a[href]') : null

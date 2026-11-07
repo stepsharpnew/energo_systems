@@ -4,3 +4,10 @@ html.service-landing-document body,
 html.service-landing-document #__nuxt {
   overflow-x: clip;
 }
+
+.landing-skip-link {
+  position: fixed; top: -100px; left: 16px; z-index: 1000;
+  padding: 12px 18px; border-radius: 8px;
+  background: #142233; color: #fff; font-weight: 700;
+}
+.landing-skip-link:focus { top: 12px; outline: 3px solid #f7aa33; outline-offset: 3px; }

@@ -1,16 +1,29 @@
-import vuetify from 'vite-plugin-vuetify'
 import { fileURLToPath } from 'node:url'
+import { METRIKA_BOOTSTRAP } from './lib/browser/analytics.js'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-07-17',
   telemetry: false,
+  // Route styles are cached independently instead of repeated in every HTML.
+  features: { inlineStyles: false },
+  experimental: {
+    defaults: { nuxtLink: { prefetchOn: { visibility: false, interaction: true } } }
+  },
+  hooks: {
+    'build:manifest'(manifest) {
+      // Async dialogs should load when opened. Keep current-route preloads,
+      // while NuxtLink handles neighboring routes on hover or keyboard focus.
+      for (const resource of Object.values(manifest)) resource.prefetch = false
+    }
+  },
   
   devtools: { enabled: true },
   
   // Настройка приложения
   app: {
     head: {
+      htmlAttrs: { lang: 'ru' },
       title: 'Энергосистемы',
       meta: [
         { charset: 'utf-8' },
@@ -26,10 +39,7 @@ export default defineNuxtConfig({
       script: [
         {
           type: 'text/javascript',
-          innerHTML: `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrackBounce:true});`
+          innerHTML: METRIKA_BOOTSTRAP
         }
       ],
       noscript: [
@@ -92,35 +102,24 @@ ym(110919120, "init", {defer:true, clickmap:true, trackLinks:true, accurateTrack
 
   // Включение CSS
   css: [
-    'vuetify/styles',
+    '~/assets/styles/site-base.css',
     '~/public/styles/callback-preferences.css'
-  ],
-
-  // Настройка сборки
-  build: {
-    transpile: ['vuetify']
-  },
-
-  // Конфигурация модулей
-  modules: [
-    async (options, nuxt) => {
-      nuxt.hooks.hook('vite:extendConfig', (config) => {
-        config.plugins?.push(vuetify({
-          styles: {
-            configFile: fileURLToPath(new URL('./assets/styles/vuetify-settings.scss', import.meta.url))
-          }
-        }))
-      })
-    }
   ],
 
   // Настройка Vite
   vite: {
-    optimizeDeps: {
-      exclude: ['gsap']
+    build: {
+      rollupOptions: {
+        output: {
+          // Keep the shared lock out of the page chunk imported by its lazy
+          // dialog. A circular page chunk loses its SSR CSS manifest entry.
+          manualChunks(id) {
+            if (id.endsWith('/utils/dguDialogLock.js')) return 'dgu-dialog-lock'
+          }
+        }
+      }
     },
     ssr: {
-      noExternal: ['vuetify'],
       resolve: {
         conditions: ['node']
       }

@@ -1,5 +1,6 @@
 <template>
   <div class="legal-page">
+    <a class="legal-skip" href="#legal-main">Перейти к содержанию</a>
     <header class="legal-header">
       <NuxtLink class="legal-brand" to="/" aria-label="Вернуться на главную">
         <img src="/img/image.png" alt="Энергосистемы" width="260" height="50">
@@ -7,7 +8,7 @@
       <NuxtLink class="legal-back" to="/">На главную</NuxtLink>
     </header>
 
-    <main class="legal-main">
+    <main id="legal-main" class="legal-main" tabindex="-1">
       <article class="legal-document">
         <p class="legal-kicker">Правовая информация</p>
         <h1>{{ title }}</h1>
@@ -43,6 +44,8 @@ const currentYear = new Date().getFullYear();
 </script>
 
 <style>
+.legal-skip { position: fixed; top: -100px; left: 16px; z-index: 10010; padding: 12px 18px; border-radius: 8px; background: #102234; color: #fff; font-weight: 700; }
+.legal-skip:focus { top: 12px; outline: 3px solid #f7aa33; }
 .legal-page {
   min-height: 100vh;
   background: #f4f7fa;

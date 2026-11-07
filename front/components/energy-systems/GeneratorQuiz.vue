@@ -22,7 +22,7 @@
           </div>
 
           <div v-if="submitState === 'success'" class="quiz-success" role="status">
-            <VIcon :icon="icons.success" size="36" aria-hidden="true" />
+            <SiteIcon name="success" size="36" aria-hidden="true" />
             <h3 ref="stepHeading" tabindex="-1">Заявка отправлена</h3>
             <p>Спасибо! Инженер получит ваши ответы и свяжется с вами по указанному телефону для подбора генератора.</p>
             <button class="quiz-primary" type="button" @click="startAgain">Пройти заново</button>
@@ -49,7 +49,7 @@
                     @change="selectOption(option.id, $event.target.checked)"
                   >
                   <span class="option-mark" :class="{ 'radio-mark': !activeQuestion.multiple }" aria-hidden="true">
-                    <VIcon v-if="isSelected(option.id)" :icon="icons.complete" size="16" />
+                    <SiteIcon v-if="isSelected(option.id)" name="complete" size="16" />
                   </span>
                   <span>{{ option.label }}</span>
                 </label>
@@ -132,16 +132,16 @@
               <p class="quiz-counter" aria-live="polite" aria-atomic="true">Шаг: <strong>{{ currentStep + 1 }}</strong>/{{ totalSteps }}</p>
               <div class="quiz-buttons">
                 <button v-if="currentStep > 0" class="quiz-back" type="button" :disabled="isSubmitting" @click="changeStep(-1)">
-                  <VIcon :icon="icons.arrowleft" size="18" aria-hidden="true" />
+                  <SiteIcon name="arrowleft" size="18" aria-hidden="true" />
                   <span>Назад</span>
                 </button>
                 <button v-if="!isContactStep" class="quiz-primary" type="button" :disabled="!canContinue" @click="changeStep(1)">
                   Далее
-                  <VIcon :icon="icons.arrowright" size="20" aria-hidden="true" />
+                  <SiteIcon name="arrowright" size="20" aria-hidden="true" />
                 </button>
                 <button v-else class="quiz-primary" type="submit" :disabled="isSubmitting">
                   {{ isSubmitting ? 'Отправляем…' : 'Получить подбор' }}
-                  <VIcon v-if="!isSubmitting" :icon="icons.arrowright" size="20" aria-hidden="true" />
+                  <SiteIcon v-if="!isSubmitting" name="arrowright" size="20" aria-hidden="true" />
                 </button>
               </div>
             </footer>
@@ -153,7 +153,7 @@
 </template>
 
 <script setup>
-import { aliases as icons } from 'vuetify/iconsets/mdi-svg'
+import SiteIcon from '~/components/SiteIcon.vue'
 import { useGeneratorQuiz } from '~/composables/useGeneratorQuiz'
 import { handlePhoneInput, handlePhoneKeydown } from '~/utils/phoneFormatter'
 
@@ -407,7 +407,7 @@ function startAgain() {
 .quiz-error { margin-top: 16px; padding: 14px; border: 1px solid var(--quiz-error-line); border-radius: 10px; background: var(--quiz-error-surface); color: var(--quiz-error-ink); font-size: 13px; line-height: 1.5; }
 .quiz-error p { margin: 0 0 8px; }
 .quiz-success { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 36px; }
-.quiz-success > .v-icon { color: var(--quiz-eyebrow); }
+.quiz-success > .site-icon { color: var(--quiz-eyebrow); }
 .quiz-success p { max-width: 560px; margin: 0; color: var(--quiz-muted); font-size: 15px; line-height: 1.6; }
 
 .generator-quiz--embedded {

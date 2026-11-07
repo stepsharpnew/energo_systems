@@ -5,14 +5,14 @@
       class="modal-overlay"
       @click.self="$emit('close')"
     >
-      <div class="modal-window">
-        <button class="modal-close" type="button" @click="$emit('close')">
+      <div ref="dialogPanel" class="modal-window" role="dialog" aria-modal="true" aria-labelledby="service-modal-title" tabindex="-1">
+        <button class="modal-close" type="button" aria-label="Закрыть описание услуги" @click="$emit('close')">
           ×
         </button>
         <div class="modal-body service-modal">
           <div class="modal-info">
             <p class="section-kicker">Услуга</p>
-            <h2>{{ service.name }}</h2>
+            <h2 id="service-modal-title" ref="dialogTitle" tabindex="-1">{{ service.name }}</h2>
             <p>{{ service.details }}</p>
           </div>
           <div class="modal-gallery">
@@ -21,13 +21,16 @@
               ref="carousel"
               @scroll.passive="onScroll"
             >
-              <div
+              <button
                 v-for="(frame, idx) in service.gallery"
                 :key="idx"
                 class="modal-carousel-card"
-                :style="{ backgroundImage: `url(${frame})` }"
+                type="button"
+                :aria-label="`Показать изображение ${idx + 1}`"
                 @click="handleCardClick(idx, $event)"
-              ></div>
+              >
+                <img v-bind="imageAttrs(frame, { sizes: '(max-width: 600px) 400px, 600px' })" alt="" loading="lazy" />
+              </button>
             </div>
             <div class="modal-carousel-dots" aria-label="Выбор изображения">
               <button
@@ -59,6 +62,9 @@
 </template>
 
 <script>
+import { ref, toRef } from "vue";
+import { useModalAccessibility } from "~/composables/useModalAccessibility.js";
+import { imageAttrs } from "~/utils/responsiveImage.js";
 export default {
   name: "ServiceModal",
   props: {
@@ -72,6 +78,11 @@ export default {
     },
   },
   emits: ["close", "open-contact-modal"],
+  setup(props, { emit }) {
+    const dialogPanel = ref(null), dialogTitle = ref(null);
+    useModalAccessibility(dialogPanel, toRef(props, "show"), () => emit("close"), { initialFocus: dialogTitle });
+    return { dialogPanel, dialogTitle, imageAttrs };
+  },
   data() {
     return {
       activeIndex: 0,
@@ -81,22 +92,14 @@ export default {
     show(newVal) {
       if (newVal) {
         this.activeIndex = 0;
-        // Блокируем скролл страницы
-        document.body.style.overflow = "hidden";
         this.$nextTick(() => {
           const carousel = this.$refs.carousel;
           if (carousel) {
             carousel.scrollLeft = 0;
           }
         });
-      } else {
-        // Разблокируем скролл страницы
-        document.body.style.overflow = "";
       }
     },
-  },
-  beforeUnmount() {
-    document.body.style.overflow = "";
   },
   methods: {
     handleCardClick(index, event) {
@@ -133,7 +136,7 @@ export default {
       const target = carousel.children[index];
       if (!target) return;
       target.scrollIntoView({
-        behavior: "smooth",
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
         inline: "center",
         block: "nearest",
       });
@@ -170,6 +173,7 @@ export default {
   z-index: 9999;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .modal-window {
@@ -242,16 +246,23 @@ export default {
 }
 
 .modal-carousel-card {
+  padding: 0;
+  overflow: hidden;
+  border: 0;
   flex: 0 0 clamp(400px, 70vw, 600px);
   height: clamp(280px, 42vh, 400px);
   border-radius: 24px;
   scroll-snap-align: center;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.modal-carousel-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .modal-carousel-card:hover {
@@ -345,7 +356,7 @@ export default {
 
 .order-button {
   padding: 14px 32px;
-  background: linear-gradient(135deg, #ff4800, #ff7a2f);
+  background: linear-gradient(135deg, #c94218, #b63812);
   border: none;
   border-radius: 16px;
   color: #fff;
@@ -400,6 +411,11 @@ export default {
   cursor: pointer;
   transition: background 0.3s ease;
 }
+
+.modal-close:focus-visible,
+.order-button:focus-visible,
+.details-button:focus-visible,
+.modal-carousel-card:focus-visible { outline: 2px solid #ff9a72; outline-offset: 3px; }
 
 .modal-close:hover {
   background: rgba(255, 255, 255, 0.35);

@@ -27,7 +27,8 @@
         type="button"
         @click="toggleMobileMenu"
         :aria-expanded="isMobileMenuOpen"
-        aria-label="Открыть меню"
+        aria-controls="mobile-navigation"
+        :aria-label="isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'"
       >
         <span class="hamburger-icon" aria-hidden="true">
           <span class="line" :class="{ active: isMobileMenuOpen }"></span>
@@ -42,7 +43,7 @@
           class="mobile-menu-overlay"
           @click="closeMobileMenu"
         >
-          <div class="mobile-menu" @click.stop>
+          <div id="mobile-navigation" ref="menuPanel" class="mobile-menu" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title" tabindex="-1" @click.stop>
             <button
               class="mobile-menu-close"
               type="button"
@@ -53,7 +54,7 @@
             </button>
 
             <div class="mobile-menu-header">
-              <span class="mobile-menu-title">Меню</span>
+              <span id="mobile-menu-title" ref="menuTitle" class="mobile-menu-title" tabindex="-1">Меню</span>
               <span class="mobile-menu-subtitle">Энергосистемы</span>
             </div>
 
@@ -86,6 +87,8 @@
 </template>
 
 <script>
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import { useModalAccessibility } from "~/composables/useModalAccessibility.js";
 export default {
   name: "Navigation",
   props: {
@@ -95,13 +98,18 @@ export default {
     },
   },
   emits: ["scroll-to"],
-  data() {
-    return {
-      isMobileMenuOpen: false,
-    };
-  },
-  beforeUnmount() {
-    document.body.style.overflow = "";
+  setup() {
+    const isMobileMenuOpen = ref(false), menuPanel = ref(null), menuTitle = ref(null);
+    useModalAccessibility(menuPanel, isMobileMenuOpen, () => { isMobileMenuOpen.value = false; }, { initialFocus: menuTitle });
+    let mobileLayout;
+    const closeOnDesktop = () => { if (!mobileLayout.matches) isMobileMenuOpen.value = false; };
+    onMounted(() => {
+      mobileLayout = window.matchMedia('(max-width: 992px)');
+      mobileLayout.addEventListener('change', closeOnDesktop);
+      closeOnDesktop();
+    });
+    onBeforeUnmount(() => mobileLayout?.removeEventListener('change', closeOnDesktop));
+    return { isMobileMenuOpen, menuPanel, menuTitle };
   },
   methods: {
     handleNavClick(key) {
@@ -110,11 +118,9 @@ export default {
     },
     toggleMobileMenu() {
       this.isMobileMenuOpen = !this.isMobileMenuOpen;
-      document.body.style.overflow = this.isMobileMenuOpen ? "hidden" : "";
     },
     closeMobileMenu() {
       this.isMobileMenuOpen = false;
-      document.body.style.overflow = "";
     },
   },
 };
@@ -181,13 +187,13 @@ export default {
 .nav-item.featured {
   color: #ffffff;
   border-color: rgba(240, 90, 40, 0.72);
-  background: #f05a28;
+  background: #c94218;
   box-shadow: 0 10px 20px rgba(240, 90, 40, 0.2);
 }
 
 .nav-item.featured:hover {
-  background: #d84618;
-  border-color: #d84618;
+  background: #b63812;
+  border-color: #b63812;
 }
 
 .nav-item:active {
@@ -343,14 +349,14 @@ export default {
 }
 
 .mobile-nav-item.featured {
-  background: #f05a28;
-  border-color: #f05a28;
+  background: #c94218;
+  border-color: #c94218;
   color: #ffffff;
 }
 
 .mobile-nav-item.featured:hover {
-  background: #d84618;
-  border-color: #d84618;
+  background: #b63812;
+  border-color: #b63812;
   color: #ffffff;
 }
 

@@ -2,7 +2,7 @@
 <header class="header" :class="{ 'is-scrolled': scrolled }" data-header>
   <div class="header__inner">
     <a class="logo" href="#top" aria-label="Энергосистемы — на главную">
-      <img src="/ups/logo.png" alt="Энергосистемы — эксперты в сфере энергетики" width="258" height="58">
+      <img v-bind="imageAttrs('/ups/logo.png', { sizes: '258px', width: 480 })" alt="Энергосистемы — эксперты в сфере энергетики">
     </a>
 
     <!-- пункты ведут к блокам, которые появятся по одному; пока якоря без цели -->
@@ -67,6 +67,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 const props = defineProps({ workingHours: Boolean, scrolled: Boolean })
 const launchCallback = inject('upsCallback')
 const moreOpen = ref(false)

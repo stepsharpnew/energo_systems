@@ -12,7 +12,7 @@
         </p>
       </div>
       <div class="footer-column">
-        <h4>Контакты</h4>
+        <h3>Контакты</h3>
         <ul>
           <li>
             <PhoneLink class="contact-link" />
@@ -30,14 +30,14 @@
         </ul>
       </div>
       <div class="footer-column">
-        <h4>Режим работы</h4>
+        <h3>Режим работы</h3>
         <ul>
           <li>Пн-Пт: 09:00 – 18:00</li>
         </ul>
         <p class="founder">Дмитрий Чернявский - учредитель компании</p>
       </div>
       <div class="footer-column">
-        <h4>Правовая информация</h4>
+        <h3>Правовая информация</h3>
         <ul>
           <li><NuxtLink class="contact-link" to="/requisites">Реквизиты</NuxtLink></li>
           <li><NuxtLink class="contact-link" to="/privacy">Политика обработки персональных данных</NuxtLink></li>
@@ -48,7 +48,7 @@
 
     <section class="footer-maps" aria-labelledby="footer-maps-title">
       <div class="footer-maps-heading">
-        <h4 id="footer-maps-title">Офис на карте</h4>
+        <h3 id="footer-maps-title">Офис на карте</h3>
       </div>
       <div class="footer-map-layout">
         <div class="map-card">
@@ -144,7 +144,7 @@ export default {
   text-transform: uppercase;
 }
 
-.footer-column h4 {
+.footer-column h3 {
   margin: 0 0 clamp(8px, 1vw, 12px) 0;
   font-size: clamp(16px, 2vw, 18px);
   font-weight: 700;
@@ -153,7 +153,7 @@ export default {
   padding-bottom: 8px;
 }
 
-.footer-column h4::after {
+.footer-column h3::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -231,7 +231,7 @@ export default {
   margin-bottom: 16px;
 }
 
-.footer-maps-heading h4 {
+.footer-maps-heading h3 {
   margin: 0;
   color: #fff;
   font-size: clamp(16px, 2vw, 18px);

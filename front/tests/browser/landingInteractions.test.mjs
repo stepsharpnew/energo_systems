@@ -45,6 +45,36 @@ async function navigateInApp(page, base, path) {
   await page.locator('[data-quiz]').waitFor()
 }
 
+async function assertLazyCallback(page) {
+  assert.equal(await page.locator('[data-modal]').count(), 0, 'closed callback markup must not be eagerly rendered')
+  await page.keyboard.press('Tab')
+  const skip = page.locator('.landing-skip-link')
+  assert.equal(await skip.evaluate(element => element === document.activeElement), true)
+  await page.keyboard.press('Enter')
+  assert.equal(await page.locator('main').evaluate(element => element === document.activeElement), true)
+  const opener = page.locator('[data-callback-open]').first()
+  await opener.click()
+  const dialog = page.locator('[data-modal]')
+  await dialog.waitFor({ state: 'visible' })
+  assert.equal(await dialog.evaluate(element => element.open), true, 'first populated request must open after async mount')
+  const form = dialog.locator('[data-modal-form]')
+  await form.locator('[name=name]').fill('Сохранённое имя')
+  await form.locator('[name=phone]').fill('79990000000')
+  await form.locator('[name=callbackTimeSlot]').selectOption('12:00–15:00')
+  await page.keyboard.press('Escape')
+  await dialog.waitFor({ state: 'hidden' })
+  await assertBodyLocked(page, false)
+  assert.equal(await opener.evaluate(element => element === document.activeElement), true, 'closing must restore the original CTA focus')
+  assert.equal(await dialog.count(), 1, 'the dialog stays mounted after first use')
+  await opener.click()
+  await dialog.waitFor({ state: 'visible' })
+  assert.equal(await form.locator('[name=name]').inputValue(), 'Сохранённое имя')
+  assert.equal(await form.locator('[name=phone]').inputValue(), '+7 (999) 000-00-00')
+  assert.equal(await form.locator('[name=callbackTimeSlot]').inputValue(), '12:00–15:00')
+  await page.keyboard.press('Escape')
+  await dialog.waitFor({ state: 'hidden' })
+}
+
 test('Vue landings preserve dependent answers, interactive sections and SPA cleanup', async t => {
   const server = createServer(async (req, res) => {
     // Even an unexpected request cannot reach the live lead API.
@@ -70,6 +100,8 @@ test('Vue landings preserve dependent answers, interactive sections and SPA clea
   try {
     browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined, headless: true })
     const scenarios = [
+      ['UPS callback loads on first use, keeps fields and restores focus', '/services/ups', assertLazyCallback],
+      ['DGU callback loads on first use, keeps fields and restores focus', '/services/dgu', assertLazyCallback],
       ['DGU clears incompatible objects and keeps custom power exclusive', '/services/dgu', async page => {
         await assertStickyHeader(page)
         const next = page.locator('[data-quiz-next]')

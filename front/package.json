@@ -13,14 +13,11 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
-    "gsap": "^3.13.0",
     "nuxt": "^3.17.7",
-    "photoswipe": "^5.4.4",
-    "vuetify": "^3.6.0"
+    "photoswipe": "^5.4.4"
   },
   "devDependencies": {
     "playwright": "^1.64.1",
-    "sass": "^1.60.0",
-    "vite-plugin-vuetify": "^2.0.2"
+    "sass": "^1.60.0"
   }
 }

@@ -150,8 +150,8 @@
         </form>
       </div>
 
-      <aside class="quiz__side">
-        <img decoding="async" class="manager__photo" src="/dgu/images/f53ba8b923820694.jpg" alt="Михаил, инженер по резервному питанию" width="300" height="300">
+      <div class="quiz__side">
+        <img class="manager__photo" v-bind="imageAttrs('/dgu/images/f53ba8b923820694.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Михаил, инженер по резервному питанию" loading="lazy">
         
         <div class="manager__bubble" aria-live="polite">
           <b>Михаил</b>
@@ -167,13 +167,14 @@
             <span>или напишите в мессенджер</span>
           </div>
         </div>
-      </aside>
+      </div>
     </div>
   </div>
 </section>
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
 import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
 const fields = reactive({ direction: '', object: '', loads: [], power: '', kw: '', autonomy: '', name: '', phone: '', channel: '', when: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })

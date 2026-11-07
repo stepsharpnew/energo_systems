@@ -234,3 +234,9 @@
 .dgu .track__btn.is-active { color: var(--text); }
 .dgu .track__btn.is-active .track__dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 6px rgba(242, 169, 59, .22); }
 .dgu .process__cta { margin-top: 64px; display: flex; justify-content: center; }
+
+.dgu .step__trigger {
+  grid-column: 1 / -1; display: grid; grid-template-columns: inherit; gap: inherit;
+  width: 100%; min-width: 0; padding: 0; border: 0; color: inherit;
+  background: transparent; font: inherit; text-align: left; cursor: pointer;
+}

@@ -119,8 +119,8 @@
         </form>
       </div>
 
-      <aside class="quiz__side">
-        <img class="manager__photo" src="/ups/engineer.jpg" alt="Михаил, инженер-проектировщик" width="300" height="300">
+      <div class="quiz__side">
+        <img class="manager__photo" v-bind="imageAttrs('/ups/engineer.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Михаил, инженер-проектировщик" loading="lazy">
         <!-- TODO: фото стоковое (placeholder), заменить на фото настоящего сотрудника; имя и должность подтвердить у заказчика -->
         <div class="manager__bubble" aria-live="polite">
           <b>Михаил</b>
@@ -136,13 +136,14 @@
             <span>или напишите в мессенджер</span>
           </div>
         </div>
-      </aside>
+      </div>
     </div>
   </div>
 </section>
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
 import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
 const form = reactive({ object: '', loads: [], power: '', kw: '', autonomy: '', name: '', phone: '', channel: '', when: '', consent: false, policy: false })

@@ -11,7 +11,47 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  frontend-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: front
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: front/package-lock.json
+      - name: Install test dependencies
+        run: |
+          npm ci --legacy-peer-deps --no-audit --no-fund
+          npm ci --prefix ../tg_bot --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Test and generate the static site
+        run: |
+          npm test
+          npm run generate
+          npm run test:forms
+      - name: Check nginx delivery
+        working-directory: .
+        run: |
+          docker run -d --rm --name energo-front-check -p 127.0.0.1:4173:5173 \
+            -v "$GITHUB_WORKSPACE/front/.output/public:/usr/share/nginx/html:ro" \
+            -v "$GITHUB_WORKSPACE/front/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
+            nginx:stable-alpine
+          for attempt in 1 2 3 4 5; do
+            if curl -fsS http://127.0.0.1:4173/ -o /dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/check-static-delivery.mjs http://127.0.0.1:4173
+      - name: Stop test nginx
+        if: always()
+        run: docker rm -f energo-front-check || true
+
   deploy:
+    needs: frontend-checks
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:

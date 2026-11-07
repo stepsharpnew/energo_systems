@@ -7,6 +7,35 @@ import { getLeadAttribution } from '../../utils/attribution.js'
 export function initHddPage() {
   var ac = new AbortController();
   var timers = [];
+  var timeouts = new Set();
+  var frames = new Set();
+  var observers = [];
+  var marqueeClones = [];
+  var cleanupTasks = [];
+
+  function listen(target, event, callback, options) {
+    target.addEventListener(event, callback, Object.assign({}, options, { signal: ac.signal }));
+  }
+  function later(callback, delay) {
+    var id = setTimeout(function () {
+      timeouts.delete(id);
+      if (!ac.signal.aborted) callback();
+    }, delay);
+    timeouts.add(id);
+    return id;
+  }
+  function cancelLater(id) {
+    clearTimeout(id);
+    timeouts.delete(id);
+  }
+  function frame(callback) {
+    var id = requestAnimationFrame(function () {
+      frames.delete(id);
+      if (!ac.signal.aborted) callback();
+    });
+    frames.add(id);
+    return id;
+  }
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Фоновое видео hero: если автоплей заблокирован — остаётся poster
@@ -57,10 +86,10 @@ export function initHddPage() {
     var onScroll = function () {
       if (ticking) return;
       ticking = true;
-      requestAnimationFrame(syncSticky);
+      frame(syncSticky);
     };
-    window.addEventListener('scroll', onScroll, { passive: true, signal: ac.signal });
-    window.addEventListener('resize', onScroll, { signal: ac.signal });
+    listen(window, 'scroll', onScroll, { passive: true, signal: ac.signal });
+    listen(window, 'resize', onScroll, { signal: ac.signal });
     syncSticky();
   }
 
@@ -86,7 +115,7 @@ export function initHddPage() {
     root.querySelector('[data-total]').textContent = total;
 
     function say(text) {
-      clearTimeout(typingTimer);
+      cancelLater(typingTimer);
       if (reduced) { msgOut.textContent = text; return; }
       msgOut.classList.add('is-typing');
       msgOut.textContent = '';
@@ -94,7 +123,7 @@ export function initHddPage() {
       dots.hidden = false;
       dots.removeAttribute('data-typing-tpl');
       msgOut.appendChild(dots);
-      typingTimer = setTimeout(function () {
+      typingTimer = later(function () {
         msgOut.classList.remove('is-typing');
         msgOut.textContent = text;
       }, 600);
@@ -127,7 +156,7 @@ export function initHddPage() {
 
     // проколы короче 50 м заказчику невыгодны: предупреждаем, но опрос не прерываем
     var isSmall = false;
-    form.addEventListener('change', function (e) {
+    listen(form, 'change', function (e) {
       var t = e.target;
       if (t.name === 'length') {
         isSmall = t.hasAttribute('data-small');
@@ -136,15 +165,15 @@ export function initHddPage() {
       if (index < total) next.disabled = !stepValid(steps[index]);
     });
 
-    back.addEventListener('click', function () {
+    listen(back, 'click', function () {
       if (index > 0) show(index - 1, true);
     });
 
     // Переход по кнопке, а не через submit: в изолированных рамках (sandbox без allow-forms)
     // браузер блокирует отправку формы и событие submit не приходит
-    form.addEventListener('submit', function (e) { e.preventDefault(); goNext(); });
-    next.addEventListener('click', goNext);
-    form.addEventListener('keydown', function (e) {
+    listen(form, 'submit', function (e) { e.preventDefault(); goNext(); });
+    listen(next, 'click', goNext);
+    listen(form, 'keydown', function (e) {
       if (e.key !== 'Enter' || e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
       e.preventDefault();
       if (!next.disabled) goNext();
@@ -162,23 +191,23 @@ export function initHddPage() {
         .catch(function () { next.disabled = false; say('Не получилось отправить заявку. Попробуйте ещё раз или позвоните нам.'); });
     }
 
-    root.querySelector('[data-restart]').addEventListener('click', function () {
+    listen(root.querySelector('[data-restart]'), 'click', function () {
       form.reset();
       show(0, true);
     });
 
     /* --- контакты --- */
     var phone = form.elements.phone;
-    phone.addEventListener('input', function () {
+    listen(phone, 'input', function () {
       phone.value = maskPhone(phone.value);
       phone.removeAttribute('aria-invalid');
     });
-    form.elements.name.addEventListener('input', function () { this.removeAttribute('aria-invalid'); });
-    form.elements.address.addEventListener('input', function () { this.removeAttribute('aria-invalid'); });
-    form.elements.email.addEventListener('input', function () { this.removeAttribute('aria-invalid'); });
+    listen(form.elements.name, 'input', function () { this.removeAttribute('aria-invalid'); });
+    listen(form.elements.address, 'input', function () { this.removeAttribute('aria-invalid'); });
+    listen(form.elements.email, 'input', function () { this.removeAttribute('aria-invalid'); });
     // оба документа обязательны: согласие на обработку данных и политика
     [form.elements.consent, form.elements.privacy].forEach(function (box) {
-      box.addEventListener('change', function () {
+      listen(box, 'change', function () {
         form.querySelector('.field__err--consent').classList.remove('is-shown');
       });
     });
@@ -344,6 +373,9 @@ export function initHddPage() {
     var defLead = leadEl.textContent;
     var lastFocus = null;
     var source = 'Заказать звонок';
+    var previousOverflow = '';
+    var previousLock = false;
+    var lockActive = false;
 
     // одно окно на все кнопки: подписи и источник заявки приходят из атрибутов кнопки
     function open(btn) {
@@ -357,35 +389,68 @@ export function initHddPage() {
       submitBtn.disabled = false;
       submitError.hidden = true;
       root.hidden = false;
+      if (!lockActive) {
+        previousOverflow = document.body.style.overflow;
+        previousLock = document.body.classList.contains('is-locked');
+        lockActive = true;
+      }
+      if (!root.open) root.showModal();
+      document.body.style.overflow = 'hidden';
       document.body.classList.add('is-locked');
       nameInput.focus();
     }
-    function close() {
+    function finishClose() {
       root.hidden = true;
-      document.body.classList.remove('is-locked');
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      if (lockActive) {
+        document.body.style.overflow = previousOverflow;
+        if (!previousLock) document.body.classList.remove('is-locked');
+        lockActive = false;
+      }
+      if (lastFocus && lastFocus.isConnected) lastFocus.focus();
     }
+    function close() {
+      if (root.open) root.close();
+      finishClose();
+    }
+    cleanupTasks.push(close);
+    listen(root, 'cancel', function (event) { event.preventDefault(); close(); });
+    listen(root, 'close', function () { if (!root.open) finishClose(); });
+    // Native modality makes the page inert. Wrap the keyboard edges explicitly
+    // as well, so Tab does not leave the document for browser chrome.
+    listen(root, 'keydown', function (event) {
+      if (event.key !== 'Tab' || !root.open) return;
+      var controls = [].slice.call(root.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(function (element) { return element.getClientRects().length > 0; });
+      var first = controls[0];
+      var last = controls[controls.length - 1];
+      if (!first) return;
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === root)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
 
     [].slice.call(document.querySelectorAll('[data-callback-open]')).forEach(function (btn) {
-      btn.addEventListener('click', function () { open(btn); });
+      listen(btn, 'click', function () { open(btn); });
     });
     [].slice.call(root.querySelectorAll('[data-callback-close]')).forEach(function (btn) {
-      btn.addEventListener('click', close);
+      listen(btn, 'click', close);
     });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !root.hidden) close();
-    }, { signal: ac.signal });
 
-    phoneInput.addEventListener('input', function () {
+    listen(phoneInput, 'input', function () {
       phoneInput.value = maskPhone(phoneInput.value);
       phoneInput.removeAttribute('aria-invalid');
     });
-    nameInput.addEventListener('input', function () { this.removeAttribute('aria-invalid'); });
+    listen(nameInput, 'input', function () { this.removeAttribute('aria-invalid'); });
     [consent, privacy].forEach(function (box) {
-      box.addEventListener('change', function () { consentErr.classList.remove('is-shown'); });
+      listen(box, 'change', function () { consentErr.classList.remove('is-shown'); });
     });
 
-    form.addEventListener('submit', function (e) {
+    listen(form, 'submit', function (e) {
       e.preventDefault();
       if (submitBtn.disabled) return;
       submitError.hidden = true;
@@ -408,6 +473,7 @@ export function initHddPage() {
       }).then(function () {
         form.hidden = true;
         done.hidden = false;
+        done.focus({ preventScroll: true });
       }).catch(function (error) {
         submitBtn.disabled = false;
         submitError.textContent = submitErrorMessage(error);
@@ -431,16 +497,16 @@ export function initHddPage() {
     var submitError = form.querySelector('[data-submit-error]');
     var done = form.querySelector('[data-contact-done]');
 
-    phoneInput.addEventListener('input', function () {
+    listen(phoneInput, 'input', function () {
       phoneInput.value = maskPhone(phoneInput.value);
       phoneInput.removeAttribute('aria-invalid');
     });
-    nameInput.addEventListener('input', function () { this.removeAttribute('aria-invalid'); });
+    listen(nameInput, 'input', function () { this.removeAttribute('aria-invalid'); });
     [consent, privacy].forEach(function (box) {
-      box.addEventListener('change', function () { consentErr.classList.remove('is-shown'); });
+      listen(box, 'change', function () { consentErr.classList.remove('is-shown'); });
     });
 
-    form.addEventListener('submit', function (e) {
+    listen(form, 'submit', function (e) {
       e.preventDefault();
       if (submitBtn.disabled) return;
       submitError.hidden = true;
@@ -487,10 +553,10 @@ export function initHddPage() {
       var k = Math.min(dots.length - 1, Math.round(projRow.scrollLeft / step));
       dots.forEach(function (d, i) { d.classList.toggle('is-on', i === k); });
     };
-    projRow.addEventListener('scroll', function () {
+    listen(projRow, 'scroll', function () {
       if (pTicking) return;
       pTicking = true;
-      requestAnimationFrame(syncDots);
+      frame(syncDots);
     }, { passive: true });
   }
 
@@ -512,14 +578,14 @@ export function initHddPage() {
       // листаем ровно на ширину видимой части: три кадра за раз
       shots.scrollBy({ left: dir * shots.clientWidth, behavior: reduced ? 'auto' : 'smooth' });
     };
-    prev.addEventListener('click', function () { stepBy(-1); });
-    next.addEventListener('click', function () { stepBy(1); });
-    shots.addEventListener('scroll', function () {
+    listen(prev, 'click', function () { stepBy(-1); });
+    listen(next, 'click', function () { stepBy(1); });
+    listen(shots, 'scroll', function () {
       if (sTicking) return;
       sTicking = true;
-      requestAnimationFrame(syncShots);
+      frame(syncShots);
     }, { passive: true });
-    window.addEventListener('resize', syncShots, { signal: ac.signal });
+    listen(window, 'resize', syncShots, { signal: ac.signal });
     syncShots();
   }
 
@@ -554,9 +620,10 @@ export function initHddPage() {
       var reveal = function () {
         if (revealed) return;
         revealed = true;
+        if (io) io.disconnect();
         sec.classList.add('is-in');
         nodes.forEach(function (n, k) {
-          setTimeout(function () { if (!line.classList.contains('is-hovering')) n.classList.add('is-on'); }, 240 * k);
+          later(function () { if (!line.classList.contains('is-hovering')) n.classList.add('is-on'); }, 240 * k);
         });
       };
 
@@ -565,6 +632,7 @@ export function initHddPage() {
         io.disconnect();
         reveal();
       }, { threshold: 0.3 });
+      observers.push(io);
       io.observe(stage);
 
       // страховка: в фоновых вкладках наблюдатель может не сработать, и тогда
@@ -576,7 +644,7 @@ export function initHddPage() {
           window.removeEventListener('scroll', onScrollSteps);
         }
       };
-      window.addEventListener('scroll', onScrollSteps, { passive: true, signal: ac.signal });
+      listen(window, 'scroll', onScrollSteps, { passive: true, signal: ac.signal });
       onScrollSteps();
     } else {
       highlight(0);
@@ -613,19 +681,19 @@ export function initHddPage() {
     var onScrollV = function () {
       if (vTicking) return;
       vTicking = true;
-      requestAnimationFrame(syncVertical);
+      frame(syncVertical);
     };
-    window.addEventListener('scroll', onScrollV, { passive: true, signal: ac.signal });
-    window.addEventListener('resize', onScrollV, { signal: ac.signal });
+    listen(window, 'scroll', onScrollV, { passive: true, signal: ac.signal });
+    listen(window, 'resize', onScrollV, { signal: ac.signal });
     syncVertical();
 
     items.forEach(function (item, k) {
       if (canHover) {
-        item.addEventListener('mouseenter', function () { highlight(k + 1); });
+        listen(item, 'mouseenter', function () { highlight(k + 1); });
       }
-      item.addEventListener('focus', function () { highlight(k + 1); });
+      listen(item, 'focus', function () { highlight(k + 1); });
       // тач-экраны: подсветка по нажатию, повторное нажатие снимает
-      item.addEventListener('click', function () {
+      listen(item, 'click', function () {
         if (canHover) return;
         var on = !item.classList.contains('is-active');
         items.forEach(function (i) { i.classList.remove('is-active'); });
@@ -634,8 +702,8 @@ export function initHddPage() {
         highlight(on ? k + 1 : 0);
       });
     });
-    cols.addEventListener('mouseleave', function () { if (canHover) highlight(0); });
-    cols.addEventListener('focusout', function (e) {
+    listen(cols, 'mouseleave', function () { if (canHover) highlight(0); });
+    listen(cols, 'focusout', function (e) {
       if (!cols.contains(e.relatedTarget)) highlight(0);
     });
   }
@@ -647,17 +715,23 @@ export function initHddPage() {
     [].slice.call(track.children).forEach(function (li) {
       var clone = li.cloneNode(true);
       clone.setAttribute('aria-hidden', 'true');
+      marqueeClones.push(clone);
       track.appendChild(clone);
     });
     // постоянная скорость ~50px/с независимо от количества плиток
     var setDur = function () {
       track.style.setProperty('--marquee-dur', Math.round(track.scrollWidth / 2 / 50) + 's');
     };
-    window.addEventListener('load', setDur, { signal: ac.signal });
+    listen(window, 'load', setDur, { signal: ac.signal });
     setDur();
   }
   return function cleanup() {
     ac.abort();
     timers.forEach(clearInterval);
+    timeouts.forEach(clearTimeout);
+    frames.forEach(cancelAnimationFrame);
+    observers.forEach(function (observer) { observer.disconnect(); });
+    marqueeClones.forEach(function (clone) { clone.remove(); });
+    cleanupTasks.forEach(function (cleanup) { cleanup(); });
   };
 }

@@ -58,6 +58,7 @@
 
 .ups .phone { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.25; margin-left: 6px; }
 .ups .phone__num {
+  display: inline-flex; align-items: center; min-height: 24px;
   font-weight: 700; font-size: 15.5px; white-space: nowrap;
   font-variant-numeric: tabular-nums;   /* цифры одной ширины, иначе единицы кажутся мельче */
   transition: color .2s;

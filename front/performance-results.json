@@ -1,0 +1,1383 @@
+{
+  "measuredOn": "2026-11-08",
+  "timezone": "Europe/Moscow",
+  "baselineCommit": "369284f",
+  "scope": "Local prerendered production build, nginx over HTTPS/HTTP2; real Metrika and Novofon enabled. The browser alone maps e-systems.su to local nginx; the public website is unchanged.",
+  "conditions": {
+    "mobile": {
+      "lighthouse": "13.6.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+      "formFactor": "mobile",
+      "throttlingMethod": "simulate",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      }
+    },
+    "desktop": {
+      "lighthouse": "13.6.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+      "formFactor": "desktop",
+      "throttlingMethod": "simulate",
+      "throttling": {
+        "rttMs": 40,
+        "throughputKbps": 10240,
+        "requestLatencyMs": 0,
+        "downloadThroughputKbps": 0,
+        "uploadThroughputKbps": 0,
+        "cpuSlowdownMultiplier": 1
+      },
+      "screenEmulation": {
+        "mobile": false,
+        "width": 1350,
+        "height": 940,
+        "deviceScaleFactor": 1,
+        "disabled": false
+      }
+    }
+  },
+  "validation": {
+    "unitTests": 52,
+    "browserTests": 70,
+    "deploymentTests": 15,
+    "axeContexts": 36,
+    "prerenderedPagesHydrated": 29,
+    "staticDelivery": "gzip, cache, SSR, 301 with campaign parameters, 404/410"
+  },
+  "homepageHtml": {
+    "before": {
+      "bytes": 146355,
+      "gzip": 27228
+    },
+    "after": {
+      "bytes": 57917,
+      "gzip": 12442
+    }
+  },
+  "limitations": [
+    "Mobile Performance >=90 and TBT <=200ms are not met across the site. UPS median mobile LCP is above 2.5s.",
+    "External SDK features remain enabled; no artificial long timeout or user-interaction gate is used to move their work outside the audit.",
+    "These are local laboratory measurements, not public-server TTFB or 28-day CrUX results."
+  ],
+  "thirdPartyBestPracticesFindings": [
+    {
+      "id": "third-party-cookies",
+      "title": "Uses third-party cookies"
+    },
+    {
+      "id": "inspector-issues",
+      "title": "Issues were logged in the `Issues` panel in Chrome Devtools"
+    }
+  ],
+  "medians": {
+    "baselineMobile": [
+      {
+        "path": "/",
+        "performance": 76,
+        "accessibility": 92,
+        "seo": 100,
+        "FCP": 1058.8139999999999,
+        "LCP": 3158.814,
+        "TBT": 572.5,
+        "CLS": 0
+      }
+    ],
+    "baselineDesktop": [
+      {
+        "path": "/",
+        "performance": 100,
+        "accessibility": 92,
+        "seo": 100,
+        "FCP": 283.996,
+        "LCP": 645.659,
+        "TBT": 38,
+        "CLS": 0
+      }
+    ],
+    "mobile": [
+      {
+        "path": "/",
+        "performance": 86,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 915.74,
+        "LCP": 1665.74,
+        "TBT": 559.0899999999999,
+        "CLS": 0
+      },
+      {
+        "path": "/services",
+        "performance": 84,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 822.88,
+        "LCP": 1661.88,
+        "TBT": 618,
+        "CLS": 0
+      },
+      {
+        "path": "/services/hdd",
+        "performance": 89,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 1029.6475,
+        "LCP": 2106.6475,
+        "TBT": 396.5,
+        "CLS": 0.00006326774653128872
+      },
+      {
+        "path": "/services/ups",
+        "performance": 83,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 1137.614,
+        "LCP": 2856.474,
+        "TBT": 488.15149999999994,
+        "CLS": 0
+      },
+      {
+        "path": "/services/dgu",
+        "performance": 86,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 1059.4299999999998,
+        "LCP": 2109.43,
+        "TBT": 530.568,
+        "CLS": 0
+      },
+      {
+        "path": "/services/road",
+        "performance": 90,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 798.146,
+        "LCP": 798.146,
+        "TBT": 428.7972500000003,
+        "CLS": 0
+      },
+      {
+        "path": "/equipment",
+        "performance": 92,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 905.8525,
+        "LCP": 2255.8525,
+        "TBT": 298.5,
+        "CLS": 0
+      },
+      {
+        "path": "/equipment/ktp",
+        "performance": 91,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 914.531,
+        "LCP": 914.531,
+        "TBT": 368,
+        "CLS": 0
+      },
+      {
+        "path": "/privacy",
+        "performance": 90,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 785.362,
+        "LCP": 785.362,
+        "TBT": 399.9999999999999,
+        "CLS": 0
+      }
+    ],
+    "desktop": [
+      {
+        "path": "/",
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 246.343,
+        "LCP": 406.34299999999996,
+        "TBT": 24,
+        "CLS": 0
+      },
+      {
+        "path": "/services",
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 221.91320000000002,
+        "LCP": 459.0896000000001,
+        "TBT": 69,
+        "CLS": 0
+      },
+      {
+        "path": "/services/hdd",
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 273.11,
+        "LCP": 603.11,
+        "TBT": 50,
+        "CLS": 0.00001030585106382979
+      },
+      {
+        "path": "/services/ups",
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 312.248,
+        "LCP": 691.248,
+        "TBT": 51,
+        "CLS": 0
+      },
+      {
+        "path": "/services/dgu",
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 288.226,
+        "LCP": 485.226,
+        "TBT": 70,
+        "CLS": 0
+      },
+      {
+        "path": "/services/road",
+        "performance": 99,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 216.13399999999996,
+        "LCP": 389.5416,
+        "TBT": 88,
+        "CLS": 0
+      },
+      {
+        "path": "/equipment",
+        "performance": 99,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 253.84619999999998,
+        "LCP": 725.0839999999998,
+        "TBT": 66.1602,
+        "CLS": 0
+      },
+      {
+        "path": "/equipment/ktp",
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 254.05880000000002,
+        "LCP": 503.09000000000003,
+        "TBT": 39.339,
+        "CLS": 0
+      },
+      {
+        "path": "/privacy",
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 100,
+        "FCP": 213.9435,
+        "LCP": 213.9435,
+        "TBT": 46.49999999999997,
+        "CLS": 0
+      }
+    ]
+  },
+  "runs": {
+    "baselineMobile": [
+      {
+        "path": "/",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 76,
+          "accessibility": 92,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1063.037,
+        "LCP": 3613.0370000000003,
+        "TBT": 572.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:18:42.502Z",
+        "benchmarkIndex": 1791
+      },
+      {
+        "path": "/",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 67,
+          "accessibility": 92,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1058.8139999999999,
+        "LCP": 3158.814,
+        "TBT": 1521.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:18:51.834Z",
+        "benchmarkIndex": 1853.5
+      },
+      {
+        "path": "/",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 84,
+          "accessibility": 92,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1053.297,
+        "LCP": 3153.297,
+        "TBT": 406,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:19:00.844Z",
+        "benchmarkIndex": 1800.5
+      }
+    ],
+    "baselineDesktop": [
+      {
+        "path": "/",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 92,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 285.659,
+        "LCP": 645.659,
+        "TBT": 2.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:47:37.034Z",
+        "benchmarkIndex": 1817
+      },
+      {
+        "path": "/",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 92,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 283.272,
+        "LCP": 643.2719999999999,
+        "TBT": 49,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:47:47.295Z",
+        "benchmarkIndex": 1803.5
+      },
+      {
+        "path": "/",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 92,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 283.996,
+        "LCP": 662.996,
+        "TBT": 38,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:47:57.137Z",
+        "benchmarkIndex": 1876.5
+      }
+    ],
+    "mobile": [
+      {
+        "path": "/",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 80,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 943.386,
+        "LCP": 1681.2980000000002,
+        "TBT": 819.1739999999998,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:35:19.644Z",
+        "benchmarkIndex": 1500.5
+      },
+      {
+        "path": "/",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 86,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 915.74,
+        "LCP": 1665.74,
+        "TBT": 559.0899999999999,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:35:29.554Z",
+        "benchmarkIndex": 1698.5
+      },
+      {
+        "path": "/",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 86,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 912.892,
+        "LCP": 1662.892,
+        "TBT": 545,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:35:39.236Z",
+        "benchmarkIndex": 1702
+      },
+      {
+        "path": "/services",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 82,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 822.88,
+        "LCP": 1661.88,
+        "TBT": 732.5000000000001,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:35:48.395Z",
+        "benchmarkIndex": 1677
+      },
+      {
+        "path": "/services",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 88,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 802.483,
+        "LCP": 1658.483,
+        "TBT": 453.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:35:57.616Z",
+        "benchmarkIndex": 1614
+      },
+      {
+        "path": "/services",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 84,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 829.828,
+        "LCP": 1663.828,
+        "TBT": 618,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:36:06.516Z",
+        "benchmarkIndex": 1402.5
+      },
+      {
+        "path": "/services/hdd",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 90,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1053.891,
+        "LCP": 2103.891,
+        "TBT": 384.5,
+        "CLS": 0.00006326774653128872,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:36:15.170Z",
+        "benchmarkIndex": 1681
+      },
+      {
+        "path": "/services/hdd",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 89,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1029.6475,
+        "LCP": 2106.6475,
+        "TBT": 396.5,
+        "CLS": 0.00006326774653128872,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:36:25.127Z",
+        "benchmarkIndex": 1332
+      },
+      {
+        "path": "/services/hdd",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 87,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1022.508,
+        "LCP": 2253.508,
+        "TBT": 482.5,
+        "CLS": 0.00006326774653128872,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:36:34.756Z",
+        "benchmarkIndex": 1629
+      },
+      {
+        "path": "/services/ups",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 78,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1172.0995,
+        "LCP": 2858.0995000000003,
+        "TBT": 693.9552500000002,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:36:43.681Z",
+        "benchmarkIndex": 1824
+      },
+      {
+        "path": "/services/ups",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 84,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1137.4740000000002,
+        "LCP": 2856.474,
+        "TBT": 451.49875,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:36:53.044Z",
+        "benchmarkIndex": 1848
+      },
+      {
+        "path": "/services/ups",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 83,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1137.614,
+        "LCP": 2854.614,
+        "TBT": 488.15149999999994,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:37:02.713Z",
+        "benchmarkIndex": 1783.5
+      },
+      {
+        "path": "/services/dgu",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 89,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1059.9070000000002,
+        "LCP": 2109.907,
+        "TBT": 423.145,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:37:12.543Z",
+        "benchmarkIndex": 1775
+      },
+      {
+        "path": "/services/dgu",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 86,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1057.542,
+        "LCP": 2107.542,
+        "TBT": 530.568,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:37:21.693Z",
+        "benchmarkIndex": 1697
+      },
+      {
+        "path": "/services/dgu",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 71,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 1059.4299999999998,
+        "LCP": 2109.43,
+        "TBT": 1942.38425,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:37:31.732Z",
+        "benchmarkIndex": 1382.5
+      },
+      {
+        "path": "/services/road",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 90,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 801.049,
+        "LCP": 801.049,
+        "TBT": 428.7972500000003,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:37:41.792Z",
+        "benchmarkIndex": 1801
+      },
+      {
+        "path": "/services/road",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 90,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 797.871,
+        "LCP": 797.871,
+        "TBT": 421.59625000000017,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:37:49.393Z",
+        "benchmarkIndex": 1918
+      },
+      {
+        "path": "/services/road",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 89,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 798.146,
+        "LCP": 798.146,
+        "TBT": 432.89975000000027,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:37:57.407Z",
+        "benchmarkIndex": 1786.5
+      },
+      {
+        "path": "/equipment",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 91,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 905.8525,
+        "LCP": 2255.8525,
+        "TBT": 324.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:38:05.441Z",
+        "benchmarkIndex": 1858
+      },
+      {
+        "path": "/equipment",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 92,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 910.6005,
+        "LCP": 2260.6005,
+        "TBT": 298.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:38:13.582Z",
+        "benchmarkIndex": 1864
+      },
+      {
+        "path": "/equipment",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 93,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 904.5395,
+        "LCP": 2254.5395,
+        "TBT": 268.9999999999999,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:38:21.684Z",
+        "benchmarkIndex": 1847.5
+      },
+      {
+        "path": "/equipment/ktp",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 93,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 919.963,
+        "LCP": 919.963,
+        "TBT": 302,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:38:29.774Z",
+        "benchmarkIndex": 1822.5
+      },
+      {
+        "path": "/equipment/ktp",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 91,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 914.531,
+        "LCP": 914.531,
+        "TBT": 368,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:38:38.133Z",
+        "benchmarkIndex": 1631
+      },
+      {
+        "path": "/equipment/ktp",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 91,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 913.171,
+        "LCP": 913.171,
+        "TBT": 391,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:38:46.208Z",
+        "benchmarkIndex": 1818.5
+      },
+      {
+        "path": "/privacy",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 90,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 791.334,
+        "LCP": 791.334,
+        "TBT": 404.9999999999999,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:38:54.125Z",
+        "benchmarkIndex": 1836
+      },
+      {
+        "path": "/privacy",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 91,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 785.362,
+        "LCP": 785.362,
+        "TBT": 381.0000000000001,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:39:01.566Z",
+        "benchmarkIndex": 1835
+      },
+      {
+        "path": "/privacy",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 90,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 784.5955,
+        "LCP": 784.5955,
+        "TBT": 399.9999999999999,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:39:08.939Z",
+        "benchmarkIndex": 1826
+      }
+    ],
+    "desktop": [
+      {
+        "path": "/",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 255.779,
+        "LCP": 430.779,
+        "TBT": 28.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:40:46.821Z",
+        "benchmarkIndex": 1807.5
+      },
+      {
+        "path": "/",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 246.343,
+        "LCP": 406.34299999999996,
+        "TBT": 23.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:40:56.682Z",
+        "benchmarkIndex": 1672
+      },
+      {
+        "path": "/",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 245.136,
+        "LCP": 405.13599999999997,
+        "TBT": 24,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:41:05.877Z",
+        "benchmarkIndex": 1833.5
+      },
+      {
+        "path": "/services",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 221.91320000000002,
+        "LCP": 459.0896000000001,
+        "TBT": 88,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:41:15.008Z",
+        "benchmarkIndex": 1647.5
+      },
+      {
+        "path": "/services",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 248.5363,
+        "LCP": 445.7468,
+        "TBT": 58,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:41:35.553Z",
+        "benchmarkIndex": 1623.5
+      },
+      {
+        "path": "/services",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 221.49890000000005,
+        "LCP": 467.75670000000014,
+        "TBT": 69,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:41:56.661Z",
+        "benchmarkIndex": 1819.5
+      },
+      {
+        "path": "/services/hdd",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 282.828,
+        "LCP": 650.828,
+        "TBT": 39,
+        "CLS": 0.00001030585106382979,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:42:17.697Z",
+        "benchmarkIndex": 1819
+      },
+      {
+        "path": "/services/hdd",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 271.8095,
+        "LCP": 602.8095000000001,
+        "TBT": 50,
+        "CLS": 0.00001030585106382979,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:42:28.038Z",
+        "benchmarkIndex": 1859
+      },
+      {
+        "path": "/services/hdd",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 273.11,
+        "LCP": 603.11,
+        "TBT": 52,
+        "CLS": 0.00001030585106382979,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:42:38.657Z",
+        "benchmarkIndex": 1870.5
+      },
+      {
+        "path": "/services/ups",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 312.61400000000003,
+        "LCP": 688.614,
+        "TBT": 39,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:42:48.565Z",
+        "benchmarkIndex": 1867
+      },
+      {
+        "path": "/services/ups",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 312.043,
+        "LCP": 692.043,
+        "TBT": 51,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:42:59.370Z",
+        "benchmarkIndex": 1735.5
+      },
+      {
+        "path": "/services/ups",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 312.248,
+        "LCP": 691.248,
+        "TBT": 52,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:43:53.075Z",
+        "benchmarkIndex": 1815
+      },
+      {
+        "path": "/services/dgu",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 289.327,
+        "LCP": 489.327,
+        "TBT": 112,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:44:03.921Z",
+        "benchmarkIndex": 1867.5
+      },
+      {
+        "path": "/services/dgu",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 284.594,
+        "LCP": 484.594,
+        "TBT": 70,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:44:14.812Z",
+        "benchmarkIndex": 1764
+      },
+      {
+        "path": "/services/dgu",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 288.226,
+        "LCP": 485.226,
+        "TBT": 49,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:44:25.752Z",
+        "benchmarkIndex": 1866.5
+      },
+      {
+        "path": "/services/road",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 216.072,
+        "LCP": 546.944,
+        "TBT": 113,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:44:36.204Z",
+        "benchmarkIndex": 1820.5
+      },
+      {
+        "path": "/services/road",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 216.13399999999996,
+        "LCP": 368.418,
+        "TBT": 86,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:44:46.035Z",
+        "benchmarkIndex": 1878.5
+      },
+      {
+        "path": "/services/road",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 223.6544,
+        "LCP": 389.5416,
+        "TBT": 88,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:44:55.724Z",
+        "benchmarkIndex": 1854
+      },
+      {
+        "path": "/equipment",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 268.80730000000005,
+        "LCP": 749.7130000000002,
+        "TBT": 51.28129999999999,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:45:16.544Z",
+        "benchmarkIndex": 1872
+      },
+      {
+        "path": "/equipment",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 251.688,
+        "LCP": 710.9709999999999,
+        "TBT": 81,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:45:37.505Z",
+        "benchmarkIndex": 1802.5
+      },
+      {
+        "path": "/equipment",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 99,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 253.84619999999998,
+        "LCP": 725.0839999999998,
+        "TBT": 66.1602,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:45:58.499Z",
+        "benchmarkIndex": 1811.5
+      },
+      {
+        "path": "/equipment/ktp",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 279.3705,
+        "LCP": 535.3365,
+        "TBT": 39.339,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:46:19.389Z",
+        "benchmarkIndex": 1881.5
+      },
+      {
+        "path": "/equipment/ktp",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 254.05880000000002,
+        "LCP": 503.09000000000003,
+        "TBT": 56.4948,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:46:40.168Z",
+        "benchmarkIndex": 1857.5
+      },
+      {
+        "path": "/equipment/ktp",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 247.4075,
+        "LCP": 487.4075,
+        "TBT": 22.00000000000003,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:47:01.093Z",
+        "benchmarkIndex": 1902.5
+      },
+      {
+        "path": "/privacy",
+        "run": 1,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 214.3555,
+        "LCP": 214.3555,
+        "TBT": 52.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:47:11.141Z",
+        "benchmarkIndex": 1673.5
+      },
+      {
+        "path": "/privacy",
+        "run": 2,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 213.051,
+        "LCP": 213.051,
+        "TBT": 40.5,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:47:18.634Z",
+        "benchmarkIndex": 1916
+      },
+      {
+        "path": "/privacy",
+        "run": 3,
+        "protocol": "h2",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 77,
+          "seo": 100
+        },
+        "FCP": 213.9435,
+        "LCP": 213.9435,
+        "TBT": 46.49999999999997,
+        "CLS": 0,
+        "errors": [],
+        "fetchTime": "2026-11-07T21:47:25.919Z",
+        "benchmarkIndex": 1912
+      }
+    ]
+  }
+}

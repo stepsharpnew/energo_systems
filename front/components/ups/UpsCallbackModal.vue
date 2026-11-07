@@ -22,6 +22,8 @@
 <script setup>
 import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
 import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
+const props = defineProps({ request: { type: Object, default: null } })
+const emit = defineEmits(['close'])
 const dialog = ref(null)
 const form = reactive({ name: '', phone: '', consent: false, policy: false })
 const callbackPreferences = ref(emptyCallbackPreferences())
@@ -33,7 +35,7 @@ const error = ref('')
 let lastFocus
 function open(options = {}) {
   if (pending.value || !dialog.value || dialog.value.open) return
-  lastFocus = document.activeElement
+  lastFocus = options.opener || document.activeElement
   title.value = options.title || 'Заказать звонок'
   text.value = options.text || 'Оставьте номер и выберите удобное время звонка'
   sent.value = false
@@ -42,7 +44,7 @@ function open(options = {}) {
   document.body.classList.add('is-locked')
 }
 function close() { dialog.value?.close() }
-function onClose() { document.body.classList.remove('is-locked'); lastFocus?.focus?.() }
+function onClose() { document.body.classList.remove('is-locked'); lastFocus?.focus?.(); emit('close') }
 function backdrop(event) { if (event.target === dialog.value) close() }
 async function submit() {
   if (pending.value || sent.value) return
@@ -57,6 +59,7 @@ async function submit() {
   } catch (problem) { error.value = landingSubmitError(problem) }
   finally { pending.value = false }
 }
+onMounted(() => { if (props.request) open(props.request) })
+watch(() => props.request, request => { if (request) open(request); else close() }, { flush: 'post' })
 onBeforeUnmount(() => { close(); document.body.classList.remove('is-locked') })
-defineExpose({ open })
 </script>

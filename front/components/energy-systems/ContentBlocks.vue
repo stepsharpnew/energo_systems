@@ -1,9 +1,9 @@
 <template>
-  <section class="services-section" ref="aboutSection">
-    <div ref="block1" class="content-block content-block-1" data-speed="0.9">
+  <section id="about" class="services-section" ref="aboutSection">
+    <div ref="block1" class="content-block content-block-1">
       <img
         ref="image1"
-        :src="contentImage1"
+        v-bind="imageAttrs(contentImage1, { sizes: '(max-width: 992px) 100vw, 50vw', width: 1200 })"
         alt="О компании"
         width="921"
         height="707"
@@ -70,7 +70,7 @@
       </div>
     </div>
 
-    <div ref="block2" class="content-block content-block-2" data-speed="0.9">
+    <div ref="block2" class="content-block content-block-2">
       <div ref="text2" class="content-text">
         <h2 class="content-title">Как мы работаем</h2>
         <p class="content-intro">
@@ -144,7 +144,7 @@
       <div class="content-images-group">
         <img
           ref="image2"
-          :src="contentImage2"
+          v-bind="imageAttrs(contentImage2, { sizes: '(max-width: 992px) 100vw, 50vw', width: 1200 })"
           alt="Как мы работаем"
           width="1200"
           height="715"
@@ -153,9 +153,8 @@
           class="content-image content-image-2"
         />
         <img
-          v-if="!isMobile"
           ref="image4"
-          :src="contentImage4"
+          v-bind="imageAttrs(contentImage4, { sizes: '(max-width: 992px) 100vw, 50vw', width: 1200 })"
           alt="Как мы работаем"
           width="1200"
           height="800"
@@ -166,11 +165,11 @@
       </div>
     </div>
 
-    <div ref="block3" class="content-block content-block-3" data-speed="0.9">
+    <div ref="block3" class="content-block content-block-3">
       <div class="content-images-group">
         <img
           ref="image3"
-          :src="contentImage3"
+          v-bind="imageAttrs(contentImage3, { sizes: '(max-width: 992px) 100vw, 50vw', width: 1200 })"
           alt="Наши преимущества"
           width="626"
           height="351"
@@ -179,9 +178,8 @@
           class="content-image content-image-3"
         />
         <img
-          v-if="!isMobile"
           ref="image5"
-          :src="contentImage5"
+          v-bind="imageAttrs(contentImage5, { sizes: '(max-width: 992px) 100vw, 50vw', width: 1200 })"
           alt="Наши преимущества"
           width="1200"
           height="795"
@@ -258,7 +256,7 @@
       <div class="partner-info-compact" ref="partnerInfo">
         <div class="partner-logo-compact" ref="logoContainer">
           <img
-            :src="rossetiLogo"
+            v-bind="imageAttrs(rossetiLogo, { sizes: '(max-width: 992px) 100vw, 50vw', width: 1200 })"
             alt="ПАО Россети Московский регион"
             width="985"
             height="251"
@@ -285,426 +283,29 @@
 </template>
 
 <script>
-const rossetiLogo = '/img/clients/client-5.png';
-const contentImage1 = '/img/content/content-1.webp';
-const contentImage3 = '/img/content/content-2.webp';
-const contentImage2 = '/img/content/content-3.webp';
-const contentImage4 = '/img/content/content-4.webp';
-const contentImage5 = '/img/content/content-5.webp';
-const presentationUrl = '/Energosistemy_el_vesia_2026.pdf';
+import { revealOnVisible } from '~/utils/revealOnVisible.js';
+import { imageAttrs } from '~/utils/responsiveImage.js';
+import '~/assets/styles/progressive-reveal.css';
 
 export default {
   name: "ContentBlocks",
   data() {
     return {
-      scrollTriggers: [],
-      contentImage1,
-      contentImage2,
-      contentImage3,
-      contentImage4,
-      contentImage5,
-      presentationUrl,
-      rossetiLogo,
-      isMobile: false,
+      contentImage1: '/img/content/content-1.webp',
+      contentImage3: '/img/content/content-2.webp',
+      contentImage2: '/img/content/content-3.webp',
+      contentImage4: '/img/content/content-4.webp',
+      contentImage5: '/img/content/content-5.webp',
+      presentationUrl: '/Energosistemy_el_vesia_2026.pdf',
+      rossetiLogo: '/img/clients/client-5.png',
+      stopReveals: null,
     };
   },
   mounted() {
-    this.checkMobile();
-    this.$nextTick(() => {
-      this.setupScrollTrigger();
-      // Обновляем ScrollTrigger после монтирования
-      this.refreshScrollTrigger();
-    });
-
-    // Добавляем обработчик изменения размера окна
-    window.addEventListener("resize", this.handleResize, { passive: true });
+    this.stopReveals = revealOnVisible(this.$el, '.content-block');
   },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-    // Очищаем ScrollTrigger инстансы
-    if (this.scrollTriggers) {
-      this.scrollTriggers.forEach((st) => st.kill());
-      this.scrollTriggers = [];
-    }
-  },
-  methods: {
-    checkMobile() {
-      this.isMobile = window.innerWidth <= 992;
-    },
-    setupScrollTrigger() {
-      const gsap = this.$gsap;
-      const ScrollTrigger = this.$ScrollTrigger;
-
-      if (!gsap || !ScrollTrigger) return;
-
-      // Проверяем, не мобильное ли устройство
-      const isMobile = window.innerWidth <= 992;
-
-      this.scrollTriggers = [];
-
-      // Определяем параметры анимации в зависимости от устройства
-      const animConfig = isMobile
-        ? {
-            xOffset: 30, // Меньшее смещение на мобильных
-            scrubValue: 0.8, // Плавная привязка к скроллу на мобильных
-          }
-        : {
-            xOffset: 60,
-            scrubValue: 0.5,
-          };
-
-      // Анимация для блока 1 - весь блок выезжает слева вместе
-      if (this.$refs.block1) {
-        const anim = gsap.fromTo(
-          this.$refs.block1,
-          {
-            opacity: 0,
-            x: -80,
-          },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.3,
-            ease: "none",
-            scrollTrigger: {
-              trigger: this.$refs.block1,
-              start: "top 80%",
-              toggleActions: "play reverse play reverse",
-            },
-          }
-        );
-        if (anim.scrollTrigger) {
-          this.scrollTriggers.push(anim.scrollTrigger);
-        }
-      }
-
-      // Анимация для блока 2 - заголовок, описание и картинки справа одним блоком, этапы справа с отдельными триггерами
-      if (this.$refs.block2) {
-        // Создаем контейнер для заголовка, описания и картинок
-        const headerElements = [];
-
-        if (this.$refs.text2) {
-          const title = this.$refs.text2.querySelector(".content-title");
-          const intro = this.$refs.text2.querySelector(".content-intro");
-          if (title) headerElements.push(title);
-          if (intro) headerElements.push(intro);
-        }
-
-        if (this.$refs.image2) headerElements.push(this.$refs.image2);
-        if (this.$refs.image4) headerElements.push(this.$refs.image4);
-
-        // Анимация заголовка, описания и картинок как один блок справа
-        if (headerElements.length > 0) {
-          const headerAnim = gsap.fromTo(
-            headerElements,
-            {
-              opacity: 0,
-              x: 80,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.2,
-              ease: "none",
-              scrollTrigger: {
-                trigger: this.$refs.block2,
-                start: "top 80%",
-                toggleActions: "play reverse play reverse",
-              },
-            }
-          );
-          if (headerAnim.scrollTrigger) {
-            this.scrollTriggers.push(headerAnim.scrollTrigger);
-          }
-        }
-
-        // Анимация этапов работы - каждый этап с отдельным ScrollTrigger, появляется слева
-        if (this.$refs.text2) {
-          const workSteps = this.$refs.text2.querySelectorAll(".work-step");
-          workSteps.forEach((step) => {
-            const stepAnim = gsap.fromTo(
-              step,
-              {
-                opacity: 0,
-                x: -80,
-              },
-              {
-                opacity: 1,
-                x: 0,
-                duration: 0,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: step,
-                  start: "top 85%",
-                  toggleActions: "play reverse play reverse",
-                },
-              }
-            );
-            if (stepAnim.scrollTrigger) {
-              this.scrollTriggers.push(stepAnim.scrollTrigger);
-            }
-          });
-        }
-      }
-
-      // Анимация для блока 3 - заголовок, описание и картинки слева одним блоком, карточки справа с отдельными триггерами
-      if (this.$refs.block3) {
-        // Создаем контейнер для заголовка, описания и картинок
-        const headerElements = [];
-
-        if (this.$refs.text3) {
-          const title = this.$refs.text3.querySelector(".content-title");
-          const intro = this.$refs.text3.querySelector(".content-intro");
-          if (title) headerElements.push(title);
-          if (intro) headerElements.push(intro);
-        }
-
-        if (this.$refs.image3) headerElements.push(this.$refs.image3);
-        if (this.$refs.image5) headerElements.push(this.$refs.image5);
-
-        // Анимация заголовка, описания и картинок как один блок слева
-        if (headerElements.length > 0) {
-          const headerAnim = gsap.fromTo(
-            headerElements,
-            {
-              opacity: 0,
-              x: -80,
-            },
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.3,
-              ease: "none",
-              scrollTrigger: {
-                trigger: this.$refs.block3,
-                start: "top 80%",
-                toggleActions: "play reverse play reverse",
-              },
-            }
-          );
-          if (headerAnim.scrollTrigger) {
-            this.scrollTriggers.push(headerAnim.scrollTrigger);
-          }
-        }
-
-        // Анимация карточек преимуществ - каждая карточка с отдельным ScrollTrigger, появляется справа
-        if (this.$refs.text3) {
-          const advantageCards =
-            this.$refs.text3.querySelectorAll(".advantage-card");
-          advantageCards.forEach((card) => {
-            const cardAnim = gsap.fromTo(
-              card,
-              {
-                opacity: 0,
-                x: 80,
-              },
-              {
-                opacity: 1,
-                x: 0,
-                duration: 0.2,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: card,
-                  start: "top 85%",
-                  toggleActions: "play reverse play reverse",
-                },
-              }
-            );
-            if (cardAnim.scrollTrigger) {
-              this.scrollTriggers.push(cardAnim.scrollTrigger);
-            }
-          });
-        }
-      }
-
-      // Анимация для блока 4 (инфографика) - появляется снизу с масштабом
-      if (this.$refs.block4) {
-        const anim4 = gsap.fromTo(
-          this.$refs.block4,
-          {
-            opacity: 0,
-            y: 50,
-            scale: 0.95,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: this.$refs.block4,
-              start: "top 90%",
-              end: isMobile ? "top 50%" : "center 60%",
-              scrub: animConfig.scrubValue,
-            },
-          }
-        );
-
-        if (anim4.scrollTrigger) {
-          this.scrollTriggers.push(anim4.scrollTrigger);
-        }
-
-        // Анимация партнерской информации - отдельно для логотипа и текста
-        if (this.$refs.partnerInfo) {
-          // Анимация логотипа
-          if (this.$refs.logoContainer) {
-            const logoAnim = gsap.fromTo(
-              this.$refs.logoContainer,
-              {
-                opacity: 0,
-                scale: 0.8,
-                x: -20,
-              },
-              {
-                opacity: 1,
-                scale: 1,
-                x: 0,
-                ease: "back.out(1.4)",
-                scrollTrigger: {
-                  trigger: this.$refs.partnerInfo,
-                  start: "top 90%",
-                  end: isMobile ? "top 60%" : "top 70%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (logoAnim.scrollTrigger) {
-              this.scrollTriggers.push(logoAnim.scrollTrigger);
-            }
-          }
-
-          // Анимация текста партнерской информации - выезжает справа
-          const partnerText = this.$refs.partnerInfo.querySelector(
-            ".partner-text-compact"
-          );
-          if (partnerText) {
-            const partnerTextAnim = gsap.fromTo(
-              partnerText,
-              {
-                x: isMobile ? 60 : 100,
-                y: isMobile ? 20 : 30,
-              },
-              {
-                x: 0,
-                y: 0,
-                ease: "power1.out",
-                scrollTrigger: {
-                  trigger: this.$refs.partnerInfo,
-                  start: "top 90%",
-                  end: isMobile ? "top 60%" : "top 70%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (partnerTextAnim.scrollTrigger) {
-              this.scrollTriggers.push(partnerTextAnim.scrollTrigger);
-            }
-          }
-        }
-
-        // Анимация статистики - плавная привязка к скроллу
-        if (this.$refs.statsCompact) {
-          const statsAnim = gsap.fromTo(
-            this.$refs.statsCompact,
-            {
-              opacity: 0,
-              y: 30,
-            },
-            {
-              opacity: 1,
-              y: 0,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: this.$refs.statsCompact,
-                start: "top 90%",
-                end: isMobile ? "top 60%" : "top 70%",
-                scrub: animConfig.scrubValue,
-              },
-            }
-          );
-          if (statsAnim.scrollTrigger) {
-            this.scrollTriggers.push(statsAnim.scrollTrigger);
-          }
-        }
-
-        // Анимация отдельных элементов статистики - плавная привязка к скроллу
-        [
-          this.$refs.statCompact1,
-          this.$refs.statCompact2,
-          this.$refs.statCompact3,
-        ].forEach((stat, index) => {
-          if (stat) {
-            const statAnim = gsap.fromTo(
-              stat,
-              {
-                opacity: 0,
-                scale: 0.7,
-                y: 20,
-              },
-              {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                ease: "back.out(1.2)",
-                scrollTrigger: {
-                  trigger: this.$refs.statsCompact,
-                  start: "top 90%",
-                  end: isMobile ? "top 60%" : "top 70%",
-                  scrub: animConfig.scrubValue,
-                },
-              }
-            );
-            if (statAnim.scrollTrigger) {
-              this.scrollTriggers.push(statAnim.scrollTrigger);
-            }
-          }
-        });
-      }
-
-      // Обновляем ScrollTrigger после создания всех анимаций
-      this.refreshScrollTrigger();
-    },
-    refreshScrollTrigger() {
-      const ScrollTrigger = this.$ScrollTrigger;
-      if (ScrollTrigger) {
-        // Небольшая задержка для гарантии готовности DOM
-        setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100);
-      }
-    },
-    handleResize() {
-      const gsap = this.$gsap;
-      const ScrollTrigger = this.$ScrollTrigger;
-
-      // Обновляем состояние мобильного устройства
-      const wasMobile = this.isMobile;
-      this.checkMobile();
-
-      // Если состояние изменилось, нужно пересоздать анимации
-      if (wasMobile !== this.isMobile) {
-        this.$nextTick(() => {
-          if (!gsap || !ScrollTrigger) return;
-
-          // При изменении размера пересоздаем анимации
-          if (this.scrollTriggers.length > 0) {
-            this.scrollTriggers.forEach((st) => st.kill());
-            this.scrollTriggers = [];
-          }
-
-          // Пересоздаем анимации с новыми параметрами
-          this.setupScrollTrigger();
-        });
-      } else if (gsap && ScrollTrigger) {
-        // Если состояние не изменилось, просто обновляем ScrollTrigger
-        if (this.scrollTriggers.length > 0) {
-          this.scrollTriggers.forEach((st) => st.kill());
-          this.scrollTriggers = [];
-        }
-        this.setupScrollTrigger();
-      }
-    },
-  },
+  beforeUnmount() { this.stopReveals?.(); },
+  methods: { imageAttrs },
 };
 </script>
 
@@ -720,7 +321,6 @@ export default {
   align-items: center;
   margin-bottom: 200px;
   position: relative;
-  will-change: transform, opacity;
   z-index: 1;
 }
 
@@ -876,7 +476,7 @@ export default {
 .highlight-number {
   font-size: clamp(32px, 4vw, 48px);
   font-weight: 800;
-  color: #ff4800;
+  color: #c94218;
   line-height: 1;
   font-family: "Arial", sans-serif;
 }
@@ -910,7 +510,7 @@ export default {
 }
 
 .presentation-link:hover {
-  border-color: #ff4800;
+  border-color: #c94218;
   box-shadow: 0 14px 30px rgba(255, 72, 0, 0.16);
   transform: translateY(-2px);
 }
@@ -922,7 +522,7 @@ export default {
   width: 48px;
   height: 48px;
   border-radius: 8px;
-  background: #ff4800;
+  background: #c94218;
   color: #ffffff;
   font-size: 13px;
   font-weight: 800;
@@ -966,7 +566,7 @@ export default {
 }
 
 .work-step:hover {
-  border-color: #ff4800;
+  border-color: #c94218;
   box-shadow: 0 4px 12px rgba(255, 72, 0, 0.1);
   transform: translateX(4px);
 }
@@ -978,7 +578,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #ff4800, #ff7a2f);
+  background: linear-gradient(135deg, #c94218, #ac3713);
   color: #fff;
   font-size: 24px;
   font-weight: 800;
@@ -1024,7 +624,7 @@ export default {
 }
 
 .advantage-card:hover {
-  border-color: #ff4800;
+  border-color: #c94218;
   box-shadow: 0 8px 24px rgba(255, 72, 0, 0.15);
   transform: translateY(-4px);
 }
@@ -1056,7 +656,6 @@ export default {
   gap: clamp(20px, 3vw, 32px);
   padding-bottom: clamp(20px, 3vw, 28px);
   border-bottom: 2px solid rgba(255, 72, 0, 0.1);
-  will-change: transform, opacity;
   min-height: 80px;
 }
 
@@ -1067,7 +666,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  will-change: transform, opacity;
 }
 
 .partner-logo-img {
@@ -1088,7 +686,7 @@ export default {
 }
 
 .partner-compact-description strong {
-  color: #ff4800;
+  color: #c94218;
   font-weight: 700;
 }
 
@@ -1098,7 +696,6 @@ export default {
   justify-content: center;
   gap: clamp(16px, 3vw, 32px);
   flex-wrap: wrap;
-  will-change: transform, opacity;
   min-height: 100px;
 }
 
@@ -1108,13 +705,12 @@ export default {
   align-items: center;
   text-align: center;
   min-width: 100px;
-  will-change: transform, opacity;
 }
 
 .stat-compact-number {
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 800;
-  color: #ff4800;
+  color: #c94218;
   line-height: 1;
   margin-bottom: 8px;
   font-family: "Arial", sans-serif;
@@ -1197,10 +793,7 @@ export default {
     grid-template-columns: 1fr;
   }
 
-  /* Отключаем data-speed эффект на мобильных */
-  [data-speed] {
-    transform: none !important;
-  }
+  .content-image-4, .content-image-5 { display: none; }
 }
 
 @media (max-width: 768px) {
@@ -1328,6 +921,6 @@ export default {
 }
 
 .content-description b {
-  color: #ff4800;
+  color: #c94218;
 }
 </style>

@@ -18,7 +18,7 @@
           <span v-if="option.description" class="choice-description">{{ option.description }}</span>
         </span>
         <span class="choice-mark" aria-hidden="true">
-          <VIcon v-if="selection === option.value" :icon="icons.complete" size="13" />
+          <SiteIcon v-if="selection === option.value" name="complete" size="13" />
         </span>
       </label>
     </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { aliases as icons } from 'vuetify/iconsets/mdi-svg'
+import SiteIcon from '~/components/SiteIcon.vue'
 import { ktpChoiceDescriptions } from '~/assets/data/ktpQuiz'
 
 const props = defineProps({

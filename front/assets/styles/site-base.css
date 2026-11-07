@@ -1,0 +1,15 @@
+/* Match the root wrappers in the previous production output. Page styles and
+ * critical-base.css own the reset; do not add a framework-wide CSS reset here.
+ * Layout derived from Vuetify (MIT); see licenses/vuetify.txt.
+ */
+.site-app { display: flex; background: #fff; color: rgba(0, 0, 0, 0.87); }
+.site-app__wrap {
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  max-width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}

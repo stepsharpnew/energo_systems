@@ -15,67 +15,67 @@
 
     <div class="stage" data-stage ref="stage" @pointerdown="pointerDown" @pointerup="pointerUp" @pointercancel="pointerCancel" @scroll.passive="onStageScroll">
       <article class="chapter" :class="{ 'is-active': chapter === 0, 'is-open': opened === 0 }" data-chapter="0" @click="selectChapter(0)" @focus="focusChapter($event, 0)" data-pos="top" tabindex="0" aria-label="Технический аудит и проектирование">
-        <img src="/ups/process-audit.webp" alt="Инженеры с чертежами у дома" width="960" height="960">
+        <img v-bind="imageAttrs('/ups/process-audit.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Инженеры с чертежами у дома" loading="lazy">
         <i class="chapter__shade" aria-hidden="true"></i>
         <div class="chapter__rail" aria-hidden="true"><span class="chapter__no">01–02</span><span class="chapter__vname">Технический аудит и проектирование</span></div>
         <div class="chapter__card">
           <div class="chapter__bar" @click.stop="toggleChapter(0)"><h3 class="chapter__title">Технический аудит и проектирование</h3><button class="chapter__tg" type="button" :aria-expanded="opened === 0"><span class="chapter__tg-t">{{ opened === 0 ? 'Свернуть' : 'Что внутри' }}</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
           <ol class="steps">
-            <li class="step" :class="{ 'is-current': current === 0 }" data-step="0" role="button" tabindex="0" @click.stop="selectStep(0, true)" @keydown.enter.prevent="selectStep(0, true)" @keydown.space.prevent="selectStep(0, true)">
+            <li class="step" :class="{ 'is-current': current === 0 }" data-step="0"><button class="step__trigger" type="button" :aria-pressed="current === 0" aria-label="Открыть этап: Выезд и технический аудит" @click.stop="selectStep(0, true)">
               <span class="step__no">1</span>
               <div><b class="step__title">Выезд и технический аудит</b><div class="step__more"><div><p class="step__text">Инженер проверяет ввод и ВРУ, определяет точку подключения и место установки, замеряет фактическую нагрузку.</p><p class="step__get">Вы получаете: Перечень нагрузок и схема размещения</p></div></div></div>
-            </li>
-            <li class="step" :class="{ 'is-current': current === 1 }" data-step="1" role="button" tabindex="0" @click.stop="selectStep(1, true)" @keydown.enter.prevent="selectStep(1, true)" @keydown.space.prevent="selectStep(1, true)">
+            </button></li>
+            <li class="step" :class="{ 'is-current': current === 1 }" data-step="1"><button class="step__trigger" type="button" :aria-pressed="current === 1" aria-label="Открыть этап: Проектирование и расчёт нагрузок" @click.stop="selectStep(1, true)">
               <span class="step__no">2</span>
               <div><b class="step__title">Проектирование и расчёт нагрузок</b><div class="step__more"><div><p class="step__text">Рассчитываем мощность ИБП и ёмкость АКБ, разрабатываем схему подключения.</p><p class="step__get">Вы получаете: Проект и смета</p></div></div></div>
-            </li>
+            </button></li>
           </ol>
         </div>
       </article>
       <article class="chapter" :class="{ 'is-active': chapter === 1, 'is-open': opened === 1 }" data-chapter="1" @click="selectChapter(1)" @focus="focusChapter($event, 1)" tabindex="0" aria-label="Комплектация и поставка">
-        <img src="/ups/process-delivery.webp" alt="Бригада несёт оборудование в дом" width="960" height="960">
+        <img v-bind="imageAttrs('/ups/process-delivery.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Бригада несёт оборудование в дом" loading="lazy">
         <i class="chapter__shade" aria-hidden="true"></i>
         <div class="chapter__rail" aria-hidden="true"><span class="chapter__no">03</span><span class="chapter__vname">Комплектация и поставка</span></div>
         <div class="chapter__card">
           <div class="chapter__bar" @click.stop="toggleChapter(1)"><h3 class="chapter__title">Комплектация и поставка</h3><button class="chapter__tg" type="button" :aria-expanded="opened === 1"><span class="chapter__tg-t">{{ opened === 1 ? 'Свернуть' : 'Что внутри' }}</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
           <ol class="steps">
-            <li class="step" :class="{ 'is-current': current === 2 }" data-step="2" role="button" tabindex="0" @click.stop="selectStep(2, true)" @keydown.enter.prevent="selectStep(2, true)" @keydown.space.prevent="selectStep(2, true)">
+            <li class="step" :class="{ 'is-current': current === 2 }" data-step="2"><button class="step__trigger" type="button" :aria-pressed="current === 2" aria-label="Открыть этап: Поставка оборудования" @click.stop="selectStep(2, true)">
               <span class="step__no">3</span>
               <div><b class="step__title">Поставка оборудования</b><div class="step__more"><div><p class="step__text">Доставляем оборудование на объект, проверяем комплектность по спецификации до монтажа.</p><p class="step__get">Вы получаете: Оборудование на объекте по спецификации</p></div></div></div>
-            </li>
+            </button></li>
           </ol>
         </div>
       </article>
       <article class="chapter" :class="{ 'is-active': chapter === 2, 'is-open': opened === 2 }" data-chapter="2" @click="selectChapter(2)" @focus="focusChapter($event, 2)" tabindex="0" aria-label="Монтаж и пусконаладочные работы">
-        <img src="/ups/process-installation.webp" alt="Монтажники устанавливают систему ИБП на стене" width="960" height="960">
+        <img v-bind="imageAttrs('/ups/process-installation.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Монтажники устанавливают систему ИБП на стене" loading="lazy">
         <i class="chapter__shade" aria-hidden="true"></i>
         <div class="chapter__rail" aria-hidden="true"><span class="chapter__no">04–05</span><span class="chapter__vname">Монтаж и пусконаладочные работы</span></div>
         <div class="chapter__card">
           <div class="chapter__bar" @click.stop="toggleChapter(2)"><h3 class="chapter__title">Монтаж и пусконаладочные работы</h3><button class="chapter__tg" type="button" :aria-expanded="opened === 2"><span class="chapter__tg-t">{{ opened === 2 ? 'Свернуть' : 'Что внутри' }}</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
           <ol class="steps">
-            <li class="step" :class="{ 'is-current': current === 3 }" data-step="3" role="button" tabindex="0" @click.stop="selectStep(3, true)" @keydown.enter.prevent="selectStep(3, true)" @keydown.space.prevent="selectStep(3, true)">
+            <li class="step" :class="{ 'is-current': current === 3 }" data-step="3"><button class="step__trigger" type="button" :aria-pressed="current === 3" aria-label="Открыть этап: Монтажные работы" @click.stop="selectStep(3, true)">
               <span class="step__no">4</span>
               <div><b class="step__title">Монтажные работы</b><div class="step__more"><div><p class="step__text">Монтируем инверторы, АКБ и байпасный щит, прокладываем кабельные линии.</p><p class="step__get">Вы получаете: Система, смонтированная по проекту</p></div></div></div>
-            </li>
-            <li class="step" :class="{ 'is-current': current === 4 }" data-step="4" role="button" tabindex="0" @click.stop="selectStep(4, true)" @keydown.enter.prevent="selectStep(4, true)" @keydown.space.prevent="selectStep(4, true)">
+            </button></li>
+            <li class="step" :class="{ 'is-current': current === 4 }" data-step="4"><button class="step__trigger" type="button" :aria-pressed="current === 4" aria-label="Открыть этап: Запуск и сдача объекта" @click.stop="selectStep(4, true)">
               <span class="step__no">5</span>
               <div><b class="step__title">Запуск и сдача объекта</b><div class="step__more"><div><p class="step__text">Выполняем пусконаладку, испытываем под нагрузкой, обучаем эксплуатации.</p><p class="step__get">Вы получаете: Работающий резерв и комплект документации</p></div></div></div>
-            </li>
+            </button></li>
           </ol>
         </div>
       </article>
     
       <article class="chapter" :class="{ 'is-active': chapter === 3, 'is-open': opened === 3 }" data-chapter="3" @click="selectChapter(3)" @focus="focusChapter($event, 3)" tabindex="0" aria-label="Обслуживание">
-        <img data-same="img-room" src="/ups/configuration-system.webp" alt="Оборудование резервного питания в техническом помещении дома" width="900" height="900">
+        <img data-same="img-room" v-bind="imageAttrs('/ups/configuration-system.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Оборудование резервного питания в техническом помещении дома" loading="lazy">
         <i class="chapter__shade" aria-hidden="true"></i>
         <div class="chapter__rail" aria-hidden="true"><span class="chapter__no">06</span><span class="chapter__vname">Обслуживание</span></div>
         <div class="chapter__card">
           <div class="chapter__bar" @click.stop="toggleChapter(3)"><h3 class="chapter__title">Обслуживание</h3><button class="chapter__tg" type="button" :aria-expanded="opened === 3"><span class="chapter__tg-t">{{ opened === 3 ? 'Свернуть' : 'Что внутри' }}</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
           <ol class="steps">
-            <li class="step" :class="{ 'is-current': current === 5 }" data-step="5" role="button" tabindex="0" @click.stop="selectStep(5, true)" @keydown.enter.prevent="selectStep(5, true)" @keydown.space.prevent="selectStep(5, true)">
+            <li class="step" :class="{ 'is-current': current === 5 }" data-step="5"><button class="step__trigger" type="button" :aria-pressed="current === 5" aria-label="Открыть этап: Сервисное обслуживание" @click.stop="selectStep(5, true)">
               <span class="step__no">6</span>
               <div><b class="step__title">Сервисное обслуживание</b><div class="step__more"><div><p class="step__text">Проверяем состояние батарей, тестируем автоматику, при наличии ДГУ — его готовность. Поддержка и мониторинг — по регламенту.</p><p class="step__get">Вы получаете: План обслуживания и порядок обращения</p></div></div></div>
-            </li>
+            </button></li>
           </ol>
         </div>
       </article>    </div>
@@ -103,6 +103,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { useUpsVisibility } from '~/composables/useUpsVisibility.js'
 const openCallback = inject('upsCallback')
 const section = ref(null)

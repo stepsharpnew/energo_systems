@@ -8,7 +8,7 @@
 
     <div class="svc2">
       <article class="mon" data-mon ref="monitor">
-        <div class="mon__bg" aria-hidden="true"><img decoding="async" src="/dgu/images/445ad6fada9570e8.webp" alt="" width="900" height="900" loading="lazy"></div>
+        <div class="mon__bg" aria-hidden="true"><img v-bind="imageAttrs('/dgu/images/445ad6fada9570e8.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy"></div>
         <i class="mon__shade" aria-hidden="true"></i>
         <span class="mon__tag">Отдельная услуга</span>
 
@@ -70,6 +70,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 const emit = defineEmits(['callback'])
 const requestCallback = payload => emit('callback', payload)
 import { useDguVisibility } from '~/composables/useDguVisibility.js'

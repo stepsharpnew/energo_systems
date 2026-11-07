@@ -1,7 +1,8 @@
 <template>
-  <div ref="page" class="ups">
+  <div ref="page" class="ups" id="top">
+    <a class="landing-skip-link" href="#ups-main-content">Перейти к содержанию</a>
     <UpsHeader :working-hours="isWorkingHours" :scrolled="headerScrolled" />
-    <main id="top">
+    <main id="ups-main-content" tabindex="-1">
       <UpsHero />
       <UpsQuiz />
       <UpsAudience />
@@ -13,14 +14,16 @@
       <UpsGuarantees />
       <UpsContacts />
     </main>
-    <div class="sticky-cta" :class="{ 'is-visible': stickyVisible }" data-sticky>
+    <div role="region" aria-label="Быстрый расчёт стоимости" class="sticky-cta" :class="{ 'is-visible': stickyVisible }" data-sticky>
       <a class="btn-pill btn-pill--sm" href="#quiz"><span>Рассчитать стоимость</span></a>
     </div>
-    <UpsCallbackModal ref="callback" />
+    <UpsCallbackModal v-if="callbackRequested" :request="callback" @close="callback = null" />
   </div>
 </template>
 
 <script setup>
+import '~/assets/styles/landing-fonts.css'
+import { landingFontPreloads } from '~/utils/landingFonts.js'
 import '~/assets/styles/ups.css'
 import '~/assets/styles/service-landing.css'
 import UpsHeader from '~/components/ups/UpsHeader.vue'
@@ -34,19 +37,20 @@ import UpsProjects from '~/components/ups/UpsProjects.vue'
 import UpsService from '~/components/ups/UpsService.vue'
 import UpsGuarantees from '~/components/ups/UpsGuarantees.vue'
 import UpsContacts from '~/components/ups/UpsContacts.vue'
-import UpsCallbackModal from '~/components/ups/UpsCallbackModal.vue'
+import { defineAsyncComponent } from 'vue'
+const UpsCallbackModal = defineAsyncComponent(() => import('~/components/ups/UpsCallbackModal.vue'))
 const page = ref(null)
-const callback = ref(null)
+const callback = shallowRef(null)
+const callbackRequested = ref(false)
 const { isWorkingHours, headerScrolled, stickyVisible } = useLandingPage(page, { stickySelectors: '.hero__cta .btn-pill, #quiz, .cfg__cta .btn-pill, .cases__cta .btn-pill, .trust-sec__cta .btn-pill' })
-provide('upsCallback', options => callback.value?.open(options))
+provide('upsCallback', (options = {}) => {
+  callbackRequested.value = true
+  callback.value = { ...options, opener: document.activeElement }
+})
 useHead({
   title: 'ИБП под ключ',
   meta: [{ name: 'viewport', content: 'width=device-width,initial-scale=1,viewport-fit=cover' }, { name: 'description', content: 'ИБП под ключ для частных домов и коттеджных посёлков: аккумуляторы, ДГУ, автоматика. Расчёт, проектирование, монтаж и обслуживание. Москва и область.' }],
   htmlAttrs: { class: 'ups-document service-landing-document', lang: 'ru' },
-  link: [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap' }
-  ]
+  link: landingFontPreloads,
 })
 </script>

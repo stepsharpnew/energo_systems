@@ -1,26 +1,12 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { observeViewportBand } from '../utils/viewportVisibility.js'
 
-// Observers measure visibility; component state owns the resulting animation.
-export function useDguVisibility(element, threshold = 0.15) {
+export function useDguVisibility(element) {
   const visible = ref(false)
-  let observer
-  const measure = () => {
-    const rect = element.value?.getBoundingClientRect()
-    visible.value = Boolean(rect && rect.top < window.innerHeight * 0.85 && rect.bottom > window.innerHeight * 0.15)
-  }
+  let stop
   onMounted(() => {
-    measure()
-    if ('IntersectionObserver' in window) {
-      observer = new IntersectionObserver(measure, { threshold: [0, threshold, 0.6] })
-      if (element.value) observer.observe(element.value)
-    }
-    window.addEventListener('scroll', measure, { passive: true })
-    window.addEventListener('resize', measure)
+    stop = observeViewportBand(element.value, value => { visible.value = value }, { top: .15, bottom: .85 })
   })
-  onBeforeUnmount(() => {
-    observer?.disconnect()
-    window.removeEventListener('scroll', measure)
-    window.removeEventListener('resize', measure)
-  })
+  onBeforeUnmount(() => stop?.())
   return visible
 }

@@ -3,12 +3,11 @@
     <div class="header-inner">
       <NuxtLink class="brand-link" to="/" aria-label="На главную">
         <img
-          src="/img/image.png"
+          v-bind="imageAttrs('/img/image.png', { sizes: '(max-width: 760px) 238px, 258px', width: 480 })"
           alt="Энергосистемы"
           class="brand-logo"
           width="258"
           height="58"
-          fetchpriority="high"
         >
       </NuxtLink>
 
@@ -77,9 +76,11 @@
 </template>
 
 <script>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 export default {
   name: "Header",
   emits: ["open-contact-modal"],
+  methods: { imageAttrs },
 };
 </script>
 
@@ -290,8 +291,8 @@ export default {
 
 .request-button {
   color: #ffffff;
-  border: 1px solid #f05a28;
-  background: #f05a28;
+  border: 1px solid #c94218;
+  background: #c94218;
   box-shadow: 0 12px 24px rgba(240, 90, 40, 0.24);
 }
 
@@ -302,8 +303,8 @@ export default {
 }
 
 .request-button:hover {
-  background: #d84618;
-  border-color: #d84618;
+  background: #b83914;
+  border-color: #b83914;
   box-shadow: 0 14px 28px rgba(216, 70, 24, 0.28);
   transform: translateY(-1px);
 }

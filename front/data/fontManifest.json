@@ -1,0 +1,180 @@
+[
+  {
+    "family": "Manrope",
+    "subset": "cyrillic-ext",
+    "weights": [
+      400,
+      500,
+      600,
+      700,
+      800
+    ],
+    "src": "/fonts/manrope-v23-cyrillic-ext.woff2",
+    "source": "https://fonts.gstatic.com/s/manrope/v23/xn7gYHE41ni1AdIRggqxSvfedN62Zw.woff2",
+    "bytes": 2584,
+    "sha256": "347c589d57130c68f9829c2cd24969eed590328078ff921ca6000a56e5a2cc84"
+  },
+  {
+    "family": "Manrope",
+    "subset": "cyrillic",
+    "weights": [
+      400,
+      500,
+      600,
+      700,
+      800
+    ],
+    "src": "/fonts/manrope-v23-cyrillic.woff2",
+    "source": "https://fonts.gstatic.com/s/manrope/v23/xn7gYHE41ni1AdIRggOxSvfedN62Zw.woff2",
+    "bytes": 14368,
+    "sha256": "93bef303b8220d2f59dbe8db119891c9f38d94f48a26d373c28256fb2b50cba7"
+  },
+  {
+    "family": "Manrope",
+    "subset": "greek",
+    "weights": [
+      400,
+      500,
+      600,
+      700,
+      800
+    ],
+    "src": "/fonts/manrope-v23-greek.woff2",
+    "source": "https://fonts.gstatic.com/s/manrope/v23/xn7gYHE41ni1AdIRggSxSvfedN62Zw.woff2",
+    "bytes": 9308,
+    "sha256": "6b478f45d63e18352735fd427e92ae4704800a998ec3337c01b59e4f6ef87d44"
+  },
+  {
+    "family": "Manrope",
+    "subset": "vietnamese",
+    "weights": [
+      400,
+      500,
+      600,
+      700,
+      800
+    ],
+    "src": "/fonts/manrope-v23-vietnamese.woff2",
+    "source": "https://fonts.gstatic.com/s/manrope/v23/xn7gYHE41ni1AdIRggixSvfedN62Zw.woff2",
+    "bytes": 8356,
+    "sha256": "ddbf28cebf2fbbf800d307f020689bed6d1a96c5a22aed50fee23bf7de80d0f1"
+  },
+  {
+    "family": "Manrope",
+    "subset": "latin-ext",
+    "weights": [
+      400,
+      500,
+      600,
+      700,
+      800
+    ],
+    "src": "/fonts/manrope-v23-latin-ext.woff2",
+    "source": "https://fonts.gstatic.com/s/manrope/v23/xn7gYHE41ni1AdIRggmxSvfedN62Zw.woff2",
+    "bytes": 15212,
+    "sha256": "27eccb1f8944bc26f6511601bac9284786feb5e5bbb0c8035ff09ac63aaf7c52"
+  },
+  {
+    "family": "Manrope",
+    "subset": "latin",
+    "weights": [
+      400,
+      500,
+      600,
+      700,
+      800
+    ],
+    "src": "/fonts/manrope-v23-latin.woff2",
+    "source": "https://fonts.gstatic.com/s/manrope/v23/xn7gYHE41ni1AdIRggexSvfedN4.woff2",
+    "bytes": 24436,
+    "sha256": "8bd97e6bbbc1f602a8f791530eed1064c9a357d5731bbc76e3fc587fb068728f"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "cyrillic-ext",
+    "weights": [
+      400
+    ],
+    "src": "/fonts/pt-serif-v19-400-cyrillic-ext.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRVQgYoZZY2vCFuvAFbzr-_dSb_nco.woff2",
+    "bytes": 11292,
+    "sha256": "3a7b3ec02adf72947410474afcffe77d8049cb725cc36728dbd12706477d4fcf"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "cyrillic",
+    "weights": [
+      400
+    ],
+    "src": "/fonts/pt-serif-v19-400-cyrillic.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRVQgYoZZY2vCFuvAFSzr-_dSb_nco.woff2",
+    "bytes": 9348,
+    "sha256": "a60d74d7dc6d8344914e202cee779bf29d92f2514dd86e87978b2aa401256d8c"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "latin-ext",
+    "weights": [
+      400
+    ],
+    "src": "/fonts/pt-serif-v19-400-latin-ext.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRVQgYoZZY2vCFuvAFYzr-_dSb_nco.woff2",
+    "bytes": 8632,
+    "sha256": "3a274c5ae6fd7bcbd384a080bc8cf124c9a5ba524fc8ae77f12da84b2e455bbf"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "latin",
+    "weights": [
+      400
+    ],
+    "src": "/fonts/pt-serif-v19-400-latin.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRVQgYoZZY2vCFuvAFWzr-_dSb_.woff2",
+    "bytes": 13400,
+    "sha256": "202b8aa6108ec44ba8f3d717b0c9f7f94c7f4d76f01943104eaadaf6cf3da602"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "cyrillic-ext",
+    "weights": [
+      700
+    ],
+    "src": "/fonts/pt-serif-v19-700-cyrillic-ext.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRSQgYoZZY2vCFuvAnt66qfVyvVp8NAyIw.woff2",
+    "bytes": 11404,
+    "sha256": "117410c3c0e4fb2cb5e78fcbff0c5a232cfde3481da825437013f26959c77524"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "cyrillic",
+    "weights": [
+      700
+    ],
+    "src": "/fonts/pt-serif-v19-700-cyrillic.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRSQgYoZZY2vCFuvAnt66qWVyvVp8NAyIw.woff2",
+    "bytes": 9516,
+    "sha256": "8e7689d802131334ff5e4e36bd5235f23dc7962306356123fbc55bc221b67d03"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "latin-ext",
+    "weights": [
+      700
+    ],
+    "src": "/fonts/pt-serif-v19-700-latin-ext.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRSQgYoZZY2vCFuvAnt66qcVyvVp8NAyIw.woff2",
+    "bytes": 8752,
+    "sha256": "1895f8fe0add5c53f4d9450430e4907cd2e2bf1c1f31f9974e3f51722e519389"
+  },
+  {
+    "family": "PT Serif",
+    "subset": "latin",
+    "weights": [
+      700
+    ],
+    "src": "/fonts/pt-serif-v19-700-latin.woff2",
+    "source": "https://fonts.gstatic.com/s/ptserif/v19/EJRSQgYoZZY2vCFuvAnt66qSVyvVp8NA.woff2",
+    "bytes": 13540,
+    "sha256": "57d3ae6c4b78cc2d5b568212e1fcd75e5a0be45e6249e55750ba77d22e22bc3b"
+  }
+]

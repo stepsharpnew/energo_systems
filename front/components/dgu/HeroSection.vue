@@ -3,7 +3,7 @@
   <div class="hero" data-hero>
 
     <div class="hero__bg" aria-hidden="true">
-      <img decoding="sync" src="/dgu/images/4cb4251f853540df.webp" alt="" width="1600" height="900" fetchpriority="high">
+      <img v-bind="imageAttrs('/dgu/images/4cb4251f853540df.webp', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
       <i class="hero__shade"></i>
     </div>
 
@@ -44,15 +44,15 @@
       <div class="trust__inner">
         <div class="trust__label">Заказчики компании:</div>
         <div class="trust__item">
-          <span class="trust__logo"><img decoding="async" src="/dgu/images/15a23ed5d414c337.png" alt="" width="160" height="160"></span>
+          <span class="trust__logo"><img v-bind="imageAttrs('/dgu/images/15a23ed5d414c337.png', { sizes: '160px', width: 480 })" alt=""></span>
           <div class="trust__text"><b>Россети</b><span>Электросетевой комплекс</span></div>
         </div>
         <div class="trust__item">
-          <span class="trust__logo"><img decoding="async" src="/dgu/images/bdace6670652bb9b.png" alt="" width="160" height="160"></span>
+          <span class="trust__logo"><img v-bind="imageAttrs('/dgu/images/bdace6670652bb9b.png', { sizes: '160px', width: 480 })" alt=""></span>
           <div class="trust__text"><b>Газпром</b><span>Нефть и газ</span></div>
         </div>
         <div class="trust__item">
-          <span class="trust__logo"><img decoding="async" src="/dgu/images/af50752acc1ced3a.png" alt="" width="160" height="160"></span>
+          <span class="trust__logo"><img v-bind="imageAttrs('/dgu/images/af50752acc1ced3a.png', { sizes: '160px', width: 480 })" alt=""></span>
           <div class="trust__text"><b>РЖД</b><span>Железнодорожный транспорт</span></div>
         </div>
       </div>
@@ -62,5 +62,6 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 defineEmits(['solution'])
 </script>

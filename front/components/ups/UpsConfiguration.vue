@@ -10,7 +10,7 @@
     <div class="cfg" :class="{ 'is-armed': !reduced, 'is-in': played }">
       <div class="cfg__media">
         <div class="cfg__photo">
-          <img id="img-room" src="/ups/configuration-system.webp" alt="Оборудование резервного питания в техническом помещении премиального дома" width="900" height="900" loading="lazy">
+          <img id="img-room" v-bind="imageAttrs('/ups/configuration-system.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Оборудование резервного питания в техническом помещении премиального дома" loading="lazy">
           <span class="cfg__chip">Расчётный пример · без ДГУ</span>
         </div>
         <div class="cfg__comp">
@@ -59,7 +59,7 @@
     <p class="cfg__h cfg__h--tiers">Другие мощности — считаем под нагрузку объекта</p>
 <div class="tiers" aria-label="Другие мощности">
       <a class="tier" href="#quiz">
-        <img class="tier__bg" src="/ups/tier-house.jpg" alt="" width="900" height="600">
+        <img class="tier__bg" v-bind="imageAttrs('/ups/tier-house.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy">
         <i class="tier__shade" aria-hidden="true"></i>
         <span class="tier__kw">30–100 кВт</span>
         <b>Большой дом, хозблоки, гостевые дома</b>
@@ -67,7 +67,7 @@
         <span class="tier__go">Рассчитать <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <a class="tier" href="#quiz">
-        <img class="tier__bg" src="/ups/tier-commercial.jpg" alt="" width="900" height="600">
+        <img class="tier__bg" v-bind="imageAttrs('/ups/tier-commercial.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy">
         <i class="tier__shade" aria-hidden="true"></i>
         <span class="tier__kw">100–500 кВт</span>
         <b>Посёлки, отели, коммерческие объекты</b>
@@ -75,7 +75,7 @@
         <span class="tier__go">Рассчитать <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <a class="tier" href="#quiz">
-        <img class="tier__bg" src="/ups/tier-industrial.jpg" alt="" width="900" height="600">
+        <img class="tier__bg" v-bind="imageAttrs('/ups/tier-industrial.jpg', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="" loading="lazy">
         <i class="tier__shade" aria-hidden="true"></i>
         <span class="tier__kw">500–1500 кВт</span>
         <b>Производство и крупные объекты</b>
@@ -88,6 +88,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { useUpsVisibility } from '~/composables/useUpsVisibility.js'
 const section = ref(null)
 const load = ref(1.5)

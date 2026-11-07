@@ -150,10 +150,10 @@ const directions = [
   gap: 9px;
   margin-top: 28px;
   padding: 0 20px;
-  border: 1px solid #f05a28;
+  border: 1px solid #c94218;
   border-radius: 8px;
   color: #ffffff;
-  background: #f05a28;
+  background: #c94218;
   font-size: 15px;
   font-weight: 800;
   line-height: 1;
@@ -229,7 +229,7 @@ const directions = [
   justify-content: center;
   border: 1px solid rgba(45, 122, 172, 0.28);
   border-radius: 6px;
-  color: #2d7aac;
+  color: #246d9c;
   background: rgba(45, 122, 172, 0.08);
   font-size: 12px;
   font-weight: 900;

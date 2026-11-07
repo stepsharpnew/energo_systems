@@ -4,8 +4,9 @@
     <Header @open-contact-modal="scrollToCatalog" />
     <Navigation :nav-items="navItems" @scroll-to="handleNavigation" />
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <section class="catalog-hero">
+        <img class="catalog-hero-image" v-bind="heroImage" alt="" aria-hidden="true" fetchpriority="high" loading="eager">
         <div class="catalog-hero-inner">
           <div class="hero-copy">
             <p class="eyebrow">Электрооборудование · поставка по России</p>
@@ -65,7 +66,7 @@
               class="equipment-card"
             >
               <NuxtLink class="card-media" :to="`/equipment/${item.slug}`" :aria-label="`Подробнее: ${item.name}`">
-                <img :src="item.gallery[0]" :alt="item.name" width="900" height="700" loading="lazy">
+                <img v-bind="imageAttrs(item.gallery[0], { sizes: '(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw', width: 800 })" :alt="item.name" loading="lazy">
                 <span class="card-number">ES–{{ formatNumber(index + 1) }}</span>
                 <span v-if="item.questionnaire" class="questionnaire-badge">Теханкета</span>
               </NuxtLink>
@@ -117,7 +118,10 @@
 import Header from '~/components/energy-systems/Header.vue'
 import Navigation from '~/components/energy-systems/Navigation.vue'
 import Footer from '~/components/energy-systems/Footer.vue'
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { equipmentCatalog } from '~/assets/data/equipmentCatalog'
+
+const heroImage = imageAttrs('/img/equipment/ktp-1.jpg', { sizes: '100vw', width: 1200 })
 
 const navItems = [
   { key: 'home', label: 'Главная', href: '/' },
@@ -159,7 +163,10 @@ useHead({
       content: 'Каталог электрооборудования Энергосистемы: МТП, КТП, БКТП, КРУН, КСО, КРУ, ЯКНО, ПКУ, трансформаторы, ВРУ и панели ЩО. Подбор по параметрам и заявка инженеру.',
     },
   ],
-  link: [{ rel: 'canonical', href: 'https://e-systems.su/equipment' }],
+  link: [
+    { rel: 'canonical', href: 'https://e-systems.su/equipment' },
+    { rel: 'preload', as: 'image', type: 'image/webp', href: heroImage.src, imagesrcset: heroImage.srcset, imagesizes: heroImage.sizes, fetchpriority: 'high' },
+  ],
   script: [{ type: 'application/ld+json', children: JSON.stringify(schema) }],
 })
 
@@ -201,17 +208,29 @@ const handleNavigation = (key) => {
 
 .catalog-hero {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
-  background:
-    linear-gradient(120deg, rgba(16, 34, 52, 0.98), rgba(18, 54, 78, 0.93)),
-    url('/img/equipment/ktp-1.jpg') center / cover;
+  background: #102234;
   color: #fff;
 }
+
+.catalog-hero-image,
+.catalog-hero::before {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.catalog-hero-image { z-index: 0; object-fit: cover; object-position: center; }
+.catalog-hero::before { content: ''; z-index: 1; background: linear-gradient(120deg, rgba(16, 34, 52, 0.98), rgba(18, 54, 78, 0.93)); }
 
 .catalog-hero::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
@@ -228,7 +247,7 @@ const handleNavigation = (key) => {
 
 .catalog-hero-inner {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
   gap: clamp(48px, 8vw, 108px);
@@ -239,7 +258,7 @@ const handleNavigation = (key) => {
 
 .eyebrow {
   margin: 0 0 14px;
-  color: #f05a28;
+  color: #c94218;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.15em;
@@ -283,7 +302,7 @@ const handleNavigation = (key) => {
 }
 
 .primary-action {
-  background: #f05a28;
+  background: #c94218;
   color: #fff;
 }
 
@@ -328,7 +347,7 @@ const handleNavigation = (key) => {
 }
 
 .passport-panel li > span {
-  color: #f05a28;
+  color: #c94218;
   font-size: 13px;
   font-weight: 900;
 }
@@ -382,7 +401,7 @@ const handleNavigation = (key) => {
 .section-heading > p,
 .selection-section p {
   margin: 0;
-  color: #647789;
+  color: #52687a;
   font-size: 17px;
   line-height: 1.65;
 }
@@ -450,7 +469,7 @@ const handleNavigation = (key) => {
 
 .questionnaire-badge {
   right: 14px;
-  background: #f05a28;
+  background: #c94218;
   color: #fff;
   text-transform: uppercase;
 }
@@ -479,7 +498,7 @@ const handleNavigation = (key) => {
 }
 
 .card-body > div > span {
-  color: #647789;
+  color: #52687a;
   line-height: 1.55;
 }
 
@@ -505,7 +524,7 @@ const handleNavigation = (key) => {
   left: 0;
   width: 6px;
   height: 6px;
-  background: #f05a28;
+  background: #c94218;
 }
 
 .card-link {

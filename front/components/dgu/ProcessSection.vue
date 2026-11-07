@@ -15,52 +15,52 @@
 
     <div class="stage" data-stage ref="stage" @pointerdown="pointerDown" @pointerup="pointerUp" @pointercancel="pointerCancel" @scroll.passive="onStageScroll">
       <article class="chapter" :class="{ 'is-active': chapter === 0 }" data-chapter="0" :ref="element => chapters[0] = element" @click="openChapter(0)" @focus="focusChapter($event, 0)" data-pos="top" tabindex="0" aria-label="Технический аудит и проектирование">
-        <img decoding="async" src="/dgu/images/3ae1688ca73db4de.webp" alt="Заказчик и два специалиста Энергосистем обсуждают проект у бизнес-центра" width="960" height="960">
+        <img v-bind="imageAttrs('/dgu/images/3ae1688ca73db4de.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Заказчик и два специалиста Энергосистем обсуждают проект у бизнес-центра" loading="lazy">
         <i class="chapter__shade" aria-hidden="true"></i>
         <div class="chapter__rail" aria-hidden="true"><span class="chapter__no">01–02</span><span class="chapter__vname">Технический аудит и проектирование</span></div>
         <div class="chapter__card">
           <h3 class="chapter__title">Технический аудит и проектирование</h3>
           <ol class="steps">
-            <li class="step" :class="{ 'is-current': active === 0 }" data-step="0" tabindex="0" role="button" @click.stop="show(0)" @keydown.enter.stop.prevent="show(0)" @keydown.space.stop.prevent="show(0)">
+            <li class="step" :class="{ 'is-current': active === 0 }" data-step="0"><button class="step__trigger" type="button" :aria-pressed="active === 0" aria-label="Открыть этап: Выезд и технический аудит" @click.stop="show(0)">
               <span class="step__no">1</span>
               <div><b class="step__title">Выезд и технический аудит</b><div class="step__more"><div><p class="step__text">Инженер проверяет ввод и главный распределительный щит, выбирает место установки, считает нагрузки и пусковые токи.</p><p class="step__get">Вы получаете: Перечень нагрузок и схема размещения</p></div></div></div>
-            </li>
-            <li class="step" :class="{ 'is-current': active === 1 }" data-step="1" tabindex="0" role="button" @click.stop="show(1)" @keydown.enter.stop.prevent="show(1)" @keydown.space.stop.prevent="show(1)">
+            </button></li>
+            <li class="step" :class="{ 'is-current': active === 1 }" data-step="1"><button class="step__trigger" type="button" :aria-pressed="active === 1" aria-label="Открыть этап: Проектирование и расчёт нагрузок" @click.stop="show(1)">
               <span class="step__no">2</span>
               <div><b class="step__title">Проектирование и расчёт нагрузок</b><div class="step__more"><div><p class="step__text">Рассчитываем мощность электростанции, схему АВР, топливную систему и кабельные линии, согласуем проект.</p><p class="step__get">Вы получаете: Проект и смета</p></div></div></div>
-            </li>
+            </button></li>
           </ol>
         </div>
       </article>
       <article class="chapter" :class="{ 'is-active': chapter === 1 }" data-chapter="1" :ref="element => chapters[1] = element" @click="openChapter(1)" @focus="focusChapter($event, 1)" data-pos="top" tabindex="0" aria-label="Комплектация и поставка">
-        <img decoding="async" src="/dgu/images/37faaf8fd8999628.webp" alt="Разгрузка ДГУ и оборудования ИБП в деревянных транспортных ящиках у бизнес-центра" width="960" height="960">
+        <img v-bind="imageAttrs('/dgu/images/37faaf8fd8999628.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Разгрузка ДГУ и оборудования ИБП в деревянных транспортных ящиках у бизнес-центра" loading="lazy">
         <i class="chapter__shade" aria-hidden="true"></i>
         <div class="chapter__rail" aria-hidden="true"><span class="chapter__no">03</span><span class="chapter__vname">Комплектация и поставка</span></div>
         <div class="chapter__card">
           <h3 class="chapter__title">Комплектация и поставка</h3>
           <ol class="steps">
-            <li class="step" :class="{ 'is-current': active === 2 }" data-step="2" tabindex="0" role="button" @click.stop="show(2)" @keydown.enter.stop.prevent="show(2)" @keydown.space.stop.prevent="show(2)">
+            <li class="step" :class="{ 'is-current': active === 2 }" data-step="2"><button class="step__trigger" type="button" :aria-pressed="active === 2" aria-label="Открыть этап: Поставка оборудования" @click.stop="show(2)">
               <span class="step__no">3</span>
               <div><b class="step__title">Поставка оборудования</b><div class="step__more"><div><p class="step__text">Доставляем электростанцию на объект, проверяем комплектность по спецификации до монтажа.</p><p class="step__get">Вы получаете: Электростанция на объекте по спецификации</p></div></div></div>
-            </li>
+            </button></li>
           </ol>
         </div>
       </article>
       <article class="chapter" :class="{ 'is-active': chapter === 2 }" data-chapter="2" :ref="element => chapters[2] = element" @click="openChapter(2)" @focus="focusChapter($event, 2)" data-pos="top" tabindex="0" aria-label="Монтаж и пусконаладочные работы">
-        <img decoding="async" src="/dgu/images/76e878b0ba76e5aa.webp" alt="Сервисные инженеры в форме Энергосистем ведут пусконаладку ДГУ и шкафов ИБП" width="960" height="960">
+        <img v-bind="imageAttrs('/dgu/images/76e878b0ba76e5aa.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Сервисные инженеры в форме Энергосистем ведут пусконаладку ДГУ и шкафов ИБП" loading="lazy">
         <i class="chapter__shade" aria-hidden="true"></i>
         <div class="chapter__rail" aria-hidden="true"><span class="chapter__no">04–05</span><span class="chapter__vname">Монтаж и пусконаладочные работы</span></div>
         <div class="chapter__card">
           <h3 class="chapter__title">Монтаж и пусконаладочные работы</h3>
           <ol class="steps">
-            <li class="step" :class="{ 'is-current': active === 3 }" data-step="3" tabindex="0" role="button" @click.stop="show(3)" @keydown.enter.stop.prevent="show(3)" @keydown.space.stop.prevent="show(3)">
+            <li class="step" :class="{ 'is-current': active === 3 }" data-step="3"><button class="step__trigger" type="button" :aria-pressed="active === 3" aria-label="Открыть этап: Монтажные работы" @click.stop="show(3)">
               <span class="step__no">4</span>
               <div><b class="step__title">Монтажные работы</b><div class="step__more"><div><p class="step__text">Готовим площадку или машинный зал, устанавливаем электростанцию, подключаем щит АВР, прокладываем кабельные линии.</p><p class="step__get">Вы получаете: Электростанция, смонтированная по проекту</p></div></div></div>
-            </li>
-            <li class="step" :class="{ 'is-current': active === 4 }" data-step="4" tabindex="0" role="button" @click.stop="show(4)" @keydown.enter.stop.prevent="show(4)" @keydown.space.stop.prevent="show(4)">
+            </button></li>
+            <li class="step" :class="{ 'is-current': active === 4 }" data-step="4"><button class="step__trigger" type="button" :aria-pressed="active === 4" aria-label="Открыть этап: Запуск и сдача объекта" @click.stop="show(4)">
               <span class="step__no">5</span>
               <div><b class="step__title">Запуск и сдача объекта</b><div class="step__more"><div><p class="step__text">Выполняем пусконаладку, проверяем автозапуск и приём нагрузки при имитации отключения сети, обучаем персонал.</p><p class="step__get">Вы получаете: Работающий резерв и комплект документации</p></div></div></div>
-            </li>
+            </button></li>
           </ol>
         </div>
       </article>
@@ -88,6 +88,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 const emit = defineEmits(['callback'])
 const requestCallback = payload => emit('callback', payload)
 import { useDguVisibility } from '~/composables/useDguVisibility.js'

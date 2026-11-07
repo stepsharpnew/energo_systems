@@ -7,7 +7,7 @@
   --line-strong: rgba(20, 23, 28, .22);
   --text: #14171C;
   --text-2: #3F434A;
-  --muted: #71747A;
+  --muted: #656970;
   --accent: #F2A93B;
   --accent-hover: #FFB65C;
   --accent-ink: #A8660A;
@@ -94,6 +94,7 @@ body.dgu-modal-open { overflow: hidden; }
 .dgu .msg:hover { transform: translateY(-1px); filter: brightness(1.1); }
 .dgu .phone { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.25; margin-left: 6px; }
 .dgu .phone__num {
+  display: inline-flex; align-items: center; min-height: 24px;
   font-weight: 700; font-size: 15.5px; white-space: nowrap;
   font-variant-numeric: tabular-nums;   /* цифры одной ширины, иначе единицы кажутся мельче */
   transition: color .2s;

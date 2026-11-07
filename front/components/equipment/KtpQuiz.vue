@@ -8,7 +8,7 @@
       </div>
       <a v-if="questionnaireFile" class="ktp-download" :href="questionnaireFile" download>
         Опросный лист <span>DOCX</span>
-        <VIcon :icon="icons.arrowdown" size="17" aria-hidden="true" />
+        <SiteIcon name="arrowdown" size="17" aria-hidden="true" />
       </a>
     </header>
 
@@ -19,7 +19,7 @@
         </div>
 
         <div v-if="submitState === 'success'" class="ktp-success" role="status">
-          <span class="ktp-success-icon"><VIcon :icon="icons.success" size="32" aria-hidden="true" /></span>
+          <span class="ktp-success-icon"><SiteIcon name="success" size="32" aria-hidden="true" /></span>
           <h3 ref="stepHeading" tabindex="-1">Параметры КТП отправлены</h3>
           <p>Инженер изучит вашу заявку и свяжется с вами, чтобы уточнить комплектацию.</p>
           <button class="ktp-primary" type="button" @click="startAgain">Подобрать ещё одну КТП</button>
@@ -38,7 +38,7 @@
             <details v-if="activeStep.details" class="ktp-details">
               <summary>
                 <span>{{ activeStep.detailsTitle }}<small>Необязательно{{ detailsCount ? ` · заполнено ${detailsCount}` : '' }}</small></span>
-                <VIcon class="ktp-chevron" :icon="icons.dropdown" size="21" aria-hidden="true" />
+                <SiteIcon class="ktp-chevron" name="dropdown" size="21" aria-hidden="true" />
               </summary>
               <div class="ktp-extra-fields">
                 <EquipmentQuizField v-for="field in activeStep.details" :key="field.key" v-model="answers[field.key]" :field="field" compact />
@@ -56,7 +56,7 @@
                 <div><dt>Схема</dt><dd>{{ answers.stationCircuit }}</dd></div>
               </dl>
               <details class="ktp-all-answers">
-                <summary>Все параметры ({{ summary.length }}) <VIcon :icon="icons.dropdown" size="18" aria-hidden="true" /></summary>
+                <summary>Все параметры ({{ summary.length }}) <SiteIcon name="dropdown" size="18" aria-hidden="true" /></summary>
                 <dl><div v-for="answer in summary" :key="answer.label"><dt>{{ answer.label }}</dt><dd>{{ answer.value }}</dd></div></dl>
               </details>
             </aside>
@@ -70,7 +70,7 @@
               </div>
               <CallbackPreferences v-model="contact.callbackPreferences" :phone="contact.phone" class="ktp-callback" />
               <details class="ktp-details ktp-contact-extra">
-                <summary><span>Компания и комментарий<small>Необязательно</small></span><VIcon class="ktp-chevron" :icon="icons.dropdown" size="21" aria-hidden="true" /></summary>
+                <summary><span>Компания и комментарий<small>Необязательно</small></span><SiteIcon class="ktp-chevron" name="dropdown" size="21" aria-hidden="true" /></summary>
                 <div class="ktp-extra-fields">
                   <label class="ktp-input"><span>Организация</span><input v-model.trim="contact.organization" name="organization" type="text" maxlength="160" autocomplete="organization" placeholder="Название компании"></label>
                   <label class="ktp-input"><span>Комментарий к заявке</span><textarea v-model.trim="contact.comment" name="comment" maxlength="3000" rows="3" placeholder="Особенности объекта, сроки и условия доставки" /></label>
@@ -85,9 +85,9 @@
           <footer class="ktp-actions">
             <span class="ktp-counter" aria-live="polite" aria-atomic="true">Шаг: <strong>{{ currentStep + 1 }}</strong> / {{ totalSteps }}</span>
             <div class="ktp-buttons">
-              <button v-if="currentStep > 0" class="ktp-back" type="button" :disabled="isSubmitting" @click="changeStep(-1)"><VIcon :icon="icons.arrowleft" size="18" aria-hidden="true" /><span>Назад</span></button>
-              <button v-if="!isContactStep" class="ktp-primary" type="button" :disabled="!canContinue" @click="changeStep(1)">Далее <VIcon :icon="icons.arrowright" size="20" aria-hidden="true" /></button>
-              <button v-else class="ktp-primary" type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Отправляем…' : 'Получить предложение' }}<VIcon v-if="!isSubmitting" :icon="icons.arrowright" size="20" aria-hidden="true" /></button>
+              <button v-if="currentStep > 0" class="ktp-back" type="button" :disabled="isSubmitting" @click="changeStep(-1)"><SiteIcon name="arrowleft" size="18" aria-hidden="true" /><span>Назад</span></button>
+              <button v-if="!isContactStep" class="ktp-primary" type="button" :disabled="!canContinue" @click="changeStep(1)">Далее <SiteIcon name="arrowright" size="20" aria-hidden="true" /></button>
+              <button v-else class="ktp-primary" type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Отправляем…' : 'Получить предложение' }}<SiteIcon v-if="!isSubmitting" name="arrowright" size="20" aria-hidden="true" /></button>
             </div>
           </footer>
         </form>
@@ -97,7 +97,7 @@
 </template>
 
 <script setup>
-import { aliases as icons } from 'vuetify/iconsets/mdi-svg'
+import SiteIcon from '~/components/SiteIcon.vue'
 import EquipmentQuizField from './EquipmentQuizField.vue'
 import { useKtpQuiz } from '~/composables/useKtpQuiz'
 import { handlePhoneInput, handlePhoneKeydown } from '~/utils/phoneFormatter'
@@ -151,7 +151,7 @@ function startAgain() { reset(); focusStep() }
 .ktp-intro h2 { margin: 0; color: var(--ktp-ink); font-size: clamp(26px, 3vw, 32px); line-height: 1.2; letter-spacing: -.035em; font-weight: 600; }
 .ktp-intro-copy { margin: 10px 0 0; color: var(--ktp-muted); font-size: 14px; line-height: 1.5; }
 .ktp-download { display: inline-flex; align-items: center; flex-shrink: 0; gap: 8px; min-height: 40px; color: #555960; font-size: 12px; text-decoration: none; }
-.ktp-download span { color: #7b7e84; font-size: 10px; letter-spacing: .05em; }
+.ktp-download span { color: #626970; font-size: 10px; letter-spacing: .05em; }
 .ktp-download:hover { color: var(--ktp-ink); text-decoration: underline; }
 .ktp-frame { padding: 7px; border-radius: 25px; background: #eeefec; scroll-margin-top: 88px; }
 .ktp-card { overflow: hidden; border-radius: 18px; background: #fff; }

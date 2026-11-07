@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  background: #fff;
+  color: #142233;
+  font-family: Arial, sans-serif;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+#__nuxt {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+}

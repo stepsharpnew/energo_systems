@@ -1,5 +1,5 @@
 <template>
-  <section class="services-carousel" ref="servicesSection">
+  <section id="services" class="services-carousel" ref="servicesSection">
     <div class="container-1">
       <div class="services-heading">
         <div>
@@ -19,7 +19,8 @@
           class="directory-item"
           :class="{ active: index === activeIndex }"
           type="button"
-          @click="goToSlide(index, true)"
+          @click="goToSlide(index)"
+          :aria-pressed="index === activeIndex"
         >
           <span>{{ formatNumber(index + 1) }}</span>
           {{ shortServiceName(service) }}
@@ -29,10 +30,6 @@
       <div
         class="showcase-shell"
         ref="carouselWrapper"
-        @mouseenter="stopAutoPlay"
-        @mouseleave="startAutoPlay"
-        @focusin="stopAutoPlay"
-        @focusout="startAutoPlay"
         @touchstart.passive="onTouchStart"
         @touchend.passive="onTouchEnd"
       >
@@ -76,10 +73,8 @@
               <img
                 v-if="activeService.image"
                 class="media-photo"
-                :src="activeService.image"
+                v-bind="imageAttrs(activeService.image, { sizes: '(max-width: 760px) 100vw, 50vw', width: 1200 })"
                 :alt="activeService.name"
-                :width="activeService.imageWidth"
-                :height="activeService.imageHeight"
                 loading="lazy"
                 decoding="async"
               />
@@ -135,6 +130,7 @@
 </template>
 
 <script>
+import { imageAttrs } from "~/utils/responsiveImage.js";
 export default {
   name: "ServicesCarousel",
   props: {
@@ -147,7 +143,7 @@ export default {
   data() {
     return {
       activeIndex: 0,
-      autoPlayInterval: null,
+      transitionTimeout: null,
       isTransitioning: false,
       touchStartX: 0,
     };
@@ -163,13 +159,11 @@ export default {
       return this.formatNumber(this.services.length);
     },
   },
-  mounted() {
-    this.startAutoPlay();
-  },
   beforeUnmount() {
-    this.stopAutoPlay();
+    clearTimeout(this.transitionTimeout);
   },
   methods: {
+    imageAttrs,
     formatNumber(value) {
       return String(value).padStart(2, "0");
     },
@@ -193,20 +187,16 @@ export default {
       if (!this.activeService) return;
       this.$emit("open-service-modal", this.activeService);
     },
-    goToSlide(index, isManual = false) {
+    goToSlide(index) {
       if (this.isTransitioning || this.services.length === 0) return;
 
       const nextIndex = (index + this.services.length) % this.services.length;
       if (nextIndex === this.activeIndex) return;
 
-      if (isManual) {
-        this.resetAutoPlay();
-      }
-
       this.isTransitioning = true;
       this.activeIndex = nextIndex;
 
-      setTimeout(() => {
+      this.transitionTimeout = setTimeout(() => {
         this.isTransitioning = false;
       }, 420);
     },
@@ -215,24 +205,6 @@ export default {
     },
     prevSlide(isManual = false) {
       this.goToSlide(this.activeIndex - 1, isManual);
-    },
-    startAutoPlay() {
-      this.stopAutoPlay();
-      if (this.services.length <= 1) return;
-
-      this.autoPlayInterval = setInterval(() => {
-        this.nextSlide(false);
-      }, 6500);
-    },
-    stopAutoPlay() {
-      if (this.autoPlayInterval) {
-        clearInterval(this.autoPlayInterval);
-        this.autoPlayInterval = null;
-      }
-    },
-    resetAutoPlay() {
-      this.stopAutoPlay();
-      this.startAutoPlay();
     },
     onTouchStart(event) {
       this.touchStartX = event.changedTouches[0]?.screenX || 0;
@@ -285,7 +257,7 @@ export default {
 
 .section-kicker {
   margin: 0 0 10px;
-  color: #f05a28;
+  color: #c94218;
   font-size: 12px;
   font-weight: 850;
   letter-spacing: 0.14em;
@@ -339,7 +311,7 @@ export default {
 }
 
 .directory-item span {
-  color: #f05a28;
+  color: #c94218;
   font-size: 11px;
   font-weight: 850;
 }
@@ -351,9 +323,9 @@ export default {
 }
 
 .directory-item.active {
-  border-color: #f05a28;
+  border-color: #c94218;
   background: #fff6f1;
-  color: #d84618;
+  color: #c94218;
 }
 
 .showcase-shell {
@@ -453,8 +425,8 @@ export default {
 }
 
 .primary-action {
-  border: 1px solid #f05a28;
-  background: #f05a28;
+  border: 1px solid #c94218;
+  background: #c94218;
   color: #ffffff;
   box-shadow: 0 14px 26px rgba(240, 90, 40, 0.22);
 }
@@ -466,8 +438,8 @@ export default {
 }
 
 .primary-action:hover {
-  background: #d84618;
-  border-color: #d84618;
+  background: #b63812;
+  border-color: #b63812;
   transform: translateY(-1px);
 }
 
@@ -558,8 +530,8 @@ export default {
 }
 
 .carousel-nav:hover {
-  background: #f05a28;
-  border-color: #f05a28;
+  background: #c94218;
+  border-color: #c94218;
   transform: translateY(-1px);
 }
 
@@ -631,15 +603,15 @@ export default {
 }
 
 .carousel-dot:hover .carousel-dot-mark {
-  border-color: #f05a28;
-  background: #f05a28;
+  border-color: #c94218;
+  background: #c94218;
   transform: scale(1.08);
 }
 
 .carousel-dot.active .carousel-dot-mark {
   width: 26px;
-  border-color: #f05a28;
-  background: #f05a28;
+  border-color: #c94218;
+  background: #c94218;
 }
 
 .copy-fade-enter-active,

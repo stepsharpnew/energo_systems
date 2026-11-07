@@ -1,5 +1,5 @@
 <template>
-  <section class="contact-cta" ref="contactSection">
+  <section id="contact" class="contact-cta" ref="contactSection">
     <div class="cta-content">
       <p class="section-kicker">Связаться с нами</p>
       <h2>Нужен быстрый расчет или выезд инженера?</h2>

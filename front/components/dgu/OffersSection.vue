@@ -40,7 +40,7 @@
       </div>
 
       <figure class="of__photo">
-        <img decoding="async" src="/dgu/images/76e878b0ba76e5aa.webp" alt="Сервисные инженеры в форме Энергосистем ведут пусконаладку ДГУ и шкафов ИБП" width="960" height="960" loading="lazy">
+        <img v-bind="imageAttrs('/dgu/images/76e878b0ba76e5aa.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Сервисные инженеры в форме Энергосистем ведут пусконаладку ДГУ и шкафов ИБП" loading="lazy">
         <i class="of__glow" aria-hidden="true"></i>
         <span class="of__chip of__chip--1"><i></i>Под ключ</span>
         <span class="of__chip of__chip--2">Проект в подарок</span>
@@ -53,6 +53,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 const emit = defineEmits(['callback'])
 const requestCallback = payload => emit('callback', payload)
 import { useDguVisibility } from '~/composables/useDguVisibility.js'

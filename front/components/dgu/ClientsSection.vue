@@ -7,10 +7,10 @@
     </h2>
     <p class="clients__lead">Резервное электроснабжение для энергетики, транспорта, связи и девелоперов: проектируем, поставляем и запускаем станции по всей России.</p>
   </div>
-  <div class="marquee" data-marquee :class="{ 'is-running': !reduced }">
+  <div tabindex="0" role="region" aria-label="Заказчики компании, прокручиваемый список" class="marquee" data-marquee :class="{ 'is-running': !reduced }">
     <ul class="marquee__track" data-marquee-track>
       <li v-for="(client, index) in displayedClients" :key="index" class="client" :aria-hidden="index >= clients.length ? 'true' : undefined">
-        <img v-if="client.src" decoding="async" class="client__logo" :src="client.src" :alt="client.alt" height="52">
+        <img v-if="client.src" decoding="async" class="client__logo" v-bind="imageAttrs(client.src, { sizes: '160px', width: 240 })" loading="lazy" :alt="client.alt">
         <span v-else class="client__name">{{ client.logo }}</span>
         <b>{{ client.name }}</b><span>{{ client.description }}</span>
       </li>
@@ -20,6 +20,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 const props = defineProps({ reduced: Boolean })
 const clients = [
   {

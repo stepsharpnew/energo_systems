@@ -1,23 +1,14 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { observeViewportBand } from '../utils/viewportVisibility.js'
 
 export function useUpsVisibility(element) {
   const visible = ref(false)
   const reduced = ref(false)
-  let observer
-  function update() {
-    const box = element.value?.getBoundingClientRect()
-    visible.value = Boolean(box && box.top < window.innerHeight * .7 && box.bottom > window.innerHeight * .25)
-  }
+  let stop
   onMounted(() => {
     reduced.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if ('IntersectionObserver' in window) {
-      observer = new IntersectionObserver(update, { threshold: [0, .3, .6] })
-      if (element.value) observer.observe(element.value)
-    }
-    window.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    update()
+    stop = observeViewportBand(element.value, value => { visible.value = value }, { top: .25, bottom: .7 })
   })
-  onBeforeUnmount(() => { observer?.disconnect(); window.removeEventListener('scroll', update); window.removeEventListener('resize', update) })
+  onBeforeUnmount(() => stop?.())
   return { visible, reduced }
 }

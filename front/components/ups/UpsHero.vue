@@ -3,12 +3,12 @@
   <div class="hero" :class="{ 'is-blackout': phase === 'blackout', 'is-backup': phase === 'backup' }" data-hero>
 
     <div class="hero__bg" aria-hidden="true">
-      <img src="/ups/hero-house.jpg" alt="" width="1200" height="750" fetchpriority="high">
+      <img v-bind="imageAttrs('/ups/hero-house.jpg', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
       <i class="hero__shade"></i>
     </div>
 
     <div class="hero__visual">
-      <img class="hero__ibp" src="/ups/hero-system.jpg" alt="Система бесперебойного питания: инверторы, аккумуляторные модули и щит на стене" width="1000" height="967" fetchpriority="high">
+      <img class="hero__ibp" v-bind="imageAttrs('/ups/hero-system.jpg', { sizes: '100vw', width: 1600 })" alt="Система бесперебойного питания: инверторы, аккумуляторные модули и щит на стене" fetchpriority="high">
     </div>
 
     <!-- «живая» плашка: показывает, что делает система при отключении сети.
@@ -58,15 +58,15 @@
         <div class="trust__label">Нам доверяют:</div>
         <!-- TODO: заменить отрасли на реальные объекты по ИБП, когда заказчик подтвердит -->
         <div class="trust__item">
-          <span class="trust__logo"><img src="/ups/hero-rosseti.png" alt="" width="160" height="160"></span>
+          <span class="trust__logo"><img v-bind="imageAttrs('/ups/hero-rosseti.png', { sizes: '160px', width: 480 })" alt=""></span>
           <div class="trust__text"><b>Россети</b><span>Электросетевой комплекс</span></div>
         </div>
         <div class="trust__item">
-          <span class="trust__logo"><img src="/ups/hero-gazprom.png" alt="" width="160" height="160"></span>
+          <span class="trust__logo"><img v-bind="imageAttrs('/ups/hero-gazprom.png', { sizes: '160px', width: 480 })" alt=""></span>
           <div class="trust__text"><b>Газпром</b><span>Нефть и газ</span></div>
         </div>
         <div class="trust__item">
-          <span class="trust__logo"><img src="/ups/hero-rzd.png" alt="" width="160" height="160"></span>
+          <span class="trust__logo"><img v-bind="imageAttrs('/ups/hero-rzd.png', { sizes: '160px', width: 480 })" alt=""></span>
           <div class="trust__text"><b>РЖД</b><span>Железнодорожный транспорт</span></div>
         </div>
       </div>
@@ -76,6 +76,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 const phase = ref('normal')
 const statuses = { normal: { title: 'Сеть 220 В в норме', text: 'Дом питается от сети' }, blackout: { title: 'Сеть пропала', text: 'Внешнее питание отключено' }, backup: { title: 'Дом на резерве', text: 'Свет и розетки работают' } }
 const status = computed(() => statuses[phase.value])

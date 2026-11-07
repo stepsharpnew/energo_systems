@@ -1,0 +1,8 @@
+.es-reveal { animation: es-content-reveal .35s ease-out; }
+@keyframes es-content-reveal {
+  from { opacity: .65; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .es-reveal { animation: none; }
+}

@@ -4,7 +4,7 @@
     <Header @open-contact-modal="scrollToRequest" />
     <Navigation :nav-items="navItems" @scroll-to="handleNavigation" />
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <section class="product-hero">
         <div class="hero-inner">
           <nav class="breadcrumbs" aria-label="Хлебные крошки">
@@ -29,7 +29,7 @@
             </div>
 
             <div class="hero-visual">
-              <img :src="equipment.gallery[0]" :alt="equipment.name" width="900" height="700" fetchpriority="high">
+              <img v-bind="imageAttrs(equipment.gallery[0], { sizes: '(max-width: 1050px) 100vw, 50vw', width: 1200 })" :alt="equipment.name" fetchpriority="high">
               <div class="visual-label">
                 <span>ES / {{ equipment.slug.toUpperCase() }}</span>
                 <span>Подбор по параметрам</span>
@@ -56,7 +56,7 @@
             </div>
           </div>
 
-          <aside class="contact-passport">
+          <div class="contact-passport">
             <div class="passport-code">
               <span>Маршрут заявки</span>
               <strong>ES–{{ equipment.slug.toUpperCase() }}</strong>
@@ -70,7 +70,7 @@
               <span>Позвонить сейчас</span>
               <PhoneLink />
             </div>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -108,7 +108,7 @@
           </div>
           <div class="related-grid">
             <NuxtLink v-for="item in relatedEquipment" :key="item.slug" :to="`/equipment/${item.slug}`">
-              <img :src="item.gallery[0]" :alt="item.name" width="180" height="140" loading="lazy">
+              <img v-bind="imageAttrs(item.gallery[0], { sizes: '(max-width: 700px) 100vw, 33vw', width: 480 })" :alt="item.name" loading="lazy">
               <span>{{ item.eyebrow }}</span>
               <strong>{{ item.name }}</strong>
             </NuxtLink>
@@ -128,6 +128,7 @@ import Footer from '~/components/energy-systems/Footer.vue'
 import EquipmentGallery from '~/components/equipment/EquipmentGallery.vue'
 import EquipmentRequestForm from '~/components/equipment/EquipmentRequestForm.vue'
 import KtpQuiz from '~/components/equipment/KtpQuiz.vue'
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { equipmentCatalog } from '~/assets/data/equipmentCatalog'
 import { equipmentQuestionnaires } from '~/assets/data/equipmentQuestionnaires'
 
@@ -262,7 +263,7 @@ const handleNavigation = (key) => {
 
 .eyebrow {
   margin: 0 0 12px;
-  color: #f05a28;
+  color: #be3d15;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -309,7 +310,7 @@ const handleNavigation = (key) => {
 
 .primary-action {
   border: 1px solid #f05a28;
-  background: #f05a28;
+  background: #c94218;
   color: #fff;
 }
 
@@ -384,7 +385,7 @@ const handleNavigation = (key) => {
 .section-heading > p:last-child {
   max-width: 760px;
   margin: 18px 0 0;
-  color: #637789;
+  color: #52687a;
   font-size: 17px;
   line-height: 1.66;
 }
@@ -406,7 +407,7 @@ const handleNavigation = (key) => {
 }
 
 .application-grid span {
-  color: #f05a28;
+  color: #c94218;
   font-size: 11px;
   font-weight: 900;
 }
@@ -460,7 +461,7 @@ const handleNavigation = (key) => {
 }
 
 .contact-passport b {
-  color: #f05a28;
+  color: #ff9a72;
   font-size: 11px;
 }
 
@@ -651,8 +652,8 @@ const handleNavigation = (key) => {
 }
 
 .gallery-nav:hover {
-  border-color: #f05a28;
-  background: #f05a28;
+  border-color: #c94218;
+  background: #c94218;
 }
 
 .gallery-caption {
@@ -714,7 +715,7 @@ const handleNavigation = (key) => {
 }
 
 .gallery-thumbs button.active {
-  border-color: #f05a28;
+  border-color: #c94218;
   box-shadow: inset 0 -4px 0 #f05a28;
   opacity: 1;
 }
@@ -788,6 +789,8 @@ const handleNavigation = (key) => {
 .related-heading h2 {
   color: #fff;
 }
+
+.related-heading .eyebrow { color: #ff9a72; }
 
 .related-heading > a {
   color: #fff;

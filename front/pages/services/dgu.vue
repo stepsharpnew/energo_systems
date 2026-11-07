@@ -1,7 +1,8 @@
 <template>
   <div ref="root" class="dgu" id="top">
+    <a class="landing-skip-link" href="#dgu-main-content">Перейти к содержанию</a>
     <DguHeader :working="isWorkingHours" :scrolled="headerScrolled" @callback="openCallback" />
-    <main>
+    <main id="dgu-main-content" tabindex="-1">
       <DguHeroSection @solution="chooseSolution" />
       <DguQuizSection />
       <DguClientsSection :reduced="reducedMotion" />
@@ -15,14 +16,16 @@
       <DguContactsSection />
     </main>
     <DguFooter />
-    <div class="sticky-cta" :class="{ 'is-visible': stickyVisible }" data-sticky>
+    <div role="region" aria-label="Быстрый расчёт стоимости" class="sticky-cta" :class="{ 'is-visible': stickyVisible }" data-sticky>
       <a class="btn-pill btn-pill--sm" href="#quiz"><span>Рассчитать стоимость</span></a>
     </div>
-    <DguCallbackModal :request="callback" @close="callback = null" />
+    <DguCallbackModal v-if="callbackRequested" :request="callback" @close="callback = null" />
   </div>
 </template>
 
 <script setup>
+import '~/assets/styles/landing-fonts.css'
+import { landingFontPreloads } from '~/utils/landingFonts.js'
 import DguHeader from '~/components/dgu/Header.vue'
 import DguHeroSection from '~/components/dgu/HeroSection.vue'
 import DguQuizSection from '~/components/dgu/QuizSection.vue'
@@ -36,21 +39,26 @@ import DguOffersSection from '~/components/dgu/OffersSection.vue'
 import DguFaqSection from '~/components/dgu/FaqSection.vue'
 import DguContactsSection from '~/components/dgu/ContactsSection.vue'
 import DguFooter from '~/components/dgu/Footer.vue'
-import DguCallbackModal from '~/components/dgu/CallbackModal.vue'
+import { defineAsyncComponent } from 'vue'
+const DguCallbackModal = defineAsyncComponent(() => import('~/components/dgu/CallbackModal.vue'))
 import { useLandingPage } from '~/composables/useLandingPage.js'
 import '~/assets/styles/dgu.css'
 import '~/assets/styles/service-landing.css'
 
-const root = ref(null), catalog = ref(null), callback = ref(null), solution = ref('all')
+const root = ref(null), catalog = ref(null), callback = shallowRef(null), solution = ref('all')
+const callbackRequested = ref(false)
 const { isWorkingHours, headerScrolled, stickyVisible, reducedMotion } = useLandingPage(root, {
   stickySelectors: '.hero__cta .btn-pill, #quiz, .cases__cta .btn-pill, #contacts, .footer',
 })
-const openCallback = (request = {}) => { callback.value = request }
+const openCallback = (request = {}) => {
+  callbackRequested.value = true
+  callback.value = { ...request, opener: document.activeElement }
+}
 async function chooseSolution(value) { solution.value = value; await nextTick(); catalog.value?.reveal() }
 useHead({
   title: 'Дизельные электростанции под ключ',
   htmlAttrs: { lang: 'ru', class: 'service-landing-document' },
   meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }, { name: 'description', content: 'Резервное энергоснабжение под ключ: ДГУ от 30 кВт с АВР и промышленные ИБП для ТЦ, БЦ, АЗС, складов, отелей, больниц и коттеджных поселков. Проектирование, поставка, монтаж и сервис по всей России.' }],
-  link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap' }],
+  link: landingFontPreloads,
 })
 </script>

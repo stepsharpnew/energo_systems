@@ -29,20 +29,22 @@ const emit = defineEmits(['close'])
 const dialog = ref(null), pending = ref(false), sent = ref(false), error = ref('')
 const fields = reactive({ name: '', phone: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })
 let lastFocus
-const close = () => { dialog.value?.close(); emit('close') }
+const close = () => { dialog.value?.close() }
 const closed = () => { unlock(); lastFocus?.focus?.(); emit('close') }
 const backdrop = event => { if (event.target === dialog.value) close() }
-watch(() => props.request, async request => {
+async function openRequest(request) {
   if (!request) { dialog.value?.close(); return }
   if (pending.value) return
-  lastFocus = document.activeElement
+  lastFocus = request.opener || document.activeElement
   sent.value = false
   error.value = ''
   await nextTick()
   if (!props.request || !dialog.value) return
   if (!dialog.value.open) dialog.value.showModal()
   lock()
-})
+}
+onMounted(() => { if (props.request) openRequest(props.request) })
+watch(() => props.request, openRequest, { flush: 'post' })
 onBeforeUnmount(() => { dialog.value?.close(); unlock() })
 async function submit() {
   if (pending.value || sent.value) return

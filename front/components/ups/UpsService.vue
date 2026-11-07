@@ -8,7 +8,7 @@
 
     <div class="svc" :class="{ 'is-in': revealed }">
       <figure class="svc__photo">
-        <img src="/ups/service-generator.webp" alt="Обслуживаемая дизельная электростанция у дома" width="1100" height="520" loading="lazy">
+        <img v-bind="imageAttrs('/ups/service-generator.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Обслуживаемая дизельная электростанция у дома" loading="lazy">
         <i class="svc__shade" aria-hidden="true"></i>
         <div class="svc__hud" aria-hidden="true">
           <p class="svc__hud-h"><i></i>Регламентная проверка</p>
@@ -48,6 +48,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { useUpsVisibility } from '~/composables/useUpsVisibility.js'
 const openCallback = inject('upsCallback')
 const section = ref(null)

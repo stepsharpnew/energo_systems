@@ -47,7 +47,7 @@
         class="motion-toggle"
         type="button"
         aria-controls="clients-track"
-        :aria-label="isPaused ? 'Продолжить движение логотипов' : 'Приостановить движение логотипов'"
+        :aria-label="isPaused ? 'Продолжить движение логотипов' : 'Пауза движения логотипов'"
         @click="isPaused = !isPaused"
       >
         <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -91,7 +91,7 @@ export default {
 .section-kicker {
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #ff4800;
+  color: #c94218;
   font-size: 12px;
   margin-bottom: 12px;
 }
@@ -190,7 +190,7 @@ export default {
   padding: 8px 12px;
   border: 1px solid transparent;
   border-radius: 8px;
-  color: #61728a;
+  color: #596a80;
   font: inherit;
   font-size: 13px;
   cursor: pointer;

@@ -9,43 +9,43 @@
 
     <div class="cases">
       <ul class="ctabs" ref="tabs" @mouseenter="paused = true" @mouseleave="paused = false" @focusin="paused = true" @focusout="paused = false" role="tablist" aria-label="Отрасли">
-        <li><button class="ctab" :class="{ 'is-active': active === 0 }" type="button" role="tab" data-case="0" :aria-selected="active === 0" @click="show(0)" :ref="element => tabButtons[0] = element">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': active === 0 }" type="button" role="tab" data-case="0" :aria-selected="active === 0" @click="show(0)" :ref="element => tabButtons[0] = element">
           <span class="ctab__place">ЖКХ и поселки</span>
           <b>ЖКХ и поселки</b>
           <span class="ctab__spec">50–400 кВт · II категория</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': active === 1 }" type="button" role="tab" data-case="1" :aria-selected="active === 1" @click="show(1)" :ref="element => tabButtons[1] = element">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': active === 1 }" type="button" role="tab" data-case="1" :aria-selected="active === 1" @click="show(1)" :ref="element => tabButtons[1] = element">
           <span class="ctab__place">Торговые центры, бизнес-центры, отели</span>
           <b>Коммерция</b>
           <span class="ctab__spec">200–1000 кВт · II категория</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': active === 2 }" type="button" role="tab" data-case="2" :aria-selected="active === 2" @click="show(2)" :ref="element => tabButtons[2] = element">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': active === 2 }" type="button" role="tab" data-case="2" :aria-selected="active === 2" @click="show(2)" :ref="element => tabButtons[2] = element">
           <span class="ctab__place">Заводы и цеха</span>
           <b>Производство</b>
           <span class="ctab__spec">300–1200 кВт · I–II категория</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': active === 3 }" type="button" role="tab" data-case="3" :aria-selected="active === 3" @click="show(3)" :ref="element => tabButtons[3] = element">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': active === 3 }" type="button" role="tab" data-case="3" :aria-selected="active === 3" @click="show(3)" :ref="element => tabButtons[3] = element">
           <span class="ctab__place">Площадки и вахтовые городки</span>
           <b>Строительство</b>
           <span class="ctab__spec">50–250 кВт · III категория</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': active === 4 }" type="button" role="tab" data-case="4" :aria-selected="active === 4" @click="show(4)" :ref="element => tabButtons[4] = element">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': active === 4 }" type="button" role="tab" data-case="4" :aria-selected="active === 4" @click="show(4)" :ref="element => tabButtons[4] = element">
           <span class="ctab__place">АЗС, связь, транспорт</span>
           <b>Инфраструктура</b>
           <span class="ctab__spec">50–300 кВт · II категория</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': active === 5 }" type="button" role="tab" data-case="5" :aria-selected="active === 5" @click="show(5)" :ref="element => tabButtons[5] = element">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': active === 5 }" type="button" role="tab" data-case="5" :aria-selected="active === 5" @click="show(5)" :ref="element => tabButtons[5] = element">
           <span class="ctab__place">Больницы и клиники</span>
           <b>Медицина</b>
           <span class="ctab__spec">150–500 кВт · I категория</span>
           <i class="ctab__bar" aria-hidden="true"></i>
         </button></li>
-        <li><button class="ctab" :class="{ 'is-active': active === 6 }" type="button" role="tab" data-case="6" :aria-selected="active === 6" @click="show(6)" :ref="element => tabButtons[6] = element">
+        <li role="presentation"><button class="ctab" :class="{ 'is-active': active === 6 }" type="button" role="tab" data-case="6" :aria-selected="active === 6" @click="show(6)" :ref="element => tabButtons[6] = element">
           <span class="ctab__place">Склады и холодильные комплексы</span>
           <b>Логистика</b>
           <span class="ctab__spec">100–600 кВт · II категория</span>
@@ -54,7 +54,7 @@
       </ul>
       <div class="cstage" data-cstage @mouseenter="paused = true" @mouseleave="paused = false">
         <article class="case" :class="{ 'is-active': active === 0, 'is-prev': previous === 0 }" data-case-view="0" :aria-hidden="active !== 0">
-          <img decoding="async" src="/dgu/images/c995dea8d81aea53.webp" alt="Дизельная электростанция в техническом помещении для коммунального объекта" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/c995dea8d81aea53.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция в техническом помещении для коммунального объекта" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">ЖКХ и поселки</p>
@@ -70,7 +70,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': active === 1, 'is-prev': previous === 1 }" data-case-view="1" :aria-hidden="active !== 1">
-          <img decoding="async" src="/dgu/images/86988b8ff84f3e3e.webp" alt="Мощная дизельная электростанция в машинном зале торгового центра" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/86988b8ff84f3e3e.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Мощная дизельная электростанция в машинном зале торгового центра" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">Торговые центры, бизнес-центры, отели</p>
@@ -86,7 +86,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': active === 2, 'is-prev': previous === 2 }" data-case-view="2" :aria-hidden="active !== 2">
-          <img decoding="async" src="/dgu/images/7c5a23b39515fd0a.webp" alt="Несколько крупных дизельных электростанций в цеховом машинном зале" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/7c5a23b39515fd0a.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Несколько крупных дизельных электростанций в цеховом машинном зале" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">Заводы и цеха</p>
@@ -102,7 +102,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': active === 3, 'is-prev': previous === 3 }" data-case-view="3" :aria-hidden="active !== 3">
-          <img decoding="async" src="/dgu/images/1373118089178785.webp" alt="Дизельная электростанция на раме для строительной площадки" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/1373118089178785.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на раме для строительной площадки" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">Площадки и вахтовые городки</p>
@@ -118,7 +118,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': active === 4, 'is-prev': previous === 4 }" data-case-view="4" :aria-hidden="active !== 4">
-          <img decoding="async" src="/dgu/images/4abc731b11f6b3e5.webp" alt="Контейнерная дизельная электростанция на площадке АЗС" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/4abc731b11f6b3e5.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Контейнерная дизельная электростанция на площадке АЗС" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">АЗС, связь, транспорт</p>
@@ -134,7 +134,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': active === 5, 'is-prev': previous === 5 }" data-case-view="5" :aria-hidden="active !== 5">
-          <img decoding="async" src="/dgu/images/746f96dceb7674d6.webp" alt="Дизельная электростанция и шкафы ИБП в техническом помещении больницы" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/746f96dceb7674d6.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция и шкафы ИБП в техническом помещении больницы" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">Больницы и клиники</p>
@@ -150,7 +150,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': active === 6, 'is-prev': previous === 6 }" data-case-view="6" :aria-hidden="active !== 6">
-          <img decoding="async" src="/dgu/images/21a6c54661c45c14.webp" alt="Дизельная электростанция в машинном зале логистического комплекса" width="860" height="860" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/21a6c54661c45c14.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция в машинном зале логистического комплекса" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">Склады и холодильные комплексы</p>
@@ -180,6 +180,7 @@
 </template>
 
 <script setup>
+import { imageAttrs } from '~/utils/responsiveImage.js'
 import { useDguVisibility } from '~/composables/useDguVisibility.js'
 const props = defineProps({ reduced: Boolean })
 const section = ref(null), tabs = ref(null), tabButtons = []
