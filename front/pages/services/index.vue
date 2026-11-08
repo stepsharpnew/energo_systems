@@ -29,7 +29,7 @@
 
           <div class="hero-summary" aria-label="Ключевые направления">
             <div>
-              <strong>10</strong>
+              <strong>{{ services.length }}</strong>
               <span>направлений работ</span>
             </div>
             <div>
@@ -154,7 +154,21 @@ const ContactModal = defineAsyncComponent(() => import('~/components/energy-syst
 import { imageAttrs } from '~/utils/responsiveImage.js'
 import { servicesDetailData } from '~/assets/data/servicesDetail'
 
-const services = servicesDetailData
+const services = [
+  ...servicesDetailData,
+  {
+    id: 'ups',
+    name: 'ИБП под ключ',
+    description: 'ИБП под ключ для частных домов и коттеджных посёлков: аккумуляторы, ДГУ, автоматика. Расчёт, проектирование, монтаж и обслуживание. Москва и область.',
+    highlights: ['Аккумуляторы', 'ДГУ', 'Автоматика', 'Монтаж и обслуживание'],
+  },
+  {
+    id: 'dgu',
+    name: 'Дизельные электростанции под ключ',
+    description: 'Резервное энергоснабжение под ключ: ДГУ от 30 кВт с АВР и промышленные ИБП для ТЦ, БЦ, АЗС, складов, отелей, больниц и коттеджных поселков. Проектирование, поставка, монтаж и сервис по всей России.',
+    highlights: ['Проектирование', 'Поставка', 'Монтаж', 'Сервис'],
+  },
+]
 const showContactModal = ref(false)
 const contactModalRequested = ref(false)
 const contactModalServiceId = ref(null)
@@ -200,6 +214,8 @@ const imageMap = {
   support: '/img/service/service-center7.webp',
   heating: '/img/service/service-center8.webp',
   monitoring: '/img/service/service-center9.webp',
+  ups: '/ups/hero-house.jpg',
+  dgu: '/dgu/images/4cb4251f853540df.webp',
 }
 
 const labelMap = {
@@ -213,6 +229,8 @@ const labelMap = {
   support: 'Ремонт сетей',
   heating: 'Электролаборатория',
   monitoring: 'Вынос электросетей',
+  ups: 'ИБП под ключ',
+  dgu: 'ДГУ под ключ',
 }
 
 useHead({

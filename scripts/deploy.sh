@@ -74,6 +74,16 @@ if ! grep -R -q '/api/lead' "${lead_paths[@]}"; then
   exit 1
 fi
 
+# SCP overwrites uploaded files but leaves sources deleted from Git behind.
+# Retire only these old plugins, settings and static pages before Docker COPY.
+rm -f -- \
+  front/plugins/gsap.client.ts \
+  front/plugins/vuetify.ts \
+  front/plugins/yandex-metrika.client.ts \
+  front/assets/styles/vuetify-settings.scss \
+  front/public/services/ups/index.html \
+  front/public/services/dgu/index.html
+
 stage=build
 echo "Building replacement images; existing services remain running"
 # Keep the layer cache and serialize builds to reduce production-host memory

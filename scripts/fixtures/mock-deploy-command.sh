@@ -32,6 +32,14 @@ case "$command_name" in
         case "$DEPLOY_TEST_SCENARIO" in
           build_failure) exit 1 ;;
           build_timeout) exit 124 ;;
+          stale_sources)
+            while IFS= read -r retired; do
+              if [ -e "$retired" ]; then
+                echo "Retired source reached Docker build: ${retired}" >&2
+                exit 1
+              fi
+            done < "$DEPLOY_TEST_RETIRED_SOURCES"
+            ;;
         esac
         ;;
       *' image load '*)

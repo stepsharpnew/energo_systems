@@ -149,6 +149,6 @@ function move(direction) {
   const card = [...(track.value?.children || [])].find(item => !item.hidden)
   track.value?.scrollBy({ left: direction * ((card?.offsetWidth || 300) + 14) * 2, behavior: props.reduced ? 'auto' : 'smooth' })
 }
-function reveal() { section.value?.scrollIntoView({ behavior: props.reduced ? 'auto' : 'smooth', block: 'start' }) }
+function reveal() { section.value?.scrollIntoView({ behavior: 'instant', block: 'start' }) }
 defineExpose({ reveal })
 </script>

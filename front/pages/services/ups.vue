@@ -24,6 +24,7 @@
 <script setup>
 import '~/assets/styles/landing-fonts.css'
 import { landingFontPreloads } from '~/utils/landingFonts.js'
+import { createPageSeo } from '~/utils/pageSeo.js'
 import '~/assets/styles/ups.css'
 import '~/assets/styles/service-landing.css'
 import UpsHeader from '~/components/ups/UpsHeader.vue'
@@ -47,10 +48,17 @@ provide('upsCallback', (options = {}) => {
   callbackRequested.value = true
   callback.value = { ...options, opener: document.activeElement }
 })
-useHead({
-  title: 'ИБП под ключ',
-  meta: [{ name: 'viewport', content: 'width=device-width,initial-scale=1,viewport-fit=cover' }, { name: 'description', content: 'ИБП под ключ для частных домов и коттеджных посёлков: аккумуляторы, ДГУ, автоматика. Расчёт, проектирование, монтаж и обслуживание. Москва и область.' }],
+useHead(createPageSeo({
+  path: '/services/ups',
+  title: 'ИБП под ключ для дома и посёлка | Энергосистемы',
+  description: 'ИБП под ключ для частных домов и коттеджных посёлков: аккумуляторы, ДГУ, автоматика. Расчёт, проектирование, монтаж и обслуживание. Москва и область.',
+  image: '/ups/hero-house.jpg',
+  imageAlt: 'Частный дом с системой резервного электроснабжения',
+  serviceType: 'Резервное и бесперебойное электроснабжение под ключ',
+  areaServed: ['Москва', 'Московская область'],
+}, {
+  meta: [{ name: 'viewport', content: 'width=device-width,initial-scale=1,viewport-fit=cover' }],
   htmlAttrs: { class: 'ups-document service-landing-document', lang: 'ru' },
   link: landingFontPreloads,
-})
+}))
 </script>

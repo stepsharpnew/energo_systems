@@ -10,6 +10,11 @@ export function imageSource(src, width = 800) {
   return (variants.find(image => image.width >= width) || variants.at(-1))?.src || src
 }
 
+export function imageSrcset(src, format = 'webp') {
+  const variants = format === 'avif' ? manifest[src]?.avifVariants : manifest[src]?.variants
+  return variants?.map(variant => `${variant.src} ${variant.width}w`).join(', ')
+}
+
 // Keep the original aspect ratio. CSS remains responsible for the page's crop.
 export function imageAttrs(src, { sizes = '100vw', width = 800 } = {}) {
   const image = manifest[src]
@@ -17,7 +22,7 @@ export function imageAttrs(src, { sizes = '100vw', width = 800 } = {}) {
   return {
     src: imageSource(src, width),
     ...(image.variants.length ? {
-      srcset: image.variants.map(variant => `${variant.src} ${variant.width}w`).join(', '),
+      srcset: imageSrcset(src),
       sizes,
     } : {}),
     width: image.width,

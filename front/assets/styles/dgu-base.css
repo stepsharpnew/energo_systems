@@ -60,6 +60,7 @@ body.dgu-modal-open { overflow: hidden; }
   font-size: 15px; font-weight: 500; color: var(--text-2); white-space: nowrap;
   transition: color .2s;
 }
+.dgu .nav a { display: inline-flex; align-items: center; min-height: 24px; }
 .dgu .nav a::after {
   content: ""; position: absolute; left: 0; bottom: -6px; width: 0; height: 2px;
   background: var(--accent); transition: width .25s;
@@ -156,6 +157,7 @@ body.dgu-modal-open { overflow: hidden; }
 }
 /* фон: дом на весь экран; тёмная вуаль гуще справа, где лежит текст */
 .dgu .hero__bg { position: absolute; inset: 0; z-index: -1; }
+.dgu .hero__bg picture { display: block; width: 100%; height: 100%; }
 .dgu .hero__bg img {
   width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%;
   transition: filter 1s ease;

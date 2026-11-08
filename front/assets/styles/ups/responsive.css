@@ -14,6 +14,9 @@
 /* планшет и телефон: система сверху, текст ниже */
 @media (max-width: 900px) {
   .ups .hero { --hero-px: 24px; display: flex; flex-direction: column; min-height: 0; }
+  /* Preserve the demo states without animating two large filtered surfaces
+     while the mobile first screen is loading. */
+  .ups .hero__bg img, .ups .hero__ibp { transition: none; }
   .ups .hero__visual {
     position: relative; left: auto; top: auto; translate: none;
     width: min(88%, 460px); margin: 32px auto 0;

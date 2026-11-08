@@ -76,7 +76,16 @@ export function initHddPage() {
     var ticking = false;
     var syncSticky = function () {
       ticking = false;
+      if (window.scrollY <= 300) {
+        sticky.classList.remove('is-on');
+        return;
+      }
       var ctaOnScreen = ctas.some(function (el) {
+        var section = el.closest('main > section');
+        if (section && section !== el) {
+          var bounds = section.getBoundingClientRect();
+          if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return false;
+        }
         var r = el.getBoundingClientRect();
         return r.bottom > 0 && r.top < window.innerHeight && el.offsetParent !== null;
       });

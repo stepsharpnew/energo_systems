@@ -21,6 +21,7 @@
   font-size: 15px; font-weight: 500; color: var(--text-2); white-space: nowrap;
   transition: color .2s;
 }
+.ups .nav a { display: inline-flex; align-items: center; min-height: 24px; }
 .ups .nav a::after {
   content: ""; position: absolute; left: 0; bottom: -6px; width: 0; height: 2px;
   background: var(--accent); transition: width .25s;

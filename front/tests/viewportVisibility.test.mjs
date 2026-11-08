@@ -5,7 +5,8 @@ import { observeViewportBand } from '../utils/viewportVisibility.js'
 function fixture({ observer = true, rect = { top: 750, bottom: 5000 } } = {}) {
   const listeners = new Map(), observers = [], frames = new Map(), changes = []
   const target = { getBoundingClientRect: () => rect }
-  let targetResize, resizeDisconnected = false, nextFrame = 0
+  let targetResize, resizeDisconnected = false, nextFrame = 0, measurements = 0
+  target.getBoundingClientRect = () => { measurements++; return rect }
   const browser = {
     innerHeight: 1000,
     addEventListener: (event, callback) => listeners.set(event, callback),
@@ -26,6 +27,8 @@ function fixture({ observer = true, rect = { top: 750, bottom: 5000 } } = {}) {
   return { browser, target, changes, listeners, observers, frames,
     setRect: value => { rect = value },
     targetResize: () => targetResize(),
+    hasTargetResize: () => Boolean(targetResize),
+    measurements: () => measurements,
     resizeDisconnected: () => resizeDisconnected,
     flushFrames: () => { const pending = [...frames.values()]; frames.clear(); pending.forEach(callback => callback()) },
   }
@@ -34,7 +37,9 @@ function fixture({ observer = true, rect = { top: 750, bottom: 5000 } } = {}) {
 test('tall sections enter the central viewport band even at tiny intersection ratios', () => {
   const f = fixture()
   const stop = observeViewportBand(f.target, value => f.changes.push(value), { top: .25, bottom: .7, browser: f.browser })
-  assert.equal(f.changes.at(-1), false)
+  assert.equal(f.changes.length, 0, 'initial state comes from the observer after layout')
+  assert.equal(f.measurements(), 0, 'mount must not synchronously force layout')
+  assert.equal(f.hasTargetResize(), false, 'native IntersectionObserver already tracks layout changes')
   assert.equal(f.listeners.has('scroll'), false)
   assert.deepEqual(f.observers[0].options, { rootMargin: '-250px 0px -300px 0px', threshold: 0 })
   f.setRect({ top: 650, bottom: 4900 })
@@ -49,8 +54,9 @@ test('tall sections enter the central viewport band even at tiny intersection ra
 test('viewport resize rebuilds pixel margins and ignores queued old-observer events', () => {
   const f = fixture({ rect: { top: 800, bottom: 5000 } })
   const stop = observeViewportBand(f.target, value => f.changes.push(value), { browser: f.browser })
-  assert.equal(f.changes.at(-1), true)
   const previous = f.observers[0]
+  previous.callback([{ target: f.target, isIntersecting: true }])
+  assert.equal(f.changes.at(-1), true)
   f.browser.innerHeight = 500
   f.listeners.get('resize')()
   f.listeners.get('resize')()
@@ -58,15 +64,17 @@ test('viewport resize rebuilds pixel margins and ignores queued old-observer eve
   f.flushFrames()
   assert.equal(previous.disconnected, true)
   assert.deepEqual(f.observers[1].options, { rootMargin: '-75px 0px -75px 0px', threshold: 0 })
+  assert.equal(f.measurements(), 0)
+  f.observers[1].callback([{ target: f.target, isIntersecting: false }])
   assert.equal(f.changes.at(-1), false)
   previous.callback([{ target: f.target, isIntersecting: true }])
   assert.equal(f.changes.at(-1), false)
   f.setRect({ top: 300, bottom: 1000 })
-  f.targetResize()
+  f.observers[1].callback([{ target: f.target, isIntersecting: true }])
   assert.equal(f.changes.at(-1), true)
   stop()
   assert.equal(f.observers[1].disconnected, true)
-  assert.equal(f.resizeDisconnected(), true)
+  assert.equal(f.hasTargetResize(), false)
   assert.equal(f.listeners.size, 0)
 })
 
@@ -77,6 +85,10 @@ test('scroll fallback is installed only without IntersectionObserver and cleans 
   f.setRect({ top: -4000, bottom: 20 })
   f.listeners.get('scroll')()
   assert.equal(f.changes.at(-1), false)
+  f.setRect({ top: 100, bottom: 2000 })
+  f.targetResize()
+  assert.equal(f.changes.at(-1), true)
   stop()
+  assert.equal(f.resizeDisconnected(), true)
   assert.equal(f.listeners.size, 0)
 })

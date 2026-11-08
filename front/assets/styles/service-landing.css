@@ -5,9 +5,35 @@ html.service-landing-document #__nuxt {
   overflow-x: clip;
 }
 
-.landing-skip-link {
+:is(.ups, .dgu) > .landing-skip-link {
   position: fixed; top: -100px; left: 16px; z-index: 1000;
   padding: 12px 18px; border-radius: 8px;
   background: #142233; color: #fff; font-weight: 700;
 }
-.landing-skip-link:focus { top: 12px; outline: 3px solid #f7aa33; outline-offset: 3px; }
+:is(.ups, .dgu) > .landing-skip-link:focus { top: 12px; outline: 3px solid #f7aa33; outline-offset: 3px; }
+
+/* Keep the full SSR content available, but let the browser skip layout/paint
+   far below the first screen. Once rendered, auto remembers the real height.
+   The hero and quiz retain their normal layout from the first frame. */
+:is(.ups, .dgu, .hdd) > main > section:nth-child(n + 3) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1100px;
+}
+@media (max-width: 900px) {
+  :is(.ups, .dgu, .hdd) > main > section:nth-child(n + 3) {
+    contain-intrinsic-size: auto 1600px;
+  }
+}
+@media print {
+  :is(.ups, .dgu, .hdd) > main > section:nth-child(n + 3) {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+}
+
+/* A smooth hash jump can compute its destination from deferred section
+   placeholders before they expand. Native instant jumps let scroll anchoring
+   keep the target in view while content-visibility resolves the real heights. */
+html:has(body :is(.ups, .dgu, .hdd)) {
+  scroll-behavior: auto;
+}

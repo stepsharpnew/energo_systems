@@ -518,6 +518,33 @@
         "width": 1600,
         "height": 900
       }
+    ],
+    "avifVariants": [
+      {
+        "src": "/img/previews/41ece5c7e5e31473-240.avif",
+        "width": 240,
+        "height": 135
+      },
+      {
+        "src": "/img/previews/41ece5c7e5e31473-480.avif",
+        "width": 480,
+        "height": 270
+      },
+      {
+        "src": "/img/previews/41ece5c7e5e31473-800.avif",
+        "width": 800,
+        "height": 450
+      },
+      {
+        "src": "/img/previews/41ece5c7e5e31473-1200.avif",
+        "width": 1200,
+        "height": 675
+      },
+      {
+        "src": "/img/previews/41ece5c7e5e31473-1600.avif",
+        "width": 1600,
+        "height": 900
+      }
     ]
   },
   "/dgu/images/528d677f4c274d9c.webp": {
@@ -1797,6 +1824,33 @@
       },
       {
         "src": "/img/previews/ad36bf5d73c7b018-1600.webp",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "avifVariants": [
+      {
+        "src": "/img/previews/985541bc2a0148d0-240.avif",
+        "width": 240,
+        "height": 135
+      },
+      {
+        "src": "/img/previews/985541bc2a0148d0-480.avif",
+        "width": 480,
+        "height": 270
+      },
+      {
+        "src": "/img/previews/985541bc2a0148d0-800.avif",
+        "width": 800,
+        "height": 450
+      },
+      {
+        "src": "/img/previews/985541bc2a0148d0-1200.avif",
+        "width": 1200,
+        "height": 675
+      },
+      {
+        "src": "/img/previews/985541bc2a0148d0-1600.avif",
         "width": 1600,
         "height": 900
       }
@@ -4977,6 +5031,28 @@
       },
       {
         "src": "/ups/hero-house.jpg",
+        "width": 1200,
+        "height": 750
+      }
+    ],
+    "avifVariants": [
+      {
+        "src": "/img/previews/d68e3601ca382715-240.avif",
+        "width": 240,
+        "height": 150
+      },
+      {
+        "src": "/img/previews/d68e3601ca382715-480.avif",
+        "width": 480,
+        "height": 300
+      },
+      {
+        "src": "/img/previews/d68e3601ca382715-800.avif",
+        "width": 800,
+        "height": 500
+      },
+      {
+        "src": "/img/previews/d68e3601ca382715-1200.avif",
         "width": 1200,
         "height": 750
       }

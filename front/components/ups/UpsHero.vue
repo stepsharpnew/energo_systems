@@ -3,7 +3,10 @@
   <div class="hero" :class="{ 'is-blackout': phase === 'blackout', 'is-backup': phase === 'backup' }" data-hero>
 
     <div class="hero__bg" aria-hidden="true">
-      <img v-bind="imageAttrs('/ups/hero-house.jpg', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
+      <picture>
+        <source type="image/avif" :srcset="imageSrcset('/ups/hero-house.jpg', 'avif')" sizes="100vw">
+        <img v-bind="imageAttrs('/ups/hero-house.jpg', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
+      </picture>
       <i class="hero__shade"></i>
     </div>
 
@@ -76,7 +79,7 @@
 </template>
 
 <script setup>
-import { imageAttrs } from '~/utils/responsiveImage.js'
+import { imageAttrs, imageSrcset } from '~/utils/responsiveImage.js'
 const phase = ref('normal')
 const statuses = { normal: { title: 'Сеть 220 В в норме', text: 'Дом питается от сети' }, blackout: { title: 'Сеть пропала', text: 'Внешнее питание отключено' }, backup: { title: 'Дом на резерве', text: 'Свет и розетки работают' } }
 const status = computed(() => statuses[phase.value])

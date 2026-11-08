@@ -97,7 +97,7 @@ medians. Novofon requires the configured production hostname and standard HTTPS
 port; a localhost URL is unsuitable for validating its real initialization.
 Vendor cache/cookie warnings are outside the frontend nginx configuration.
 
-## Validation snapshot — 2026-11-08
+## Validation snapshot — 2026-11-08 (before the service-landing follow-up)
 
 Production generation and all 52 unit, 70 browser and 15 deployment tests pass.
 All 29 pages hydrate without errors and include their route CSS in server HTML.
@@ -136,3 +136,27 @@ These results are not a claim that all performance targets have passed. All
 analytics functions stay enabled, and no long timeout or click gate is used
 to hide SDK work from the measurement. Recheck public delivery and real-user
 metrics after release.
+
+## Service-landing follow-up
+
+HDD, UPS and DGU now serve responsive AVIF hero images with WebP fallbacks.
+Lower sections keep their complete server HTML while `content-visibility: auto`
+defers offscreen layout and painting. Visibility observers and sticky controls
+avoid forcing those sections to render during startup. Native section links jump
+directly so expanding deferred sections cannot move a smooth-scroll destination.
+UPS keeps its power-loss
+demonstration but skips large image-filter transitions on mobile.
+
+The homepage and the three landings have fixed canonical URLs, sharing metadata
+and structured data. UPS and DGU are linked from the service catalog and included
+in the sitemap. Generated-route tests check canonical URLs, internal reachability
+and sitemap coverage; browser tests cover deep links and keyboard access to
+deferred contact forms. Browser suites run sequentially to avoid competing
+Chromium instances producing navigation timeouts on smaller CI runners.
+
+SCP overwrites files but does not remove deleted source files. Deployment now
+retires the six obsolete plugins/style/static landing files before building the
+replacement images. The regression fixture reproduces an upgrade over an older
+upload and checks that current sources, application data and certificates survive.
+Do not interpret a successful Git push as a successful release: verify the deploy
+job and the public HTML before comparing new PageSpeed results.

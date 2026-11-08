@@ -20,8 +20,19 @@ export function useLandingPage(root, options = {}) {
   const updateViewport = () => {
     frame = undefined
     headerScrolled.value = window.scrollY > 8
+    if (window.scrollY <= (options.stickyMinScroll ?? 0)) {
+      stickyVisible.value = false
+      return
+    }
     const selectors = options.stickySelectors || '.hero__cta .btn-pill, #quiz, .pcard__cta .btn-pill, .cases__cta .btn-pill, .trust-sec__cta .btn-pill'
     const ctaVisible = [...(root.value?.querySelectorAll(selectors) || [])].some(element => {
+      // Reading a descendant of a skipped content-visibility section forces it
+      // to render. Its outer section is enough to reject offscreen controls.
+      const section = element.closest('main > section')
+      if (section && section !== element) {
+        const bounds = section.getBoundingClientRect()
+        if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return false
+      }
       const bounds = element.getBoundingClientRect()
       return bounds.width > 0 && bounds.height > 0 && bounds.bottom > 0 && bounds.top < window.innerHeight
     })

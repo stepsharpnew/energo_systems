@@ -42,7 +42,10 @@
   <section class="hero-wrap" id="directions">
     <div class="hero">
       <div class="hero__media" aria-hidden="true">
-        <img v-bind="imageAttrs('/hdd/hero-gnb.jpg', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
+        <picture>
+          <source type="image/avif" :srcset="imageSrcset('/hdd/hero-gnb.jpg', 'avif')" sizes="100vw">
+          <img v-bind="imageAttrs('/hdd/hero-gnb.jpg', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
+        </picture>
         <!-- Для видео-фона:
         <video autoplay muted loop playsinline poster="/hdd/hero-gnb.jpg"><source src="/hdd/hero.mp4" type="video/mp4"></video>
         -->
@@ -846,23 +849,25 @@
 
 <script setup>
 import '~/assets/styles/landing-fonts.css'
+import '~/assets/styles/service-landing.css'
 import { landingFontPreloads } from '~/utils/landingFonts.js'
-import { imageAttrs } from '~/utils/responsiveImage.js'
+import { imageAttrs, imageSrcset } from '~/utils/responsiveImage.js'
 import { onMounted, onBeforeUnmount } from 'vue'
 import { initHddPage } from '~/assets/js/hdd-landing.js'
+import { createPageSeo } from '~/utils/pageSeo.js'
 
-useHead({
+useHead(createPageSeo({
+  path: '/services/hdd',
   title: 'ГНБ под ключ: прокол под дорогой 110–800 мм — Москва и область',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'Горизонтально направленное бурение и проколы под дорогами: связь, газ, электрика. ' +
-        'Диаметры 110–800 мм, свой отдел проектирования, работы под ключ в Москве и области.'
-    }
-  ],
+  description: 'Горизонтально направленное бурение и проколы под дорогами: связь, газ, электрика. ' +
+    'Диаметры 110–800 мм, свой отдел проектирования, работы под ключ в Москве и области.',
+  image: '/hdd/hero-gnb.jpg',
+  imageAlt: 'Буровая установка для бестраншейной прокладки коммуникаций',
+  serviceType: 'Горизонтально направленное бурение и проколы под дорогами',
+  areaServed: ['Москва', 'Московская область'],
+}, {
   link: landingFontPreloads
-})
+}))
 
 let cleanup = null
 onMounted(() => { cleanup = initHddPage() })
@@ -1056,6 +1061,7 @@ img { display: block; max-width: 100%; }
     radial-gradient(40% 50% at 20% 20%, rgba(90,110,140,.35), transparent 70%),
     linear-gradient(135deg, #2A2F37 0%, #1B1F25 55%, #0F1115 100%);
 }
+.hero__media picture { display: block; width: 100%; height: 100%; }
 .hero__media video, .hero__media img {
   width: 100%; height: 100%; object-fit: cover;
   object-position: 50% 40%;

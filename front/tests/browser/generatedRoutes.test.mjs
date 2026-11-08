@@ -79,6 +79,61 @@ test('every route includes its required styles before hydration without speculat
   }
 })
 
+test('SEO: every indexed route has one matching canonical, is internally reachable and is in the sitemap', async () => {
+  const origin = 'https://e-systems.su'
+  const pages = new Map()
+  for (const path of await collect(root)) {
+    const route = ('/' + path.slice(root.length).replace(/index\.html$/, '')).replace(/\/$/, '') || '/'
+    if (route !== '/hdd') pages.set(route, await readFile(path, 'utf8'))
+  }
+  assert.ok(pages.size >= 29, 'all current content routes must participate in the SEO check')
+  const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1].replaceAll('&amp;', '&')
+  const canonicalUrls = []
+  const links = new Map()
+  for (const [route, html] of pages) {
+    const canonicals = [...html.matchAll(/<link\b[^>]*>/g)]
+      .map(match => match[0]).filter(tag => attribute(tag, 'rel') === 'canonical')
+    assert.equal(canonicals.length, 1, `${route} needs exactly one canonical`)
+    const canonical = attribute(canonicals[0], 'href')
+    assert.equal(canonical, origin + route, `${route} must use its public canonical without query parameters or index.html`)
+    canonicalUrls.push(canonical)
+    const targets = new Set()
+    for (const match of html.matchAll(/<a\b[^>]*\bhref="([^"]*)"/g)) {
+      const url = new URL(match[1].replaceAll('&amp;', '&'), canonical)
+      const target = url.pathname.replace(/\/$/, '') || '/'
+      if (url.origin === origin && pages.has(target)) targets.add(target)
+    }
+    links.set(route, targets)
+  }
+  const reached = new Set(['/'])
+  const queue = ['/']
+  for (let index = 0; index < queue.length; index++) {
+    for (const target of links.get(queue[index]) || []) {
+      if (!reached.has(target)) { reached.add(target); queue.push(target) }
+    }
+  }
+  assert.deepEqual([...pages.keys()].filter(route => !reached.has(route)), [], 'content pages must have a crawlable path from the home page')
+
+  const sitemap = await readFile(join(root, 'sitemap.xml'), 'utf8')
+  const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1])
+  assert.equal(new Set(sitemapUrls).size, sitemapUrls.length, 'sitemap URLs must be unique')
+  assert.deepEqual(sitemapUrls.sort(), canonicalUrls.sort(), 'sitemap must list every current canonical content route and no redirect aliases')
+  for (const route of ['/', '/services/hdd', '/services/ups', '/services/dgu']) {
+    const html = pages.get(route)
+    for (const property of ['og:title', 'og:description', 'og:url', 'og:image']) {
+      const tags = [...html.matchAll(/<meta\b[^>]*>/g)].map(match => match[0]).filter(tag => attribute(tag, 'property') === property)
+      assert.equal(tags.length, 1, `${route} needs one ${property}`)
+      assert.ok(attribute(tags[0], 'content'), `${route} ${property} must not be empty`)
+      if (property === 'og:url') assert.equal(attribute(tags[0], 'content'), origin + route)
+    }
+    const schemas = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(match => JSON.parse(match[1]))
+    const graph = schemas.flatMap(schema => schema['@graph'] || [schema])
+    assert.ok(graph.some(entity => entity['@type'] === 'Organization'), `${route} must identify the provider`)
+    assert.ok(graph.some(entity => entity['@type'] === 'WebPage' && entity.url === origin + route), `${route} needs matching page schema`)
+    if (route !== '/') assert.ok(graph.some(entity => entity['@type'] === 'Service' && entity.url === origin + route), `${route} needs service schema`)
+  }
+})
+
 test('every prerendered route hydrates without runtime errors or hydration mismatches', async t => {
   const pages = await collect(root)
   const routes = pages.map(path => ('/' + path.slice(root.length).replace(/index\.html$/, '')).replace(/\/$/, '') || '/')

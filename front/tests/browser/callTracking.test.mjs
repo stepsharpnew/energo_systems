@@ -35,6 +35,9 @@ const fakeSdk = `(${function () {
 }})()`
 
 async function assertSafeReplacement(page, expected = assignedPhone) {
+  // The SDK is deliberately scheduled after paint/idle, which may happen
+  // after networkidle. Wait for execution before checking its replacement.
+  await page.waitForFunction(() => window.__callTrackingTest?.calls?.length > 0)
   const calls = await page.evaluate(() => window.__callTrackingTest?.calls)
   assert.ok(calls?.length, 'the intercepted Novofon SDK must execute')
   for (const call of calls) {
@@ -69,7 +72,9 @@ async function assertLanding(page, kind) {
   assert.ok(indicators.every(text => text.trim() === ''), 'quiz indicators must not contain a phone number')
   const secondary = page.locator('a[href="tel:+74951780118"]')
   assert.ok(await secondary.count() > 0)
-  assert.match(await secondary.first().innerText(), /178-01-18/)
+  // Offscreen contacts may skip rendering via content-visibility. This
+  // assertion checks that replacement preserved their DOM text and href.
+  assert.match(await secondary.first().textContent(), /178-01-18/)
   assert.equal(await secondary.first().getAttribute('data-calltracking-phone'), null)
 
   // Use real clicks on labels/buttons to catch destroyed controls, then walk

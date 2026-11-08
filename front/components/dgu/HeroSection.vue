@@ -3,7 +3,10 @@
   <div class="hero" data-hero>
 
     <div class="hero__bg" aria-hidden="true">
-      <img v-bind="imageAttrs('/dgu/images/4cb4251f853540df.webp', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
+      <picture>
+        <source type="image/avif" :srcset="imageSrcset('/dgu/images/4cb4251f853540df.webp', 'avif')" sizes="100vw">
+        <img v-bind="imageAttrs('/dgu/images/4cb4251f853540df.webp', { sizes: '100vw', width: 1600 })" alt="" fetchpriority="high">
+      </picture>
       <i class="hero__shade"></i>
     </div>
 
@@ -62,6 +65,6 @@
 </template>
 
 <script setup>
-import { imageAttrs } from '~/utils/responsiveImage.js'
+import { imageAttrs, imageSrcset } from '~/utils/responsiveImage.js'
 defineEmits(['solution'])
 </script>

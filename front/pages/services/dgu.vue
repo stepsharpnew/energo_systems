@@ -26,6 +26,7 @@
 <script setup>
 import '~/assets/styles/landing-fonts.css'
 import { landingFontPreloads } from '~/utils/landingFonts.js'
+import { createPageSeo } from '~/utils/pageSeo.js'
 import DguHeader from '~/components/dgu/Header.vue'
 import DguHeroSection from '~/components/dgu/HeroSection.vue'
 import DguQuizSection from '~/components/dgu/QuizSection.vue'
@@ -55,10 +56,17 @@ const openCallback = (request = {}) => {
   callback.value = { ...request, opener: document.activeElement }
 }
 async function chooseSolution(value) { solution.value = value; await nextTick(); catalog.value?.reveal() }
-useHead({
-  title: 'Дизельные электростанции под ключ',
+useHead(createPageSeo({
+  path: '/services/dgu',
+  title: 'Дизельные электростанции под ключ | Энергосистемы',
+  description: 'Резервное энергоснабжение под ключ: ДГУ от 30 кВт с АВР и промышленные ИБП для ТЦ, БЦ, АЗС, складов, отелей, больниц и коттеджных поселков. Проектирование, поставка, монтаж и сервис по всей России.',
+  image: '/dgu/images/4cb4251f853540df.webp',
+  imageAlt: 'Бизнес-центр с резервным электроснабжением',
+  serviceType: 'Проектирование, поставка, монтаж и сервис дизельных электростанций',
+  areaServed: { '@type': 'Country', name: 'Россия' },
+}, {
   htmlAttrs: { lang: 'ru', class: 'service-landing-document' },
-  meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }, { name: 'description', content: 'Резервное энергоснабжение под ключ: ДГУ от 30 кВт с АВР и промышленные ИБП для ТЦ, БЦ, АЗС, складов, отелей, больниц и коттеджных поселков. Проектирование, поставка, монтаж и сервис по всей России.' }],
+  meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }],
   link: landingFontPreloads,
-})
+}))
 </script>

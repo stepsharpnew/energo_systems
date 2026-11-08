@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { gzipSync, inflateSync } from 'node:zlib'
 import manifest from '../data/imageManifest.json' with { type: 'json' }
 import { equipmentCatalog } from '../assets/data/equipmentCatalog.js'
-import { imageAttrs, imageDimensions, imageSource } from '../utils/responsiveImage.js'
+import { imageAttrs, imageDimensions, imageSource, imageSrcset } from '../utils/responsiveImage.js'
 
 const publicFile = src => fileURLToPath(new URL('../public' + src, import.meta.url))
 
@@ -47,6 +47,29 @@ test('responsive hero has mobile and desktop choices and unknown assets remain u
   const bytes = await readFile(new URL('../data/imageManifest.json', import.meta.url))
   assert.ok(gzipSync(bytes).length < 15_000, 'shared image metadata must stay below 15 KB gzip')
 })
+
+for (const original of ['/ups/hero-house.jpg', '/hdd/hero-gnb.jpg', '/dgu/images/4cb4251f853540df.webp']) {
+test(`${original} LCP has smaller responsive AVIF sources and keeps the WebP fallback`, async () => {
+  const image = manifest[original]
+  assert.ok(image.avifVariants.length >= 3)
+  assert.match(imageSrcset(original, 'avif'), /480w/)
+  assert.match(imageAttrs(original).srcset, /\.webp /)
+  let lastWidth = 0
+  for (const variant of image.avifVariants) {
+    assert.ok(variant.width > lastWidth && variant.width <= image.width)
+    assert.ok(Math.abs(variant.height - image.height * variant.width / image.width) <= 1)
+    const bytes = await readFile(publicFile(variant.src))
+    assert.equal(bytes.toString('ascii', 4, 8), 'ftyp')
+    assert.ok(bytes.subarray(8, 32).includes(Buffer.from('avif')))
+    lastWidth = variant.width
+  }
+  const avif = image.avifVariants.find(variant => variant.width === 800)
+  const webp = image.variants.find(variant => variant.width === 800)
+  assert.ok((await stat(publicFile(avif.src))).size < (await stat(publicFile(webp.src))).size * .65,
+    'the mobile LCP image must save at least 35% without lowering its dimensions')
+  assert.equal(imageSrcset('/missing-image.svg', 'avif'), undefined)
+})
+}
 
 
 test('Adobe RGB logo previews preserve the original color-management profile', async () => {

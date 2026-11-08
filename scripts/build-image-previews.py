@@ -25,6 +25,11 @@ MANIFEST = FRONT / "data/imageManifest.json"
 WIDTHS = (240, 480, 800, 1200, 1600)
 QUALITY = 80
 ENCODER = f"webp-q{QUALITY}-m5-v1"
+# Full-bleed landing heroes are mobile LCP images. AVIF keeps their detail
+# at substantially fewer bytes; WebP remains the fallback.
+AVIF_IMAGES = {"/ups/hero-house.jpg", "/hdd/hero-gnb.jpg", "/dgu/images/4cb4251f853540df.webp"}
+AVIF_QUALITY = 55
+AVIF_ENCODER = f"avif-q{AVIF_QUALITY}-s6-v1"
 RASTER = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 SOURCE_DIRS = ("components", "pages", "assets", "data")
 URL = re.compile(r'''["'`](/(?:img|hdd|ups|dgu)/[^"'`<>\s]+?\.(?:jpe?g|png|webp|gif))["'`]''', re.I)
@@ -79,9 +84,23 @@ def build() -> None:
                             continue
                         outputs.add(filename)
                         entry["variants"].append({"src": "/img/previews/" + filename, "width": target_width, "height": target_height})
+                    if src in AVIF_IMAGES:
+                        entry["avifVariants"] = []
+                        avif_profile = AVIF_ENCODER + ("-keep-icc" if icc_profile else "")
+                        avif_digest = hashlib.sha256(path.read_bytes() + avif_profile.encode()).hexdigest()[:16]
+                        for target_width in sorted({size for size in WIDTHS if size < width} | {min(width, WIDTHS[-1])}):
+                            target_height = max(1, round(height * target_width / width))
+                            filename = f"{avif_digest}-{target_width}.avif"
+                            output = OUTPUT / filename
+                            if not output.exists():
+                                image.resize((target_width, target_height), Image.Resampling.LANCZOS).save(output, "AVIF", quality=AVIF_QUALITY, speed=6, icc_profile=icc_profile)
+                            outputs.add(filename)
+                            entry["avifVariants"].append({"src": "/img/previews/" + filename, "width": target_width, "height": target_height})
             except (OSError, ValueError) as error:
                 raise RuntimeError(f"Cannot process {src}: {error}") from error
-    for path in OUTPUT.glob("*.webp"):
+    for path in OUTPUT.iterdir():
+        if path.suffix not in {".webp", ".avif"}:
+            continue
         if path.name not in outputs:
             path.unlink()
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)

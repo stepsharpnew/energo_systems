@@ -25,8 +25,9 @@ export function observeViewportBand(element, onChange, { top = .15, bottom = .85
         threshold: 0,
       })
       observer.observe(element)
+    } else {
+      measure()
     }
-    measure()
   }
   const onResize = () => {
     if (!browser.requestAnimationFrame) recreate()
@@ -35,7 +36,10 @@ export function observeViewportBand(element, onChange, { top = .15, bottom = .85
   recreate()
   if (!hasObserver) browser.addEventListener('scroll', measure, { passive: true })
   browser.addEventListener('resize', onResize)
-  if (typeof browser.ResizeObserver === 'function') {
+  // IntersectionObserver reports the initial intersection after layout and
+  // tracks target/layout changes itself. Measuring here would force the whole
+  // landing to lay out once per mounted section before its first paint.
+  if (!hasObserver && typeof browser.ResizeObserver === 'function') {
     resizeObserver = new browser.ResizeObserver(measure)
     resizeObserver.observe(element)
   }
