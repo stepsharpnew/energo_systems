@@ -42,6 +42,7 @@ function runDeployment(scenario = 'success') {
     for (const file of ['front/Dockerfile', 'tg_bot/Dockerfile', 'docker-base-images.tar.gz']) {
       writeFileSync(join(fixture, file), 'test fixture\n');
     }
+    if (['cached_images', 'missing_archive'].includes(scenario)) rmSync(join(fixture, 'docker-base-images.tar.gz'));
     if (scenario !== 'missing_env') {
       writeFileSync(join(fixture, '.env'), 'SMTP_PASS=test-secret-must-not-be-printed\n');
     }
@@ -118,7 +119,7 @@ test('retired source files from an older SCP upload are removed before build; cu
   assert.match(output, /Deployment completed successfully/);
 });
 
-for (const scenario of ['build_failure', 'build_timeout', 'load_failure', 'missing_env']) {
+for (const scenario of ['build_failure', 'build_timeout', 'load_failure', 'missing_env', 'missing_archive', 'invalid_archive', 'docker_unavailable']) {
   test(`${scenario}: leave existing application containers untouched`, () => {
     const { status, log, output } = runDeployment(scenario);
     assert.equal(status, scenario === 'build_timeout' ? 124 : 1, output);
@@ -128,6 +129,24 @@ for (const scenario of ['build_failure', 'build_timeout', 'load_failure', 'missi
     if (scenario === 'build_timeout') assert.match(output, /15-minute limit/);
   });
 }
+
+test('cached Docker images deploy without an archive and never reload an older archive', () => {
+  for (const scenario of ['cached_images', 'success']) {
+    const { status, log, output } = runDeployment(scenario);
+    assert.equal(status, 0, output);
+    assert.doesNotMatch(log, /image load/);
+    assert.match(output, /Reusing installed Docker base images/);
+  }
+});
+
+test('first deployment loads missing base images and verifies them before building', () => {
+  const { status, log, output } = runDeployment('first_images');
+  assert.equal(status, 0, output);
+  const load = log.indexOf('docker image load');
+  const verify = log.indexOf('docker image inspect', load);
+  const build = log.indexOf('build --pull=false');
+  assert.ok(load >= 0 && verify > load && build > verify);
+});
 
 for (const scenario of ['start_failure', 'api_failure', 'frontend_failure']) {
   test(`${scenario}: stop with diagnostics before modifying nginx or certificates`, () => {

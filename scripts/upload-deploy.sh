@@ -61,6 +61,25 @@ timeout --kill-after=2s 20s ssh-keyscan -T 10 "$SERVER_HOST" > "$hosts"
 [[ -s "$hosts" ]] || fail 'SSH host key discovery returned no keys'
 chmod 600 "$hosts"
 
+# Docker archives are hundreds of MB and gzip changes defeat rsync's delta
+# transfer. Existing base images remain valid across application releases.
+# Verify the daemon first so an SSH/permission failure cannot mean "missing".
+rsync_excludes=()
+tar_excludes=()
+if [[ -s "$bundle/docker-base-images.tar.gz" ]]; then
+  printf 'Checking installed Docker base images before transferring their archive...\n'
+  if timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
+    'set -eu; sudo -n docker info >/dev/null; if sudo -n docker image inspect node:20-alpine node:18-alpine nginx:stable-alpine certbot/certbot:latest >/dev/null 2>&1; then exit 0; else exit 42; fi'; then
+    rsync_excludes=(--exclude=/docker-base-images.tar.gz)
+    tar_excludes=(--exclude=./docker-base-images.tar.gz)
+    printf 'All Docker base images are installed; skipping the large archive.\n'
+  else
+    image_status=$?
+    [[ $image_status == 42 ]] || { printf 'Docker preflight failed (exit %s).\n' "$image_status" >&2; exit "$image_status"; }
+    printf 'Some Docker base images are missing; including their archive.\n'
+  fi
+fi
+
 printf 'Checking incremental rsync support on the server...\n'
 if timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
   'if command -v rsync >/dev/null 2>&1; then exit 0; else exit 42; fi'; then
@@ -74,7 +93,7 @@ if timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
   printf 'Uploading changed files with rsync; progress includes transferred bytes and rate...\n'
   timeout --kill-after=5s 420s rsync -a --no-owner --no-group --checksum --delay-updates \
     --partial-dir="$partial_name" --timeout=60 --info=progress2 --stats \
-    --rsync-path='umask 077; rsync' -e "$rsync_ssh" -- "$bundle/" "$target:$remote_dir/"
+    --rsync-path='umask 077; rsync' ${rsync_excludes[@]+"${rsync_excludes[@]}"} -e "$rsync_ssh" -- "$bundle/" "$target:$remote_dir/"
   timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
     "set -eu; test -s '$remote_dir/.env'; chmod 600 -- '$remote_dir/.env'; find '$remote_dir' -type d -name '$partial_name' -prune -exec rm -rf -- {} +"
   rsync_started=0
@@ -86,7 +105,7 @@ else
 fi
 
 printf 'Server has no rsync; packing private fallback archive with gzip -1...\n'
-tar -C "$bundle" -cf - . | gzip -1 > "$archive"
+tar -C "$bundle" ${tar_excludes[@]+"${tar_excludes[@]}"} -cf - . | gzip -1 > "$archive"
 chmod 600 "$archive"
 bytes=$(wc -c < "$archive")
 digest=$(sha256sum "$archive")

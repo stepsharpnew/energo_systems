@@ -47,7 +47,7 @@ start_proxy() {
     -d --no-build --pull never --no-deps --force-recreate nginx
 }
 
-for required in .env front/Dockerfile tg_bot/Dockerfile docker-base-images.tar.gz; do
+for required in .env front/Dockerfile tg_bot/Dockerfile; do
   if [ ! -s "$required" ]; then
     echo "Required deployment file is missing or empty: ${required}" >&2
     exit 1
@@ -57,9 +57,19 @@ chmod 600 .env
 # Never print the expanded config: it includes SMTP credentials from .env.
 sudo docker compose config --quiet
 
-echo "Loading Docker base images"
-sudo docker image load --input docker-base-images.tar.gz
-sudo docker image inspect node:20-alpine node:18-alpine nginx:stable-alpine certbot/certbot:latest >/dev/null
+base_images=(node:20-alpine node:18-alpine nginx:stable-alpine certbot/certbot:latest)
+sudo docker info >/dev/null
+if sudo docker image inspect "${base_images[@]}" >/dev/null 2>&1; then
+  echo "Reusing installed Docker base images"
+else
+  if [ ! -s docker-base-images.tar.gz ]; then
+    echo "Docker base images are missing and no archive is available" >&2
+    exit 1
+  fi
+  echo "Loading missing Docker base images from the deployment archive"
+  sudo docker image load --input docker-base-images.tar.gz
+  sudo docker image inspect "${base_images[@]}" >/dev/null
+fi
 
 lead_paths=(front/components tg_bot/src)
 if [ -d front/src/components ]; then

@@ -28,6 +28,15 @@ case "$command_name" in
     ;;
   docker)
     case " $* " in
+      *' info '*)
+        [ "$DEPLOY_TEST_SCENARIO" != docker_unavailable ] || exit 1
+        ;;
+      *' image inspect '*)
+        case "$DEPLOY_TEST_SCENARIO" in
+          load_failure|missing_archive|invalid_archive) exit 1 ;;
+          first_images) [ -f "$DEPLOY_TEST_COUNTER.loaded" ] || exit 1 ;;
+        esac
+        ;;
       *' build '*)
         case "$DEPLOY_TEST_SCENARIO" in
           build_failure) exit 1 ;;
@@ -44,6 +53,7 @@ case "$command_name" in
         ;;
       *' image load '*)
         [ "$DEPLOY_TEST_SCENARIO" != load_failure ] || exit 1
+        touch "$DEPLOY_TEST_COUNTER.loaded"
         ;;
       *' up '*frontend*)
         [ "$DEPLOY_TEST_SCENARIO" != start_failure ] || exit 1

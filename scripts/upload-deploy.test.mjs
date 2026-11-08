@@ -32,13 +32,21 @@ if(name==='rsync'){
  // Use the real local rsync engine for checksum/delay-updates/directory
  // semantics; only SSH and progress flags differ on macOS openrsync.
  const realPath=process.env.PATH.split(path.delimiter).filter(directory=>directory!==root+'/bin').join(path.delimiter);
- const result=cp.spawnSync('/usr/bin/rsync',['-a','--checksum','--delay-updates','--partial-dir='+partial,source,destination],{stdio:'inherit',env:{...process.env,PATH:realPath}});
+ const excludes=args.filter(argument=>argument.startsWith('--exclude='));
+ const result=cp.spawnSync('/usr/bin/rsync',['-a','--checksum','--delay-updates','--partial-dir='+partial,...excludes,source,destination],{stdio:'inherit',env:{...process.env,PATH:realPath}});
  process.exit(result.status??1)
 }
 for(const key of ['BatchMode=yes','IdentitiesOnly=yes','StrictHostKeyChecking=yes','ConnectTimeout=15','ServerAliveInterval=15','ServerAliveCountMax=3'])if(!args.includes(key))throw Error('Missing SSH option '+key);
 const key=args[args.indexOf('-i')+1], hosts=args.find(a=>a.startsWith('UserKnownHostsFile=')).split('=')[1];
 for(const file of [key,hosts])if((fs.statSync(file).mode&511)!==384)throw Error('Credential file must be mode 600');
 if(process.env.SERVER_SSH_KEY)throw Error('Private key must be removed from child environment');
+if(name==='ssh'&&args.at(-1).includes('sudo -n docker info')){
+ const command=args.at(-1);
+ for(const ref of ['node:20-alpine','node:18-alpine','nginx:stable-alpine','certbot/certbot:latest'])if(!command.includes(ref))throw Error('All four base images must be inspected');
+ if(process.env.UPLOAD_TEST_SCENARIO.endsWith('_probe_failure'))process.exit(255);
+ if(process.env.UPLOAD_TEST_SCENARIO.endsWith('_daemon_failure'))process.exit(1);
+ process.exit(process.env.UPLOAD_TEST_SCENARIO.endsWith('_cached')?0:42)
+}
 if(name==='ssh'&&args.at(-1).includes('command -v rsync')){
  if(process.env.UPLOAD_TEST_SCENARIO==='probe_failure')process.exit(255);
  process.exit(process.env.UPLOAD_TEST_SCENARIO.startsWith('rsync_')?0:42)
@@ -83,6 +91,12 @@ function run(scenario = 'success', overrides = {}) {
     const collision = join(root, 'remote/app/front/.deploy-partial-1234567-2')
     if (scenario === 'rsync_collision') writeFileSync(collision, 'existing server file must survive\n')
     writeFileSync(join(root, 'remote/app/tg_bot/data/existing.json'), 'preserved server data\n')
+    const baseArchive = join(root, 'bundle/docker-base-images.tar.gz')
+    if (scenario.includes('_base_')) {
+      writeFileSync(baseArchive, 'new Docker base archive\n')
+      writeFileSync(join(root, 'remote/app/docker-base-images.tar.gz'), 'old Docker base archive\n')
+      writeFileSync(join(root, 'bundle/front/docker-base-images.tar.gz'), 'nested source must still transfer\n')
+    }
     const result = spawnSync('bash', [script, 'bundle'], {
       cwd: root, encoding: 'utf8', timeout: 10000,
       env: { ...process.env, PATH: join(root, 'bin') + ':' + process.env.PATH,
@@ -93,7 +107,10 @@ function run(scenario = 'success', overrides = {}) {
     const log = existsSync(join(root, 'commands.jsonl')) ? readFileSync(join(root, 'commands.jsonl'), 'utf8').trim().split('\n').map(JSON.parse) : []
     const serialized = JSON.stringify(log), output = result.stdout + result.stderr
     assert.doesNotMatch(serialized + output, new RegExp(secret + '|private-bundle-secret'))
-    assert.doesNotMatch(serialized, /docker|compose|systemctl|sudo/)
+    assert.doesNotMatch(serialized, /docker (?:compose|image (?:load|rm|prune)|system|container|stop|kill|rm|run|start)|systemctl/)
+    for (const entry of log.filter(row => row.args.at(-1)?.includes('sudo '))) {
+      assert.match(entry.args.at(-1), /^set -eu; sudo -n docker info >\/dev\/null; if sudo -n docker image inspect /, 'uploader may inspect Docker but must not mutate it')
+    }
     for (const entry of log.filter(row => row.name === 'ssh' && row.args.at(-1).includes('rm -rf'))) {
       assert.match(entry.args.at(-1), /find '\/home\/deploy\/app' -type d -name '\.deploy-partial-1234567-2' -prune -exec rm -rf -- \{\} \+/)
     }
@@ -108,6 +125,9 @@ function run(scenario = 'success', overrides = {}) {
     return { status: result.status, log, output, extracted: existsSync(join(root, 'remote/app/fresh-only.txt')),
       indexes: Object.fromEntries(['front', 'tg_bot'].map(name => [name, readFileSync(join(root, 'remote/app', name, 'index.html'), 'utf8')])),
       envMode: existsSync(join(root, 'remote/app/.env')) ? statSync(join(root, 'remote/app/.env')).mode & 0o777 : null,
+      localBaseArchive: existsSync(baseArchive) ? readFileSync(baseArchive, 'utf8') : null,
+      remoteBaseArchive: existsSync(join(root, 'remote/app/docker-base-images.tar.gz')) ? readFileSync(join(root, 'remote/app/docker-base-images.tar.gz'), 'utf8') : null,
+      nestedBaseArchive: existsSync(join(root, 'remote/app/front/docker-base-images.tar.gz')) ? readFileSync(join(root, 'remote/app/front/docker-base-images.tar.gz'), 'utf8') : null,
       collision: existsSync(collision) ? readFileSync(collision, 'utf8') : null,
       env: existsSync(join(root, 'remote/app/.env')) ? readFileSync(join(root, 'remote/app/.env'), 'utf8') : null }
   } finally { rmSync(root, { recursive: true, force: true }) }
@@ -163,6 +183,36 @@ test('an existing file with this run partial name is rejected without deletion o
   assert.equal(result.collision, 'existing server file must survive\n')
   assert.equal(result.log.some(row => row.name === 'rsync' || row.name === 'scp'), false)
 })
+
+for (const transport of ['rsync', 'scp']) for (const state of ['cached', 'missing']) {
+  test(`${transport}: base archive is ${state === 'cached' ? 'excluded when all images exist' : 'transferred when an image is missing'}`, () => {
+    const result = run(`${transport}_base_${state}`)
+    assert.equal(result.status, 0, result.output)
+    assert.equal(result.extracted, true)
+    assert.equal(result.localBaseArchive, 'new Docker base archive\n', 'the local archive must never be deleted')
+    assert.equal(result.remoteBaseArchive, state === 'cached' ? 'old Docker base archive\n' : 'new Docker base archive\n')
+    // BSDtar on the local macOS runner treats exclude patterns differently;
+    // production GNUtar and rsync retain the explicitly anchored root scope.
+    if (transport === 'rsync' || process.platform !== 'darwin') {
+      assert.equal(result.nestedBaseArchive, 'nested source must still transfer\n', 'the exclusion must apply only at the bundle root')
+    }
+    assert.equal(result.envMode, 0o600)
+    const probe = result.log.findIndex(row => row.name === 'ssh' && row.args.at(-1).includes('sudo -n docker info'))
+    const upload = result.log.findIndex(row => row.name === transport)
+    assert.ok(probe >= 0 && upload > probe, 'base image availability must be checked before transferring files')
+    if (transport === 'rsync') assert.equal(result.log[upload].args.includes('--exclude=/docker-base-images.tar.gz'), state === 'cached')
+  })
+}
+
+for (const error of ['probe_failure', 'daemon_failure']) {
+  test(`Docker ${error} aborts before transfer instead of treating unavailable Docker as missing images`, () => {
+    const result = run(`rsync_base_${error}`)
+    assert.equal(result.status, error === 'probe_failure' ? 255 : 1, result.output)
+    assert.equal(result.log.some(row => row.name === 'rsync' || row.name === 'scp' || row.name === 'gzip'), false)
+    assert.equal(result.remoteBaseArchive, 'old Docker base archive\n')
+    assert.equal(result.extracted, false)
+  })
+}
 
 for (const scenario of ['upload_failure', 'verify_failure', 'gzip_failure']) test(`${scenario} never extracts and cleans only its temporary archive and key`, () => {
   const result = run(scenario)

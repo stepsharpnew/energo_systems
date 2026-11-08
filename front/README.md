@@ -162,7 +162,13 @@ Do not interpret a successful Git push as a successful release: verify the deplo
 job and the public HTML before comparing new PageSpeed results.
 
 Deployment upload uses the runner's native OpenSSH client with an eight-minute
-workflow limit. When the server has rsync, checksum comparison and delta transfer
+workflow limit. Before uploading, it checks that Docker is available and all four
+base images are installed. If so, the large base-image archive is excluded from
+both rsync and SCP uploads; deployment reuses the installed images instead of
+reloading an older archive. Missing images are still supplied by the archive for
+first-time installations. Updating a mutable base-image tag is an explicit server
+maintenance operation (`docker pull`), separate from application releases.
+When the server has rsync, checksum comparison and delta transfer
 reuse existing files; progress and transfer statistics are logged, and 60 seconds
 without data fails the transfer. Updates use private temporary directories and
 delayed renames, preserving server data without a remote `--delete`.
