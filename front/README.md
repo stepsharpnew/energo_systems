@@ -162,6 +162,10 @@ Do not interpret a successful Git push as a successful release: verify the deplo
 job and the public HTML before comparing new PageSpeed results.
 
 Deployment upload uses the runner's native OpenSSH client with an eight-minute
-workflow limit. It stages a private archive per run, verifies SHA-256, gzip and
-tar integrity before extraction, and removes only its own temporary files.
-Application replacement still starts only after both images build successfully.
+workflow limit. When the server has rsync, checksum comparison and delta transfer
+reuse existing files; progress and transfer statistics are logged, and 60 seconds
+without data fails the transfer. Updates use private temporary directories and
+delayed renames, preserving server data without a remote `--delete`.
+Servers without rsync use a private archive verified with SHA-256, gzip and tar
+before extraction. Only this run's temporary files are removed. Application
+replacement still starts only after both images build successfully.

@@ -128,8 +128,8 @@ jobs:
             sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /home/${{ secrets.SERVER_USER }}/app
 
       - name: Copy deploy bundle to server
-        # Use the runner's OpenSSH client; drone-scp stalled during transfer.
-        # Verify the staged archive before extracting any application sources.
+        # Reuse existing files via rsync over OpenSSH instead of resending the
+        # whole bundle. The uploader verifies its archive fallback if needed.
         timeout-minutes: 10
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}

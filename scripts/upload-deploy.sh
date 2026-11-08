@@ -21,8 +21,10 @@ hosts=$temporary/known_hosts
 archive=$temporary/bundle.tar.gz
 remote_dir=/home/$SERVER_USER/app
 remote_archive=$remote_dir/.deploy-$GITHUB_RUN_ID-$attempt.tar.gz
+partial_name=.deploy-partial-$GITHUB_RUN_ID-$attempt
 target=$SERVER_USER@$SERVER_HOST
 remote_owned=0
+rsync_started=0
 ssh_options=(-i "$key" -o BatchMode=yes -o IdentitiesOnly=yes
   -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$hosts"
   -o ConnectTimeout=15 -o ConnectionAttempts=1
@@ -36,6 +38,10 @@ cleanup() {
     timeout --kill-after=2s 10s ssh "${ssh_options[@]}" "$target" \
       "rm -f -- '$remote_archive'" >/dev/null 2>&1
   fi
+  if [[ $rsync_started == 1 ]]; then
+    timeout --kill-after=2s 10s ssh "${ssh_options[@]}" "$target" \
+      "find '$remote_dir' -type d -name '$partial_name' -prune -exec rm -rf -- {} +" >/dev/null 2>&1
+  fi
   rm -f -- "$key" "$hosts" "$archive"
   rmdir -- "$temporary"
   exit "$result"
@@ -47,24 +53,50 @@ trap 'exit 130' INT
 printf '%s\n' "$SERVER_SSH_KEY" > "$key"
 unset SERVER_SSH_KEY
 chmod 600 "$key"
-printf 'Packing deployment bundle with gzip -1...\n'
-tar -C "$bundle" -cf - . | gzip -1 > "$archive"
-chmod 600 "$archive"
-bytes=$(wc -c < "$archive")
-digest=$(sha256sum "$archive")
-digest=${digest%% *}
-printf 'Deployment archive: %s bytes\n' "${bytes//[[:space:]]/}"
+chmod 600 "$bundle/.env"
 
 # TOFU matches the previous action's unpinned host trust. Subsequent SSH/SCP
 # calls use only this dedicated, verified known_hosts file and never prompt.
 timeout --kill-after=2s 20s ssh-keyscan -T 10 "$SERVER_HOST" > "$hosts"
 [[ -s "$hosts" ]] || fail 'SSH host key discovery returned no keys'
 chmod 600 "$hosts"
+
+printf 'Checking incremental rsync support on the server...\n'
+if timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
+  'if command -v rsync >/dev/null 2>&1; then exit 0; else exit 42; fi'; then
+  # A relative partial directory is created separately under each destination
+  # directory: an absolute path would collide on repeated names like index.html.
+  # Refuse to claim any existing directory with this run's unique name.
+  timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
+    "set -eu; umask 077; mkdir -p -- '$remote_dir'; test -z \"\$(find '$remote_dir' -name '$partial_name' -print -quit)\""
+  rsync_started=1
+  printf -v rsync_ssh '%q ' ssh "${ssh_options[@]}"
+  printf 'Uploading changed files with rsync; progress includes transferred bytes and rate...\n'
+  timeout --kill-after=5s 420s rsync -a --no-owner --no-group --checksum --delay-updates \
+    --partial-dir="$partial_name" --timeout=60 --info=progress2 --stats \
+    --rsync-path='umask 077; rsync' -e "$rsync_ssh" -- "$bundle/" "$target:$remote_dir/"
+  timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
+    "set -eu; test -s '$remote_dir/.env'; chmod 600 -- '$remote_dir/.env'; find '$remote_dir' -type d -name '$partial_name' -prune -exec rm -rf -- {} +"
+  rsync_started=0
+  printf 'Deployment bundle synchronized successfully.\n'
+  exit 0
+else
+  probe_status=$?
+  [[ $probe_status == 42 ]] || { printf 'SSH capability check failed (exit %s); not retrying with SCP.\n' "$probe_status" >&2; exit "$probe_status"; }
+fi
+
+printf 'Server has no rsync; packing private fallback archive with gzip -1...\n'
+tar -C "$bundle" -cf - . | gzip -1 > "$archive"
+chmod 600 "$archive"
+bytes=$(wc -c < "$archive")
+digest=$(sha256sum "$archive")
+digest=${digest%% *}
+printf 'Deployment archive: %s bytes\n' "${bytes//[[:space:]]/}"
 timeout --kill-after=2s 30s ssh "${ssh_options[@]}" "$target" \
   "set -eu; umask 077; mkdir -p -- '$remote_dir'; (set -C; : > '$remote_archive'); chmod 600 -- '$remote_archive'"
 remote_owned=1
 printf 'Uploading archive through native OpenSSH SCP...\n'
-timeout --kill-after=5s 420s scp -O "${ssh_options[@]}" "$archive" "$target:$remote_archive"
+timeout --kill-after=5s 120s scp -O "${ssh_options[@]}" "$archive" "$target:$remote_archive"
 printf 'Verifying checksum and archive before extraction...\n'
 timeout --kill-after=5s 90s ssh "${ssh_options[@]}" "$target" \
   "set -eu; printf '%s  %s\\n' '$digest' '$remote_archive' | sha256sum -c -; gzip -t -- '$remote_archive'; tar -tzf '$remote_archive' >/dev/null; tar -xzf '$remote_archive' -C '$remote_dir' --no-same-owner; rm -f -- '$remote_archive'"
