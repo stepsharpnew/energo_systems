@@ -60,7 +60,7 @@ jobs:
 
       - name: Test deployment safety
         run: |
-          bash -n scripts/deploy.sh
+          bash -n scripts/deploy.sh scripts/upload-deploy.sh
           node --test scripts/*.test.mjs
 
       - name: Create .env from DOTENV secret
@@ -128,20 +128,15 @@ jobs:
             sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /home/${{ secrets.SERVER_USER }}/app
 
       - name: Copy deploy bundle to server
-        # v1 is a composite action: tar runs as the runner user who owns the
-        # mode-600 .env. The old Docker action used a different filesystem user.
-        uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
-        with:
-          version: "1.8.0"
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "deploy"
-          target: "/home/${{ secrets.SERVER_USER }}/app"
-          overwrite: true
-          strip_components: 1
-          timeout: 120s
-          command_timeout: 20m
+        # Use the runner's OpenSSH client; drone-scp stalled during transfer.
+        # Verify the staged archive before extracting any application sources.
+        timeout-minutes: 10
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+        run: |
+          timeout --kill-after=15s 8m bash scripts/upload-deploy.sh deploy
 
       - name: Build and replace services on server
         uses: appleboy/ssh-action@v1.0.3

@@ -88,10 +88,23 @@ test('secret creation fails without DOTENV instead of packaging a stale file', (
   });
 });
 
-test('SCP stays on the verified native/composite action and pinned binary', () => {
-  assert.match(workflow, /uses: appleboy\/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345/);
-  assert.match(workflow, /version: "1\.8\.0"/);
-  assert.doesNotMatch(workflow, /scp-action@v0\./);
+test('workflow bounds the native upload and stops before build if transfer fails', () => {
+  withFixture(fixture => {
+    const invocations = join(fixture, 'upload-invocations.txt');
+    writeFileSync(join(fixture, 'scripts/upload-deploy.sh'), 'printf "%s\\n" "$1" > "$UPLOAD_TEST_LOG"\nexit 42\n');
+    // macOS does not ship GNU timeout; the fixture preserves its child exit.
+    mkdirSync(join(fixture, 'bin'));
+    writeFileSync(join(fixture, 'bin/timeout'), '#!/bin/sh\nshift 2\nexec "$@"\n', { mode: 0o755 });
+    const result = shell(runBlock('Copy deploy bundle to server'), fixture, {
+      PATH: `${join(fixture, 'bin')}:${process.env.PATH}`,
+      UPLOAD_TEST_LOG: invocations,
+    });
+    assert.equal(result.status, 42, 'a failed uploader must fail the workflow step');
+    assert.equal(readFileSync(invocations, 'utf8').trim(), 'deploy');
+  });
+  assert.match(runBlock('Copy deploy bundle to server'), /timeout --kill-after=15s 8m /);
+  assert.doesNotMatch(workflow, /uses: appleboy\/scp-action/);
   assert.doesNotMatch(workflow, /chmod 6(?:44|66) .*\.env/);
   assert.ok(workflow.indexOf('- name: Verify deploy bundle permissions') < workflow.indexOf('- name: Copy deploy bundle to server'));
+  assert.ok(workflow.indexOf('- name: Copy deploy bundle to server') < workflow.indexOf('- name: Build and replace services on server'));
 });

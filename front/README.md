@@ -160,3 +160,8 @@ replacement images. The regression fixture reproduces an upgrade over an older
 upload and checks that current sources, application data and certificates survive.
 Do not interpret a successful Git push as a successful release: verify the deploy
 job and the public HTML before comparing new PageSpeed results.
+
+Deployment upload uses the runner's native OpenSSH client with an eight-minute
+workflow limit. It stages a private archive per run, verifies SHA-256, gzip and
+tar integrity before extraction, and removes only its own temporary files.
+Application replacement still starts only after both images build successfully.
