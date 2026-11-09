@@ -1,24 +1,15 @@
 <template>
   <nav class="main-nav" aria-label="Основная навигация">
     <div class="nav-container desktop-nav">
-      <template v-for="item in navItems" :key="item.key">
-        <NuxtLink
-          v-if="item.href"
-          :to="item.href"
-          class="nav-item"
-          :class="{ featured: item.featured }"
-        >
-          {{ item.label }}
-        </NuxtLink>
-        <button
-          v-else
-          type="button"
-          class="nav-item"
-          @click="handleNavClick(item.key)"
-        >
-          {{ item.label }}
-        </button>
-      </template>
+      <NuxtLink
+        v-for="item in navItems"
+        :key="item.key"
+        :to="item.href"
+        class="nav-item"
+        :class="{ featured: item.featured }"
+      >
+        {{ item.label }}
+      </NuxtLink>
     </div>
 
     <div class="mobile-nav-wrapper">
@@ -59,25 +50,16 @@
             </div>
 
             <div class="mobile-menu-items">
-              <template v-for="item in navItems" :key="item.key">
-                <NuxtLink
-                  v-if="item.href"
-                  :to="item.href"
-                  class="mobile-nav-item"
-                  :class="{ featured: item.featured }"
-                  @click="closeMobileMenu"
-                >
-                  {{ item.label }}
-                </NuxtLink>
-                <button
-                  v-else
-                  type="button"
-                  class="mobile-nav-item"
-                  @click="handleNavClick(item.key)"
-                >
-                  {{ item.label }}
-                </button>
-              </template>
+              <NuxtLink
+                v-for="item in navItems"
+                :key="item.key"
+                :to="item.href"
+                class="mobile-nav-item"
+                :class="{ featured: item.featured }"
+                @click="closeMobileMenu"
+              >
+                {{ item.label }}
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -97,7 +79,6 @@ export default {
       required: true,
     },
   },
-  emits: ["scroll-to"],
   setup() {
     const isMobileMenuOpen = ref(false), menuPanel = ref(null), menuTitle = ref(null);
     useModalAccessibility(menuPanel, isMobileMenuOpen, () => { isMobileMenuOpen.value = false; }, { initialFocus: menuTitle });
@@ -112,10 +93,6 @@ export default {
     return { isMobileMenuOpen, menuPanel, menuTitle };
   },
   methods: {
-    handleNavClick(key) {
-      this.closeMobileMenu();
-      this.$emit("scroll-to", key);
-    },
     toggleMobileMenu() {
       this.isMobileMenuOpen = !this.isMobileMenuOpen;
     },

@@ -3,10 +3,7 @@
     <a class="skip-link" href="#main-content">Перейти к содержанию</a>
     <Header @open-contact-modal="openContactModal()" />
 
-    <Navigation
-      :nav-items="navItems"
-      @scroll-to="scrollToSection"
-    />
+    <Navigation :nav-items="navItems" />
 
     <main id="main-content" tabindex="-1">
       <section class="services-hero">
@@ -174,14 +171,14 @@ const contactModalRequested = ref(false)
 const contactModalServiceId = ref(null)
 
 const navItems = [
-  { key: 'hero', label: 'Главная' },
-  { key: 'services', label: 'Услуги' },
+  { key: 'hero', label: 'Главная', href: '/' },
+  { key: 'services', label: 'Услуги', href: '/services#services-catalog' },
   { key: 'equipment', label: 'Оборудование', href: '/equipment' },
-  { key: 'about', label: 'О нас' },
-  { key: 'projects', label: 'Проекты' },
-  { key: 'clients', label: 'Клиенты' },
-  { key: 'certificates', label: 'Документы' },
-  { key: 'contact', label: 'Контакты' },
+  { key: 'about', label: 'О нас', href: '/#about' },
+  { key: 'projects', label: 'Проекты', href: '/#projects' },
+  { key: 'clients', label: 'Клиенты', href: '/#clients' },
+  { key: 'certificates', label: 'Документы', href: '/#certificates' },
+  { key: 'contact', label: 'Контакты', href: '/#contact' },
 ]
 
 const workflowSteps = [
@@ -265,19 +262,6 @@ const closeContactModal = () => {
   contactModalServiceId.value = null
 }
 
-const scrollToSection = (key) => {
-  if (key === 'hero') {
-    navigateTo('/')
-    return
-  }
-
-  if (key === 'services') {
-    document.getElementById('services-catalog')?.scrollIntoView({ behavior: 'smooth' })
-    return
-  }
-
-  navigateTo('/')
-}
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
   <div class="product-page">
     <a class="skip-link" href="#main-content">Перейти к содержанию</a>
     <Header @open-contact-modal="scrollToRequest" />
-    <Navigation :nav-items="navItems" @scroll-to="handleNavigation" />
+    <Navigation :nav-items="navItems" />
 
     <main id="main-content" tabindex="-1">
       <section class="product-hero">
@@ -192,9 +192,6 @@ const scrollToRequest = () => {
   document.getElementById('equipment-request')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-const handleNavigation = (key) => {
-  if (key === 'equipment') navigateTo('/equipment')
-}
 </script>
 
 <style scoped>

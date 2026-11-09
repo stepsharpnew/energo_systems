@@ -13,3 +13,15 @@
   min-height: 100dvh;
   position: relative;
 }
+
+/* Keep fragment destinations below the shared sticky navigation, including
+ * native links before hydration and links arriving from another page. */
+:is(.energy-systems, .services-page) main [id] {
+  scroll-margin-top: 70px;
+}
+
+@media (max-width: 992px) {
+  :is(.energy-systems, .services-page) main [id] {
+    scroll-margin-top: 12px;
+  }
+}

@@ -3,7 +3,7 @@
     <a class="skip-link" href="#main-content" @click.prevent="skipToContent">Перейти к содержанию</a>
     <Header @open-contact-modal="openContactModal" />
 
-    <Navigation :nav-items="navItems" @scroll-to="scrollToSection" />
+    <Navigation :nav-items="navItems" />
 
     <main id="main-content" ref="mainContent" tabindex="-1">
       <HeroSection ref="heroSection" @open-contact-modal="openContactModal" />
@@ -428,14 +428,14 @@ export default {
       ],
       navItems: [
         { key: "gnb", label: "ГНБ под ключ", href: "/services/hdd", featured: true },
-        { key: "hero", label: "Главная" },
-        { key: "services", label: "Услуги" },
+        { key: "hero", label: "Главная", href: "/#hero" },
+        { key: "services", label: "Услуги", href: "/#services" },
         { key: "equipment", label: "Оборудование", href: "/equipment" },
-        { key: "about", label: "О нас" },
-        { key: "projects", label: "Проекты" },
-        { key: "clients", label: "Клиенты" },
-        { key: "certificates", label: "Документы" },
-        { key: "contact", label: "Контакты" },
+        { key: "about", label: "О нас", href: "/#about" },
+        { key: "projects", label: "Проекты", href: "/#projects" },
+        { key: "clients", label: "Клиенты", href: "/#clients" },
+        { key: "certificates", label: "Документы", href: "/#certificates" },
+        { key: "contact", label: "Контакты", href: "/#contact" },
       ],
       serviceModalRequested: false,
       showServiceModal: false,
@@ -479,18 +479,6 @@ export default {
       // Устанавливаем выбранную услугу и открываем контактную модалку
       this.contactModalServiceId = service?.id || null;
       this.showContactModal = true;
-    },
-    scrollToSection(key) {
-      const map = {
-        hero: this.$refs.heroSection?.$el,
-        services: this.$refs.servicesSection?.$el,
-        about: this.$refs.aboutSection?.$el,
-        projects: this.$refs.projectsSection?.$el,
-        clients: this.$refs.clientsSection?.$el,
-        certificates: this.$refs.certificatesSection?.$el,
-        contact: this.$refs.contactSection?.$el,
-      };
-      scrollToPageSection(map[key], this.$el.querySelector('.main-nav'));
     },
     skipToContent() {
       this.$refs.mainContent?.focus({ preventScroll: true });

@@ -3,10 +3,7 @@
     <a class="skip-link" href="#main-content">Перейти к содержанию</a>
     <Header @open-contact-modal="openContactModal" />
     
-    <Navigation 
-      :nav-items="navItems"
-      @scroll-to="scrollToSection"
-    />
+    <Navigation :nav-items="navItems" />
 
     <main id="main-content" class="services-detail-container" tabindex="-1">
       <div class="container-1">
@@ -206,14 +203,14 @@ const labelMap = {
 }
 
 const navItems = [
-  { key: 'hero', label: 'Главная' },
-  { key: 'services', label: 'Услуги' },
+  { key: 'hero', label: 'Главная', href: '/' },
+  { key: 'services', label: 'Услуги', href: '/services' },
   { key: 'equipment', label: 'Оборудование', href: '/equipment' },
-  { key: 'about', label: 'О нас' },
-  { key: 'projects', label: 'Проекты' },
-  { key: 'clients', label: 'Клиенты' },
-  { key: 'certificates', label: 'Документы' },
-  { key: 'contact', label: 'Контакты' }
+  { key: 'about', label: 'О нас', href: '/#about' },
+  { key: 'projects', label: 'Проекты', href: '/#projects' },
+  { key: 'clients', label: 'Клиенты', href: '/#clients' },
+  { key: 'certificates', label: 'Документы', href: '/#certificates' },
+  { key: 'contact', label: 'Контакты', href: '/#contact' }
 ]
 
 const selectedService = computed(() => {
@@ -312,11 +309,6 @@ const closeContactModal = () => {
   showContactModal.value = false
 }
 
-const scrollToSection = (key) => {
-  if (key === 'hero' || key === 'services') {
-    navigateTo('/')
-  }
-}
 </script>
 
 <style scoped>

@@ -3,6 +3,7 @@ name: Docker Compose CI/CD
 on:
   push:
     branches:
+      - main
       - master
 
 # Never interrupt an active production deployment or deploy twice at once.

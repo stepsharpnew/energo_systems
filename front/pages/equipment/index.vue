@@ -2,7 +2,7 @@
   <div class="equipment-page">
     <a class="skip-link" href="#main-content">Перейти к содержанию</a>
     <Header @open-contact-modal="scrollToCatalog" />
-    <Navigation :nav-items="navItems" @scroll-to="handleNavigation" />
+    <Navigation :nav-items="navItems" />
 
     <main id="main-content" tabindex="-1">
       <section class="catalog-hero">
@@ -176,9 +176,6 @@ const scrollToCatalog = () => {
   document.getElementById('equipment-catalog')?.scrollIntoView({ behavior: 'smooth' })
 }
 
-const handleNavigation = (key) => {
-  if (key === 'equipment') scrollToCatalog()
-}
 </script>
 
 <style scoped>

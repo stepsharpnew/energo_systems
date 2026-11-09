@@ -1,5 +1,6 @@
 <template>
   <section
+    id="hero"
     class="hdd-hero"
     ref="heroSection"
   >
