@@ -106,6 +106,10 @@ test('shared navigation opens every destination on desktop, mobile and before hy
     await t.test('desktop links work without JavaScript and preserve fragment offsets', async () => {
       const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } })
       try {
+        // The noscript Metrika pixel must not make this navigation check
+        // depend on an external network request completing on the CI runner.
+        await context.route('**/*', request => new URL(request.request().url()).origin === base
+          ? request.continue() : request.fulfill({ status: 200, body: '' }))
         const page = await context.newPage()
         await page.goto(base + '/services/road')
         await page.locator('.desktop-nav').getByRole('link', { name: 'Контакты', exact: true }).click()

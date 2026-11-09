@@ -32,9 +32,22 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Test and generate the static site
         run: |
+          set -o pipefail
           npm test
           npm run generate
-          npm run test:forms
+          npm run test:forms 2>&1 | tee /tmp/frontend-browser-tests.log
+      - name: Report browser test failures
+        if: failure()
+        run: |
+          node <<'JS'
+          const fs = require('node:fs')
+          const path = '/tmp/frontend-browser-tests.log'
+          if (fs.existsSync(path)) {
+            const details = fs.readFileSync(path, 'utf8').slice(-12000)
+            const escaped = details.replaceAll('%', '%25').replaceAll('\r', '%0D').replaceAll('\n', '%0A')
+            console.log('::error title=Browser regression tests::' + escaped)
+          }
+          JS
       - name: Check nginx delivery
         working-directory: .
         run: |
