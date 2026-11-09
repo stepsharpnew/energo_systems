@@ -54,7 +54,7 @@
       </ul>
       <div class="cstage" data-cstage @mouseenter="paused = true" @mouseleave="paused = false">
         <article class="case" :class="{ 'is-active': active === 0, 'is-prev': previous === 0 }" data-case-view="0" :aria-hidden="active !== 0">
-          <img v-bind="imageAttrs('/dgu/images/c995dea8d81aea53.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция в техническом помещении для коммунального объекта" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/5ae551f4109372e3.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция в техническом помещении для коммунального объекта" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">ЖКХ и поселки</p>
@@ -102,7 +102,7 @@
           </div>
         </article>
         <article class="case" :class="{ 'is-active': active === 3, 'is-prev': previous === 3 }" data-case-view="3" :aria-hidden="active !== 3">
-          <img v-bind="imageAttrs('/dgu/images/1373118089178785.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на раме для строительной площадки" loading="lazy">
+          <img v-bind="imageAttrs('/dgu/images/962187e5624433ab.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на раме для строительной площадки" loading="lazy">
           <i class="case__shade" aria-hidden="true"></i>
           <div class="case__panel">
             <p class="case__place">Площадки и вахтовые городки</p>
