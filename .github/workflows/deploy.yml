@@ -155,3 +155,4 @@ jobs:
             set -euo pipefail
             cd /home/${{ secrets.SERVER_USER }}/app
             bash scripts/deploy.sh
+            sudo docker exec tg_bot npm run check:mail -- dgu ups
