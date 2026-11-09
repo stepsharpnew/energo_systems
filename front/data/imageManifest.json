@@ -51,27 +51,27 @@
       }
     ]
   },
-  "/dgu/images/1373118089178785.webp": {
+  "/dgu/images/962187e5624433ab.webp": {
     "width": 860,
     "height": 860,
     "variants": [
       {
-        "src": "/img/previews/c2af620268f4052c-240.webp",
+        "src": "/img/previews/962187e5624433ab-240.webp",
         "width": 240,
         "height": 240
       },
       {
-        "src": "/img/previews/c2af620268f4052c-480.webp",
+        "src": "/img/previews/962187e5624433ab-480.webp",
         "width": 480,
         "height": 480
       },
       {
-        "src": "/img/previews/c2af620268f4052c-800.webp",
+        "src": "/img/previews/962187e5624433ab-800.webp",
         "width": 800,
         "height": 800
       },
       {
-        "src": "/dgu/images/1373118089178785.webp",
+        "src": "/dgu/images/962187e5624433ab.webp",
         "width": 860,
         "height": 860
       }
@@ -166,24 +166,24 @@
       }
     ]
   },
-  "/dgu/images/2c1bcf67980ade8b.webp": {
-    "width": 640,
-    "height": 640,
+  "/dgu/images/14e283f07b3fc32e.webp": {
+    "width": 800,
+    "height": 533,
     "variants": [
       {
-        "src": "/img/previews/e5c8884db86c879c-240.webp",
+        "src": "/img/previews/14e283f07b3fc32e-240.webp",
         "width": 240,
-        "height": 240
+        "height": 160
       },
       {
-        "src": "/img/previews/e5c8884db86c879c-480.webp",
+        "src": "/img/previews/14e283f07b3fc32e-480.webp",
         "width": 480,
-        "height": 480
+        "height": 320
       },
       {
-        "src": "/dgu/images/2c1bcf67980ade8b.webp",
-        "width": 640,
-        "height": 640
+        "src": "/dgu/images/14e283f07b3fc32e.webp",
+        "width": 800,
+        "height": 533
       }
     ]
   },
@@ -912,22 +912,22 @@
       }
     ]
   },
-  "/dgu/images/843a0308bd4bc841.webp": {
+  "/dgu/images/6048557a81c94bc7.webp": {
     "width": 640,
     "height": 640,
     "variants": [
       {
-        "src": "/img/previews/a5055c76404ee524-240.webp",
+        "src": "/img/previews/6048557a81c94bc7-240.webp",
         "width": 240,
         "height": 240
       },
       {
-        "src": "/img/previews/a5055c76404ee524-480.webp",
+        "src": "/img/previews/6048557a81c94bc7-480.webp",
         "width": 480,
         "height": 480
       },
       {
-        "src": "/dgu/images/843a0308bd4bc841.webp",
+        "src": "/dgu/images/6048557a81c94bc7.webp",
         "width": 640,
         "height": 640
       }
@@ -1311,27 +1311,27 @@
       }
     ]
   },
-  "/dgu/images/c995dea8d81aea53.webp": {
+  "/dgu/images/5ae551f4109372e3.webp": {
     "width": 860,
     "height": 860,
     "variants": [
       {
-        "src": "/img/previews/5d6ff44ef3f8d350-240.webp",
+        "src": "/img/previews/5ae551f4109372e3-240.webp",
         "width": 240,
         "height": 240
       },
       {
-        "src": "/img/previews/5d6ff44ef3f8d350-480.webp",
+        "src": "/img/previews/5ae551f4109372e3-480.webp",
         "width": 480,
         "height": 480
       },
       {
-        "src": "/img/previews/5d6ff44ef3f8d350-800.webp",
+        "src": "/img/previews/5ae551f4109372e3-800.webp",
         "width": 800,
         "height": 800
       },
       {
-        "src": "/dgu/images/c995dea8d81aea53.webp",
+        "src": "/dgu/images/5ae551f4109372e3.webp",
         "width": 860,
         "height": 860
       }
@@ -1405,22 +1405,22 @@
       }
     ]
   },
-  "/dgu/images/da10e29e518fe230.webp": {
+  "/dgu/images/e8d92b1be5330dba.webp": {
     "width": 640,
     "height": 640,
     "variants": [
       {
-        "src": "/img/previews/0234019837801007-240.webp",
+        "src": "/img/previews/e8d92b1be5330dba-240.webp",
         "width": 240,
         "height": 240
       },
       {
-        "src": "/img/previews/0234019837801007-480.webp",
+        "src": "/img/previews/e8d92b1be5330dba-480.webp",
         "width": 480,
         "height": 480
       },
       {
-        "src": "/dgu/images/da10e29e518fe230.webp",
+        "src": "/dgu/images/e8d92b1be5330dba.webp",
         "width": 640,
         "height": 640
       }
@@ -5257,27 +5257,27 @@
       }
     ]
   },
-  "/ups/solution-hybrid.webp": {
+  "/ups/solution-hybrid-8039c5f2.webp": {
     "width": 1200,
     "height": 800,
     "variants": [
       {
-        "src": "/img/previews/950b8ca6283a6327-240.webp",
+        "src": "/img/previews/8039c5f224c3d416-240.webp",
         "width": 240,
         "height": 160
       },
       {
-        "src": "/img/previews/950b8ca6283a6327-480.webp",
+        "src": "/img/previews/8039c5f224c3d416-480.webp",
         "width": 480,
         "height": 320
       },
       {
-        "src": "/img/previews/950b8ca6283a6327-800.webp",
+        "src": "/img/previews/8039c5f224c3d416-800.webp",
         "width": 800,
         "height": 533
       },
       {
-        "src": "/ups/solution-hybrid.webp",
+        "src": "/ups/solution-hybrid-8039c5f2.webp",
         "width": 1200,
         "height": 800
       }

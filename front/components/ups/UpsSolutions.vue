@@ -16,7 +16,7 @@
       <figure class="sol__photo" data-sol-photo>
         <img class="sol__img" :class="{ 'is-on': selected === 0 }" data-sol-img="0" id="img-ups" v-bind="imageAttrs('/ups/solution-ups.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Система ИБП и аккумуляторов на стене технического помещения" loading="lazy">
         <img class="sol__img" :class="{ 'is-on': selected === 1 }" data-sol-img="1" id="img-dgu" v-bind="imageAttrs('/ups/solution-dgu.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная генераторная установка на отдельной площадке у дома" loading="lazy">
-        <img class="sol__img" :class="{ 'is-on': selected === 2 }" data-sol-img="2" v-bind="imageAttrs('/ups/solution-hybrid.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Контейнер с ДГУ, ИБП и аккумуляторами за решёткой на удалении от дома" loading="lazy">
+        <img class="sol__img" :class="{ 'is-on': selected === 2 }" data-sol-img="2" v-bind="imageAttrs('/ups/solution-hybrid-8039c5f2.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Контейнер с ДГУ, ИБП и аккумуляторами за решёткой на удалении от дома" loading="lazy">
         <i class="sol__sweep is-go" :key="selected" aria-hidden="true"></i>
         <span class="sol__chip" data-sol-chip>{{ current.chip }}</span>
         <div class="hud" :class="{ 'is-off': !state.grid[2] && !state.mode, 'is-backup': state.mode === 'backup', 'is-gen': state.mode === 'gen' }" data-sol-hud role="status" aria-live="off">

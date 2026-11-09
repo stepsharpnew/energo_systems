@@ -35,7 +35,7 @@
         </dl>
       </li>
       <li class="pw-card" data-seg="village construction" :hidden="!matches('village construction')"><button class="card-trigger" type="button" aria-label="Подобрать: ДГУ ММЗ" @click="requestCallback({&quot;title&quot;: &quot;ДГУ ММЗ&quot;, &quot;text&quot;: &quot;Оставьте контакт: инженер предложит решение на базе двигателя ММЗ под вашу нагрузку.&quot;})" data-callback-open data-callback-title="ДГУ ММЗ" data-callback-text="Оставьте контакт: инженер предложит решение на базе двигателя ММЗ под вашу нагрузку."></button>
-        <div class="pw-card__img"><img v-bind="imageAttrs('/dgu/images/843a0308bd4bc841.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на двигателе ММЗ на раме" loading="lazy"><span class="pw-tag pw-tag--stock"><i></i>В наличии</span></div>
+        <div class="pw-card__img"><img v-bind="imageAttrs('/dgu/images/6048557a81c94bc7.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на двигателе ММЗ на раме" loading="lazy"><span class="pw-tag pw-tag--stock"><i></i>В наличии</span></div>
         <div class="pw-card__kw"><b>50–120</b><span>кВт</span><i>63–150 кВА</i></div>
         <p class="pw-card__for">Небольшие объекты и стройплощадки: магазины, склады, малые котельные</p>
         <dl class="pw-card__spec">
@@ -62,7 +62,7 @@
         </dl>
       </li>
       <li class="pw-card" data-seg="commerce industry construction logistics" :hidden="!matches('commerce industry construction logistics')"><button class="card-trigger" type="button" aria-label="Подобрать: ДГУ Doosan" @click="requestCallback({&quot;title&quot;: &quot;ДГУ Doosan&quot;, &quot;text&quot;: &quot;Оставьте контакт: инженер предложит решение на базе двигателя Doosan под вашу нагрузку.&quot;})" data-callback-open data-callback-title="ДГУ Doosan" data-callback-text="Оставьте контакт: инженер предложит решение на базе двигателя Doosan под вашу нагрузку."></button>
-        <div class="pw-card__img"><img v-bind="imageAttrs('/dgu/images/da10e29e518fe230.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на двигателе Doosan на раме" loading="lazy"><span class="pw-tag pw-tag--request"><i></i>По запросу</span></div>
+        <div class="pw-card__img"><img v-bind="imageAttrs('/dgu/images/e8d92b1be5330dba.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на двигателе Doosan на раме" loading="lazy"><span class="pw-tag pw-tag--request"><i></i>По запросу</span></div>
         <div class="pw-card__kw"><b>95–600</b><span>кВт</span><i>119–750 кВА</i></div>
         <p class="pw-card__for">Производство и крупная коммерция: цеха, ТЦ, насосные станции</p>
         <dl class="pw-card__spec">
@@ -89,7 +89,7 @@
         </dl>
       </li>
       <li class="pw-card" data-seg="commerce infra med" :hidden="!matches('commerce infra med')"><button class="card-trigger" type="button" aria-label="Подобрать: ДГУ Volvo Penta" @click="requestCallback({&quot;title&quot;: &quot;ДГУ Volvo Penta&quot;, &quot;text&quot;: &quot;Оставьте контакт: инженер предложит решение на базе двигателя Volvo Penta под вашу нагрузку.&quot;})" data-callback-open data-callback-title="ДГУ Volvo Penta" data-callback-text="Оставьте контакт: инженер предложит решение на базе двигателя Volvo Penta под вашу нагрузку."></button>
-        <div class="pw-card__img"><img v-bind="imageAttrs('/dgu/images/2c1bcf67980ade8b.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на двигателе Volvo Penta на раме" loading="lazy"><span class="pw-tag pw-tag--order"><i></i>Под заказ</span></div>
+        <div class="pw-card__img"><img v-bind="imageAttrs('/dgu/images/14e283f07b3fc32e.webp', { sizes: '(max-width: 768px) 100vw, 50vw', width: 800 })" alt="Дизельная электростанция на двигателе Volvo Penta на раме" loading="lazy"><span class="pw-tag pw-tag--order"><i></i>Под заказ</span></div>
         <div class="pw-card__kw"><b>104–500</b><span>кВт</span><i>130–625 кВА</i></div>
         <p class="pw-card__for">Премиальные объекты: больницы, бизнес-центры, отели</p>
         <dl class="pw-card__spec">
