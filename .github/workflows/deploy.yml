@@ -80,6 +80,7 @@ jobs:
       - name: Create .env from DOTENV secret
         env:
           DOTENV: ${{ secrets.DOTENV }}
+          SMTP_LANDING_ENV: ${{ secrets.SMTP_LANDING_ENV }}
         run: |
           if [ -z "$DOTENV" ]; then
             echo "GitHub secret DOTENV is empty or missing"
@@ -87,6 +88,9 @@ jobs:
           fi
 
           printf '%s\n' "$DOTENV" > .env
+          if [ -n "${SMTP_LANDING_ENV:-}" ]; then
+            printf '%s\n' "$SMTP_LANDING_ENV" >> .env
+          fi
           chmod 600 .env
 
       - name: Validate Docker Compose config

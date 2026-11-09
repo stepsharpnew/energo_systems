@@ -82,6 +82,20 @@ test('bundle preflight rejects a missing or empty .env before transfer', () => {
   });
 });
 
+test('dedicated SMTP configuration appends to the existing environment without exposing either secret', () => {
+  withFixture(fixture => {
+    const landing = 'SMTP_DGU_USER=dgu@example.test\nSMTP_DGU_PASS=dgu-test-secret\nSMTP_UPS_USER=ups@example.test\nSMTP_UPS_PASS=ups-test-secret';
+    const result = shell(runBlock('Create .env from DOTENV secret'), fixture, {
+      DOTENV: dummySecret,
+      SMTP_LANDING_ENV: landing,
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(readFileSync(join(fixture, '.env'), 'utf8'), `${dummySecret}\n${landing}\n`);
+    assert.equal(statSync(join(fixture, '.env')).mode & 0o777, 0o600);
+    assert.doesNotMatch(result.stdout + result.stderr, /dgu-test-secret|ups-test-secret/);
+  });
+});
+
 test('secret creation fails without DOTENV instead of packaging a stale file', () => {
   withFixture(fixture => {
     assert.notEqual(shell(runBlock('Create .env from DOTENV secret'), fixture, { DOTENV: '' }).status, 0);

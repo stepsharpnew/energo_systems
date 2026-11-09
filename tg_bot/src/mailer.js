@@ -40,9 +40,41 @@ function buildHtmlRows(rows) {
     .join("");
 }
 
-function getEmailConfig() {
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS || process.env.SMTP_PASSWORD;
+const EMAIL_DIRECTIONS = {
+  dgu: { prefix: "SMTP_DGU", tag: "ДГУ", label: "ДГУ для бизнеса" },
+  ups: { prefix: "SMTP_UPS", tag: "ИБП", label: "ИБП для дома и посёлков" },
+};
+
+function getLeadDirection(data) {
+  const path = String(data.sourcePage || "").replace(/\/+$/, "");
+  if (path === "/services/dgu") return "dgu";
+  if (path === "/services/ups") return "ups";
+
+  // Older forms or browsers without Referer still identify their landing
+  // through the existing service/product fields; no client SMTP settings.
+  const service = String(data.service || "");
+  if (/^(?:ДГУ(?:\s|$)|Опрос по ДГУ(?:\s|$))/iu.test(service)) return "dgu";
+  if (/^(?:ИБП(?:\s|$)|Опрос по ИБП(?:\s|$))/iu.test(service)) return "ups";
+  if (data.product === "Подбор генератора — резервное питание") return "dgu";
+  return undefined;
+}
+
+function getEmailConfig(direction) {
+  if (direction !== undefined && !Object.hasOwn(EMAIL_DIRECTIONS, direction)) {
+    const error = new Error("Неизвестное направление SMTP");
+    error.code = "SMTP_UNKNOWN_PROFILE";
+    throw error;
+  }
+  const profile = EMAIL_DIRECTIONS[direction];
+  const profileUser = profile && process.env[`${profile.prefix}_USER`];
+  const profilePass = profile && process.env[`${profile.prefix}_PASS`];
+  // Both empty preserves an existing single-mailbox deployment. Once either
+  // is configured, never mix these credentials with the default account.
+  const useProfile = Boolean(profileUser || profilePass);
+  const user = useProfile ? profileUser : process.env.SMTP_USER;
+  const pass = useProfile
+    ? profilePass
+    : process.env.SMTP_PASS || process.env.SMTP_PASSWORD;
 
   return {
     enabled: Boolean(user && pass),
@@ -51,9 +83,10 @@ function getEmailConfig() {
     secure: normalizeBoolean(process.env.SMTP_SECURE, true),
     user,
     pass,
-    from:
-      process.env.EMAIL_FROM ||
-      (user ? `"Энергосистемы" <${user}>` : undefined),
+    credentialKeys: useProfile ? `${profile.prefix}_USER/${profile.prefix}_PASS` : "SMTP_USER/SMTP_PASS",
+    from: useProfile
+      ? `"Энергосистемы — ${profile.label}" <${user}>`
+      : process.env.EMAIL_FROM || (user ? `"Энергосистемы" <${user}>` : undefined),
     to: process.env.EMAIL_TO || "sales@e-systems.su",
     cc: process.env.EMAIL_CC || "inbox@e-systems.su",
     family: Number(process.env.SMTP_FAMILY || 4),
@@ -89,13 +122,16 @@ function buildLeadEmail(data) {
     .replace(/[\r\n]+/g, " ")
     .trim()
     .slice(0, 160);
-  const subject =
+  const direction = getLeadDirection(data);
+  const baseSubject =
     type === "equipment" && safeProduct
       ? `${leadTypeLabel} — ${safeProduct}`
       : leadTypeLabel;
+  const subject = direction ? `[${EMAIL_DIRECTIONS[direction].tag}] ${baseSubject}` : baseSubject;
   const rows = [
     ["Тип", leadTypeLabel],
   ];
+  if (direction) rows.push(["Направление заявки", EMAIL_DIRECTIONS[direction].label]);
 
   if (type === "equipment") {
     rows.push(["Оборудование", product]);
@@ -201,11 +237,11 @@ function createTransporter(config) {
 }
 
 async function sendLeadEmail(data) {
-  const config = getEmailConfig();
+  const config = getEmailConfig(getLeadDirection(data));
 
   if (!config.enabled) {
     throw new Error(
-      "SMTP_USER/SMTP_PASS не заданы — email-уведомление о заявке не отправлено."
+      `${config.credentialKeys} не заданы — email-уведомление о заявке не отправлено.`
     );
   }
 
@@ -243,17 +279,17 @@ async function sendLeadEmail(data) {
   };
 }
 
-async function verifyEmailConfiguration() {
-  const config = getEmailConfig();
+async function verifyEmailConfiguration(direction) {
+  const config = getEmailConfig(direction);
   if (!config.enabled) {
-    const error = new Error("SMTP_USER/SMTP_PASS не заданы");
+    const error = new Error(`${config.credentialKeys} не заданы`);
     error.code = "SMTP_NOT_CONFIGURED";
     throw error;
   }
   const transporter = createTransporter(config);
   try {
     await transporter.verify();
-    return { host: config.host, port: config.port, to: config.to, cc: config.cc };
+    return { host: config.host, port: config.port, user: config.user, to: config.to, cc: config.cc };
   } finally {
     transporter.close();
   }

@@ -50,6 +50,10 @@ services:
       - SMTP_FAMILY=${SMTP_FAMILY:-4}
       - SMTP_USER=${SMTP_USER:-application@e-systems.su}
       - SMTP_PASS=${SMTP_PASS:-}
+      - SMTP_DGU_USER=${SMTP_DGU_USER:-}
+      - SMTP_DGU_PASS=${SMTP_DGU_PASS:-}
+      - SMTP_UPS_USER=${SMTP_UPS_USER:-}
+      - SMTP_UPS_PASS=${SMTP_UPS_PASS:-}
       - EMAIL_FROM=${EMAIL_FROM:-Энергосистемы <application@e-systems.su>}
       - EMAIL_TO=${EMAIL_TO:-sales@e-systems.su}
       - EMAIL_CC=${EMAIL_CC:-inbox@e-systems.su}
