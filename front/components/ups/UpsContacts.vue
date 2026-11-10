@@ -25,14 +25,14 @@
         <div class="contacts__done" data-contact-done :hidden="!sent">
           <b>Спасибо за обращение!</b>
           <span>Мы получили вашу заявку. Учтём ваши пожелания по времени звонка.</span>
-          <span>Будем рады помочь и по телефону: <PhoneLink /></span>
+          <span>Будем рады помочь и по телефону: <PhoneLink class="calltracking-ups" /></span>
         </div>
       </form>
 
       <div class="contacts__side">
-        <div class="cnt"><span class="cnt__label">Телефон</span><PhoneLink class="cnt__value" /></div>
+        <div class="cnt"><span class="cnt__label">Телефон</span><PhoneLink class="cnt__value calltracking-ups" /></div>
         <div class="cnt"><span class="cnt__label">Дополнительный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+74951780118">+7 (495) 178-01-18</a></div>
-        <div class="cnt"><span class="cnt__label">Мобильный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+79251640560">+7 (925) 164-05-60</a></div>
+        <div class="cnt"><span class="cnt__label">Мобильный телефон</span><a class="cnt__value cnt__value--secondary" href="tel:+79253932789">+7 (925) 393-27-89</a></div>
         <div class="cnt"><span class="cnt__label">Почта</span><a class="cnt__value" href="mailto:sales@e-systems.su">sales@e-systems.su <i>по заявкам и расчётам</i></a></div>
         <div class="cnt"><span class="cnt__label">Мессенджеры</span>
           <div class="cnt__msgrs">

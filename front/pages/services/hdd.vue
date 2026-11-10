@@ -26,7 +26,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
         </a>
         <div class="phone">
-          <PhoneLink class="phone__num" />
+          <PhoneLink class="phone__num calltracking-hdd" />
           <a class="phone__mail" href="mailto:sales@e-systems.su">sales@e-systems.su</a>
           <span class="phone__note" data-status-box><i class="phone__dot" aria-hidden="true"></i><span data-status>Ответим за 30 минут</span></span>
         </div>
@@ -718,14 +718,14 @@
           <div class="contacts__done" data-contact-done hidden>
             <b>Спасибо за обращение!</b>
             <span>Мы получили вашу заявку. Учтём ваши пожелания по времени звонка.</span>
-            <span>Будем рады помочь и по телефону: <PhoneLink /></span>
+            <span>Будем рады помочь и по телефону: <PhoneLink class="calltracking-hdd" /></span>
           </div>
         </form>
 
         <div class="contacts__side">
           <div class="cnt">
             <span class="cnt__label">Телефон</span>
-            <PhoneLink class="cnt__value" />
+            <PhoneLink class="cnt__value calltracking-hdd" />
           </div>
           <div class="cnt">
             <span class="cnt__label">Дополнительный телефон</span>
@@ -832,7 +832,7 @@
       <div class="modal__done" data-callback-done tabindex="-1" role="status" hidden>
         <b>Спасибо за обращение!</b>
         <span>Мы получили вашу заявку. Учтём ваши пожелания по времени звонка.</span>
-        <span>Будем рады помочь и по телефону: <PhoneLink /></span>
+        <span>Будем рады помочь и по телефону: <PhoneLink class="calltracking-hdd" /></span>
       </div>
     </div>
   </dialog>
@@ -840,7 +840,7 @@
   <!-- липкая кнопка на узких экранах; прячется, когда виден сам опрос -->
   <aside class="sticky-cta" data-sticky aria-label="Быстрая связь">
     <a class="sticky-cta__btn" href="#quiz">Рассчитать стоимость</a>
-    <PhoneLink class="sticky-cta__call" aria-label="Позвонить">
+    <PhoneLink class="sticky-cta__call calltracking-hdd" aria-label="Позвонить">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
     </PhoneLink>
   </aside>

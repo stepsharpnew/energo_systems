@@ -33,8 +33,8 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg>
       </a>
       <div class="phone">
-        <PhoneLink class="phone__num" />
-        <a class="phone__num" href="tel:+79251640560">+7 (925) 164-05-60</a>
+        <PhoneLink class="phone__num calltracking-ups" />
+        <a class="phone__num" href="tel:+79253932789">+7 (925) 393-27-89</a>
         <span class="phone__note" data-status-box :class="{ 'is-off': !workingHours }"><i class="phone__dot" aria-hidden="true"></i><span data-status>{{ workingHours ? 'На связи, ответим за 30 минут' : 'Ответим утром, с 9:00' }}</span></span>
       </div>
     </div>
@@ -58,8 +58,8 @@
       <a href="#contacts">Контакты</a>
     </nav>
     <div class="drawer__contacts">
-      <PhoneLink />
-      <a href="tel:+79251640560">+7 (925) 164-05-60</a>
+      <PhoneLink class="calltracking-ups" />
+      <a href="tel:+79253932789">+7 (925) 393-27-89</a>
       <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
     </div>
   </div>
