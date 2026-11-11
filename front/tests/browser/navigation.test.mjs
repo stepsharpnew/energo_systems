@@ -72,6 +72,7 @@ test('shared navigation opens every destination on desktop, mobile and before hy
             await waitForSection(page, id)
             assert.equal(await page.evaluate(() => window.__navigationDocument), true, 'hydrated links must keep SPA navigation')
             if (width <= 992) {
+              await page.getByRole('dialog', { name: 'Меню', exact: true }).waitFor({ state: 'detached' })
               assert.equal(await page.getByRole('dialog', { name: 'Меню', exact: true }).count(), 0)
               assert.equal(await page.locator('.mobile-menu-toggle').getAttribute('aria-expanded'), 'false')
             }
