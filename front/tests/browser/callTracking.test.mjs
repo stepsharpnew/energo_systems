@@ -10,6 +10,38 @@ const root = fileURLToPath(new URL('../../.output/public/', import.meta.url))
 const mime = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp' }
 const phoneSelector = 'a[data-calltracking-phone="+74951795920"]'
 const assignedPhone = { raw: '74951287470', text: '+7 (495) 128-74-70' }
+const sourcePhone = { raw: '74951795920', text: '+7 (495) 179-59-20' }
+const services = ['ups', 'dgu', 'hdd']
+
+async function assertUntrackedPhones(page) {
+  const links = await page.locator('a[href="tel:+74951780118"], a[href="tel:+79253932789"]').evaluateAll(elements => elements.map(link => ({
+    href: link.getAttribute('href'), text: link.textContent.trim(),
+    tracked: link.hasAttribute('data-calltracking-phone') || [...link.classList].some(name => name.startsWith('calltracking-')),
+  })))
+  for (const link of links) {
+    assert.equal(link.tracked, false, 'additional and mobile phones must not be replaced')
+    assert.equal(link.text, link.href === 'tel:+74951780118' ? '+7 (495) 178-01-18' : '+7 (925) 393-27-89')
+  }
+}
+
+async function assertSourcePhones(page, kind) {
+  const phones = await page.locator('a[href^="tel:"]').evaluateAll(elements => elements.map(link => ({
+    href: link.getAttribute('href'), text: link.textContent.trim(),
+    source: link.getAttribute('data-calltracking-phone'), classes: [...link.classList],
+  })))
+  assert.ok(phones.length > 0)
+  for (const phone of phones) {
+    assert.ok(['tel:+74951795920', 'tel:+74951780118', 'tel:+79253932789'].includes(phone.href), `unexpected source phone ${phone.href}`)
+    if (phone.href !== 'tel:+74951795920') continue
+    assert.equal(phone.source, '+74951795920')
+    assert.ok(phone.classes.includes(`calltracking-${kind}`), 'every primary number, including hidden confirmations, needs its service selector')
+    assert.deepEqual(phone.classes.filter(name => name.startsWith('calltracking-')), [`calltracking-${kind}`])
+    if (phone.text) assert.equal(phone.text, sourcePhone.text)
+  }
+  assert.equal(await page.locator(`.calltracking-${kind}`).count(), await page.locator(phoneSelector).count())
+  assert.ok(await page.locator(phoneSelector).count() > 0)
+  await assertUntrackedPhones(page)
+}
 
 // Run at the actual SDK execution point, before page.goto resolves. If the
 // application has not installed its veto yet, reproduce the destructive rule.
@@ -62,9 +94,10 @@ async function replace(page, id, phone = assignedPhone) {
 }
 
 async function assertLanding(page, kind) {
-  assert.match(await page.locator('h1').innerText(), kind === 'hdd' ? /ГНБ под ключ/ : /Бесперебойное питание частного дома под ключ/)
+  const titles = { hdd: /ГНБ под ключ/, ups: /Бесперебойное питание частного дома под ключ/, dgu: /электроснабжение под ключ/ }
+  assert.match(await page.locator('h1').innerText(), titles[kind])
   const heroButton = page.locator('.hero a.btn-pill[href="#quiz"]')
-  assert.match(await heroButton.innerText(), /Рассчитать стоимость/)
+  assert.match(await heroButton.innerText(), kind === 'dgu' ? /Предложить решение/ : /Рассчитать стоимость/)
   assert.equal(await heroButton.locator('.btn-pill__icon svg').count(), 1)
   const indicator = kind === 'hdd' ? '.opt__ind' : '.opt__mark'
   const indicators = await page.locator(`[data-quiz] ${indicator}`).allTextContents()
@@ -76,6 +109,7 @@ async function assertLanding(page, kind) {
   // assertion checks that replacement preserved their DOM text and href.
   assert.match(await secondary.first().textContent(), /178-01-18/)
   assert.equal(await secondary.first().getAttribute('data-calltracking-phone'), null)
+  await assertUntrackedPhones(page)
 
   // Use real clicks on labels/buttons to catch destroyed controls, then walk
   // all steps to confirm the final lead form remains reachable.
@@ -90,9 +124,10 @@ async function assertLanding(page, kind) {
   const next = page.locator(kind === 'hdd' ? '[data-next]' : '[data-quiz-next]')
   assert.equal(await next.isEnabled(), false)
   assert.equal((await next.innerText()).trim(), 'Далее')
-  for (let step = 0; step < 4; step++) {
+  const questionCount = kind === 'dgu' ? 5 : 4
+  for (let step = 0; step < questionCount; step++) {
     const active = page.locator(kind === 'hdd' ? '[data-quiz] fieldset.is-active' : '[data-quiz] .qstep:visible')
-    await active.locator('label.opt').first().click()
+    await active.locator('label.opt:visible').first().click()
     assert.equal(await next.isEnabled(), true)
     await next.click()
   }
@@ -102,7 +137,7 @@ async function assertLanding(page, kind) {
   assert.equal(await form.locator('[name=name]').inputValue(), 'Проверка телефонов')
   assert.equal((await form.locator('[name=phone]').inputValue()).replace(/\D/g, ''), '79990000000')
   const counter = page.locator(kind === 'hdd' ? '[data-cur]' : '[data-quiz-n]')
-  assert.equal(await counter.innerText(), '5')
+  assert.equal(await counter.innerText(), String(questionCount + 1))
 }
 
 test('call tracking cannot overwrite page content on SDK load or SPA navigation', async t => {
@@ -123,7 +158,37 @@ test('call tracking cannot overwrite page content on SDK load or SPA navigation'
   let browser
   try {
     browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined, headless: true })
-    for (const scenario of ['header and SPA navigation', 'hdd', 'ups', 'custom phone label']) {
+    await t.test('source phones and matching contact forms before SDK replacement', async () => {
+      const forms = []
+      for (const kind of services) {
+        const context = await browser.newContext({ reducedMotion: 'reduce' })
+        const page = await context.newPage()
+        await page.route('**/*', route => new URL(route.request().url()).origin === base
+          ? route.continue() : route.fulfill({ status: 200, body: '' }))
+        try {
+          await page.goto(`${base}/services/${kind}`, { waitUntil: 'networkidle' })
+          await assertSourcePhones(page, kind)
+          if (kind === 'hdd') continue
+          const contacts = await page.locator('.contacts__side .cnt').evaluateAll(rows => rows.slice(0, 3).map(row => ({
+            label: row.querySelector('.cnt__label').textContent,
+            href: row.querySelector('a').getAttribute('href'), text: row.querySelector('a').textContent,
+          })))
+          assert.deepEqual(contacts, [
+            { label: 'Телефон', href: 'tel:+74951795920', text: sourcePhone.text },
+            { label: 'Дополнительный телефон', href: 'tel:+74951780118', text: '+7 (495) 178-01-18' },
+            { label: 'Мобильный телефон', href: 'tel:+79253932789', text: '+7 (925) 393-27-89' },
+          ])
+          forms.push(await page.locator('[data-contact-form] input, [data-contact-form] select, [data-contact-form] textarea').evaluateAll(fields => fields.map(field => ({
+            tag: field.tagName, name: field.name, type: field.type,
+            options: field.tagName === 'SELECT' ? [...field.options].map(option => ({ value: option.value, text: option.textContent })) : undefined,
+          }))))
+        } finally {
+          await context.close()
+        }
+      }
+      assert.deepEqual(forms[0], forms[1], 'UPS and DGU must offer the same contact form fields and callback options')
+    })
+    for (const scenario of ['header and SPA navigation', 'hdd', 'ups', 'dgu', 'custom phone label']) {
       await t.test(scenario, async () => {
         const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1280, height: 900 } })
         const page = await context.newPage()
@@ -190,13 +255,20 @@ test('call tracking cannot overwrite page content on SDK load or SPA navigation'
             await custom.evaluate(link => { link.textContent = 'Связаться по телефону' })
             assert.equal(await custom.getAttribute('href'), 'tel:+74951287471')
           } else {
+            const differentPhone = { raw: '74951287471', text: '+7 (495) 128-74-71' }
+            for (const other of services.filter(kind => kind !== scenario)) {
+              assert.equal(await page.locator(`.calltracking-${other}`).count(), 0)
+              assert.equal(await page.evaluate(rule => window.__callTrackingTest.replace([rule]), { id: `selector=.calltracking-${other}`, ...differentPhone }), true)
+              await assertSafeReplacement(page, assignedPhone)
+            }
+            await replace(page, `selector=.calltracking-${scenario}`, differentPhone)
             await replace(page, 'number=74951795920')
             for (const rules of [null, {}, [null, 'span', { id: 'selector=[', raw: assignedPhone.raw }, { id: 'selector=span', raw: 'invalid' }]]) {
               assert.equal(await page.evaluate(value => window.__callTrackingTest.replace(value), rules), true)
             }
             await assertSafeReplacement(page)
             assert.equal(await page.evaluate(() => window.__callTrackingTest.replace([])), true)
-            await assertSafeReplacement(page, { raw: '74951795920', text: '+7 (495) 179-59-20' })
+            await assertSafeReplacement(page, sourcePhone)
             await replace(page, 'selector=span')
             if (scenario === 'hdd') assert.equal(await page.locator('.sticky-cta__call svg').count(), 1)
             await assertLanding(page, scenario)

@@ -10,8 +10,8 @@
       <div><dt>ИНН</dt><dd>5044089069</dd></div>
     </dl>
     <div class="footer__links">
-      <a href="tel:+74951271058">+7 (495) 127-10-58</a>
-      <a href="tel:+79251640560">+7 (925) 164-05-60</a>
+      <PhoneLink class="calltracking-dgu" />
+      <a href="tel:+79253932789">+7 (925) 393-27-89</a>
       <a href="mailto:sales@e-systems.su">sales@e-systems.su</a>
     </div>
     <div class="footer__docs">
