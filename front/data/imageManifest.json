@@ -5257,27 +5257,27 @@
       }
     ]
   },
-  "/ups/solution-hybrid-8039c5f2.webp": {
+  "/ups/solution-hybrid-de86638d.webp": {
     "width": 1200,
     "height": 800,
     "variants": [
       {
-        "src": "/img/previews/8039c5f224c3d416-240.webp",
+        "src": "/img/previews/de86638d7aa4c624-240.webp",
         "width": 240,
         "height": 160
       },
       {
-        "src": "/img/previews/8039c5f224c3d416-480.webp",
+        "src": "/img/previews/de86638d7aa4c624-480.webp",
         "width": 480,
         "height": 320
       },
       {
-        "src": "/img/previews/8039c5f224c3d416-800.webp",
+        "src": "/img/previews/de86638d7aa4c624-800.webp",
         "width": 800,
         "height": 533
       },
       {
-        "src": "/ups/solution-hybrid-8039c5f2.webp",
+        "src": "/ups/solution-hybrid-de86638d.webp",
         "width": 1200,
         "height": 800
       }
