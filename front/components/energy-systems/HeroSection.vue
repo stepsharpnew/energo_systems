@@ -5,6 +5,8 @@
   >
     <img class="hero-background" v-bind="heroImage" alt="" aria-hidden="true" fetchpriority="high" loading="eager" />
     <div class="hero-inner">
+      <ServiceDirections />
+
       <div class="hero-copy">
         <p class="hero-kicker">ГНБ под ключ в Москве и области</p>
         <h1>Проколы под дорогами без вскрытия покрытия</h1>
@@ -52,11 +54,12 @@
 
 <script>
 import GeneratorQuiz from './GeneratorQuiz.vue';
+import ServiceDirections from './ServiceDirections.vue';
 import { imageAttrs } from '~/utils/responsiveImage.js';
 
 export default {
   name: "HeroSection",
-  components: { GeneratorQuiz },
+  components: { GeneratorQuiz, ServiceDirections },
   emits: ["open-contact-modal"],
   data() {
     return {
@@ -266,7 +269,7 @@ export default {
 
   .hero-inner {
     grid-template-columns: 1fr;
-    padding: clamp(56px, 10vw, 84px) 0;
+    padding: 24px 0 clamp(56px, 10vw, 84px);
   }
 
   .hero-facts {
