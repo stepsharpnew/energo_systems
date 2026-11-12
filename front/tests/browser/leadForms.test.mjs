@@ -77,6 +77,7 @@ async function selectCallbackPreferences(form, custom = false) {
 async function enterContact(form, names) {
   await form.locator(`[name=${names.name}]`).fill('Тестовая заявка')
   await form.locator(`[name=${names.phone}]`).fill('79990000000')
+  if (names.email) await form.locator(`[name=${names.email}]`).fill('test@example.com')
   for (const name of names.consent) await check(form.locator(`[name=${name}]`))
 }
 
@@ -89,7 +90,7 @@ const cases = [
   { name: 'ИБП: опрос', path: '/services/ups', form: '[data-quiz-form]', quiz: 'ups', button: '[data-quiz-next]', error: '[data-quiz-error]', success: '[data-quiz-done]', names: { name: 'name', phone: 'phone', consent: ['consent', 'policy'] } },
   { name: 'ДГУ: форма в контактах', path: '/services/dgu', form: '[data-contact-form]', button: '.contacts__submit', error: '[data-contact-error]', success: '[data-contact-done]', names: { name: 'ctname', phone: 'ctphone', consent: ['ctconsent', 'ctprivacy'] } },
   { name: 'ДГУ: обратный звонок', path: '/services/dgu', opener: '[data-callback-open]', form: '[data-modal-form]', button: '[data-modal-submit]', error: '[data-modal-error]', success: '[data-modal-form].is-sent', names: { name: 'name', phone: 'phone', consent: ['consent', 'policy'] } },
-  { name: 'ДГУ: опрос', path: '/services/dgu', form: '[data-quiz-form]', quiz: 'dgu', questions: 5, button: '[data-quiz-next]', error: '[data-quiz-error]', success: '[data-quiz-done]', names: { name: 'name', phone: 'phone', consent: ['consent', 'policy'] } },
+  { name: 'ДГУ: опрос', path: '/services/dgu', form: '[data-quiz-form]', quiz: 'dgu', questions: 5, button: '[data-quiz-next]', error: '[data-quiz-error]', success: '[data-quiz-done]', names: { name: 'name', email: 'email', phone: 'phone', consent: ['consent', 'policy'] } },
 ]
 
 test('landing forms send validated leads and never report an unacknowledged submission as successful', async t => {
@@ -169,11 +170,13 @@ test('landing forms send validated leads and never report an unacknowledged subm
           if (item.quiz === 'dgu') {
             assert.equal(payload.service, 'Опрос по ДГУ')
             assert.deepEqual(payload.answers.map(answer => answer.label), [
-              'Направление', 'Объект', 'Нагрузки', 'Мощность',
+              'Направление', 'Объект', 'Нагрузки', 'Мощность', 'Email',
               'Категория надёжности', 'Способ связи', 'Срок установки',
             ])
             assert.equal(payload.answers[0].value, 'Для бизнеса')
             assert.equal(payload.answers[1].value, 'Торговый центр')
+            assert.equal(payload.email, 'test@example.com')
+            assert.equal(payload.answers[4].value, 'test@example.com')
           }
           assert.deepEqual(errors, [])
         } finally {
