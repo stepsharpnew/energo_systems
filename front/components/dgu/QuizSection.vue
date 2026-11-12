@@ -70,15 +70,14 @@
           </fieldset>
 
           <fieldset class="qstep" data-step="4" :hidden="step !== 3 || sent">
-            <legend class="qstep__title">Расчётная мощность нагрузки</legend>
-            <p class="qstep__hint">Если нагрузка известна, укажите её. Нет — рассчитаем по перечню потребителей</p>
+            <legend class="qstep__title">Необходимая мощность оборудования</legend>
+            <p class="qstep__hint">Укажите мощность оборудования, по которому у вас запрос: выберите диапазон или назовите своё значение</p>
           <div class="opts">
             <label class="opt"><input type="radio" name="power" value="30–60 кВт" v-model="fields.power" @change="choosePower"><span class="opt__mark" aria-hidden="true"></span><span class="opt__text">30–60 кВт<span class="opt__sub">небольшой объект, часть нагрузок</span></span></label>
             <label class="opt"><input type="radio" name="power" value="60–150 кВт" v-model="fields.power" @change="choosePower"><span class="opt__mark" aria-hidden="true"></span><span class="opt__text">60–150 кВт<span class="opt__sub">клиника, АЗС, малый торговый объект</span></span></label>
             <label class="opt"><input type="radio" name="power" value="150–300 кВт" v-model="fields.power" @change="choosePower"><span class="opt__mark" aria-hidden="true"></span><span class="opt__text">150–300 кВт<span class="opt__sub">средний торговый или медицинский объект</span></span></label>
             <label class="opt"><input type="radio" name="power" value="300–600 кВт" v-model="fields.power" @change="choosePower"><span class="opt__mark" aria-hidden="true"></span><span class="opt__text">300–600 кВт<span class="opt__sub">большой ТЦ, больница</span></span></label>
             <label class="opt"><input type="radio" name="power" value="Больше 600 кВт" v-model="fields.power" @change="choosePower"><span class="opt__mark" aria-hidden="true"></span><span class="opt__text">Больше 600 кВт<span class="opt__sub">крупный комплекс, несколько станций</span></span></label>
-            <label class="opt"><input type="radio" name="power" value="Не знаю" v-model="fields.power" @change="choosePower"><span class="opt__mark" aria-hidden="true"></span><span class="opt__text">Не знаю<span class="opt__sub">рассчитайте по перечню</span></span></label>
           </div>
             <label class="field field--kw"><span>Или назовите свою мощность, кВт</span>
               <input id="quiz-kw" type="number" name="kw" min="1" max="5000" inputmode="numeric" placeholder="Например, 250" v-model="fields.kw" @input="chooseKw"></label>
@@ -100,6 +99,7 @@
             <p class="qstep__hint">Инженер свяжется и уточнит исходные данные по объекту</p>
             <div class="qfields">
               <label class="field"><span>Имя</span><input id="quiz-name" type="text" name="name" autocomplete="name" v-model="fields.name"></label>
+              <label class="field"><span>Email</span><input id="quiz-email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="name@company.ru" v-model="fields.email"></label>
               <label class="field"><span>Телефон</span><input id="quiz-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" data-phone :value="fields.phone" @input="fields.phone = maskLandingPhone($event.target.value)"></label>
     <CallbackPreferences v-model="fields.callbackPreferences" />
             </div>
@@ -128,6 +128,7 @@
               <div><dt>Объект</dt><dd data-sum="object">{{ summary.object }}</dd></div>
               <div><dt>Нагрузки</dt><dd data-sum="loads">{{ summary.loads }}</dd></div>
               <div><dt>Мощность</dt><dd data-sum="power">{{ summary.power }}</dd></div>
+<div><dt>Email</dt><dd data-sum="email">{{ summary.email }}</dd></div>
               <div><dt>Категория надёжности</dt><dd data-sum="autonomy">{{ summary.autonomy }}</dd></div>
             </dl>
             <p class="quiz__done-note">Состав электростанции и стоимость инженер пришлёт после уточнения нагрузки. Заявка отправлена.</p>
@@ -175,15 +176,15 @@
 
 <script setup>
 import { imageAttrs } from '~/utils/responsiveImage.js'
-import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
+import { maskLandingPhone, validLandingPhone, validLandingEmail, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
 import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
-const fields = reactive({ direction: '', object: '', loads: [], power: '', kw: '', autonomy: '', name: '', phone: '', channel: '', when: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })
+const fields = reactive({ direction: '', object: '', loads: [], power: '', kw: '', autonomy: '', name: '', email: '', phone: '', channel: '', when: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })
 const step = ref(0), pending = ref(false), sent = ref(false), error = ref(''), form = ref(null), done = ref(null)
 const replies = [
   'Выберите направление: от него зависят схема резервирования, мощность и тип исполнения станции.',
   'Расскажите об объекте: от его типа зависят нагрузки и схема резервирования.',
   'Отметьте, что должна держать электростанция. По перечню рассчитаем суммарную мощность и пусковые токи.',
-  'Мощность — главный параметр. Если точных данных нет, выберите «Не знаю»: рассчитаем по перечню потребителей.',
+  'Мощность — главный параметр. Выберите диапазон или назовите точное значение в кВт: по нему подберём двигатель и исполнение.',
   'От категории надёжности зависят схема АВР и то, нужен ли ИБП для самых критичных линий. Если не уверены, подскажу.',
   'Остался контакт. Расчёт отправлю тем способом связи, который вы выберете.'
 ]
@@ -192,7 +193,7 @@ const validStep = computed(() => [Boolean(fields.direction), Boolean(fields.obje
 const nextDisabled = computed(() => pending.value || sent.value || !validStep.value)
 const progress = computed(() => sent.value ? 100 : (step.value + 1) / 6 * 100)
 const message = computed(() => sent.value ? 'Заявка принята. Свяжусь выбранным способом и уточню исходные данные по объекту.' : step.value === 3 && kw.value > 0 && kw.value < 30 ? 'Мы специализируемся на электростанциях от 30 кВт — это наш профиль. Заявку всё равно приму и подскажу решение.' : replies[step.value])
-const summary = computed(() => ({ direction: fields.direction, object: fields.object, loads: fields.loads.join(', '), power: kw.value > 0 ? String(kw.value).replace('.', ',') + ' кВт' : fields.power, autonomy: fields.autonomy }))
+const summary = computed(() => ({ direction: fields.direction, object: fields.object, loads: fields.loads.join(', '), power: kw.value > 0 ? String(kw.value).replace('.', ',') + ' кВт' : fields.power, autonomy: fields.autonomy, email: fields.email.trim() }))
 watch(() => fields.direction, () => { fields.object = '' })
 // Radio presets and a custom kW value are alternative answers.
 const choosePower = () => { fields.kw = '' }
@@ -208,15 +209,17 @@ async function next() {
   const name = fields.name.trim()
   if (name.length < 2 || name.length > 80) error.value = 'Укажите имя от 2 до 80 символов'
   else if (!validLandingPhone(fields.phone)) error.value = 'Введите телефон полностью'
+  else if (!fields.email.trim()) error.value = 'Укажите email'
+  else if (!validLandingEmail(fields.email) || fields.email.trim().length > 254) error.value = 'Проверьте email: он указан неверно'
   else if (!fields.consent || !fields.policy) error.value = 'Отметьте обе галочки — без них заявку не отправить'
   if (error.value) return
   pending.value = true
   try {
     const value = summary.value
-    await submitLandingLead({ type: 'service', name, contact: fields.phone, service: 'Опрос по ДГУ', callbackPreferences: getCallbackPreferences(fields.phone, fields.callbackPreferences), consent: true,
+    await submitLandingLead({ type: 'service', name, contact: fields.phone, email: value.email, service: 'Опрос по ДГУ', callbackPreferences: getCallbackPreferences(fields.phone, fields.callbackPreferences), consent: true,
       answers: [
         { label: 'Направление', value: value.direction }, { label: 'Объект', value: value.object }, { label: 'Нагрузки', value: value.loads },
-        { label: 'Мощность', value: value.power }, { label: 'Категория надёжности', value: value.autonomy },
+        { label: 'Мощность', value: value.power }, { label: 'Email', value: value.email }, { label: 'Категория надёжности', value: value.autonomy },
         { label: 'Способ связи', value: fields.channel || 'не указан' }, { label: 'Срок установки', value: fields.when || 'не указан' }
       ] })
     sent.value = true
