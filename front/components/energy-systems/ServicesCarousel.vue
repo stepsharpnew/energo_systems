@@ -25,6 +25,16 @@
           <span>{{ formatNumber(index + 1) }}</span>
           {{ shortServiceName(service) }}
         </button>
+        <NuxtLink class="directory-item directory-link" to="/services/ups">
+          <span>11</span>
+          ИБП под ключ
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+        </NuxtLink>
+        <NuxtLink class="directory-item directory-link" to="/services/dgu">
+          <span>12</span>
+          Резервное питание
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+        </NuxtLink>
       </div>
 
       <div
@@ -300,6 +310,7 @@ export default {
   font-size: 13px;
   font-weight: 800;
   line-height: 1;
+  text-decoration: none;
   cursor: pointer;
   box-shadow: 0 8px 18px rgba(16, 34, 52, 0.05);
   transition:
@@ -314,6 +325,23 @@ export default {
   color: #c94218;
   font-size: 11px;
   font-weight: 850;
+}
+
+.directory-link {
+  border-color: #bfd8e9;
+  background: #f2f8fc;
+  color: #175f8f;
+}
+
+.directory-link svg {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .directory-item:hover {

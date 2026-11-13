@@ -64,8 +64,14 @@
       </address>
 
       <div class="header-actions">
-        <NuxtLink class="hdd-link" to="/services/hdd">
+        <NuxtLink class="service-link hdd-link" to="/services/hdd">
           ГНБ под ключ
+        </NuxtLink>
+        <NuxtLink class="service-link" to="/services/dgu">
+          Резервное питание
+        </NuxtLink>
+        <NuxtLink class="service-link" to="/services/ups">
+          Источники бесперебойного питания
         </NuxtLink>
         <button class="request-button" type="button" @click="$emit('open-contact-modal')">
           Рассчитать проект
@@ -100,7 +106,7 @@ export default {
   min-height: 92px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(210px, 280px) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(210px, 280px) minmax(0, 1fr);
   align-items: center;
   gap: clamp(18px, 2.6vw, 34px);
   padding: 16px 0;
@@ -115,7 +121,7 @@ export default {
 
 .brand-link:focus-visible,
 .header-contacts a:focus-visible,
-.hdd-link:focus-visible,
+.service-link:focus-visible,
 .request-button:focus-visible {
   outline: 3px solid rgba(45, 122, 172, 0.3);
   outline-offset: 4px;
@@ -255,25 +261,26 @@ export default {
 }
 
 .header-actions {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   justify-items: stretch;
 }
 
-.hdd-link,
+.service-link,
 .request-button {
   min-height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  padding: 0 18px;
+  padding: 10px 18px;
   font-size: 14px;
   font-weight: 850;
-  line-height: 1;
+  line-height: 1.25;
+  text-align: center;
   text-decoration: none;
-  white-space: nowrap;
   cursor: pointer;
   transition:
     background-color 0.18s ease,
@@ -283,7 +290,7 @@ export default {
     transform 0.18s ease;
 }
 
-.hdd-link {
+.service-link {
   color: #175f8f;
   border: 1px solid #bfd8e9;
   background: #f2f8fc;
@@ -296,7 +303,7 @@ export default {
   box-shadow: 0 12px 24px rgba(240, 90, 40, 0.24);
 }
 
-.hdd-link:hover {
+.service-link:hover {
   color: #ffffff;
   border-color: #2d7aac;
   background: #2d7aac;
@@ -310,19 +317,13 @@ export default {
 }
 
 .request-button:active,
-.hdd-link:active {
+.service-link:active {
   transform: translateY(0);
 }
 
 @media (max-width: 1240px) {
   .header-inner {
-    grid-template-columns: minmax(220px, 290px) 1fr;
-  }
-
-  .header-actions {
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(2, minmax(0, 220px));
-    justify-content: start;
+    grid-template-columns: 220px minmax(0, 1fr);
   }
 }
 
@@ -385,14 +386,14 @@ export default {
     grid-template-columns: 1fr;
   }
 
-  .hdd-link,
+  .service-link,
   .request-button {
     width: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hdd-link,
+  .service-link,
   .request-button {
     transition: none;
   }
