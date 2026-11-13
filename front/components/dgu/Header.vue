@@ -1,7 +1,7 @@
 <template>
 <header class="header" :class="{ 'is-scrolled': scrolled }" data-header>
   <div class="header__inner">
-    <a class="logo" href="#top" aria-label="Энергосистемы — на главную">
+    <a class="logo" href="/" aria-label="Энергосистемы — на главную">
       <img v-bind="imageAttrs('/dgu/images/989cb57ad44591a6.png', { sizes: '258px', width: 480 })" alt="Энергосистемы — эксперты в сфере энергетики">
     </a>
 
