@@ -11,6 +11,8 @@
         <label class="cfield" for="ct-phone"><span class="cfield__label">Телефон</span>
           <input class="cfield__input" id="ct-phone" type="tel" name="ctphone" :aria-invalid="invalid.phone || undefined"  autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" data-phone :value="form.ctphone" @input="form.ctphone = maskLandingPhone($event.target.value); invalid.phone = false">
           <span class="cfield__err">Проверьте номер телефона</span></label>
+        <label class="cfield" for="ct-location"><span class="cfield__label">Город и регион <i class="cfield__opt">по желанию</i></span>
+          <input class="cfield__input" id="ct-location" type="text" name="location" maxlength="200" placeholder="Например: Казань, Татарстан" v-model.trim="form.location"></label>
     <CallbackPreferences v-model="callbackPreferences" />
         <label class="cfield" for="ct-task"><span class="cfield__label">Коротко об объекте <i class="cfield__opt">по желанию</i></span>
           <textarea class="cfield__input cfield__input--area" id="ct-task" name="cttask" rows="3" placeholder="Например: дом 450 м² в коттеджном посёлке, нужен резерв для котла, насосов и видеонаблюдения" v-model="form.cttask"></textarea></label>
@@ -59,7 +61,7 @@
 <script setup>
 import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
 import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
-const form = reactive({ ctname: '', ctphone: '', cttask: '', ctconsent: false, ctprivacy: false })
+const form = reactive({ ctname: '', ctphone: '', location: '', cttask: '', ctconsent: false, ctprivacy: false })
 const callbackPreferences = ref(emptyCallbackPreferences())
 const invalid = reactive({ name: false, phone: false, consent: false })
 const pending = ref(false)
@@ -74,7 +76,7 @@ async function submit() {
   if (Object.values(invalid).some(Boolean)) return
   pending.value = true
   try {
-    await submitLandingLead({ type: 'service', name: form.ctname.trim(), contact: form.ctphone, callbackPreferences: getCallbackPreferences(form.ctphone, callbackPreferences.value), service: 'ИБП — форма в контактах', comment: form.cttask.trim(), consent: true })
+    await submitLandingLead({ type: 'service', name: form.ctname.trim(), contact: form.ctphone, location: form.location.trim(), callbackPreferences: getCallbackPreferences(form.ctphone, callbackPreferences.value), service: 'ИБП — форма в контактах', comment: form.cttask.trim(), consent: true })
     sent.value = true
   } catch (problem) { error.value = landingSubmitError(problem) }
   finally { pending.value = false }

@@ -71,6 +71,7 @@
             <div class="qfields">
               <label class="field"><span>Имя</span><input id="quiz-name" type="text" name="name" autocomplete="name" v-model="form.name"></label>
               <label class="field"><span>Телефон</span><input id="quiz-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" data-phone :value="form.phone" @input="form.phone = maskLandingPhone($event.target.value)"></label>
+              <label class="field field--wide"><span>Город и регион · по желанию</span><input type="text" name="location" maxlength="200" placeholder="Например: Казань, Татарстан" v-model.trim="form.location"></label>
     <CallbackPreferences v-model="callbackPreferences" />
             </div>
             <p class="qlabel">Как с вами связаться</p>
@@ -146,7 +147,7 @@
 import { imageAttrs } from '~/utils/responsiveImage.js'
 import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
 import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
-const form = reactive({ object: '', loads: [], power: '', kw: '', autonomy: '', name: '', phone: '', channel: '', when: '', consent: false, policy: false })
+const form = reactive({ object: '', loads: [], power: '', kw: '', autonomy: '', name: '', phone: '', location: '', channel: '', when: '', consent: false, policy: false })
 const callbackPreferences = ref(emptyCallbackPreferences())
 const step = ref(0)
 const pending = ref(false)
@@ -180,7 +181,7 @@ async function next() {
   if (!form.consent || !form.policy) { error.value = 'Отметьте обе галочки — без них заявку не отправить'; return }
   pending.value = true
   try {
-    await submitLandingLead({ type: 'service', name: form.name.trim(), contact: form.phone, service: 'Опрос по ИБП', callbackPreferences: getCallbackPreferences(form.phone, callbackPreferences.value), consent: true, answers: [
+    await submitLandingLead({ type: 'service', name: form.name.trim(), contact: form.phone, location: form.location.trim(), service: 'Опрос по ИБП', callbackPreferences: getCallbackPreferences(form.phone, callbackPreferences.value), consent: true, answers: [
       { label: 'Объект', value: summary.value.object }, { label: 'Нагрузки', value: summary.value.loads }, { label: 'Мощность', value: summary.value.power }, { label: 'Автономная работа', value: summary.value.autonomy }, { label: 'Способ связи', value: form.channel || 'не указан' }, { label: 'Срок установки', value: form.when || 'не указан' }
     ] })
     sent.value = true

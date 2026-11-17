@@ -8,6 +8,7 @@
     <p class="modal__text" data-modal-text>{{ sent ? 'Учтём ваши пожелания по времени звонка.' : (request?.text || 'Оставьте номер и выберите удобное время звонка') }}</p>
     <label class="field"><span>Имя</span><input type="text" name="name" autocomplete="name" required v-model="fields.name"></label>
     <label class="field"><span>Телефон</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required data-phone :value="fields.phone" @input="fields.phone = maskLandingPhone($event.target.value)"></label>
+    <label class="field"><span>Город и регион · по желанию</span><input type="text" name="location" maxlength="200" placeholder="Например: Казань, Татарстан" v-model.trim="fields.location"></label>
     <CallbackPreferences v-model="fields.callbackPreferences" />
     <label class="check"><input type="checkbox" name="consent" required v-model="fields.consent">
       <span>Согласен на <a href="https://e-systems.su/personal-data-consent" target="_blank" rel="noopener">обработку персональных данных</a></span></label>
@@ -27,7 +28,7 @@ const props = defineProps({ request: { type: Object, default: null } })
 const { lock, unlock } = createDguDialogLock()
 const emit = defineEmits(['close'])
 const dialog = ref(null), pending = ref(false), sent = ref(false), error = ref('')
-const fields = reactive({ name: '', phone: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })
+const fields = reactive({ name: '', phone: '', location: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })
 let lastFocus
 const close = () => { dialog.value?.close() }
 const closed = () => { unlock(); lastFocus?.focus?.(); emit('close') }
@@ -53,7 +54,7 @@ async function submit() {
   if (error.value) return
   pending.value = true
   try {
-    await submitLandingLead({ type: 'service', name, contact: fields.phone, callbackPreferences: getCallbackPreferences(fields.phone, fields.callbackPreferences), service: 'ДГУ — ' + (props.request?.title || 'Заказать звонок'), consent: true })
+    await submitLandingLead({ type: 'service', name, contact: fields.phone, location: fields.location.trim(), callbackPreferences: getCallbackPreferences(fields.phone, fields.callbackPreferences), service: 'ДГУ — ' + (props.request?.title || 'Заказать звонок'), consent: true })
     sent.value = true
   } catch (failure) { error.value = landingSubmitError(failure) }
   finally { pending.value = false }

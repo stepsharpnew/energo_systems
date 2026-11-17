@@ -101,6 +101,7 @@
             <div class="qfields">
               <label class="field"><span>Имя</span><input id="quiz-name" type="text" name="name" autocomplete="name" v-model="fields.name"></label>
               <label class="field"><span>Телефон</span><input id="quiz-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" data-phone :value="fields.phone" @input="fields.phone = maskLandingPhone($event.target.value)"></label>
+              <label class="field field--wide"><span>Город и регион · по желанию</span><input type="text" name="location" maxlength="200" placeholder="Например: Казань, Татарстан" v-model.trim="fields.location"></label>
     <CallbackPreferences v-model="fields.callbackPreferences" />
             </div>
             <p class="qlabel">Как с вами связаться</p>
@@ -177,7 +178,7 @@
 import { imageAttrs } from '~/utils/responsiveImage.js'
 import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitError } from '~/utils/landingLead.js'
 import { emptyCallbackPreferences, getCallbackPreferences } from '~/lib/browser/callbackPreferences.js'
-const fields = reactive({ direction: '', object: '', loads: [], power: '', kw: '', autonomy: '', name: '', phone: '', channel: '', when: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })
+const fields = reactive({ direction: '', object: '', loads: [], power: '', kw: '', autonomy: '', name: '', phone: '', location: '', channel: '', when: '', consent: false, policy: false, callbackPreferences: emptyCallbackPreferences() })
 const step = ref(0), pending = ref(false), sent = ref(false), error = ref(''), form = ref(null), done = ref(null)
 const replies = [
   'Выберите направление: от него зависят схема резервирования, мощность и тип исполнения станции.',
@@ -213,7 +214,7 @@ async function next() {
   pending.value = true
   try {
     const value = summary.value
-    await submitLandingLead({ type: 'service', name, contact: fields.phone, service: 'Опрос по ДГУ', callbackPreferences: getCallbackPreferences(fields.phone, fields.callbackPreferences), consent: true,
+    await submitLandingLead({ type: 'service', name, contact: fields.phone, location: fields.location.trim(), service: 'Опрос по ДГУ', callbackPreferences: getCallbackPreferences(fields.phone, fields.callbackPreferences), consent: true,
       answers: [
         { label: 'Направление', value: value.direction }, { label: 'Объект', value: value.object }, { label: 'Нагрузки', value: value.loads },
         { label: 'Мощность', value: value.power }, { label: 'Категория надёжности', value: value.autonomy },

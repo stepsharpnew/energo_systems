@@ -46,6 +46,7 @@
 .dgu .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
 .dgu .field--kw { margin-top: 20px; max-width: 420px; }
 .dgu .qfields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.dgu .qfields .field--wide { grid-column: 1 / -1; }
 .dgu .qlabel { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--muted); }
 .dgu .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
 .dgu .chip { position: relative; cursor: pointer; }

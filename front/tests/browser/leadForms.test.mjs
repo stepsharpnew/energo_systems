@@ -65,6 +65,7 @@ function assertCampaignEmail(message) {
 }
 
 const check = locator => locator.evaluate(element => element.click())
+const leadLocation = 'Новосибирск, Новосибирская область <тест> & район'
 async function selectCallbackPreferences(form, custom = false) {
   assert.equal(await form.locator('[name=allowNonWorkingDays]').isChecked(), false)
   await form.locator('[name=callbackTimeSlot]').selectOption('12:00–15:00')
@@ -132,6 +133,14 @@ test('landing forms send validated leads and never report an unacknowledged subm
           }
           await enterContact(form, item.names)
           await selectCallbackPreferences(form, Boolean(item.quiz))
+          const hasLocation = /\/services\/(dgu|ups)$/.test(item.path)
+          if (hasLocation) {
+            const location = form.locator('[name=location]')
+            assert.equal(await location.isVisible(), true)
+            assert.equal(await location.getAttribute('required'), null)
+            assert.equal(await location.getAttribute('maxlength'), '200')
+            await location.fill('  ' + leadLocation + '  ')
+          }
           if (item.quiz === 'hdd') await form.locator('[name=address]').fill('Тестовый адрес объекта')
           const button = page.locator(item.button)
           const error = item.quiz ? page.locator(item.error) : form.locator(item.error)
@@ -141,14 +150,19 @@ test('landing forms send validated leads and never report an unacknowledged subm
           assert.equal(await page.locator(item.success).isVisible(), false)
           assert.equal(await button.isEnabled(), true)
           assert.equal(await form.locator(`[name=${item.names.name}]`).inputValue(), 'Тестовая заявка')
+          if (hasLocation) assert.equal(await form.locator('[name=location]').inputValue(), leadLocation)
 
           mode = 'unacknowledged'
+          // An empty optional location must still reach the submission handler.
+          if (hasLocation) await form.locator('[name=location]').fill('')
           await button.click()
           await page.waitForFunction(selector => !document.querySelector(selector).disabled, item.button)
           assert.equal(payloads.length, 2)
           assert.equal(await page.locator(item.success).isVisible(), false)
+          if (hasLocation) assert.equal(payloads.at(-1).location, '')
 
           mode = 'success'
+          if (hasLocation) await form.locator('[name=location]').fill(leadLocation)
           const before = mail.length
           await button.click()
           await page.locator(item.success).waitFor({ state: 'visible' })
@@ -162,6 +176,11 @@ test('landing forms send validated leads and never report an unacknowledged subm
           assert.equal(payload.consent, true)
           assert.equal(payload.consentVersion, '2026-07-13')
           assert.equal(payload.contact, '+7 (999)-000-00-00')
+          if (hasLocation) {
+            assert.equal(payload.location, leadLocation)
+            assert.ok(mail.at(-1).text.includes('Город и регион: ' + leadLocation))
+            assert.ok(mail.at(-1).html.includes('Новосибирск, Новосибирская область &lt;тест&gt; &amp; район'))
+          }
           assert.deepEqual(payload.callbackPreferences, { time: item.quiz ? 'с 10:00 до 18:00' : '12:00–15:00', allowNonWorkingDays: Boolean(item.quiz) })
           assert.ok(mail.at(-1).text.includes(payload.callbackPreferences.time))
           assert.ok(mail.at(-1).text.includes(item.quiz ? 'Разрешены клиентом' : 'Не звонить — только рабочие дни'))

@@ -62,6 +62,7 @@ const COMMON_LEAD_FIELDS = [
   "contact",
   "callbackPreferences",
   "email",
+  "location",
   "consent",
   "consentVersion",
   "attribution",
@@ -78,7 +79,6 @@ const EQUIPMENT_LEAD_FIELDS = new Set([
   ...COMMON_LEAD_FIELDS,
   "product",
   "organization",
-  "location",
   "comment",
   "answers",
 ]);
@@ -247,6 +247,14 @@ async function handleLeadSubmit(req, res) {
       return res.status(400).json({ ok: false, error: "invalid_callback_preferences" });
     }
 
+    if (req.body.location !== undefined && typeof req.body.location !== "string") {
+      return res.status(400).json({ ok: false, error: "invalid_payload" });
+    }
+    const location = normalizeText(req.body.location);
+    if (location.length > 200 || !isSingleLine(location)) {
+      return res.status(400).json({ ok: false, error: "invalid_location" });
+    }
+
     const consentRecordId = randomUUID();
     const consentAcceptedAt = new Date().toISOString();
 
@@ -256,6 +264,7 @@ async function handleLeadSubmit(req, res) {
       contact,
       callbackPreferences,
       email,
+      location,
       consentRecordId,
       consentVersion: CONSENT_VERSION,
       consentAcceptedAt,
@@ -300,8 +309,6 @@ async function handleLeadSubmit(req, res) {
         typeof req.body.product !== "string" ||
         (req.body.organization !== undefined &&
           typeof req.body.organization !== "string") ||
-        (req.body.location !== undefined &&
-          typeof req.body.location !== "string") ||
         (req.body.comment !== undefined && typeof req.body.comment !== "string")
       ) {
         return res.status(400).json({ ok: false, error: "invalid_payload" });
@@ -309,7 +316,6 @@ async function handleLeadSubmit(req, res) {
 
       const product = normalizeText(req.body.product);
       const organization = normalizeText(req.body.organization);
-      const location = normalizeText(req.body.location);
       const comment = normalizeText(req.body.comment);
       const answers = normalizeAnswers(req.body.answers);
 
@@ -327,9 +333,6 @@ async function handleLeadSubmit(req, res) {
         return res
           .status(400)
           .json({ ok: false, error: "invalid_organization" });
-      }
-      if (location.length > 200 || (location && !isSingleLine(location))) {
-        return res.status(400).json({ ok: false, error: "invalid_location" });
       }
       if (comment.length > 5000) {
         return res.status(400).json({ ok: false, error: "invalid_comment" });

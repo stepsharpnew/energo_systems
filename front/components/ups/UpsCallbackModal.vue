@@ -8,6 +8,7 @@
     <p class="modal__text" data-modal-text>{{ sent ? 'Учтём ваши пожелания по времени звонка.' : text }}</p>
     <label class="field"><span>Имя</span><input type="text" name="name" autocomplete="name" required v-model="form.name"></label>
     <label class="field"><span>Телефон</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required data-phone :value="form.phone" @input="form.phone = maskLandingPhone($event.target.value)"></label>
+    <label class="field"><span>Город и регион · по желанию</span><input type="text" name="location" maxlength="200" placeholder="Например: Казань, Татарстан" v-model.trim="form.location"></label>
     <CallbackPreferences v-model="callbackPreferences" />
     <label class="check"><input type="checkbox" name="consent" required v-model="form.consent">
       <span>Согласен на <a href="/personal-data-consent" target="_blank" rel="noopener">обработку персональных данных</a></span></label>
@@ -25,7 +26,7 @@ import { maskLandingPhone, validLandingPhone, submitLandingLead, landingSubmitEr
 const props = defineProps({ request: { type: Object, default: null } })
 const emit = defineEmits(['close'])
 const dialog = ref(null)
-const form = reactive({ name: '', phone: '', consent: false, policy: false })
+const form = reactive({ name: '', phone: '', location: '', consent: false, policy: false })
 const callbackPreferences = ref(emptyCallbackPreferences())
 const title = ref('Заказать звонок')
 const text = ref('Оставьте номер и выберите удобное время звонка')
@@ -54,7 +55,7 @@ async function submit() {
   if (!form.consent || !form.policy) { error.value = 'Отметьте обе галочки — без них заявку не отправить'; return }
   pending.value = true
   try {
-    await submitLandingLead({ type: 'service', name: form.name.trim(), contact: form.phone, callbackPreferences: getCallbackPreferences(form.phone, callbackPreferences.value), service: `ИБП — ${title.value}`, consent: true })
+    await submitLandingLead({ type: 'service', name: form.name.trim(), contact: form.phone, location: form.location.trim(), callbackPreferences: getCallbackPreferences(form.phone, callbackPreferences.value), service: `ИБП — ${title.value}`, consent: true })
     sent.value = true
   } catch (problem) { error.value = landingSubmitError(problem) }
   finally { pending.value = false }

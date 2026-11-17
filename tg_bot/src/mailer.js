@@ -142,6 +142,7 @@ function buildLeadEmail(data) {
     rows.push(["Организация", organization]);
   }
   if (type === "service" || contact) rows.push(["Телефон", contact]);
+  if (location) rows.push([type === "service" ? "Город и регион" : "Регион / город объекта", location]);
   if (contact && callbackPreferences) {
     rows.push(["Удобное время звонка (МСК)", callbackPreferences.time || "В рабочее время, 09:00–18:00"]);
     rows.push(["Звонки в выходные и праздники", callbackPreferences.allowNonWorkingDays ? "Разрешены клиентом" : "Не звонить — только рабочие дни"]);
@@ -149,7 +150,6 @@ function buildLeadEmail(data) {
   if (email) rows.push(["Email для обратной связи", email]);
 
   if (type === "equipment") {
-    if (location) rows.push(["Регион / город объекта", location]);
     if (comment) rows.push(["Описание задачи", comment]);
   } else {
     rows.push(["Услуга", service]);

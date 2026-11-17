@@ -48,6 +48,7 @@
 .ups .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
 .ups .field--kw { margin-top: 20px; max-width: 420px; }
 .ups .qfields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.ups .qfields .field--wide { grid-column: 1 / -1; }
 .ups .qlabel { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--muted); }
 .ups .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
 .ups .chip { position: relative; cursor: pointer; }
