@@ -43,6 +43,7 @@ test('landing forms use the matching authenticated sender and keep sales as the 
       assert.deepEqual(options.auth, { user: `${direction}@example.test`, pass: `${direction}-test-password` });
       assert.ok(message.from.endsWith(`<${direction}@example.test>`));
       assert.equal(message.to, 'sales@e-systems.su');
+      assert.equal(message.cc, 'inbox@e-systems.su, i.lysenko@e-systems.su');
       assert.ok(message.subject.startsWith(direction === 'dgu' ? '[ДГУ]' : '[ИБП]'));
       assert.ok(message.text.includes('Направление заявки:'));
       assert.ok(message.html.includes('Направление заявки'));
@@ -62,6 +63,7 @@ test('all existing landing service names and the generator quiz work without Ref
   ]) {
     await sendLeadEmail({ ...lead, ...fields });
     assert.equal(sent.at(-1).options.auth.user, `${direction}@example.test`);
+    assert.equal(sent.at(-1).message.cc, 'inbox@e-systems.su, i.lysenko@e-systems.su');
   }
 });
 
@@ -71,6 +73,7 @@ test('unrelated forms keep the default SMTP sender and old email subject', async
     await sendLeadEmail({ ...lead, ...fields });
     assert.equal(sent.at(-1).options.auth.user, 'default@example.test');
     assert.equal(sent.at(-1).message.from, 'Default <default@example.test>');
+    assert.equal(sent.at(-1).message.cc, 'inbox@e-systems.su');
     assert.doesNotMatch(sent.at(-1).message.subject, /^\[/);
   }
 });
@@ -80,6 +83,7 @@ test('deployments without dedicated accounts keep sending landing leads through 
   for (const service of ['Опрос по ДГУ', 'Опрос по ИБП']) {
     await sendLeadEmail({ ...lead, service });
     assert.equal(sent.at(-1).options.auth.user, 'default@example.test');
+    assert.equal(sent.at(-1).message.cc, 'inbox@e-systems.su, i.lysenko@e-systems.su');
   }
 });
 
@@ -104,6 +108,7 @@ test('each account can be verified without sending mail or returning its passwor
     const result = await verifyEmailConfiguration(direction);
     assert.equal(result.user, `${direction}@example.test`);
     assert.equal(result.to, 'sales@e-systems.su');
+    assert.equal(result.cc, 'inbox@e-systems.su, i.lysenko@e-systems.su');
     assert.doesNotMatch(JSON.stringify(result), /test-password/);
   }
   assert.deepEqual(checked, ['dgu@example.test', 'ups@example.test']);
@@ -135,6 +140,7 @@ test('the API selects the sender for both landing pages and for legacy forms wit
       assert.equal((await response.json()).ok, true);
       assert.equal(sent.at(-1).options.auth.user, `${direction}@example.test`);
       assert.equal(sent.at(-1).message.to, 'sales@e-systems.su');
+      assert.equal(sent.at(-1).message.cc, 'inbox@e-systems.su, i.lysenko@e-systems.su');
     }
   } finally {
     await new Promise(resolve => server.close(resolve));

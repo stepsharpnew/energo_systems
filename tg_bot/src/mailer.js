@@ -75,6 +75,7 @@ function getEmailConfig(direction) {
   const pass = useProfile
     ? profilePass
     : process.env.SMTP_PASS || process.env.SMTP_PASSWORD;
+  const cc = process.env.EMAIL_CC || "inbox@e-systems.su";
 
   return {
     enabled: Boolean(user && pass),
@@ -88,7 +89,7 @@ function getEmailConfig(direction) {
       ? `"Энергосистемы — ${profile.label}" <${user}>`
       : process.env.EMAIL_FROM || (user ? `"Энергосистемы" <${user}>` : undefined),
     to: process.env.EMAIL_TO || "sales@e-systems.su",
-    cc: process.env.EMAIL_CC || "inbox@e-systems.su",
+    cc: profile ? `${cc}, i.lysenko@e-systems.su` : cc,
     family: Number(process.env.SMTP_FAMILY || 4),
     connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT_MS || 10000),
     greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT_MS || 10000),
