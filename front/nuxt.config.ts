@@ -84,6 +84,7 @@ export default defineNuxtConfig({
         '/equipment',
         '/equipment/mtp',
         '/equipment/ktp',
+        '/equipment/dgu',
         '/equipment/bktp',
         '/equipment/krun',
         '/equipment/krun-cells',

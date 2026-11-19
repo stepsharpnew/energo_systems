@@ -69,6 +69,10 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://e-systems.su/equipment/dgu</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://e-systems.su/equipment/bktp</loc>
     <priority>0.8</priority>
   </url>

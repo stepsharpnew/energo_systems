@@ -39,6 +39,26 @@ export const equipmentCatalog = [
     questionnaireFile: '/equipment/questionnaires/ktp-questionnaire.docx'
   },
   {
+    slug: 'dgu',
+    name: 'ДГУ',
+    eyebrow: 'Дизель-генераторные установки',
+    shortDescription: 'Дизельные электростанции для резервного и автономного электроснабжения.',
+    description: 'Подбираем дизель-генераторную установку по нагрузке, режиму работы и условиям размещения. В галерее представлены капотные, контейнерные и мобильные станции из реализованных проектов.',
+    applications: [
+      'Промышленные и складские объекты',
+      'Торговые комплексы и АЗС',
+      'Удалённые и временные площадки'
+    ],
+    gallery: [
+      '/dgu/images/688b7f50498bc904.webp',
+      '/dgu/images/440bf30653a28826.webp',
+      '/dgu/images/f758f58f7e79eef6.webp',
+      '/dgu/images/89abf7105259b112.webp'
+    ],
+    questionnaire: null,
+    questionnaireFile: null
+  },
+  {
     slug: 'bktp',
     name: 'БКТП',
     eyebrow: 'Блочные подстанции',
